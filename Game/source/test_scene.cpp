@@ -1,10 +1,6 @@
-﻿#include "test_scene.hpp"
-
-#include "game.hpp"
-
-#include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
-#include <iostream>
+﻿#include <SDL3/SDL.h>
+#include <game.hpp>
+#include <test_scene.hpp>
 namespace
 {
    uint32_t frame { 0 };
@@ -13,12 +9,12 @@ namespace
    float    y { 800 };
 
 }    // namespace
+
 namespace myge
 {
    TestScene::TestScene( Game* game_ ) : Scene( game_ )
    {
-      image = IMG_LoadTexture( game()->render(), "resource/image/enemy01_sprite.png" );
-      if ( image == nullptr ) { SDL_Log( "画像を読み込めませんでした:  %s ", SDL_GetError() ); }
+
       size_t length { 8 };
       for ( size_t i = 0; i < length; i++ ) { sprite.emplace_back( SDL_FRect( 32 * i, 0, 32, 40 ) ); }
    }

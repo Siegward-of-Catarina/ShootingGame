@@ -1,6 +1,6 @@
-﻿#include "scene.hpp"
-
-#include "game.hpp"
+﻿#include <game.hpp>
+#include <scene.hpp>
+#include <sequencer.hpp>
 namespace myge
 {
    Scene::Scene( Game* game_ ) : _game { game_ } {}

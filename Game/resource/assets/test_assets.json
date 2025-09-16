@@ -1,0 +1,8 @@
+{
+	"textures": [
+		{
+			"name": "enemy",
+			"file": "resource/assets/image/enemy01_sprite.png"
+		}
+	],
+}

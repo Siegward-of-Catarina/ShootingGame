@@ -1,11 +1,9 @@
 ﻿#pragma once
-#include "sequencer.hpp"
 
-#include <memory>
+#include <core/fwd.hpp>
+
 namespace myge
 {
-   class Sequencer;
-   class Game;
    class Scene
    {
    public:

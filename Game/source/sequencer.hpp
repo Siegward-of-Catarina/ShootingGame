@@ -1,8 +1,7 @@
 ﻿#pragma once
-#include "scene.hpp"
+#include <core/fwd.hpp>
 namespace myge
 {
-   class Scene;
    class Sequencer
    {
    public:

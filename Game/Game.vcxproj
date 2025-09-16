@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -43,6 +44,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>./source/;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>./source/;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -88,6 +95,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="source\resource_manager.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="source\scene.cpp">
       <SubType>
       </SubType>
@@ -102,11 +113,69 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\Components\sprite.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\core\fwd.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\game.hpp">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="source\entt\entt.hpp" />
+    <ClInclude Include="source\nlohmann\adl_serializer.hpp" />
+    <ClInclude Include="source\nlohmann\byte_container_with_subtype.hpp" />
+    <ClInclude Include="source\nlohmann\detail\abi_macros.hpp" />
+    <ClInclude Include="source\nlohmann\detail\conversions\from_json.hpp" />
+    <ClInclude Include="source\nlohmann\detail\conversions\to_chars.hpp" />
+    <ClInclude Include="source\nlohmann\detail\conversions\to_json.hpp" />
+    <ClInclude Include="source\nlohmann\detail\exceptions.hpp" />
+    <ClInclude Include="source\nlohmann\detail\hash.hpp" />
+    <ClInclude Include="source\nlohmann\detail\input\binary_reader.hpp" />
+    <ClInclude Include="source\nlohmann\detail\input\input_adapters.hpp" />
+    <ClInclude Include="source\nlohmann\detail\input\json_sax.hpp" />
+    <ClInclude Include="source\nlohmann\detail\input\lexer.hpp" />
+    <ClInclude Include="source\nlohmann\detail\input\parser.hpp" />
+    <ClInclude Include="source\nlohmann\detail\input\position_t.hpp" />
+    <ClInclude Include="source\nlohmann\detail\iterators\internal_iterator.hpp" />
+    <ClInclude Include="source\nlohmann\detail\iterators\iteration_proxy.hpp" />
+    <ClInclude Include="source\nlohmann\detail\iterators\iterator_traits.hpp" />
+    <ClInclude Include="source\nlohmann\detail\iterators\iter_impl.hpp" />
+    <ClInclude Include="source\nlohmann\detail\iterators\json_reverse_iterator.hpp" />
+    <ClInclude Include="source\nlohmann\detail\iterators\primitive_iterator.hpp" />
+    <ClInclude Include="source\nlohmann\detail\json_custom_base_class.hpp" />
+    <ClInclude Include="source\nlohmann\detail\json_pointer.hpp" />
+    <ClInclude Include="source\nlohmann\detail\json_ref.hpp" />
+    <ClInclude Include="source\nlohmann\detail\macro_scope.hpp" />
+    <ClInclude Include="source\nlohmann\detail\macro_unscope.hpp" />
+    <ClInclude Include="source\nlohmann\detail\meta\call_std\begin.hpp" />
+    <ClInclude Include="source\nlohmann\detail\meta\call_std\end.hpp" />
+    <ClInclude Include="source\nlohmann\detail\meta\cpp_future.hpp" />
+    <ClInclude Include="source\nlohmann\detail\meta\detected.hpp" />
+    <ClInclude Include="source\nlohmann\detail\meta\identity_tag.hpp" />
+    <ClInclude Include="source\nlohmann\detail\meta\is_sax.hpp" />
+    <ClInclude Include="source\nlohmann\detail\meta\std_fs.hpp" />
+    <ClInclude Include="source\nlohmann\detail\meta\type_traits.hpp" />
+    <ClInclude Include="source\nlohmann\detail\meta\void_t.hpp" />
+    <ClInclude Include="source\nlohmann\detail\output\binary_writer.hpp" />
+    <ClInclude Include="source\nlohmann\detail\output\output_adapters.hpp" />
+    <ClInclude Include="source\nlohmann\detail\output\serializer.hpp" />
+    <ClInclude Include="source\nlohmann\detail\string_concat.hpp" />
+    <ClInclude Include="source\nlohmann\detail\string_escape.hpp" />
+    <ClInclude Include="source\nlohmann\detail\string_utils.hpp" />
+    <ClInclude Include="source\nlohmann\detail\value_t.hpp" />
+    <ClInclude Include="source\nlohmann\json.hpp" />
+    <ClInclude Include="source\nlohmann\json_fwd.hpp" />
+    <ClInclude Include="source\nlohmann\ordered_map.hpp" />
+    <ClInclude Include="source\nlohmann\thirdparty\hedley\hedley.hpp" />
+    <ClInclude Include="source\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
+    <ClInclude Include="source\resource_manager.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\scene.hpp">
       <SubType>
       </SubType>
@@ -120,7 +189,18 @@
       </SubType>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="resource\assets\test_assets.json" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+  </Target>
 </Project>

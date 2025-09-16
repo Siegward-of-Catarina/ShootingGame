@@ -1,10 +1,7 @@
 ﻿#pragma once
-#include <SDL3/SDL.h>
-#include <iostream>
-
+#include <core/fwd.hpp>
 namespace myge
 {
-   class Sequencer;
    class Game
    {
    public:

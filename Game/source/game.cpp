@@ -1,8 +1,8 @@
-﻿#include "game.hpp"
-
-#include "scene.hpp"
-#include "sequencer.hpp"
-#include "test_scene.hpp"
+﻿#include <SDL3/SDL.h>
+#include <game.hpp>
+#include <scene.hpp>
+#include <sequencer.hpp>
+#include <test_scene.hpp>
 namespace myge
 {
    Game::Game() : _window { nullptr }, _render { nullptr }, _sequencer { nullptr } {}

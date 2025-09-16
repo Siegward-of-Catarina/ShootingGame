@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include "scene.hpp"
-
-#include <SDL3/SDL.h>
+#include <SDL3/SDL_rect.h>
+#include <core/fwd.hpp>
+#include <scene.hpp>
 #include <vector>
 namespace myge
 {
