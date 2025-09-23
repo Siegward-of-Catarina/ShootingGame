@@ -7,16 +7,17 @@ namespace myge
    public:
       Game();
       ~Game();
-      bool          init();
-      void          run();
-      void          quit();
-      SDL_Renderer* render() { return _render; }
-      Sequencer*    sequencer() { return _sequencer; }
+      bool       init();
+      void       run();
+      void       quit();
+      Renderer&  render() { return *_renderer; }
+      Sequencer& sequencer() { return *_sequencer; }
 
    private:
-      SDL_Window*   _window;
-      SDL_Renderer* _render;
-      Sequencer*    _sequencer;
-      std::uint32_t _last_time;
+      SDL_WindowPtr                    _window;
+      std::unique_ptr<Renderer>        _renderer;
+      std::unique_ptr<Sequencer>       _sequencer;
+      std::unique_ptr<ResourceManager> _resource_manager;
+      u64                              _last_time;
    };
 }    // namespace myge

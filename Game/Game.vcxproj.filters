@@ -6,7 +6,13 @@
     <ClCompile Include="source\scene.cpp" />
     <ClCompile Include="source\sequencer.cpp" />
     <ClCompile Include="source\test_scene.cpp" />
-    <ClCompile Include="source\resource_manager.cpp" />
+    <ClCompile Include="source\resource_manager\resource_manager.cpp" />
+    <ClCompile Include="source\entity_factory.cpp" />
+    <ClCompile Include="source\math\vector.cpp" />
+    <ClCompile Include="source\renderer\renderer.cpp" />
+    <ClCompile Include="source\systems\move_system.cpp" />
+    <ClCompile Include="source\resource_loader\sprite_loader.cpp" />
+    <ClCompile Include="source\resource_loader\sprite_anim_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\game.hpp" />
@@ -60,9 +66,21 @@
     <ClInclude Include="source\nlohmann\detail\string_concat.hpp" />
     <ClInclude Include="source\nlohmann\detail\string_escape.hpp" />
     <ClInclude Include="source\nlohmann\detail\string_utils.hpp" />
-    <ClInclude Include="source\resource_manager.hpp" />
+    <ClInclude Include="source\resource_manager\resource_manager.hpp" />
     <ClInclude Include="source\Components\sprite.hpp" />
     <ClInclude Include="source\core\fwd.hpp" />
+    <ClInclude Include="source\Components\sprite_anim_component.hpp" />
+    <ClInclude Include="source\Components\sprite_component.hpp" />
+    <ClInclude Include="source\Components\transform_component.hpp" />
+    <ClInclude Include="source\Components\velocity_component.hpp" />
+    <ClInclude Include="source\core\core.hpp" />
+    <ClInclude Include="source\entity_factory.hpp" />
+    <ClInclude Include="source\math\vector.hpp" />
+    <ClInclude Include="source\renderer\renderer.hpp" />
+    <ClInclude Include="source\systems\move_system.hpp" />
+    <ClInclude Include="source\resource_manager\sprite_anim_resource.hpp" />
+    <ClInclude Include="source\resource_loader\sprite_loader.hpp" />
+    <ClInclude Include="source\resource_loader\sprite_anim_loader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="resource\assets\test_assets.json" />

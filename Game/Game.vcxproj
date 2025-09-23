@@ -87,6 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\entity_factory.cpp" />
     <ClCompile Include="source\game.cpp">
       <SubType>
       </SubType>
@@ -95,7 +96,9 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="source\resource_manager.cpp">
+    <ClCompile Include="source\math\vector.cpp" />
+    <ClCompile Include="source\renderer\renderer.cpp" />
+    <ClCompile Include="source\resource_manager\resource_manager.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -107,25 +110,35 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="source\systems\move_system.cpp" />
     <ClCompile Include="source\test_scene.cpp">
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="source\resource_loader\sprite_loader.cpp" />
+    <ClCompile Include="source\resource_loader\sprite_anim_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\Components\sprite_anim_component.hpp" />
+    <ClInclude Include="source\Components\sprite_component.hpp" />
+    <ClInclude Include="source\Components\transform_component.hpp" />
+    <ClInclude Include="source\Components\velocity_component.hpp" />
+    <ClInclude Include="source\core\core.hpp" />
     <ClInclude Include="source\core\fwd.hpp">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\entity_factory.hpp" />
     <ClInclude Include="source\game.hpp">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="source\entt\entt.hpp" />
+    <ClInclude Include="source\math\vector.hpp" />
     <ClInclude Include="source\nlohmann\adl_serializer.hpp" />
     <ClInclude Include="source\nlohmann\byte_container_with_subtype.hpp" />
     <ClInclude Include="source\nlohmann\detail\abi_macros.hpp" />
@@ -172,7 +185,8 @@
     <ClInclude Include="source\nlohmann\ordered_map.hpp" />
     <ClInclude Include="source\nlohmann\thirdparty\hedley\hedley.hpp" />
     <ClInclude Include="source\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
-    <ClInclude Include="source\resource_manager.hpp">
+    <ClInclude Include="source\renderer\renderer.hpp" />
+    <ClInclude Include="source\resource_manager\resource_manager.hpp">
       <SubType>
       </SubType>
     </ClInclude>
@@ -184,10 +198,14 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\systems\move_system.hpp" />
     <ClInclude Include="source\test_scene.hpp">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\resource_manager\sprite_anim_resource.hpp" />
+    <ClInclude Include="source\resource_loader\sprite_loader.hpp" />
+    <ClInclude Include="source\resource_loader\sprite_anim_loader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="resource\assets\test_assets.json" />

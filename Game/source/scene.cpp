@@ -1,11 +1,17 @@
 ﻿#include <game.hpp>
+#include <renderer/renderer.hpp>
+#include <resource_manager/resource_manager.hpp>
 #include <scene.hpp>
 #include <sequencer.hpp>
 namespace myge
 {
-   Scene::Scene( Game* game_ ) : _game { game_ } {}
-   Sequencer* myge::Scene::sequencer() { return _game->sequencer(); }
+   Scene::Scene( SceneInitDesc desc_ )
+     : _renderer { desc_.renderer }, _sequencer { desc_.sequencer }, _resource_manager { desc_.resource_manager }
+   {
+   }
 
-   Game* Scene::game() { return _game; }
+   Renderer& Scene::renderer() { return _renderer; }
+
+   ResourceManager& Scene::resourceManager() { return _resource_manager; }
 
 }    // namespace myge

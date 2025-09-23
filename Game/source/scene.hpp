@@ -1,20 +1,22 @@
 ﻿#pragma once
 
 #include <core/fwd.hpp>
+#include <core/core.hpp>
 
 namespace myge
 {
    class Scene
    {
    public:
-      Scene( Game* game_ );
+      Scene( SceneInitDesc desc_ );
       virtual ~Scene() {};
       virtual void proc( float _delta ) = 0;
 
-      Sequencer* sequencer();
-      Game*      game();
-
+      Renderer& renderer();
+      ResourceManager& resourceManager();
    private:
-      Game* _game;
+       Renderer& _renderer;
+       Sequencer& _sequencer;
+       ResourceManager& _resource_manager;
    };
 }    // namespace myge
