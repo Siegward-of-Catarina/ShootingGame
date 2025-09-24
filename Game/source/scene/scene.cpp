@@ -1,7 +1,7 @@
 ﻿#include <game.hpp>
 #include <renderer/renderer.hpp>
-#include <resource_manager/resource_manager.hpp>
-#include <scene.hpp>
+#include <resource/resource_manager.hpp>
+#include <scene/scene.hpp>
 #include <sequencer.hpp>
 namespace myge
 {

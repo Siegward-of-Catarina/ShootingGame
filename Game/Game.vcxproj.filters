@@ -2,32 +2,33 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\game.cpp" />
-    <ClCompile Include="source\scene.cpp" />
-    <ClCompile Include="source\sequencer.cpp" />
-    <ClCompile Include="source\test_scene.cpp" />
-    <ClCompile Include="source\resource_manager\resource_manager.cpp" />
-    <ClCompile Include="source\entity_factory.cpp" />
+    <ClCompile Include="source\core\game_context.cpp" />
+    <ClCompile Include="source\core\utilities.cpp" />
     <ClCompile Include="source\math\vector.cpp" />
     <ClCompile Include="source\renderer\renderer.cpp" />
+    <ClCompile Include="source\resource\loader\sprite_anim_loader.cpp" />
+    <ClCompile Include="source\resource\loader\sprite_loader.cpp" />
+    <ClCompile Include="source\resource\resource_manager.cpp" />
+    <ClCompile Include="source\scene\scene.cpp" />
+    <ClCompile Include="source\scene\test_scene.cpp" />
     <ClCompile Include="source\systems\move_system.cpp" />
-    <ClCompile Include="source\resource_loader\sprite_loader.cpp" />
-    <ClCompile Include="source\resource_loader\sprite_anim_loader.cpp" />
+    <ClCompile Include="source\entity_factory.cpp" />
+    <ClCompile Include="source\game.cpp" />
+    <ClCompile Include="source\sequencer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\game.hpp" />
+    <ClInclude Include="source\Components\sprite.hpp" />
+    <ClInclude Include="source\Components\sprite_anim_component.hpp" />
+    <ClInclude Include="source\Components\sprite_component.hpp" />
+    <ClInclude Include="source\Components\transform_component.hpp" />
+    <ClInclude Include="source\Components\velocity_component.hpp" />
+    <ClInclude Include="source\core\core.hpp" />
+    <ClInclude Include="source\core\fwd.hpp" />
+    <ClInclude Include="source\core\game_context.hpp" />
+    <ClInclude Include="source\core\json_fwd.hpp" />
+    <ClInclude Include="source\core\utilities.hpp" />
     <ClInclude Include="source\entt\entt.hpp" />
-    <ClInclude Include="source\scene.hpp" />
-    <ClInclude Include="source\sequencer.hpp" />
-    <ClInclude Include="source\test_scene.hpp" />
-    <ClInclude Include="source\nlohmann\ordered_map.hpp" />
-    <ClInclude Include="source\nlohmann\adl_serializer.hpp" />
-    <ClInclude Include="source\nlohmann\byte_container_with_subtype.hpp" />
-    <ClInclude Include="source\nlohmann\json.hpp" />
-    <ClInclude Include="source\nlohmann\json_fwd.hpp" />
-    <ClInclude Include="source\nlohmann\thirdparty\hedley\hedley.hpp" />
-    <ClInclude Include="source\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
-    <ClInclude Include="source\nlohmann\detail\value_t.hpp" />
+    <ClInclude Include="source\math\vector.hpp" />
     <ClInclude Include="source\nlohmann\detail\conversions\from_json.hpp" />
     <ClInclude Include="source\nlohmann\detail\conversions\to_chars.hpp" />
     <ClInclude Include="source\nlohmann\detail\conversions\to_json.hpp" />
@@ -66,23 +67,25 @@
     <ClInclude Include="source\nlohmann\detail\string_concat.hpp" />
     <ClInclude Include="source\nlohmann\detail\string_escape.hpp" />
     <ClInclude Include="source\nlohmann\detail\string_utils.hpp" />
-    <ClInclude Include="source\resource_manager\resource_manager.hpp" />
-    <ClInclude Include="source\Components\sprite.hpp" />
-    <ClInclude Include="source\core\fwd.hpp" />
-    <ClInclude Include="source\Components\sprite_anim_component.hpp" />
-    <ClInclude Include="source\Components\sprite_component.hpp" />
-    <ClInclude Include="source\Components\transform_component.hpp" />
-    <ClInclude Include="source\Components\velocity_component.hpp" />
-    <ClInclude Include="source\core\core.hpp" />
-    <ClInclude Include="source\entity_factory.hpp" />
-    <ClInclude Include="source\math\vector.hpp" />
+    <ClInclude Include="source\nlohmann\detail\value_t.hpp" />
+    <ClInclude Include="source\nlohmann\thirdparty\hedley\hedley.hpp" />
+    <ClInclude Include="source\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
+    <ClInclude Include="source\nlohmann\adl_serializer.hpp" />
+    <ClInclude Include="source\nlohmann\byte_container_with_subtype.hpp" />
+    <ClInclude Include="source\nlohmann\json.hpp" />
+    <ClInclude Include="source\nlohmann\json_fwd.hpp" />
+    <ClInclude Include="source\nlohmann\ordered_map.hpp" />
     <ClInclude Include="source\renderer\renderer.hpp" />
+    <ClInclude Include="source\resource\loader\sprite_anim_loader.hpp" />
+    <ClInclude Include="source\resource\loader\sprite_loader.hpp" />
+    <ClInclude Include="source\resource\resource_manager.hpp" />
+    <ClInclude Include="source\resource\sprite_anim_resource.hpp" />
+    <ClInclude Include="source\scene\data\background_data.hpp" />
+    <ClInclude Include="source\scene\scene.hpp" />
+    <ClInclude Include="source\scene\test_scene.hpp" />
     <ClInclude Include="source\systems\move_system.hpp" />
-    <ClInclude Include="source\resource_manager\sprite_anim_resource.hpp" />
-    <ClInclude Include="source\resource_loader\sprite_loader.hpp" />
-    <ClInclude Include="source\resource_loader\sprite_anim_loader.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="resource\assets\test_assets.json" />
+    <ClInclude Include="source\entity_factory.hpp" />
+    <ClInclude Include="source\game.hpp" />
+    <ClInclude Include="source\sequencer.hpp" />
   </ItemGroup>
 </Project>

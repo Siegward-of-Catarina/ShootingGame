@@ -1,7 +1,7 @@
 #include <SDL3/SDL.h>
 #include <filesystem>
 #include <renderer/renderer.hpp>
-#include <resource_loader/sprite_loader.hpp>
+#include <resource/loader/sprite_loader.hpp>
 namespace myge
 {
    std::shared_ptr<SDL_Texture> SpriteLoader::operator()( Renderer& renderer_, const std::string_view path_ ) const

@@ -1,4 +1,4 @@
-﻿#include <scene.hpp>
+﻿#include <scene/scene.hpp>
 #include <sequencer.hpp>
 namespace myge
 {

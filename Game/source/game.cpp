@@ -2,10 +2,10 @@
 #include <core/core.hpp>
 #include <game.hpp>
 #include <renderer/renderer.hpp>
-#include <resource_manager/resource_manager.hpp>
-#include <scene.hpp>
+#include <resource/resource_manager.hpp>
+#include <scene/scene.hpp>
 #include <sequencer.hpp>
-#include <test_scene.hpp>
+#include <scene/test_scene.hpp>
 namespace myge
 {
    Game::Game()
@@ -21,11 +21,13 @@ namespace myge
 
    bool Game::init()
    {
+       //あさーとを使うか例外を出すか
       if ( !SDL_Init( SDL_INIT_VIDEO ) )
       {
          SDL_Log( "SDLを初期化できませんでした:  %s ", SDL_GetError() );
          return false;
       }
+      
 
       // window, renderer 取得
       // いったん生ポインタで取得し、unique_ptrへ

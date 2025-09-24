@@ -1,10 +1,10 @@
 ﻿#pragma once
-#include <SDL3/SDL_rect.h>
 #include <core/fwd.hpp>
 #include <core/core.hpp>
-#include <scene.hpp>
-#include <vector>
+#include <core/json_fwd.hpp>
+#include <scene/scene.hpp>
 #include <entt/entt.hpp>
+
 namespace myge
 {
 	class TestScene : public Scene
@@ -18,5 +18,6 @@ namespace myge
 	private:
 		entt::registry registry;
 		entt::entity enemy;
+		json scene_data;
 	};
 }    // namespace myge

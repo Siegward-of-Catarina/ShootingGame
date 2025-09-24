@@ -1,0 +1,31 @@
+{
+	"Sprites": {
+		"SpriteRootPath": "assets/sprite/",
+		"SpriteDatas": [
+			{
+				"name": "back_ground",
+				"file": "back_ground.png"
+			},
+			{
+				"name": "back_star",
+				"file": "star.png"
+			},
+			{
+				"name": "enemy1",
+				"file": "enemy01_sprite.png"
+			}
+		]
+	},
+	"SpriteAnims": [
+		{
+			"name": "enemy1_anim",
+			"sprite_name": "enemy1",
+			"sprite_col": 8,
+			"sprite_row": 1,
+			"frame_width": 32,
+			"frame_height": 40,
+			"frame_time": 30.0,
+			"is_loop": true
+		}
+	]
+}

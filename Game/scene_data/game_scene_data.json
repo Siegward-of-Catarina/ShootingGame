@@ -1,0 +1,36 @@
+{
+  "BackGrounds": [
+    {
+      "sprite_name": "back_ground",
+      "px": 0.0,
+      "py": 0.0,
+      "pz": 5,
+      "dx": 0.0,
+      "dy": 20.0
+    },
+    {
+      "sprite_name": "back_ground",
+      "px": 0.0,
+      "py": -799.0,
+      "pz": 5,
+      "dx": 0.0,
+      "dy": 20.0
+    },
+    {
+      "sprite_name": "back_star",
+      "px": 0.0,
+      "py": 0.0,
+      "pz": 4,
+      "dx": 0.0,
+      "dy": 80.0
+    },
+    {
+      "sprite_name": "back_star",
+      "px": 0.0,
+      "py": -799.0,
+      "pz": 4,
+      "dx": 0.0,
+      "dy": 80.0
+    }
+  ]
+}

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -14,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7b2123b6-8fc7-4b2f-b4db-005a6e365762}</ProjectGuid>
+    <ProjectGuid>{bd774566-9af5-4d4d-85e8-d9e8bf076a57}</ProjectGuid>
     <RootNamespace>Game</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -52,12 +51,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>../SDL/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CallingConvention>FastCall</CallingConvention>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -68,7 +69,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -76,68 +77,46 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>../SDL/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CallingConvention>FastCall</CallingConvention>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../SDL/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL3.lib;SDL3_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\core\game_context.cpp" />
+    <ClCompile Include="source\core\utilities.cpp" />
     <ClCompile Include="source\entity_factory.cpp" />
-    <ClCompile Include="source\game.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="source\main.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
+    <ClCompile Include="source\game.cpp" />
+    <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\math\vector.cpp" />
     <ClCompile Include="source\renderer\renderer.cpp" />
-    <ClCompile Include="source\resource_manager\resource_manager.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="source\scene.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="source\sequencer.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
+    <ClCompile Include="source\resource\loader\sprite_anim_loader.cpp" />
+    <ClCompile Include="source\resource\loader\sprite_loader.cpp" />
+    <ClCompile Include="source\resource\resource_manager.cpp" />
+    <ClCompile Include="source\scene\scene.cpp" />
+    <ClCompile Include="source\scene\test_scene.cpp" />
+    <ClCompile Include="source\sequencer.cpp" />
     <ClCompile Include="source\systems\move_system.cpp" />
-    <ClCompile Include="source\test_scene.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="source\resource_loader\sprite_loader.cpp" />
-    <ClCompile Include="source\resource_loader\sprite_anim_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\Components\sprite.hpp">
-      <SubType>
-      </SubType>
-    </ClInclude>
+    <ClInclude Include="source\Components\sprite.hpp" />
     <ClInclude Include="source\Components\sprite_anim_component.hpp" />
     <ClInclude Include="source\Components\sprite_component.hpp" />
     <ClInclude Include="source\Components\transform_component.hpp" />
     <ClInclude Include="source\Components\velocity_component.hpp" />
     <ClInclude Include="source\core\core.hpp" />
-    <ClInclude Include="source\core\fwd.hpp">
-      <SubType>
-      </SubType>
-    </ClInclude>
+    <ClInclude Include="source\core\fwd.hpp" />
+    <ClInclude Include="source\core\game_context.hpp" />
+    <ClInclude Include="source\core\json_fwd.hpp" />
+    <ClInclude Include="source\core\utilities.hpp" />
     <ClInclude Include="source\entity_factory.hpp" />
-    <ClInclude Include="source\game.hpp">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="source\entt\entt.hpp" />
+    <ClInclude Include="source\game.hpp" />
     <ClInclude Include="source\math\vector.hpp" />
     <ClInclude Include="source\nlohmann\adl_serializer.hpp" />
     <ClInclude Include="source\nlohmann\byte_container_with_subtype.hpp" />
@@ -186,39 +165,17 @@
     <ClInclude Include="source\nlohmann\thirdparty\hedley\hedley.hpp" />
     <ClInclude Include="source\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
     <ClInclude Include="source\renderer\renderer.hpp" />
-    <ClInclude Include="source\resource_manager\resource_manager.hpp">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="source\scene.hpp">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="source\sequencer.hpp">
-      <SubType>
-      </SubType>
-    </ClInclude>
+    <ClInclude Include="source\resource\loader\sprite_anim_loader.hpp" />
+    <ClInclude Include="source\resource\loader\sprite_loader.hpp" />
+    <ClInclude Include="source\resource\resource_manager.hpp" />
+    <ClInclude Include="source\resource\sprite_anim_resource.hpp" />
+    <ClInclude Include="source\scene\data\background_data.hpp" />
+    <ClInclude Include="source\scene\scene.hpp" />
+    <ClInclude Include="source\scene\test_scene.hpp" />
+    <ClInclude Include="source\sequencer.hpp" />
     <ClInclude Include="source\systems\move_system.hpp" />
-    <ClInclude Include="source\test_scene.hpp">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="source\resource_manager\sprite_anim_resource.hpp" />
-    <ClInclude Include="source\resource_loader\sprite_loader.hpp" />
-    <ClInclude Include="source\resource_loader\sprite_anim_loader.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="resource\assets\test_assets.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
   </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets'))" />
-  </Target>
 </Project>
