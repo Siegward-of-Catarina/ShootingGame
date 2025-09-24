@@ -1,8 +1,8 @@
 #include <core/utilities.hpp>
+#include <exception>
 #include <filesystem>
 #include <fstream>
 #include <nlohmann/json.hpp>
-
 namespace myge
 {
    json loadJson( std::string_view assets_path_ )
@@ -18,5 +18,9 @@ namespace myge
       stream.seekg( 0, std::ios::beg );
 
       return json::parse( stream );
+   }
+   void throwIfError( bool condition_, const std::string_view message_ )
+   {
+      throw std::runtime_error( message_.data() );
    }
 }    // namespace myge

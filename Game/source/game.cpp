@@ -4,8 +4,8 @@
 #include <renderer/renderer.hpp>
 #include <resource/resource_manager.hpp>
 #include <scene/scene.hpp>
-#include <sequencer.hpp>
 #include <scene/test_scene.hpp>
+#include <sequencer.hpp>
 namespace myge
 {
    Game::Game()
@@ -15,28 +15,13 @@ namespace myge
      , _resource_manager { nullptr }
      , _last_time { 0 }
    {
-   }
-
-   Game::~Game() {}
-
-   bool Game::init()
-   {
-       //あさーとを使うか例外を出すか
-      if ( !SDL_Init( SDL_INIT_VIDEO ) )
-      {
-         SDL_Log( "SDLを初期化できませんでした:  %s ", SDL_GetError() );
-         return false;
-      }
-      
+      // あさーとを使うか例外を出すか
+      if ( !SDL_Init( SDL_INIT_VIDEO ) ) { throw GameException( "SDLの初期化に失敗しました" ); }
 
       // window, renderer 取得
       // いったん生ポインタで取得し、unique_ptrへ
       SDL_Window* window_raw = SDL_CreateWindow( "shooting", 640, 800, 0 );
-      if ( !window_raw )
-      {
-         SDL_Log( "SDLwindowを作成できませんでした: %s", SDL_GetError() );
-         return false;
-      }
+      if ( !window_raw ) { throw GameException( "SDLwindowを作成できませんでした" ); }
 
       // uniqueへ代入
       _window = { window_raw, &SDL_DestroyWindow };
@@ -47,12 +32,13 @@ namespace myge
 
       _resource_manager = std::make_unique<ResourceManager>();
 
-      _sequencer->setNextScene( new TestScene( SceneInitDesc( *_renderer, *_sequencer, *_resource_manager ) ) );
+      _sequencer->setNextScene(
+        std::make_unique<TestScene>( SceneInitDesc( *_renderer, *_sequencer, *_resource_manager ) ) );
 
       _last_time = SDL_GetPerformanceCounter();
-
-      return true;
    }
+
+   Game::~Game() { SDL_Quit(); }
 
    void Game::run()
    {
@@ -74,9 +60,7 @@ namespace myge
          auto delta     = static_cast<double>( tick_time - _last_time ) / SDL_GetPerformanceFrequency();
          _last_time     = tick_time;
 
-         _sequencer->currentScene()->proc( delta );
+         _sequencer->currentScene().proc( delta );
       }
    }
-
-   void Game::quit() { SDL_Quit(); }
 }    // namespace myge

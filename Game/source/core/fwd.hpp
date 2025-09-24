@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
+#include <core/game_exception.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -10,6 +11,7 @@ namespace myge
    // クラスの前方宣言
    class Game;
    class Scene;
+   class TestScene;
    class Sequencer;
    class ResourceManager;
    class Vec4;

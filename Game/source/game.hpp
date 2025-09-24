@@ -7,9 +7,7 @@ namespace myge
    public:
       Game();
       ~Game();
-      bool       init();
       void       run();
-      void       quit();
       Renderer&  render() { return *_renderer; }
       Sequencer& sequencer() { return *_sequencer; }
 
