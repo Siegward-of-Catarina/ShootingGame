@@ -1,0 +1,20 @@
+#include <SDL3/SDL.h>
+#include <engine/rendering/loader/sprite_loader.hpp>
+#include <engine/rendering/loader/sprite_resource.hpp>
+#include <engine/rendering/renderer.hpp>
+#include <filesystem>
+namespace sdl_engine
+{
+   std::shared_ptr<SpriteResource> SpriteLoader::operator()( Renderer& renderer_, const json& data_ ) const
+   {
+      auto path_ = data_.at( "file_path" ).get<std::string>();
+      if ( !std::filesystem::exists( path_ ) ) { SDL_Log( "‰æ‘œƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ:  %s ", path_.data() ); }
+
+      SpriteResource* resource { new SpriteResource };
+      resource->depth   = data_.value( "depth", 0 );
+      resource->texture = renderer_.LoadTexture( path_ );
+      if ( !resource->texture ) { SDL_Log( "‰æ‘œ‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½:  %s ", SDL_GetError() ); }
+
+      return std::shared_ptr<SpriteResource>( resource, SpriteResourceDeleter );
+   }
+}    // namespace sdl_engine

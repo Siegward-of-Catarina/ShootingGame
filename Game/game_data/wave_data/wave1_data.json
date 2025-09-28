@@ -1,0 +1,58 @@
+{
+	"Enemy1": {
+		"sprite": {
+			"sprite_name": "enemy1",
+			"sprite_anim_name": "enemy1_anim"
+		},
+		"components": [
+			{
+				"transform": {
+					"px": 200,
+					"py": -50,
+					"angle": 180.0,
+					"scale": 1.0
+				},
+				"velocity": {
+					"dx": 0,
+					"dy": 150.0
+				}
+			},
+			{
+				"transform": {
+					"px": 200,
+					"py": -100,
+					"angle": 180.0,
+					"scale": 1.0
+				},
+				"velocity": {
+					"dx": 0,
+					"dy": 150.0
+				}
+			},
+			{
+				"transform": {
+					"px": 200,
+					"py": -150,
+					"angle": 180.0,
+					"scale": 1.0
+				},
+				"velocity": {
+					"dx": 0,
+					"dy": 150.0
+				}
+			},
+			{
+				"transform": {
+					"px": 200,
+					"py": -200,
+					"angle": 180.0,
+					"scale": 1.0
+				},
+				"velocity": {
+					"dx": 0,
+					"dy": 150.0
+				}
+			}
+		]
+	}
+}

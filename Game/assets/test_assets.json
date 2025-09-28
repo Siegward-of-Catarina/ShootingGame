@@ -4,15 +4,18 @@
 		"SpriteDatas": [
 			{
 				"name": "back_ground",
-				"file": "back_ground.png"
+				"file_path": "back_ground.png",
+				"depth": 30
 			},
 			{
 				"name": "back_star",
-				"file": "star.png"
+				"file_path": "star.png",
+				"depth": 29
 			},
 			{
 				"name": "enemy1",
-				"file": "enemy01_sprite.png"
+				"file_path": "enemy01_sprite.png",
+				"depth": 28
 			}
 		]
 	},

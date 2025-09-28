@@ -1,0 +1,70 @@
+{
+	"Waves": [
+		{
+			"wave_class_name": "Wave1",
+			"wave_data_path": "game_data/wave_data/wave1_data.json"
+		}
+	],
+	"BackGrounds": [
+		{
+			"sprite": {
+				"sprite_name": "back_ground"
+			},
+			"transform": {
+				"px": 0.0,
+				"py": 0.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"velocity": {
+				"dx": 0.0,
+				"dy": 20.0
+			}
+		},
+		{
+			"sprite": {
+				"sprite_name": "back_ground"
+			},
+			"transform": {
+				"px": 0.0,
+				"py": -779.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"velocity": {
+				"dx": 0.0,
+				"dy": 20.0
+			}
+		},
+		{
+			"sprite": {
+				"sprite_name": "back_star"
+			},
+			"transform": {
+				"px": 0.0,
+				"py": 0.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"velocity": {
+				"dx": 0.0,
+				"dy": 20.0
+			}
+		},
+		{
+			"sprite": {
+				"sprite_name": "back_star"
+			},
+			"transform": {
+				"px": 0.0,
+				"py": -779.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"velocity": {
+				"dx": 0.0,
+				"dy": 20.0
+			}
+		}
+	]
+}
