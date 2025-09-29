@@ -5,66 +5,137 @@
 			"wave_data_path": "game_data/wave_data/wave1_data.json"
 		}
 	],
-	"BackGrounds": [
-		{
-			"sprite": {
-				"sprite_name": "back_ground"
+	"Entities": {
+		"BackGround": [
+			{
+				"Sprite": { "name": "back_ground" },
+				"Transform": {
+					"px": 320.0,
+					"py": 400.0,
+					"angle": 0.0,
+					"scale": 1.0
+				},
+				"Velocity": {
+					"dx": 0.0,
+					"dy": 20.0,
+					"anguler": 0.0,
+					"scale_rate": 0.0
+				},
+				"BoundingBox": {
+					"harf_width": 320.0,
+					"harf_height": 400.0,
+					"radius": 0.0
+				},
+				"OutOfScreenBehavior": {
+					"behavior": "Wrap",
+					"wrap_position_x": 0.0,
+					"wrap_position_y": -400.0
+				}
 			},
-			"transform": {
-				"px": 0.0,
-				"py": 0.0,
-				"angle": 0.0,
-				"scale": 1.0
+			{
+				"Sprite": { "name": "back_ground" },
+				"Transform": {
+					"px": 320.0,
+					"py": -400.0,
+					"angle": 0.0,
+					"scale": 1.0
+				},
+				"Velocity": {
+					"dx": 0.0,
+					"dy": 20.0,
+					"anguler": 0.0,
+					"scale_rate": 0.0
+				},
+				"BoundingBox": {
+					"harf_width": 320.0,
+					"harf_height": 400.0,
+					"radius": 0.0
+				},
+				"OutOfScreenBehavior": {
+					"behavior": "Wrap",
+					"wrap_position_x": 0.0,
+					"wrap_position_y": -400.0
+				}
 			},
-			"velocity": {
-				"dx": 0.0,
-				"dy": 20.0
+			{
+				"Sprite": { "name": "back_star" },
+				"Transform": {
+					"px": 320.0,
+					"py": 400.0,
+					"angle": 0.0,
+					"scale": 1.0
+				},
+				"Velocity": {
+					"dx": 0.0,
+					"dy": 100.0,
+					"anguler": 0.0,
+					"scale_rate": 0.0
+				},
+				"BoundingBox": {
+					"harf_width": 320.0,
+					"harf_height": 400.0,
+					"radius": 0.0
+				},
+				"OutOfScreenBehavior": {
+					"behavior": "Wrap",
+					"wrap_position_x": 0.0,
+					"wrap_position_y": -400.0
+				}
+			},
+			{
+				"Sprite": { "name": "back_star" },
+				"Transform": {
+					"px": 320.0,
+					"py": -400.0,
+					"angle": 0.0,
+					"scale": 1.0
+				},
+				"Velocity": {
+					"dx": 0.0,
+					"dy": 100.0,
+					"anguler": 0.0,
+					"scale_rate": 0.0
+				},
+				"BoundingBox": {
+					"harf_width": 320.0,
+					"harf_height": 400.0,
+					"radius": 0.0
+				},
+				"OutOfScreenBehavior": {
+					"behavior": "Wrap",
+					"wrap_position_x": 0.0,
+					"wrap_position_y": -399.0
+				}
 			}
-		},
-		{
-			"sprite": {
-				"sprite_name": "back_ground"
+		],
+		"Player": {
+			"Sprite": { "name": "player" },
+			"SpriteAnim": {
+				"name": "player_anim",
+				"current_frame": 1
 			},
-			"transform": {
-				"px": 0.0,
-				"py": -779.0,
+			"Transform": {
+				"px": 320,
+				"py": 800,
 				"angle": 0.0,
 				"scale": 1.0
 			},
-			"velocity": {
-				"dx": 0.0,
-				"dy": 20.0
-			}
-		},
-		{
-			"sprite": {
-				"sprite_name": "back_star"
+			"Velocity": {
+				"dx": 0,
+				"dy": -150.0,
+				"anguler": 0.0,
+				"scale_rate": 0.0
 			},
-			"transform": {
-				"px": 0.0,
-				"py": 0.0,
-				"angle": 0.0,
-				"scale": 1.0
+			"BoundingBox": {
+				"harf_width": 24.0,
+				"harf_height": 24.0,
+				"radius": 20.0
 			},
-			"velocity": {
-				"dx": 0.0,
-				"dy": 20.0
-			}
-		},
-		{
-			"sprite": {
-				"sprite_name": "back_star"
-			},
-			"transform": {
-				"px": 0.0,
-				"py": -779.0,
-				"angle": 0.0,
-				"scale": 1.0
-			},
-			"velocity": {
-				"dx": 0.0,
-				"dy": 20.0
+			"OutOfScreenBehavior": {
+				"behavior": "Stop",
+				"wrap_position_x": 0.0,
+				"wrap_position_y": 0.0
 			}
 		}
-	]
+	}
 }

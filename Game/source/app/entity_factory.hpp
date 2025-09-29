@@ -7,10 +7,7 @@ namespace myge
    class EntityFactory
    {
    public:
-      entt::entity
-      createEnemy( entt::registry& registry_, sdl_engine::ResourceManager& resource_manager_, const json& data_ );
-      entt::entity
-      createBackGround( entt::registry& registry_, sdl_engine::ResourceManager& resource_mamager_, const json& data_ );
+      void createEntities( entt::registry& registry_, sdl_engine::ResourceManager& resource_manager_, json& data_ );
 
    private:
       // ResourceManager&;

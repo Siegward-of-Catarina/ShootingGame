@@ -27,6 +27,10 @@ namespace sdl_engine
    struct SpriteAnimResource;
    class SpriteResourceDeleter;
 
+   class SystemInterface;
+   class TransformUpdateSystem;
+   class SpriteRenderSystem;
+
    using Color = sdl_engine::Vector4;
 
 }    // namespace sdl_engine

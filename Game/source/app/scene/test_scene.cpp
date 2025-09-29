@@ -11,42 +11,49 @@
 #include <engine/rendering/renderer.hpp>
 #include <engine/utils/json_utilities.hpp>
 //
+#include <app/systems/out_of_screen_system.hpp>
 #include <engine/rendering/loader/sprite_resource.hpp>
-
+#include <engine/systems/sprite_animation_system.hpp>
+#include <engine/systems/sprite_render_system.hpp>
+#include <engine/systems/transfrom_update_system.hpp>
 namespace myge
 {
-   TestScene::TestScene( sdl_engine::GameContext& ctx_ ) : Scene { ctx_ }
+   TestScene::TestScene( sdl_engine::GameContext& ctx_ ) : Scene { ctx_ }, _systems {}, _scene_elapsed_time { 0.f }
    {
+      _player_movement_system = std::make_unique<PlayerMovementSystem>();
+      _systems.emplace_back( std::make_unique<sdl_engine::TransformUpdateSystem>() );
+      _systems.emplace_back( std::make_unique<sdl_engine::SpriteRenderSystem>() );
+      _systems.emplace_back( std::make_unique<sdl_engine::SpriteAnimationSystem>() );
+      _systems.emplace_back( std::make_unique<OutOfScreenSystem>() );
+      // 優先度でソート
+      std::sort( _systems.begin(),
+                 _systems.end(),
+                 []( const std::unique_ptr<sdl_engine::SystemInterface>& rref,
+                     const std::unique_ptr<sdl_engine::SystemInterface>& lref )
+                 { return rref->priority() < lref->priority(); } );
+
       loadAssets();
       loadSceneData();
       createWaves();
-      createBackGrounds();
+      if ( _scene_data.contains( "Entities" ) )
+      {
+         EntityFactory factory;
+         factory.createEntities( _registry, getGameContext().getResourceManager(), _scene_data.at( "Entities" ) );
+      }
 
       _waves[ 0 ]->start( _registry, getGameContext() );
    }
    TestScene::~TestScene() {}
-   void TestScene::proc( f32 delta_time )
+   void TestScene::proc( f32 delta_time_ )
    {
+      _scene_elapsed_time += static_cast<f64>( delta_time_ );
       auto& renderer = getGameContext().getRenderer();
 
-      _waves[ 0 ]->update( _registry, getGameContext(), delta_time );
+      _waves[ 0 ]->update( _registry, getGameContext(), delta_time_ );
 
-      renderer.setRenderClearColor( .3f, .3f, .3f, 1.f );
-      renderer.RenderClear();
+      _player_movement_system->update( _registry, getGameContext(), delta_time_ );
 
-      for ( auto [ entity, sprt, trfm ] : _registry.view<sdl_engine::Sprite, sdl_engine::Transform>().each() )
-      {
-
-         renderer.RenderTexture( sprt.texture->texture, &sprt.src, &sprt.dst, trfm.angle );
-      }
-
-      if ( getGameContext().getInputManager().isKeyDown( SDL_SCANCODE_Z ) ) { SDL_Log( " Z key down!" ); }
-      if ( getGameContext().getInputManager().isKeyDown( SDL_SCANCODE_X ) ) { SDL_Log( " X key down!" ); }
-      if ( getGameContext().getInputManager().isKeyDown( SDL_SCANCODE_UP ) ) { SDL_Log( " UP key down!" ); }
-      if ( getGameContext().getInputManager().isKeyPress( SDL_SCANCODE_DOWN ) ) { SDL_Log( " DOWN key press!" ); }
-      if ( getGameContext().getInputManager().isKeyUp( SDL_SCANCODE_Z ) ) { SDL_Log( " Z key up!" ); }
-
-      renderer.RenderPresent();
+      for ( auto& system : _systems ) { system->update( _registry, getGameContext(), delta_time_ ); }
    }
    void TestScene::loadAssets()
    {
@@ -77,16 +84,5 @@ namespace myge
          }
       }
    }
-   void TestScene::createBackGrounds()
-   {
-      // jsonからBackGroundを生成
-      EntityFactory factory;
-      if ( _scene_data.contains( "BackGrounds" ) )
-      {
-         for ( const auto bd_data : _scene_data[ "BackGrounds" ] )
-         {
-            auto back = factory.createBackGround( _registry, getGameContext().getResourceManager(), bd_data );
-         }
-      }
-   }
+
 }    // namespace myge

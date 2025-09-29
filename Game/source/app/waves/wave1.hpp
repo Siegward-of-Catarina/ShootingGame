@@ -1,8 +1,9 @@
 #pragma once
 #include <app/forward_declarations.hpp>
 #include <app/systems/enemy_velocity_ystem.hpp>
-#include <app/systems/move_system.hpp>
 #include <app/waves/wave.hpp>
+#include <engine/core/forward_declarations.hpp>
+#include <engine/systems/transfrom_update_system.hpp>
 #include <entt/entt.hpp>
 namespace myge
 {
@@ -15,10 +16,9 @@ namespace myge
       void update( entt::registry& registry_, sdl_engine::GameContext& context_, f32 delta_time_ ) override;
 
    private:
-      void createEnemys( entt::registry& registry_, sdl_engine::GameContext& context_ );
 
    private:
-      std::unique_ptr<MoveSystem>          _move_system;
-      std::unique_ptr<EnemyVelocitySystem> _enemy_system;
+      std::unique_ptr<sdl_engine::TransformUpdateSystem> _move_system;
+      std::unique_ptr<EnemyVelocitySystem>               _enemy_system;
    };
 }    // namespace myge

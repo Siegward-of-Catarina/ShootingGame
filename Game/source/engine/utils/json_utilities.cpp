@@ -2,7 +2,6 @@
 #include <engine/utils/json_utilities.hpp>
 #include <filesystem>
 #include <fstream>
-#include <nlohmann/json.hpp>
 namespace sdl_engine
 {
    json loadJson( std::string_view assets_path_ )

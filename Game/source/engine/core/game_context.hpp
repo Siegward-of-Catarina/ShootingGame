@@ -12,11 +12,11 @@ namespace sdl_engine
       void setNextScene( std::unique_ptr<Scene> next_ );
       void setCurrentScene( Scene* const current_ );
 
-      const Vector2_i32 getWindowSize() const { return _window_size; }
-      Renderer&         getRenderer() { return *_renderer; }
-      SceneManager&     getSequencer() { return *_sequencer; }
-      ResourceManager&  getResourceManager() { return *_resource_manager; }
-      InputManager&     getInputManager() { return *_input_manager; }
+      const Vector2_i32& getWindowSize() const { return _window_size; }
+      Renderer&          getRenderer() { return *_renderer; }
+      SceneManager&      getSequencer() { return *_sequencer; }
+      ResourceManager&   getResourceManager() { return *_resource_manager; }
+      InputManager&      getInputManager() { return *_input_manager; }
 
    private:
       SDL_WindowPtr                    _window;

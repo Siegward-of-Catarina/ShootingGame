@@ -9,7 +9,7 @@ namespace sdl_engine
    struct SpriteAnim
    {
       entt::resource<SpriteAnimResource> sprite_anim;
-      f32                                current_frame {};
+      u32                                current_frame {};
       f64                                elapsed_time {};    // •b’PˆÊ
       bool                               is_playing {};
    };

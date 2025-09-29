@@ -1,6 +1,6 @@
+#include <app/components/enemy_tag.hpp>
 #include <app/systems/enemy_velocity_ystem.hpp>
 #include <cmath>
-#include <engine/Components/enemy_tag.hpp>
 #include <engine/components/transform.hpp>
 #include <engine/components/velocity.hpp>
 namespace myge
@@ -9,13 +9,13 @@ namespace myge
 
    EnemyVelocitySystem::~EnemyVelocitySystem() {}
 
-   void EnemyVelocitySystem::update( entt::registry& registry_, f32 delta_time_ )
+   void EnemyVelocitySystem::update( entt::registry& registry_, sdl_engine::GameContext& context_, f32 delta_time_ )
    {
       static float time = 0.0f;
       time += delta_time_ * 10;
       f32 target_x { 0 };
       f32 target_y { 0 };
-      for ( auto [ entity ] : registry_.view<sdl_engine::EnemyTag>().each() )
+      for ( auto [ entity ] : registry_.view<EnemyTag>().each() )
       {
          auto& velocity  = registry_.get<sdl_engine::Velocity>( entity );
          auto& transform = registry_.get<sdl_engine::Transform>( entity );
@@ -33,5 +33,7 @@ namespace myge
          target_y = transform.y;
       }
    }
+
+   int EnemyVelocitySystem::priority() const { return 0; }
 
 }    // namespace myge

@@ -88,6 +88,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\app\systems\out_of_screen_system.cpp" />
+    <ClCompile Include="source\app\systems\player_movement_system.cpp" />
     <ClCompile Include="source\engine\entity\entity_create_helper.cpp" />
     <ClCompile Include="source\app\systems\enemy_velocity_ystem.cpp" />
     <ClCompile Include="source\app\waves\wave_factory.cpp" />
@@ -102,6 +104,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="source\engine\systems\system_interface.cpp" />
     <ClCompile Include="source\engine\utils\common_utilities.cpp" />
     <ClCompile Include="source\app\game.cpp" />
     <ClCompile Include="source\engine\math\vector2.cpp" />
@@ -111,13 +114,20 @@
     <ClCompile Include="source\engine\rendering\loader\sprite_loader.cpp" />
     <ClCompile Include="source\engine\scene\scene.cpp" />
     <ClCompile Include="source\app\scene\test_scene.cpp" />
-    <ClCompile Include="source\app\systems\move_system.cpp" />
-    <ClCompile Include="source\engine\systems\system.cpp" />
     <ClCompile Include="source\engine\utils\json_utilities.cpp" />
     <ClCompile Include="source\app\waves\wave.cpp" />
     <ClCompile Include="source\app\waves\wave1.cpp" />
+    <ClCompile Include="source\engine\systems\sprite_render_system.cpp" />
+    <ClCompile Include="source\engine\systems\transfrom_update_system.cpp" />
+    <ClCompile Include="source\engine\systems\sprite_animation_system.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\app\components\bounding_box.hpp" />
+    <ClInclude Include="source\app\components\out_of_screen_behavior.hpp" />
+    <ClInclude Include="source\app\components\player_movement.hpp" />
+    <ClInclude Include="source\app\components\player_tag.hpp" />
+    <ClInclude Include="source\app\systems\out_of_screen_system.hpp" />
+    <ClInclude Include="source\app\systems\player_movement_system.hpp" />
     <ClInclude Include="source\engine\Components\basic_components.hpp" />
     <ClInclude Include="source\engine\entity\entity_create_helper.hpp" />
     <ClInclude Include="source\app\components\enemy_follower.hpp" />
@@ -204,10 +214,12 @@
     <ClInclude Include="source\engine\scene\scene.hpp" />
     <ClInclude Include="source\app\scene\test_scene.hpp" />
     <ClInclude Include="source\sequencer.hpp" />
-    <ClInclude Include="source\app\systems\move_system.hpp" />
-    <ClInclude Include="source\engine\systems\system.hpp" />
+    <ClInclude Include="source\engine\systems\system_interface.hpp" />
     <ClInclude Include="source\app\waves\wave.hpp" />
     <ClInclude Include="source\app\waves\wave1.hpp" />
+    <ClInclude Include="source\engine\systems\sprite_render_system.hpp" />
+    <ClInclude Include="source\engine\systems\transfrom_update_system.hpp" />
+    <ClInclude Include="source\engine\systems\sprite_animation_system.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

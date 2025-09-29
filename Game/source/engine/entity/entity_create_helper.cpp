@@ -1,11 +1,12 @@
 #include <engine/entity/entity_create_helper.hpp>
 namespace sdl_engine
 {
-   SpriteAnim getSpriteAnimComponent( entt::resource<sdl_engine::SpriteAnimResource> resource_ )
+   SpriteAnim getSpriteAnimComponent( entt::resource<sdl_engine::SpriteAnimResource> resource_, const json& data_ )
    {
-      sdl_engine::SpriteAnim sprt_anim_comp {
-         .sprite_anim { resource_ }, .current_frame { 0 }, .elapsed_time { 0.0 }, .is_playing { true }
-      };
+      sdl_engine::SpriteAnim sprt_anim_comp { .sprite_anim { resource_ },
+                                              .current_frame { data_.value( "current_frame", 0u ) },
+                                              .elapsed_time { 0.0 },
+                                              .is_playing { data_.value( "is_playing", true ) } };
       return sprt_anim_comp;
    }
    Sprite getSpriteComponent( entt::resource<sdl_engine::SpriteResource> resource_ )
@@ -30,7 +31,9 @@ namespace sdl_engine
    Velocity getVelocityComponent( const json& data_ )
    {
       sdl_engine::Velocity vlcy_comp { .dx { sdl_engine::getJsonData<f32>( data_, "dx" ) },
-                                       .dy { sdl_engine::getJsonData<f32>( data_, "dy" ) } };
+                                       .dy { sdl_engine::getJsonData<f32>( data_, "dy" ) },
+                                       .anguler { sdl_engine::getJsonData<f32>( data_, "anguler" ) },
+                                       .scale_rate { sdl_engine::getJsonData<f32>( data_, "scale_rate" ) } };
       return vlcy_comp;
    }
 }    // namespace sdl_engine

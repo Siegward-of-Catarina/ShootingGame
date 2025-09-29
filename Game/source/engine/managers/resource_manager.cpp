@@ -22,7 +22,6 @@ namespace sdl_engine
    {
       // assets読み込み
       auto assets = loadJson( assets_path_ );
-
       // sprite読み込み
       if ( assets.contains( "Sprites" ) )
       {

@@ -15,6 +15,8 @@ namespace sdl_engine
       resource->texture = renderer_.LoadTexture( path_ );
       if ( !resource->texture ) { SDL_Log( "‰æ‘œ‚ð“Ç‚Ýž‚ß‚Ü‚¹‚ñ‚Å‚µ‚½:  %s ", SDL_GetError() ); }
 
+      SDL_SetTextureScaleMode( resource->texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );
+
       return std::shared_ptr<SpriteResource>( resource, SpriteResourceDeleter );
    }
 }    // namespace sdl_engine

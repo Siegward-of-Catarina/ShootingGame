@@ -13,6 +13,11 @@
 				"depth": 29
 			},
 			{
+				"name": "player",
+				"file_path": "player_sprite.png",
+				"depth": 10
+			},
+			{
 				"name": "enemy1",
 				"file_path": "enemy01_sprite.png",
 				"depth": 28
@@ -20,6 +25,16 @@
 		]
 	},
 	"SpriteAnims": [
+		{
+			"name": "player_anim",
+			"sprite_name": "player",
+			"sprite_col": 3,
+			"sprite_row": 1,
+			"frame_width": 48,
+			"frame_height": 48,
+			"frame_time": 0,
+			"is_loop": false
+		},
 		{
 			"name": "enemy1_anim",
 			"sprite_name": "enemy1",
