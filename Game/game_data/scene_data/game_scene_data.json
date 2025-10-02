@@ -27,9 +27,7 @@
 					"radius": 0.0
 				},
 				"OutOfScreenBehavior": {
-					"behavior": "Wrap",
-					"wrap_position_x": 0.0,
-					"wrap_position_y": -400.0
+					"behavior": "Wrap"
 				}
 			},
 			{
@@ -52,9 +50,7 @@
 					"radius": 0.0
 				},
 				"OutOfScreenBehavior": {
-					"behavior": "Wrap",
-					"wrap_position_x": 0.0,
-					"wrap_position_y": -400.0
+					"behavior": "Wrap"
 				}
 			},
 			{
@@ -77,9 +73,7 @@
 					"radius": 0.0
 				},
 				"OutOfScreenBehavior": {
-					"behavior": "Wrap",
-					"wrap_position_x": 0.0,
-					"wrap_position_y": -400.0
+					"behavior": "Wrap"
 				}
 			},
 			{
@@ -102,9 +96,7 @@
 					"radius": 0.0
 				},
 				"OutOfScreenBehavior": {
-					"behavior": "Wrap",
-					"wrap_position_x": 0.0,
-					"wrap_position_y": -399.0
+					"behavior": "Wrap"
 				}
 			}
 		],
@@ -112,11 +104,12 @@
 			"Sprite": { "name": "player" },
 			"SpriteAnim": {
 				"name": "player_anim",
-				"current_frame": 1
+				"current_frame": 1,
+				"is_playing": true
 			},
 			"Transform": {
 				"px": 320,
-				"py": 800,
+				"py": 750,
 				"angle": 0.0,
 				"scale": 1.0
 			},
@@ -132,9 +125,13 @@
 				"radius": 20.0
 			},
 			"OutOfScreenBehavior": {
-				"behavior": "Stop",
-				"wrap_position_x": 0.0,
-				"wrap_position_y": 0.0
+				"behavior": "Stop"
+			},
+			"PlayerInput": {
+				"up_sdl_key_name": "Up",
+				"down_sdl_key_name": "Down",
+				"left_sdl_key_name": "Left",
+				"right_sdl_key_name": "Right"
 			}
 		}
 	}

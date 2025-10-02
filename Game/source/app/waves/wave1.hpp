@@ -4,7 +4,6 @@
 #include <app/waves/wave.hpp>
 #include <engine/core/forward_declarations.hpp>
 #include <engine/systems/transfrom_update_system.hpp>
-#include <entt/entt.hpp>
 namespace myge
 {
    class Wave1 final : public Wave
@@ -12,8 +11,8 @@ namespace myge
    public:
       Wave1();
       // Wave ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
-      void start( entt::registry& registry_, sdl_engine::GameContext& context_ ) override;
-      void update( entt::registry& registry_, sdl_engine::GameContext& context_, f32 delta_time_ ) override;
+      void start( sdl_engine::GameContext& context_ ) override;
+      void update( sdl_engine::GameContext& context_ ) override;
 
    private:
 

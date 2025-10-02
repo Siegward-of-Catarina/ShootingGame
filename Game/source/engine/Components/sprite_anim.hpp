@@ -6,11 +6,11 @@
 struct SDL_Texture;
 namespace sdl_engine
 {
-   struct SpriteAnim
-   {
-      entt::resource<SpriteAnimResource> sprite_anim;
-      u32                                current_frame {};
-      f64                                elapsed_time {};    // •b’PˆÊ
-      bool                               is_playing {};
-   };
+	struct SpriteAnim
+	{
+		entt::resource<SpriteAnimResource> sprite_anim;
+		u32                                current_frame{};
+		f64                                elapsed_time{};    // •b’PˆÊ
+		bool                               is_playing{};
+	};
 }    // namespace sdl_engine

@@ -1,10 +1,9 @@
 #include <SDL3/SDL.h>
+#include <engine/core.hpp>
 #include <engine/core/game_context.hpp>
-#include <engine/managers/input_manager.hpp>
-#include <engine/managers/resource_manager.hpp>
-#include <engine/managers/scene_manager.hpp>
 #include <engine/rendering/renderer.hpp>
-#include <engine/scene/scene.hpp>
+// basic systems
+#include <engine/basic_system.hpp>
 namespace sdl_engine
 {
    GameContext::GameContext( std::string_view window_name_, i32 window_width_, i32 window_height_ )
@@ -14,6 +13,8 @@ namespace sdl_engine
      , _resource_manager { std::make_unique<ResourceManager>() }
      , _input_manager { std::make_unique<InputManager>() }
      , _window_size { window_width_, window_height_ }
+     , _system_manager { std::make_unique<SystemManager>() }
+     , _game_timer { std::make_unique<GameTimer>() }
    {
       if ( !SDL_Init( SDL_INIT_VIDEO ) ) { throw GameException( "SDLÇÃèâä˙âªÇ…é∏îsÇµÇ‹ÇµÇΩ" ); }
 
@@ -28,7 +29,5 @@ namespace sdl_engine
       _renderer = std::make_unique<Renderer>( window_raw );
    }
    GameContext::~GameContext() {}
-   void GameContext::setNextScene( std::unique_ptr<Scene> next_ ) { _sequencer->setNextScene( std::move( next_ ) ); }
-   void GameContext::setCurrentScene( Scene* const current_ ) { _sequencer->setCurrentScene( current_ ); }
 
 }    // namespace sdl_engine

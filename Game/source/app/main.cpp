@@ -1,6 +1,6 @@
 ﻿#include <SDL3/SDL_main.h>
 #include <app/game.hpp>
-#include <engine/core/game_exception.hpp>
+#include <engine/core.hpp>
 #include <iostream>
 
 // SDL_mainを使用する場合 argc, argvをmainで受け取る必要があるが、使用しないのでこの形をとる

@@ -4,6 +4,11 @@
 #include <vector>
 namespace sdl_engine
 {
+    enum class AnimType {
+        Loop,
+        Once,
+        Manual
+    };
    struct SpriteAnimResource
    {
       std::vector<SDL_FRect> frames;
@@ -11,7 +16,7 @@ namespace sdl_engine
       u32                    frame_height {};
       u32                    frame_num {};
       f64                    frame_time {};    // •b’PˆÊ
-      bool                   is_loop {};
+      AnimType anim_type{};
    };
 
 }    // namespace sdl_engine

@@ -4,7 +4,6 @@
 #include <engine/rendering/loader/sprite_resource.hpp>
 #include <engine/rendering/renderer.hpp>
 #include <engine/utils/json_utilities.hpp>
-#include <functional>
 #include <nlohmann/json.hpp>
 
 namespace

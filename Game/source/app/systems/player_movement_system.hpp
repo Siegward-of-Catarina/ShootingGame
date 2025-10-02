@@ -1,17 +1,15 @@
 #pragma once
-#include <engine/core/forward_declarations.hpp>
+#include <engine/forward.hpp>
 #include <engine/systems/system_interface.hpp>
-#include <entt/entt.hpp>
 namespace myge
 {
    class PlayerMovementSystem final : public sdl_engine::SystemInterface
    {
    public:
-      PlayerMovementSystem();
+      PlayerMovementSystem( i32 priority_ );
       virtual ~PlayerMovementSystem() override;
 
       // SystemInterface ÇâÓÇµÇƒåpè≥Ç≥ÇÍÇ‹ÇµÇΩ
-      virtual void update( entt::registry& registry_, sdl_engine::GameContext& context_, f32 delta_time_ ) override;
-      virtual int  priority() const override;
+      virtual void update( sdl_engine::GameContext& context_ ) override;
    };
 }    // namespace myge

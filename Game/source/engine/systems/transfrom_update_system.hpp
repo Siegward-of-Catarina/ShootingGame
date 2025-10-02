@@ -6,10 +6,9 @@ namespace sdl_engine
    class TransformUpdateSystem : public SystemInterface
    {
    public:
-      TransformUpdateSystem();
+      TransformUpdateSystem( i32 priority_ );
       ~TransformUpdateSystem() override;
       // SystemInterface ÇâÓÇµÇƒåpè≥Ç≥ÇÍÇ‹ÇµÇΩ
-      void update( entt::registry& registry_, GameContext& context_, f32 delta_time_ ) override;
-      int  priority() const override;
+      void update( GameContext& context_ ) override;
    };
 }    // namespace sdl_engine

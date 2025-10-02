@@ -1,6 +1,6 @@
 #pragma once
 #include <deque>
-#include <engine/components/transform.hpp>
+#include <engine/basic_component.hpp>
 namespace myge
 {
    struct EnemyLeader

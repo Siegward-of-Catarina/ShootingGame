@@ -1,6 +1,5 @@
 ﻿#pragma once
-#include <engine/core/forward_declarations.hpp>
-#include <engine/core/game_context.hpp>
+#include <engine/forward.hpp>
 
 namespace myge
 {
@@ -13,6 +12,5 @@ namespace myge
 
    private:
       std::unique_ptr<sdl_engine::GameContext> _context;
-      u64                                      _last_time;
    };
 }    // namespace myge

@@ -1,7 +1,6 @@
 #pragma once
 #include <engine/core/forward_declarations.hpp>
 #include <queue>
-#include <vector>
 namespace sdl_engine
 {
    enum class KeyState : u8
@@ -25,6 +24,9 @@ namespace sdl_engine
       bool isKeyDown( i32 scancode_ );
       bool isKeyPress( i32 scancode_ );
       bool isKeyUp( i32 scancode_ );
+      bool isKeyDown( std::string_view key_name_ );
+      bool isKeyPress( std::string_view key_name_ );
+      bool isKeyUp( std::string_view key_name_ );
 
    private:
       std::vector<KeyState> _key_state;

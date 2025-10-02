@@ -6,5 +6,6 @@ namespace myge
    std::unique_ptr<Wave> createWave( std::string_view waveType )
    {
       if ( waveType == "Wave1" ) return std::make_unique<Wave1>();
+      return nullptr;
    }
 }    // namespace myge

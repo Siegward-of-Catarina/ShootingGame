@@ -1,6 +1,4 @@
 ﻿#include <engine/managers/resource_manager.hpp>
-#include <engine/managers/scene_manager.hpp>
-#include <engine/rendering/renderer.hpp>
 #include <engine/scene/scene.hpp>
 namespace sdl_engine
 {

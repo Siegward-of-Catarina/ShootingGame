@@ -1,5 +1,5 @@
 #pragma once
-#include <engine/core/forward_declarations.hpp>
+#include <engine/forward.hpp>
 #include <entt/entt.hpp>
 namespace myge
 {

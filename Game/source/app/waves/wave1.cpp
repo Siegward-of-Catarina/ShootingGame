@@ -2,9 +2,7 @@
 #include <app/entity_factory.hpp>
 #include <app/waves/wave1.hpp>
 #include <engine/components/sprite.hpp>
-#include <engine/components/sprite_anim.hpp>
-#include <engine/components/transform.hpp>
-#include <engine/core/game_context.hpp>
+#include <engine/core.hpp>
 #include <engine/rendering/loader/sprite_anim_resource.hpp>
 #include <engine/rendering/loader/sprite_resource.hpp>
 #include <engine/utils/json_utilities.hpp>
@@ -19,27 +17,19 @@ namespace myge
 {
    Wave1::Wave1() : Wave {}, _move_system {} {}
 
-   void Wave1::start( entt::registry& registry_, sdl_engine::GameContext& context_ )
+   void Wave1::start( sdl_engine::GameContext& context_ )
    {
       if ( _wave_data.contains( "Entities" ) )
       {
          EntityFactory factory;
-         factory.createEntities( registry_, context_.getResourceManager(), _wave_data.at( "Entities" ) );
+         factory.createEntities( context_, _wave_data.at( "Entities" ) );
       }
+      auto& registry = context_.getRegistry();
 
-      // 描画用にエンティティをソート
-      registry_.sort<sdl_engine::Sprite>( []( const sdl_engine::Sprite& l_sprt, const sdl_engine::Sprite& r_sprt )
-                                          { return l_sprt.texture->depth > r_sprt.texture->depth; } );
-
-      for ( auto [ entity, sprt ] : registry_.view<sdl_engine::Sprite>().each() )
+      for ( auto [ entity, sprt ] : registry.view<sdl_engine::Sprite>().each() )
       {
          SDL_Log( "%d", sprt.texture->depth );
       }
    }
-   void Wave1::update( entt::registry& registry_, sdl_engine::GameContext& context_, f32 delta_time_ )
-   {
-      _enemy_system->update( registry_, context_, delta_time_ );
-
-      _active_time -= delta_time_;
-   }
+   void Wave1::update( sdl_engine::GameContext& context_ ) { _active_time -= context_.getGameTimer().getDeltaTime(); }
 }    // namespace myge

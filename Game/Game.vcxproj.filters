@@ -20,13 +20,16 @@
     <ClCompile Include="source\app\waves\wave_factory.cpp" />
     <ClCompile Include="source\app\waves\wave1.cpp" />
     <ClCompile Include="source\app\systems\enemy_velocity_ystem.cpp" />
-    <ClCompile Include="source\engine\entity\entity_create_helper.cpp" />
+    <ClCompile Include="source\engine\Components\basic_component_create_helper.cpp" />
     <ClCompile Include="source\app\systems\player_movement_system.cpp" />
     <ClCompile Include="source\engine\systems\sprite_render_system.cpp" />
     <ClCompile Include="source\engine\systems\system_interface.cpp" />
     <ClCompile Include="source\engine\systems\transfrom_update_system.cpp" />
     <ClCompile Include="source\engine\systems\sprite_animation_system.cpp" />
     <ClCompile Include="source\app\systems\out_of_screen_system.cpp" />
+    <ClCompile Include="source\app\systems\input_system.cpp" />
+    <ClCompile Include="source\engine\managers\system_manager.cpp" />
+    <ClCompile Include="source\engine\core\game_timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -113,8 +116,8 @@
     <ClInclude Include="source\app\systems\enemy_velocity_ystem.hpp" />
     <ClInclude Include="source\app\components\enemy_leader.hpp" />
     <ClInclude Include="source\app\components\enemy_follower.hpp" />
-    <ClInclude Include="source\engine\entity\entity_create_helper.hpp" />
-    <ClInclude Include="source\engine\Components\basic_components.hpp" />
+    <ClInclude Include="source\engine\Components\basic_component_create_helper.hpp" />
+    <ClInclude Include="source\engine\basic_component.hpp" />
     <ClInclude Include="source\app\components\player_movement.hpp" />
     <ClInclude Include="source\app\systems\player_movement_system.hpp" />
     <ClInclude Include="source\engine\systems\sprite_render_system.hpp" />
@@ -124,5 +127,16 @@
     <ClInclude Include="source\app\systems\out_of_screen_system.hpp" />
     <ClInclude Include="source\app\components\bounding_box.hpp" />
     <ClInclude Include="source\app\components\player_tag.hpp" />
+    <ClInclude Include="source\app\components\player_input.hpp" />
+    <ClInclude Include="source\app\systems\input_system.hpp" />
+    <ClInclude Include="source\engine\managers\system_manager.hpp" />
+    <ClInclude Include="source\engine\core\game_timer.hpp" />
+    <ClInclude Include="source\engine\basic_system.hpp" />
+    <ClInclude Include="source\engine\utils.hpp" />
+    <ClInclude Include="source\engine\core.hpp" />
+    <ClInclude Include="source\engine\math.hpp" />
+    <ClInclude Include="source\engine\graphics.hpp" />
+    <ClInclude Include="source\engine\forward.hpp" />
+    <ClInclude Include="source\engine\sdl_engine.hpp" />
   </ItemGroup>
 </Project>

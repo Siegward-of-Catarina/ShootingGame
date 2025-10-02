@@ -2,7 +2,6 @@
 #include <SDL3_image/SDL_image.h>
 #include <engine/math/vector4.hpp>
 #include <engine/rendering/renderer.hpp>
-#include <stdexcept>
 namespace sdl_engine
 {
    Renderer::Renderer() : _sdl_renderer { nullptr, nullptr } {}

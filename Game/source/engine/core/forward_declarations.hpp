@@ -2,30 +2,33 @@
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
 #include <cstdint>
-#include <engine/core/game_exception.hpp>
 #include <memory>
 #include <string>
 #include <string_view>
+#include <vector>
 namespace sdl_engine
 {
    // クラスの前方宣言
    class Game;
    class GameContext;
+   class GameTimer;
    class Scene;
-   class TestScene;
+
    class SceneManager;
    class ResourceManager;
    class InputManager;
+   class SystemManager;
+
    class Vector4;
    class Vector2_f32;
    class Vector2_i32;
    class Renderer;
 
    class SpriteLoader;
-   class SpriteAnimLoader;
    struct SpriteResource;
-   struct SpriteAnimResource;
    class SpriteResourceDeleter;
+   class SpriteAnimLoader;
+   struct SpriteAnimResource;
 
    class SystemInterface;
    class TransformUpdateSystem;

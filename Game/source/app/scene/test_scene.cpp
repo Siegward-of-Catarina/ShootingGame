@@ -3,34 +3,20 @@
 #include <app/scene/test_scene.hpp>
 #include <app/waves/wave.hpp>
 #include <app/waves/wave_factory.hpp>
-#include <engine/components/sprite.hpp>
-#include <engine/components/transform.hpp>
-#include <engine/core/game_context.hpp>
-#include <engine/managers/input_manager.hpp>
-#include <engine/managers/resource_manager.hpp>
-#include <engine/rendering/renderer.hpp>
-#include <engine/utils/json_utilities.hpp>
-//
+// system
+#include <app/systems/input_system.hpp>
 #include <app/systems/out_of_screen_system.hpp>
-#include <engine/rendering/loader/sprite_resource.hpp>
-#include <engine/systems/sprite_animation_system.hpp>
-#include <engine/systems/sprite_render_system.hpp>
-#include <engine/systems/transfrom_update_system.hpp>
+// engine
+#include <engine/core.hpp>
+
 namespace myge
 {
-   TestScene::TestScene( sdl_engine::GameContext& ctx_ ) : Scene { ctx_ }, _systems {}, _scene_elapsed_time { 0.f }
+   TestScene::TestScene( sdl_engine::GameContext& ctx_ ) : Scene { ctx_ }, _scene_elapsed_time { 0.f }
    {
-      _player_movement_system = std::make_unique<PlayerMovementSystem>();
-      _systems.emplace_back( std::make_unique<sdl_engine::TransformUpdateSystem>() );
-      _systems.emplace_back( std::make_unique<sdl_engine::SpriteRenderSystem>() );
-      _systems.emplace_back( std::make_unique<sdl_engine::SpriteAnimationSystem>() );
-      _systems.emplace_back( std::make_unique<OutOfScreenSystem>() );
-      // 優先度でソート
-      std::sort( _systems.begin(),
-                 _systems.end(),
-                 []( const std::unique_ptr<sdl_engine::SystemInterface>& rref,
-                     const std::unique_ptr<sdl_engine::SystemInterface>& lref )
-                 { return rref->priority() < lref->priority(); } );
+      //_player_movement_system = std::make_unique<PlayerMovementSystem>();
+      auto& system_manager { getGameContext().getSystemManager() };
+      system_manager.addSystem( typeid( InputSystem ), std::make_unique<InputSystem>( 0 ) );
+      system_manager.addSystem( typeid( OutOfScreenSystem ), std::make_unique<OutOfScreenSystem>( 97 ) );
 
       loadAssets();
       loadSceneData();
@@ -38,22 +24,18 @@ namespace myge
       if ( _scene_data.contains( "Entities" ) )
       {
          EntityFactory factory;
-         factory.createEntities( _registry, getGameContext().getResourceManager(), _scene_data.at( "Entities" ) );
+         factory.createEntities( getGameContext(), _scene_data.at( "Entities" ) );
       }
 
-      _waves[ 0 ]->start( _registry, getGameContext() );
+      _waves[ 0 ]->start( getGameContext() );
    }
    TestScene::~TestScene() {}
-   void TestScene::proc( f32 delta_time_ )
+   void TestScene::proc()
    {
-      _scene_elapsed_time += static_cast<f64>( delta_time_ );
-      auto& renderer = getGameContext().getRenderer();
+      auto delta_time = getGameContext().getGameTimer().getDeltaTime();
+      _scene_elapsed_time += delta_time;
 
-      _waves[ 0 ]->update( _registry, getGameContext(), delta_time_ );
-
-      _player_movement_system->update( _registry, getGameContext(), delta_time_ );
-
-      for ( auto& system : _systems ) { system->update( _registry, getGameContext(), delta_time_ ); }
+      _waves[ 0 ]->update( getGameContext() );
    }
    void TestScene::loadAssets()
    {
@@ -71,7 +53,7 @@ namespace myge
       // jsonからWaveを生成
       if ( _scene_data.contains( "Waves" ) )
       {
-         for ( const auto wave_data : _scene_data[ "Waves" ] )
+         for ( const auto& wave_data : _scene_data[ "Waves" ] )
          {
             // クラス名とデータパスを取得
             auto wave_class_name = sdl_engine::getJsonData<std::string>( wave_data, "wave_class_name" );

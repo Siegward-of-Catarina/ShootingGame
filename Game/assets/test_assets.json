@@ -33,7 +33,7 @@
 			"frame_width": 48,
 			"frame_height": 48,
 			"frame_time": 0,
-			"is_loop": false
+			"anim_type": "Manual"
 		},
 		{
 			"name": "enemy1_anim",
@@ -43,7 +43,7 @@
 			"frame_width": 32,
 			"frame_height": 40,
 			"frame_time": 30.0,
-			"is_loop": true
+			"anim_type": "Loop"
 		}
 	]
 }

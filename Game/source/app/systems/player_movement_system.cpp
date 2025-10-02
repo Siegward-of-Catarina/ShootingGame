@@ -1,18 +1,18 @@
 #include <app/components/player_movement.hpp>
 #include <app/systems/player_movement_system.hpp>
-#include <engine/components/velocity.hpp>
-#include <engine/core/game_context.hpp>
-#include <engine/managers/input_manager.hpp>
+#include <engine/basic_component.hpp>
+#include <engine/core.hpp>
 namespace myge
 {
-   PlayerMovementSystem::PlayerMovementSystem() {}
+   PlayerMovementSystem::PlayerMovementSystem( i32 priority_ ) : SystemInterface { priority_ } {}
 
    PlayerMovementSystem::~PlayerMovementSystem() {}
 
-   void PlayerMovementSystem::update( entt::registry& registry_, sdl_engine::GameContext& context_, f32 delta_time_ )
+   void PlayerMovementSystem::update( sdl_engine::GameContext& context_ )
    {
-      for ( auto [ entity, move, velo ] : registry_.view<PlayerAutoPilotMove, sdl_engine::Velocity>().each() ) {}
-      for ( auto [ entity, move, velo ] : registry_.view<PlayerInputMove, sdl_engine::Velocity>().each() )
+      auto& registry = context_.getRegistry();
+      for ( auto [ entity, move, velo ] : registry.view<PlayerAutoPilotMove, sdl_engine::Velocity>().each() ) {}
+      for ( auto [ entity, move, velo ] : registry.view<PlayerInputMove, sdl_engine::Velocity>().each() )
       {
          velo.dx              = 0;
          velo.dy              = 0;
@@ -23,6 +23,4 @@ namespace myge
          if ( input_manager_.isKeyPress( move.right_code ) ) { velo.dx = 300.0f; }
       }
    }
-
-   int PlayerMovementSystem::priority() const { return 0; }
 }    // namespace myge

@@ -64,7 +64,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../third_party/SDL/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -84,13 +84,15 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../third_party/SDL/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\engine\core\game_timer.cpp" />
+    <ClCompile Include="source\app\systems\input_system.cpp" />
     <ClCompile Include="source\app\systems\out_of_screen_system.cpp" />
     <ClCompile Include="source\app\systems\player_movement_system.cpp" />
-    <ClCompile Include="source\engine\entity\entity_create_helper.cpp" />
+    <ClCompile Include="source\engine\Components\basic_component_create_helper.cpp" />
     <ClCompile Include="source\app\systems\enemy_velocity_ystem.cpp" />
     <ClCompile Include="source\app\waves\wave_factory.cpp" />
     <ClCompile Include="source\app\entity_factory.cpp" />
@@ -120,16 +122,24 @@
     <ClCompile Include="source\engine\systems\sprite_render_system.cpp" />
     <ClCompile Include="source\engine\systems\transfrom_update_system.cpp" />
     <ClCompile Include="source\engine\systems\sprite_animation_system.cpp" />
+    <ClCompile Include="source\engine\managers\system_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\engine\forward.hpp" />
+    <ClInclude Include="source\engine\graphics.hpp" />
+    <ClInclude Include="source\engine\math.hpp" />
+    <ClInclude Include="source\engine\core.hpp" />
+    <ClInclude Include="source\engine\core\game_timer.hpp" />
     <ClInclude Include="source\app\components\bounding_box.hpp" />
     <ClInclude Include="source\app\components\out_of_screen_behavior.hpp" />
+    <ClInclude Include="source\app\components\player_input.hpp" />
     <ClInclude Include="source\app\components\player_movement.hpp" />
     <ClInclude Include="source\app\components\player_tag.hpp" />
+    <ClInclude Include="source\app\systems\input_system.hpp" />
     <ClInclude Include="source\app\systems\out_of_screen_system.hpp" />
     <ClInclude Include="source\app\systems\player_movement_system.hpp" />
-    <ClInclude Include="source\engine\Components\basic_components.hpp" />
-    <ClInclude Include="source\engine\entity\entity_create_helper.hpp" />
+    <ClInclude Include="source\engine\basic_component.hpp" />
+    <ClInclude Include="source\engine\Components\basic_component_create_helper.hpp" />
     <ClInclude Include="source\app\components\enemy_follower.hpp" />
     <ClInclude Include="source\app\systems\enemy_velocity_ystem.hpp" />
     <ClInclude Include="source\app\forward_declarations.hpp" />
@@ -152,6 +162,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="source\engine\rendering\loader\sprite_resource.hpp" />
+    <ClInclude Include="source\engine\basic_system.hpp" />
+    <ClInclude Include="source\engine\sdl_engine.hpp" />
+    <ClInclude Include="source\engine\utils.hpp" />
     <ClInclude Include="source\engine\utils\json_utilities.hpp" />
     <ClInclude Include="source\engine\utils\common_utilities.hpp" />
     <ClInclude Include="source\entity_factory.hpp" />
@@ -220,6 +233,7 @@
     <ClInclude Include="source\engine\systems\sprite_render_system.hpp" />
     <ClInclude Include="source\engine\systems\transfrom_update_system.hpp" />
     <ClInclude Include="source\engine\systems\sprite_animation_system.hpp" />
+    <ClInclude Include="source\engine\managers\system_manager.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

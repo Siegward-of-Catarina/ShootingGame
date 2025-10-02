@@ -5,18 +5,23 @@
 #include <engine/systems/sprite_render_system.hpp>
 namespace sdl_engine
 {
-   SpriteRenderSystem::SpriteRenderSystem() {}
+   SpriteRenderSystem::SpriteRenderSystem( i32 priority_ ) : SystemInterface { priority_ } {}
    SpriteRenderSystem::~SpriteRenderSystem() {}
 
-   void SpriteRenderSystem::update( entt::registry& registry_, GameContext& context_, f32 delta_time_ )
+   void SpriteRenderSystem::update( GameContext& context_ )
    {
+      auto& registry = context_.getRegistry();
       auto& renderer = context_.getRenderer();
-
       renderer.RenderClear( .3f, .3f, .3f, 1.f );
 
-      for ( auto [ entity, sprt ] : registry_.view<Sprite>().each() )
+      // 描画用にエンティティをソート
+      context_.getRegistry().sort<sdl_engine::Sprite>(
+        []( const sdl_engine::Sprite& l_sprt, const sdl_engine::Sprite& r_sprt )
+        { return l_sprt.texture->depth > r_sprt.texture->depth; } );
+
+      for ( auto [ entity, sprt ] : registry.view<Sprite>().each() )
       {
-         auto& trfm   = registry_.get<Transform>( entity );
+         auto& trfm   = registry.get<Transform>( entity );
          auto  harf_w = sprt.dst.w / 2;
          auto  harf_h = sprt.dst.h / 2;
          sprt.dst.x   = trfm.x - harf_w;
@@ -26,6 +31,4 @@ namespace sdl_engine
 
       renderer.RenderPresent();
    }
-
-   int SpriteRenderSystem::priority() const { return 100; }
 }    // namespace sdl_engine

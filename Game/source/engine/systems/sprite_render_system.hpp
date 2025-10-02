@@ -5,10 +5,9 @@ namespace sdl_engine
    class SpriteRenderSystem : public SystemInterface
    {
    public:
-      SpriteRenderSystem();
+      SpriteRenderSystem( i32 priority_ );
       virtual ~SpriteRenderSystem() override;
       // SystemInterface ÇâÓÇµÇƒåpè≥Ç≥ÇÍÇ‹ÇµÇΩ
-      void update( entt::registry& registry_, GameContext& context_, f32 delta_time_ ) override;
-      int  priority() const override;
+      void update( GameContext& context_ ) override;
    };
 }    // namespace sdl_engine

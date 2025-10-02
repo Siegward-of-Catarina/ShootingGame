@@ -99,6 +99,29 @@ namespace sdl_engine
       }
       return false;
    }
+   bool InputManager::isKeyDown(std::string_view key_name_)
+   {
+       auto scancode{ SDL_GetScancodeFromName(key_name_.data()) };
+       if (scancode == SDL_SCANCODE_UNKNOWN) { return false;
+       }
+       return isKeyDown(scancode);
+   }
+   bool InputManager::isKeyPress(std::string_view key_name_)
+   {
+       auto scancode{ SDL_GetScancodeFromName(key_name_.data()) };
+       if (scancode == SDL_SCANCODE_UNKNOWN) {
+           return false;
+       }
+       return isKeyPress(scancode);
+   }
+   bool InputManager::isKeyUp(std::string_view key_name_)
+   {
+       auto scancode{ SDL_GetScancodeFromName(key_name_.data()) };
+       if (scancode == SDL_SCANCODE_UNKNOWN) {
+           return false;
+       }
+       return isKeyUp(scancode);
+   }
 }    // namespace sdl_engine
 // SDL_SCANCODE_A = 4, 0
 // SDL_SCANCODE_B = 5, 1

@@ -1,11 +1,11 @@
 #pragma once
-#include <engine/core/forward_declarations.hpp>
+#include <engine/forward.hpp>
 namespace myge
 {
    struct BoundingBox
    {
-      u32 harf_width;
-      u32 harf_hegiht;
+      i32 harf_width;
+      i32 harf_hegiht;
       f32 radius;
    };
 }    // namespace myge
