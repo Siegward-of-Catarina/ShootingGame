@@ -6,6 +6,6 @@ namespace myge
    class EntityFactory
    {
    public:
-      void createEntities( sdl_engine::GameContext& context_, json& data_ );
+      std::vector<entt::entity> createEntities( sdl_engine::GameContext& context_, json& data_ );
    };
 }    // namespace myge

@@ -58,6 +58,11 @@ namespace sdl_engine
       }
    }
 
+   void ResourceManager::addSpriteResources( std::string_view resources_name_, SDL_Texture* texture_, u32 depth_ )
+   {
+      auto handle = _sprite_cache.load( u32Hash( resources_name_.data() ), texture_, depth_ );
+   }
+
    entt::resource<SpriteResource> ResourceManager::getSprite( std::string_view key )
    {
       if ( entt::resource<SpriteResource> res = _sprite_cache[ u32Hash( key ) ]; res ) { return res; }

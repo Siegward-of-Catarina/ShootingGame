@@ -13,18 +13,19 @@ namespace sdl_engine
       Renderer( SDL_Window* window_ );
       ~Renderer();
 
-      SDL_Texture* LoadTexture( std::string_view path );
+      SDL_Texture* loadTexture( std::string_view path );
+      SDL_Texture* createWhiteTexture();
 
       void setRenderClearColor( float r_, float g_, float b_, float a_ );
       void setRenderClearColor( Color& color_ );
 
-      void RenderClear();
-      void RenderClear( Color color_ );
-      void RenderClear( float r_, float g_, float b_, float a_ );
+      void renderClear();
+      void renderClear( Color color_ );
+      void renderClear( float r_, float g_, float b_, float a_ );
 
-      void RenderTexture( SDL_Texture* texture_, const SDL_FRect* src_, const SDL_FRect* dst_, f32 angle_ );
+      void renderTexture( SDL_Texture* texture_, const SDL_FRect* src_, const SDL_FRect* dst_, f32 angle_ );
 
-      void RenderPresent();
+      void renderPresent();
 
    private:
       SDL_RendererPtr _sdl_renderer;

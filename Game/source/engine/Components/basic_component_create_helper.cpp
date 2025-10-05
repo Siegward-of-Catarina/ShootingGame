@@ -15,7 +15,8 @@ namespace sdl_engine
       sdl_engine::Sprite sprt_comp {
          .texture { sprite },
          .src { 0.f, 0.f, static_cast<f32>( sprite->texture->w ), static_cast<f32>( sprite->texture->h ) },
-         .dst { 0.f, 0.f, static_cast<f32>( sprite->texture->w ), static_cast<f32>( sprite->texture->h ) }
+         .dst { 0.f, 0.f, static_cast<f32>( sprite->texture->w ), static_cast<f32>( sprite->texture->h ) },
+         .color{1,1,1,1}
       };
       return sprt_comp;
    }

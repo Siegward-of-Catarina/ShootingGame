@@ -1,5 +1,7 @@
 #pragma once
+#include <engine/Components/active.hpp>
 #include <engine/Components/basic_component_create_helper.hpp>
+#include <engine/Components/fade.hpp>
 #include <engine/Components/sprite.hpp>
 #include <engine/Components/sprite_anim.hpp>
 #include <engine/Components/transform.hpp>

@@ -9,7 +9,9 @@ namespace sdl_engine
    public:
       Scene( GameContext& ctx_ );
       virtual ~Scene() {};
-      virtual void proc() = 0;
+      virtual void initialize() = 0;
+      virtual void start()      = 0;
+      virtual void update()     = 0;
 
       GameContext& getGameContext() { return _context; }
 

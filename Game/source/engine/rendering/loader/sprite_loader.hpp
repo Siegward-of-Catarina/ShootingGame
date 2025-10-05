@@ -8,5 +8,6 @@ namespace sdl_engine
    public:
       using result_type = std::shared_ptr<SpriteResource>;
       std::shared_ptr<SpriteResource> operator()( Renderer& renderer_, const json& data_ ) const;
+      std::shared_ptr<SpriteResource> operator()( SDL_Texture* texture_, u32 depth_ ) const;
    };
 }    // namespace sdl_engine

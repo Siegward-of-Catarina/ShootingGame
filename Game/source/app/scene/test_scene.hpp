@@ -11,7 +11,9 @@ namespace myge
       TestScene( sdl_engine::GameContext& ctx_ );
       ~TestScene();
       // Scene を介して継承されました
-      void proc() override;
+      void initialize() override;
+      void start() override;
+      void update() override;
 
    private:
       void loadAssets();
@@ -22,5 +24,6 @@ namespace myge
       json                               _scene_data;
       std::vector<std::unique_ptr<Wave>> _waves;
       f64                                _scene_elapsed_time;
+      std::vector<entt::entity>          _entities;
    };
 }    // namespace myge

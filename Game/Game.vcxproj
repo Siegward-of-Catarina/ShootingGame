@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\engine\systems\fade_system.cpp" />
     <ClCompile Include="source\engine\core\game_timer.cpp" />
     <ClCompile Include="source\app\systems\input_system.cpp" />
     <ClCompile Include="source\app\systems\out_of_screen_system.cpp" />
@@ -106,6 +107,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="source\engine\managers\scene_manager.cpp" />
     <ClCompile Include="source\engine\systems\system_interface.cpp" />
     <ClCompile Include="source\engine\utils\common_utilities.cpp" />
     <ClCompile Include="source\app\game.cpp" />
@@ -123,8 +125,12 @@
     <ClCompile Include="source\engine\systems\transfrom_update_system.cpp" />
     <ClCompile Include="source\engine\systems\sprite_animation_system.cpp" />
     <ClCompile Include="source\engine\managers\system_manager.cpp" />
+    <ClCompile Include="title_scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\engine\Components\active.hpp" />
+    <ClInclude Include="source\engine\systems\fade_system.hpp" />
+    <ClInclude Include="source\engine\Components\fade.hpp" />
     <ClInclude Include="source\engine\forward.hpp" />
     <ClInclude Include="source\engine\graphics.hpp" />
     <ClInclude Include="source\engine\math.hpp" />
@@ -234,6 +240,7 @@
     <ClInclude Include="source\engine\systems\transfrom_update_system.hpp" />
     <ClInclude Include="source\engine\systems\sprite_animation_system.hpp" />
     <ClInclude Include="source\engine\managers\system_manager.hpp" />
+    <ClInclude Include="title_scene.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

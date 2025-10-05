@@ -7,11 +7,20 @@
 #include <app/systems/input_system.hpp>
 #include <app/systems/out_of_screen_system.hpp>
 // engine
+#include <engine/basic_component.hpp>
 #include <engine/core.hpp>
+namespace
+{
+   enum class SceneState
+   {
+      Wave,
+      End
+   } scene_state;
+}
 
 namespace myge
 {
-   TestScene::TestScene( sdl_engine::GameContext& ctx_ ) : Scene { ctx_ }, _scene_elapsed_time { 0.f }
+   TestScene::TestScene( sdl_engine::GameContext& ctx_ ) : Scene { ctx_ }, _scene_elapsed_time { 0.f }, _entities {}
    {
       //_player_movement_system = std::make_unique<PlayerMovementSystem>();
       auto& system_manager { getGameContext().getSystemManager() };
@@ -20,22 +29,49 @@ namespace myge
 
       loadAssets();
       loadSceneData();
+   }
+   TestScene::~TestScene()
+   {
+      auto& registry { getGameContext().getRegistry() };
+      for ( auto& entity : _entities )
+      {
+         if ( registry.valid( entity ) ) { registry.destroy( entity ); }
+      }
+   }
+   void TestScene::initialize()
+   {
       createWaves();
       if ( _scene_data.contains( "Entities" ) )
       {
          EntityFactory factory;
-         factory.createEntities( getGameContext(), _scene_data.at( "Entities" ) );
+         _entities = factory.createEntities( getGameContext(), _scene_data.at( "Entities" ) );
       }
 
-      _waves[ 0 ]->start( getGameContext() );
+      auto& registry { getGameContext().getRegistry() };
+      for ( auto& entity : _entities ) { registry.emplace<sdl_engine::Active>( entity ); }
+      scene_state = SceneState::Wave;
    }
-   TestScene::~TestScene() {}
-   void TestScene::proc()
+   void TestScene::start() { _waves[ 0 ]->start( getGameContext() ); }
+
+   void TestScene::update()
    {
       auto delta_time = getGameContext().getGameTimer().getDeltaTime();
       _scene_elapsed_time += delta_time;
 
-      _waves[ 0 ]->update( getGameContext() );
+      switch ( scene_state )
+      {
+         case SceneState::Wave :
+         {
+            _waves[ 0 ]->update( getGameContext() );
+            if ( _scene_elapsed_time > 10 ) { scene_state = SceneState::End; }
+            break;
+         }
+         case SceneState::End :
+         {
+            getGameContext().getSceneManager().setNextScene( std::make_unique<TestScene>( getGameContext() ) );
+            break;
+         }
+      }
    }
    void TestScene::loadAssets()
    {

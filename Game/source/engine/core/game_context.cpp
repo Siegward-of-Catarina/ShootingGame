@@ -9,7 +9,7 @@ namespace sdl_engine
    GameContext::GameContext( std::string_view window_name_, i32 window_width_, i32 window_height_ )
      : _window { nullptr, nullptr }
      , _renderer { nullptr }
-     , _sequencer { std::make_unique<SceneManager>() }
+     , _scene_manager { std::make_unique<SceneManager>() }
      , _resource_manager { std::make_unique<ResourceManager>() }
      , _input_manager { std::make_unique<InputManager>() }
      , _window_size { window_width_, window_height_ }
@@ -27,7 +27,15 @@ namespace sdl_engine
       _window = { window_raw, &SDL_DestroyWindow };
 
       _renderer = std::make_unique<Renderer>( window_raw );
+      _scene_manager->initialize( *this );
    }
    GameContext::~GameContext() {}
 
+   void GameContext::update()
+   {
+      _game_timer->update();
+      _scene_manager->update( *this );
+      _system_manager->updateSystems( *this );
+      _input_manager->update();
+   }
 }    // namespace sdl_engine

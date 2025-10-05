@@ -2,13 +2,16 @@
 #include <SDL3/SDL_rect.h>
 #include <engine/rendering/loader/sprite_resource.hpp>
 #include <entt/entt.hpp>
+#include <engine/math.hpp>
+#include <engine/core/forward_declarations.hpp>
 struct SDL_Texture;
 namespace sdl_engine
 {
-   struct Sprite
-   {
-      entt::resource<SpriteResource> texture;
-      SDL_FRect                      src {};
-      SDL_FRect                      dst {};
-   };
+	struct Sprite
+	{
+		entt::resource<SpriteResource> texture;
+		SDL_FRect                      src{};
+		SDL_FRect                      dst{};
+		Vector4 color;
+	};
 }    // namespace sdl_engine

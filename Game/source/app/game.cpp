@@ -11,7 +11,7 @@ namespace myge
 {
    Game::Game() : _context { std::make_unique<sdl_engine::GameContext>( "shooting", 600, 800 ) }
    {
-      _context->getSequencer().setCurrentScene( new TestScene( *_context ) );
+      _context->getSceneManager().initializeCurrentScene( std::make_unique<TestScene>( *_context ) );
    }
 
    Game::~Game() { SDL_Quit(); }
@@ -34,11 +34,7 @@ namespace myge
             _context->getInputManager().handleEvent( event );
          }
 
-         _context->getGameTimer().update();
-         _context->getSequencer().currentScene().proc();
-
-         _context->getSystemManager().updateSystems( *_context );
-         _context->getInputManager().update();
+         _context->update();
       }
    }
 }    // namespace myge

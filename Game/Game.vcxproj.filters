@@ -30,6 +30,9 @@
     <ClCompile Include="source\app\systems\input_system.cpp" />
     <ClCompile Include="source\engine\managers\system_manager.cpp" />
     <ClCompile Include="source\engine\core\game_timer.cpp" />
+    <ClCompile Include="source\engine\managers\scene_manager.cpp" />
+    <ClCompile Include="source\engine\systems\fade_system.cpp" />
+    <ClCompile Include="title_scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -138,5 +141,9 @@
     <ClInclude Include="source\engine\graphics.hpp" />
     <ClInclude Include="source\engine\forward.hpp" />
     <ClInclude Include="source\engine\sdl_engine.hpp" />
+    <ClInclude Include="source\engine\Components\fade.hpp" />
+    <ClInclude Include="source\engine\systems\fade_system.hpp" />
+    <ClInclude Include="source\engine\Components\active.hpp" />
+    <ClInclude Include="title_scene.hpp" />
   </ItemGroup>
 </Project>

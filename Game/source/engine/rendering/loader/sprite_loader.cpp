@@ -12,9 +12,21 @@ namespace sdl_engine
 
       SpriteResource* resource { new SpriteResource };
       resource->depth   = data_.value( "depth", 0 );
-      resource->texture = renderer_.LoadTexture( path_ );
+      resource->texture = renderer_.loadTexture( path_ );
       if ( !resource->texture ) { SDL_Log( "画像を読み込めませんでした:  %s ", SDL_GetError() ); }
 
+      SDL_SetTextureBlendMode( resource->texture, SDL_BLENDMODE_BLEND );    // 標準はアルファブレンド
+      SDL_SetTextureScaleMode( resource->texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );
+
+      return std::shared_ptr<SpriteResource>( resource, SpriteResourceDeleter );
+   }
+   std::shared_ptr<SpriteResource> SpriteLoader::operator()( SDL_Texture* texture_, u32 depth_ ) const
+   {
+      SpriteResource* resource { new SpriteResource };
+      resource->depth   = depth_;
+      resource->texture = texture_;
+
+      SDL_SetTextureBlendMode( resource->texture, SDL_BLENDMODE_BLEND );    // 標準はアルファブレンド
       SDL_SetTextureScaleMode( resource->texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );
 
       return std::shared_ptr<SpriteResource>( resource, SpriteResourceDeleter );

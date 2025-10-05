@@ -12,7 +12,9 @@ namespace myge
    {
       auto& registry = context_.getRegistry();
       for ( auto [ entity, behavior, box, trfm, velo ] :
-            registry.view<OutOfScreenBehavior, BoundingBox, sdl_engine::Transform, sdl_engine::Velocity>().each() )
+            registry
+              .view<OutOfScreenBehavior, BoundingBox, sdl_engine::Transform, sdl_engine::Velocity, sdl_engine::Active>()
+              .each() )
       {
          // target box
          f32 t_left   = trfm.x - box.harf_width;

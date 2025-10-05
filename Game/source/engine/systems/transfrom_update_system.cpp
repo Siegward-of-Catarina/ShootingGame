@@ -1,3 +1,4 @@
+#include <engine/Components/active.hpp>
 #include <engine/components/Velocity.hpp>
 #include <engine/components/transform.hpp>
 #include <engine/core/game_context.hpp>
@@ -11,7 +12,7 @@ namespace sdl_engine
    {
       auto& registry   = context_.getRegistry();
       auto  delta_time = context_.getGameTimer().getDeltaTime();
-      for ( auto [ entity, velo ] : registry.view<Velocity>().each() )
+      for ( auto [ entity, velo ] : registry.view<Velocity, Active>().each() )
       {
          auto& trfm = registry.get<Transform>( entity );
          trfm.x += velo.dx * delta_time;

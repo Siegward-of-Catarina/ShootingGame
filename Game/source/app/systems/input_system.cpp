@@ -13,7 +13,7 @@ namespace myge
    {
       auto& registry = context_.getRegistry();
       for ( auto [ entity, input, velo, anim ] :
-            registry.view<PlayerInput, sdl_engine::Velocity, sdl_engine::SpriteAnim>().each() )
+            registry.view<PlayerInput, sdl_engine::Velocity, sdl_engine::SpriteAnim, sdl_engine::Active>().each() )
       {
          velo.dx              = 0;
          velo.dy              = 0;

@@ -1,7 +1,7 @@
 #include <SDL3/SDL.h>
 #include <app/entity_factory.hpp>
 #include <app/waves/wave1.hpp>
-#include <engine/components/sprite.hpp>
+#include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 #include <engine/rendering/loader/sprite_anim_resource.hpp>
 #include <engine/rendering/loader/sprite_resource.hpp>
@@ -19,12 +19,15 @@ namespace myge
 
    void Wave1::start( sdl_engine::GameContext& context_ )
    {
+      std::vector<entt::entity> entities;
       if ( _wave_data.contains( "Entities" ) )
       {
          EntityFactory factory;
-         factory.createEntities( context_, _wave_data.at( "Entities" ) );
+         entities = factory.createEntities( context_, _wave_data.at( "Entities" ) );
       }
       auto& registry = context_.getRegistry();
+
+      for ( auto& entity : entities ) { registry.emplace<sdl_engine::Active>( entity ); }
 
       for ( auto [ entity, sprt ] : registry.view<sdl_engine::Sprite>().each() )
       {

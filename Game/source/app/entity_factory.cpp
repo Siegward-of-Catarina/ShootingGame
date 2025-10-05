@@ -78,7 +78,7 @@ namespace
 }    // namespace
 namespace myge
 {
-   void EntityFactory::createEntities( sdl_engine::GameContext& context_, json& data_ )
+   std::vector<entt::entity> EntityFactory::createEntities( sdl_engine::GameContext& context_, json& data_ )
    {
 
       auto& registry { context_.getRegistry() };
@@ -100,17 +100,19 @@ namespace myge
          for ( auto& bg_data : data_.at( "BackGround" ) ) { entities_data.emplace_back( bg_data ); };
       }
 
+      std::vector<entt::entity> entities { entities_data.size() };
+
       // 取得したデータからエンティティを生成
-      for ( auto& entity_data : entities_data )
+      for ( i32 i { 0 }; auto& entity_data : entities_data )
       {
-         auto entity = registry.create();
+         entities[ i ] = registry.create();
          // 基本的なコンポーネント
-         emplaceBasicComponents( registry, resource_manager, entity, entity_data );
+         emplaceBasicComponents( registry, resource_manager, entities[ i ], entity_data );
          // [spriteAnim]
          if ( entity_data.contains( "SpriteAnim" ) )
          {
             getSpriteAnimResourceAndEmplaceComponent(
-              registry, resource_manager, entity, entity_data.at( "SpriteAnim" ) );
+              registry, resource_manager, entities[ i ], entity_data.at( "SpriteAnim" ) );
          }
          // [playerInput]
          if ( entity_data.contains( "PlayerInput" ) )
@@ -123,7 +125,7 @@ namespace myge
                .left_sdl_key_name { sdl_engine::getJsonData<std::string>( data, "left_sdl_key_name" ) },
                .right_sdl_key_name { sdl_engine::getJsonData<std::string>( data, "right_sdl_key_name" ) }
             };
-            registry.emplace<PlayerInput>( entity, input_comp );
+            registry.emplace<PlayerInput>( entities[ i ], input_comp );
          }
          // [BoundingBox]
          if ( entity_data.contains( "BoundingBox" ) )
@@ -133,7 +135,7 @@ namespace myge
                                          .harf_hegiht { sdl_engine::getJsonData<i32>( data, "harf_height" ) },
                                          .radius { sdl_engine::getJsonData<f32>( data, "radius" ) } };
 
-            registry.emplace<myge::BoundingBox>( entity, box_comp );
+            registry.emplace<myge::BoundingBox>( entities[ i ], box_comp );
          }
          // [OutOfScreenBehavior]
          if ( entity_data.contains( "OutOfScreenBehavior" ) )
@@ -144,8 +146,12 @@ namespace myge
             else if ( data.at( "behavior" ) == "Wrap" ) { behavior.type = myge::OutOfScreenBehavior::Type::Wrap; }
             else if ( data.at( "behavior" ) == "Stop" ) { behavior.type = myge::OutOfScreenBehavior::Type::Stop; }
             else if ( data.at( "behavior" ) == "Ignore" ) { behavior.type = myge::OutOfScreenBehavior::Type::Ignore; }
-            registry.emplace<myge::OutOfScreenBehavior>( entity, behavior );
+            registry.emplace<myge::OutOfScreenBehavior>( entities[ i ], behavior );
          }
+
+         i++;
       }
+
+      return entities;
    }
 }    // namespace myge
