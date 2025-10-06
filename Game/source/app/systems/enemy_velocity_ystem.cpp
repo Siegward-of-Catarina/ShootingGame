@@ -18,7 +18,7 @@ namespace myge
       time += delta_time * 10;
       f32 target_x { 0 };
       f32 target_y { 0 };
-      for ( auto [ entity ] : registry.view<EnemyTag, sdl_engine::Active>().each() )
+      for ( auto [ entity ] : getLogicUpdateable<EnemyTag>( registry ).each() )
       {
          auto& velocity  = registry.get<sdl_engine::Velocity>( entity );
          auto& transform = registry.get<sdl_engine::Transform>( entity );

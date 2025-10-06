@@ -36,6 +36,9 @@ namespace sdl_engine
 
    using Color = sdl_engine::Vector4;
 
+   struct LogicUpdateableTag;
+   struct RenderableTag;
+
 }    // namespace sdl_engine
 // SDLの前方宣言
 struct SDL_Texture;

@@ -1,5 +1,5 @@
 #pragma once
-#include <engine/Components/active.hpp>
+#include <engine/Components/enable_tag_components.hpp>
 #include <engine/Components/basic_component_create_helper.hpp>
 #include <engine/Components/fade.hpp>
 #include <engine/Components/sprite.hpp>

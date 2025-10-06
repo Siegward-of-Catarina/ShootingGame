@@ -10,42 +10,21 @@ namespace myge
    OutOfScreenSystem::~OutOfScreenSystem() {}
    void OutOfScreenSystem::update( sdl_engine::GameContext& context_ )
    {
-      auto& registry = context_.getRegistry();
-      for ( auto [ entity, behavior, box, trfm, velo ] :
-            registry
-              .view<OutOfScreenBehavior, BoundingBox, sdl_engine::Transform, sdl_engine::Velocity, sdl_engine::Active>()
-              .each() )
+      auto& registry { context_.getRegistry() };
+      auto& window_size { context_.getWindowSize() };
+      f32   w_right  = static_cast<f32>( window_size.x );
+      f32   w_bottom = static_cast<f32>( window_size.y );
+      auto  view { getLogicUpdateable<OutOfScreenBehavior, BoundingBox, sdl_engine::Transform, sdl_engine::Velocity>(
+        registry ) };
+      for ( auto [ entity, behavior, box, trfm, velo ] : view.each() )
       {
-         // target box
-         f32 t_left   = trfm.x - box.harf_width;
-         f32 t_right  = trfm.x + box.harf_width;
-         f32 t_top    = trfm.y - box.harf_hegiht;
-         f32 t_bottom = trfm.y + box.harf_hegiht;
-         // screen box
-         f32 s_left   = 0.f;
-         f32 s_right  = static_cast<f32>( context_.getWindowSize().x );
-         f32 s_top    = 0.f;
-         f32 s_bottom = static_cast<f32>( context_.getWindowSize().y );
-
-         // 先に上下左右を計算し、結果のみを保持しておく
-
-         // バウンディングボックスが少しでもはみ出す場合
-         bool is_out_t_top_at_s_top { ( t_top < s_top ) ? true : false };
-         bool is_out_t_bottom_at_s_bottom { ( t_bottom > s_bottom ) ? true : false };
-         bool is_out_t_left_at_s_left { ( t_left < s_left ) ? true : false };
-         bool is_out_t_right_at_s_right { ( t_right > s_right ) ? true : false };
-         // バウンディングボックス全体がはみ出す場合
-         bool is_out_t_bottom_at_s_top { ( t_bottom < s_top ) ? true : false };
-         bool is_out_t_top_at_s_bottom { ( t_top > s_bottom ) ? true : false };
-         bool is_out_t_right_at_s_left { ( t_right < s_left ) ? true : false };
-         bool is_out_t_left_at_s_right { ( t_left > s_right ) ? true : false };
-
+         // ここはentityのタグごとに処理を決めるようにする
+         // player or enemy or bg...
          switch ( behavior.type )
          {
             case OutOfScreenBehavior::Type::Destroy :
             {
-               if ( is_out_t_bottom_at_s_top || is_out_t_top_at_s_bottom || is_out_t_right_at_s_left
-                    || is_out_t_left_at_s_right )
+               if ( static_cast<u32>( box.state ) & static_cast<u32>( BoundingBox::State::Out ) )
                {
                   registry.destroy( entity );
                   continue;
@@ -54,26 +33,33 @@ namespace myge
             }
             case OutOfScreenBehavior::Type::Wrap :
             {
-               if ( is_out_t_bottom_at_s_top ) { trfm.y = s_bottom + box.harf_hegiht; }
-               if ( is_out_t_top_at_s_bottom ) { trfm.y = static_cast<f32>( -box.harf_hegiht ); }
-               if ( is_out_t_right_at_s_left ) { trfm.x = s_right + box.harf_width; }
-               if ( is_out_t_left_at_s_right ) { trfm.x = static_cast<f32>( -box.harf_width ); }
+               if ( box.state == BoundingBox::State::OutTop ) { trfm.y = w_bottom + box.harf_hegiht; }
+               if ( box.state == BoundingBox::State::OutBottom ) { trfm.y = static_cast<f32>( -box.harf_hegiht ); }
+               if ( box.state == BoundingBox::State::OutLeft ) { trfm.x = w_right + box.harf_width; }
+               if ( box.state == BoundingBox::State::OutRight ) { trfm.x = static_cast<f32>( -box.harf_width ); }
                break;
             }
             case OutOfScreenBehavior::Type::Stop :
             {
-               if ( is_out_t_top_at_s_top ) { trfm.y = static_cast<f32>( box.harf_hegiht ); }
-               if ( is_out_t_bottom_at_s_bottom ) { trfm.y = s_bottom - box.harf_hegiht; }
-               if ( is_out_t_left_at_s_left ) { trfm.x = static_cast<f32>( box.harf_width ); }
-               if ( is_out_t_right_at_s_right ) { trfm.x = s_right - box.harf_width; }
-               break;
-            }
-            case OutOfScreenBehavior::Type::Ignore :
-            {
-               if ( !is_out_t_bottom_at_s_top && !is_out_t_top_at_s_bottom && !is_out_t_right_at_s_left
-                    && !is_out_t_left_at_s_right )
+               if ( box.state == BoundingBox::State::PartinalTop )
                {
-                  behavior.type = OutOfScreenBehavior::Type::Destroy();
+                  velo.dy = 0;
+                  trfm.y  = static_cast<f32>( box.harf_hegiht );
+               }
+               if ( box.state == BoundingBox::State::PartinalBottom )
+               {
+                  velo.dy = 0;
+                  trfm.y  = w_bottom - box.harf_hegiht;
+               }
+               if ( box.state == BoundingBox::State::PartinalLeft )
+               {
+                  velo.dx = 0;
+                  trfm.x  = static_cast<f32>( box.harf_width );
+               }
+               if ( box.state == BoundingBox::State::PartinalRight )
+               {
+                  velo.dx = 0;
+                  trfm.x  = w_right - box.harf_width;
                }
                break;
             }

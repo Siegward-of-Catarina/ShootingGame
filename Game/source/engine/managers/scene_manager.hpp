@@ -7,19 +7,12 @@ namespace sdl_engine
    public:
       SceneManager();
       ~SceneManager();
-      void   initialize( GameContext& context_ );
-      void   update( GameContext& context_ );
-      void   initializeCurrentScene( std::unique_ptr<Scene> current_ );
+      void initialize( GameContext& context_ );
+      void update( GameContext& context_ );
+      // 最初期シーン初期化後開始
+      void   initStartCurrentScene( std::unique_ptr<Scene> current_ );
       void   setNextScene( std::unique_ptr<Scene> next_ ) { _next_scene = std::move( next_ ); };
       Scene& currentScene() { return *_current_scene; };
-
-      // メモ：シーンの遷移について
-      // シーンが終了時に、シーン自身にNextSceneをsetさせる。
-      // nextsceneは通常nullptrであり、setされたときのみアドレスを持つ。
-      // シーンマネージャはこのnextsceneを監視し、nullptrでない場合、
-      // フェードアウトを実行する。
-      // フェードアウトが完了し次第、currentにnextを移動させ、nextはnullptrに。
-      // その後、sceneの初期化が終わり次第フェードインを実行する。
 
    private:
       entt::entity           _fade;

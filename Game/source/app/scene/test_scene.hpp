@@ -4,26 +4,24 @@
 #include <engine/utils.hpp>
 namespace myge
 {
-   class Wave;
-   class TestScene : public sdl_engine::Scene
-   {
-   public:
-      TestScene( sdl_engine::GameContext& ctx_ );
-      ~TestScene();
-      // Scene を介して継承されました
-      void initialize() override;
-      void start() override;
-      void update() override;
+	class Wave;
+	class TestScene final : public sdl_engine::Scene
+	{
+	public:
+		TestScene(sdl_engine::GameContext& ctx_);
+		~TestScene();
+		// Scene を介して継承されました
+		void initialize() override;
+		void start() override;
+		void update() override;
 
-   private:
-      void loadAssets();
-      void loadSceneData();
-      void createWaves();
+		virtual void addSystems() override;
+	private:
+		void createWaves();
 
-   private:
-      json                               _scene_data;
-      std::vector<std::unique_ptr<Wave>> _waves;
-      f64                                _scene_elapsed_time;
-      std::vector<entt::entity>          _entities;
-   };
+	private:
+		std::vector<std::unique_ptr<Wave>> _waves;
+		f64                                _scene_elapsed_time;
+
+	};
 }    // namespace myge

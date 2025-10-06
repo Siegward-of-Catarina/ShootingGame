@@ -1,5 +1,6 @@
 #include <app/components/bounding_box.hpp>
 #include <app/components/enemy_tag.hpp>
+#include <app/components/lifecycle.hpp>
 #include <app/components/out_of_screen_behavior.hpp>
 #include <app/components/player_input.hpp>
 #include <app/components/player_movement.hpp>
@@ -74,7 +75,6 @@ namespace
       auto vlcy_comp = sdl_engine::getVelocityComponent( data_.at( "Velocity" ) );
       registry_.emplace<sdl_engine::Velocity>( entity_, vlcy_comp );
    }
-
 }    // namespace
 namespace myge
 {
@@ -99,13 +99,16 @@ namespace myge
       {
          for ( auto& bg_data : data_.at( "BackGround" ) ) { entities_data.emplace_back( bg_data ); };
       }
-
+      if ( data_.contains( "Title" ) ) { entities_data.emplace_back( data_.at( "Title" ) ); }
       std::vector<entt::entity> entities { entities_data.size() };
 
       // 取得したデータからエンティティを生成
       for ( i32 i { 0 }; auto& entity_data : entities_data )
       {
          entities[ i ] = registry.create();
+         // ライフサイクルタグ [ 画面外からゲームエリアへ向かう ]状態を初期値とする
+         // この時点で更新対象にもする
+         registry.emplace<myge::EnteringTag>( entities[ i ] );
          // 基本的なコンポーネント
          emplaceBasicComponents( registry, resource_manager, entities[ i ], entity_data );
          // [spriteAnim]
@@ -133,7 +136,24 @@ namespace myge
             auto&             data = entity_data.at( "BoundingBox" );
             myge::BoundingBox box_comp { .harf_width { sdl_engine::getJsonData<i32>( data, "harf_width" ) },
                                          .harf_hegiht { sdl_engine::getJsonData<i32>( data, "harf_height" ) },
-                                         .radius { sdl_engine::getJsonData<f32>( data, "radius" ) } };
+                                         .radius { sdl_engine::getJsonData<f32>( data, "radius" ) },
+                                         .state { BoundingBox::State::None },    // 固定
+                                         .enable_axis { BoundingBox::EnableAxis::ALL } };
+            // 有効判定方向に指定があれば再設定
+            if ( data.contains( "enable_axis" ) )
+            {
+               auto axis { sdl_engine::getJsonData<std::string>( data, "enable_axis" ) };
+               // allの場合すでに設定されてるので無視
+               if ( axis != "all" )
+               {
+                  if ( axis == "top" ) { box_comp.enable_axis = BoundingBox::EnableAxis::Top; }
+                  else if ( axis == "bottom" ) { box_comp.enable_axis = BoundingBox::EnableAxis::Bottom; }
+                  else if ( axis == "left" ) { box_comp.enable_axis = BoundingBox::EnableAxis::Left; }
+                  else if ( axis == "right" ) { box_comp.enable_axis = BoundingBox::EnableAxis::Right; }
+                  else if ( axis == "lr" ) { box_comp.enable_axis = BoundingBox::EnableAxis::LR; }
+                  else if ( axis == "tb" ) { box_comp.enable_axis = BoundingBox::EnableAxis::TB; }
+               }
+            }
 
             registry.emplace<myge::BoundingBox>( entities[ i ], box_comp );
          }

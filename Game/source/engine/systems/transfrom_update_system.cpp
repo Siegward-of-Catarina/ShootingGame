@@ -1,5 +1,5 @@
-#include <engine/Components/active.hpp>
 #include <engine/components/Velocity.hpp>
+#include <engine/components/enable_tag_components.hpp>
 #include <engine/components/transform.hpp>
 #include <engine/core/game_context.hpp>
 #include <engine/core/game_timer.hpp>
@@ -12,7 +12,7 @@ namespace sdl_engine
    {
       auto& registry   = context_.getRegistry();
       auto  delta_time = context_.getGameTimer().getDeltaTime();
-      for ( auto [ entity, velo ] : registry.view<Velocity, Active>().each() )
+      for ( auto [ entity, velo ] : registry.view<Velocity>().each() )
       {
          auto& trfm = registry.get<Transform>( entity );
          trfm.x += velo.dx * delta_time;

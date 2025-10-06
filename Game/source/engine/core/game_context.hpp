@@ -11,7 +11,7 @@ namespace sdl_engine
       GameContext( std::string_view window_name_, i32 window_width_, i32 window_height_ );
       ~GameContext();
       void update();
-
+      void loadAssets(std::string_view assets_path_);
       const Vector2_i32& getWindowSize() const { return _window_size; }
       Renderer&          getRenderer() { return *_renderer; }
       SceneManager&      getSceneManager() { return *_scene_manager; }

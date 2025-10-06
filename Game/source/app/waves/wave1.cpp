@@ -27,8 +27,6 @@ namespace myge
       }
       auto& registry = context_.getRegistry();
 
-      for ( auto& entity : entities ) { registry.emplace<sdl_engine::Active>( entity ); }
-
       for ( auto [ entity, sprt ] : registry.view<sdl_engine::Sprite>().each() )
       {
          SDL_Log( "%d", sprt.texture->depth );

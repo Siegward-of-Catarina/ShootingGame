@@ -36,7 +36,11 @@ namespace sdl_engine
       // map‚É•ÏX‚ª‚ ‚Á‚½ê‡view‚ðÄ\’z
       if ( _needs_rebuild_view ) { rebuildSystemView(); }
 
-      for ( auto& system : _systems ) { system.second->update( context_ ); }
+      for ( auto& system : _systems )
+      {
+         //
+         system.second->update( context_ );
+      }
       for ( auto& basic_sys : _basic_systems ) { basic_sys->update( context_ ); }
    }
    void SystemManager::removeSystem( const std::type_index& id_ )

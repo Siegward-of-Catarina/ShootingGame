@@ -31,6 +31,5 @@ namespace sdl_engine
          renderer.renderTexture( sprt.texture->texture, &sprt.src, &sprt.dst, trfm.angle );
       }
 
-      renderer.renderPresent();
    }
 }    // namespace sdl_engine

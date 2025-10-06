@@ -1,5 +1,5 @@
 #include <engine/systems/system_interface.hpp>
-
+#include <engine/basic_component.hpp>
 namespace sdl_engine
 {
    SystemInterface::SystemInterface( i32 priority_ ) : _priority { priority_ } {}

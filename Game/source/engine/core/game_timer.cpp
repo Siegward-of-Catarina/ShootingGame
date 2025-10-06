@@ -3,7 +3,7 @@
 namespace sdl_engine
 {
    GameTimer::GameTimer()
-     : _last_time { SDL_GetPerformanceCounter() }, _delta_time { 0 }, _elapsed_time { 0 }, _frame_count { 0 }
+     : _last_time { SDL_GetPerformanceCounter() }, _delta_time { 0 }, _elapsed_time { 0 }, _frame_count { 0 },_fps{0}
    {
    }
    GameTimer::~GameTimer() {}
@@ -23,9 +23,9 @@ namespace sdl_engine
       // fpsŒvŽZ
       if ( _elapsed_time >= 1.0 )
       {
-         _fps          = _frame_count / _delta_time;
+         _fps          = _frame_count / _elapsed_time;
          _frame_count  = 0;
-         _elapsed_time = 00.;
+         _elapsed_time = 0.0;
       }
    }
 }    // namespace sdl_engine

@@ -32,7 +32,9 @@
     <ClCompile Include="source\engine\core\game_timer.cpp" />
     <ClCompile Include="source\engine\managers\scene_manager.cpp" />
     <ClCompile Include="source\engine\systems\fade_system.cpp" />
-    <ClCompile Include="title_scene.cpp" />
+    <ClCompile Include="source\app\scene\title_scene.cpp" />
+    <ClCompile Include="source\app\systems\screen_bounds_system.cpp" />
+    <ClCompile Include="source\app\systems\life_cycle_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -144,6 +146,10 @@
     <ClInclude Include="source\engine\Components\fade.hpp" />
     <ClInclude Include="source\engine\systems\fade_system.hpp" />
     <ClInclude Include="source\engine\Components\active.hpp" />
-    <ClInclude Include="title_scene.hpp" />
+    <ClInclude Include="source\app\scene\title_scene.hpp" />
+    <ClInclude Include="source\app\systems\screen_bounds_system.hpp" />
+    <ClInclude Include="source\engine\Components\enable_tag_components.hpp" />
+    <ClInclude Include="source\app\components\lifecycle.hpp" />
+    <ClInclude Include="source\app\systems\life_cycle_system.hpp" />
   </ItemGroup>
 </Project>

@@ -5,7 +5,9 @@
 #include <app/waves/wave_factory.hpp>
 // system
 #include <app/systems/input_system.hpp>
+#include <app/systems/life_cycle_system.hpp>
 #include <app/systems/out_of_screen_system.hpp>
+#include <app/systems/screen_bounds_system.hpp>
 // engine
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
@@ -20,35 +22,22 @@ namespace
 
 namespace myge
 {
-   TestScene::TestScene( sdl_engine::GameContext& ctx_ ) : Scene { ctx_ }, _scene_elapsed_time { 0.f }, _entities {}
-   {
-      //_player_movement_system = std::make_unique<PlayerMovementSystem>();
-      auto& system_manager { getGameContext().getSystemManager() };
-      system_manager.addSystem( typeid( InputSystem ), std::make_unique<InputSystem>( 0 ) );
-      system_manager.addSystem( typeid( OutOfScreenSystem ), std::make_unique<OutOfScreenSystem>( 97 ) );
-
-      loadAssets();
-      loadSceneData();
-   }
-   TestScene::~TestScene()
-   {
-      auto& registry { getGameContext().getRegistry() };
-      for ( auto& entity : _entities )
-      {
-         if ( registry.valid( entity ) ) { registry.destroy( entity ); }
-      }
-   }
+   TestScene::TestScene( sdl_engine::GameContext& ctx_ ) : Scene { ctx_ }, _scene_elapsed_time { 0.f } {}
+   TestScene::~TestScene() {}
    void TestScene::initialize()
    {
+      loadSceneData( "game_data/scene_data/game_scene_data.json" );
+      addSystems();
       createWaves();
-      if ( _scene_data.contains( "Entities" ) )
+
+      auto& scene_data { getSceneData() };
+      if ( scene_data.contains( "Entities" ) )
       {
          EntityFactory factory;
-         _entities = factory.createEntities( getGameContext(), _scene_data.at( "Entities" ) );
+         setEntities( factory.createEntities( getGameContext(), scene_data.at( "Entities" ) ) );
       }
 
       auto& registry { getGameContext().getRegistry() };
-      for ( auto& entity : _entities ) { registry.emplace<sdl_engine::Active>( entity ); }
       scene_state = SceneState::Wave;
    }
    void TestScene::start() { _waves[ 0 ]->start( getGameContext() ); }
@@ -73,23 +62,14 @@ namespace myge
          }
       }
    }
-   void TestScene::loadAssets()
-   {
-      auto& renderer         = getGameContext().getRenderer();
-      auto& resource_manager = getGameContext().getResourceManager();
-      resource_manager.loadResources( renderer, "assets/test_assets.json" );
-   }
-   void TestScene::loadSceneData()
-   {
-      // jsonからシーンデータを読み込む
-      _scene_data = sdl_engine::loadJson( "game_data/scene_data/game_scene_data.json" );
-   }
+
    void TestScene::createWaves()
    {
       // jsonからWaveを生成
-      if ( _scene_data.contains( "Waves" ) )
+      auto& scene_data { getSceneData() };
+      if ( scene_data.contains( "Waves" ) )
       {
-         for ( const auto& wave_data : _scene_data[ "Waves" ] )
+         for ( const auto& wave_data : scene_data[ "Waves" ] )
          {
             // クラス名とデータパスを取得
             auto wave_class_name = sdl_engine::getJsonData<std::string>( wave_data, "wave_class_name" );
@@ -101,6 +81,15 @@ namespace myge
             _waves.emplace_back( std::move( wave ) );
          }
       }
+   }
+
+   void TestScene::addSystems()
+   {
+      auto& system_manager { getGameContext().getSystemManager() };
+      system_manager.addSystem( typeid( InputSystem ), std::make_unique<InputSystem>( 0 ) );
+      system_manager.addSystem( typeid( ScreenBoundsSystem ), std::make_unique<ScreenBoundsSystem>( 95 ) );
+      system_manager.addSystem( typeid( LifeCycleSystem ), std::make_unique<LifeCycleSystem>( 96 ) );
+      system_manager.addSystem( typeid( OutOfScreenSystem ), std::make_unique<OutOfScreenSystem>( 97 ) );
    }
 
 }    // namespace myge

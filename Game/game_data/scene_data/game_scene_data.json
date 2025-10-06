@@ -10,7 +10,7 @@
 			{
 				"Sprite": { "name": "back_ground" },
 				"Transform": {
-					"px": 320.0,
+					"px": 300.0,
 					"py": 400.0,
 					"angle": 0.0,
 					"scale": 1.0
@@ -22,9 +22,10 @@
 					"scale_rate": 0.0
 				},
 				"BoundingBox": {
-					"harf_width": 320.0,
+					"harf_width": 0.0,
 					"harf_height": 400.0,
-					"radius": 0.0
+					"radius": 0.0,
+					"enable_axis": "top"
 				},
 				"OutOfScreenBehavior": {
 					"behavior": "Wrap"
@@ -33,7 +34,7 @@
 			{
 				"Sprite": { "name": "back_ground" },
 				"Transform": {
-					"px": 320.0,
+					"px": 300.0,
 					"py": -400.0,
 					"angle": 0.0,
 					"scale": 1.0
@@ -45,9 +46,10 @@
 					"scale_rate": 0.0
 				},
 				"BoundingBox": {
-					"harf_width": 320.0,
+					"harf_width": 0.0,
 					"harf_height": 400.0,
-					"radius": 0.0
+					"radius": 0.0,
+					"enable_axis": "top"
 				},
 				"OutOfScreenBehavior": {
 					"behavior": "Wrap"
@@ -56,7 +58,7 @@
 			{
 				"Sprite": { "name": "back_star" },
 				"Transform": {
-					"px": 320.0,
+					"px": 300.0,
 					"py": 400.0,
 					"angle": 0.0,
 					"scale": 1.0
@@ -68,9 +70,10 @@
 					"scale_rate": 0.0
 				},
 				"BoundingBox": {
-					"harf_width": 320.0,
+					"harf_width": 0.0,
 					"harf_height": 400.0,
-					"radius": 0.0
+					"radius": 0.0,
+					"enable_axis": "top"
 				},
 				"OutOfScreenBehavior": {
 					"behavior": "Wrap"
@@ -79,7 +82,7 @@
 			{
 				"Sprite": { "name": "back_star" },
 				"Transform": {
-					"px": 320.0,
+					"px": 300.0,
 					"py": -400.0,
 					"angle": 0.0,
 					"scale": 1.0
@@ -91,9 +94,10 @@
 					"scale_rate": 0.0
 				},
 				"BoundingBox": {
-					"harf_width": 320.0,
+					"harf_width": 0.0,
 					"harf_height": 400.0,
-					"radius": 0.0
+					"radius": 0.0,
+					"enable_axis": "top"
 				},
 				"OutOfScreenBehavior": {
 					"behavior": "Wrap"
@@ -108,7 +112,7 @@
 				"is_playing": true
 			},
 			"Transform": {
-				"px": 320,
+				"px": 300,
 				"py": 750,
 				"angle": 0.0,
 				"scale": 1.0

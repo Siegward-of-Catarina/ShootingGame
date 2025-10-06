@@ -1,7 +1,10 @@
 #pragma once
 namespace sdl_engine
 {
-   struct Active
+   struct LogicUpdateableTag
+   {
+   };
+   struct RenderableTag
    {
    };
 }    // namespace sdl_engine

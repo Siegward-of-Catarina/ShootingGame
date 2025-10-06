@@ -12,5 +12,10 @@ namespace myge
       void initialize() override;
       void start() override;
       void update() override;
+   private:
+      // Scene ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
+      virtual void addSystems() override;
+   private:
+       f64 _scene_elapsed_time;
    };
 }    // namespace myge

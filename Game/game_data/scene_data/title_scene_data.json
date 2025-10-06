@@ -1,92 +1,17 @@
 {
-	"Waves": [
-		{
-			"wave_class_name": "Wave1",
-			"wave_data_path": "game_data/wave_data/wave1_data.json"
-		}
-	],
 	"Entities": {
 		"BackGround": [
 			{
 				"Sprite": { "name": "back_ground" },
 				"Transform": {
-					"px": 320.0,
+					"px": 300.0,
 					"py": 400.0,
 					"angle": 0.0,
 					"scale": 1.0
 				},
 				"Velocity": {
 					"dx": 0.0,
-					"dy": 20.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 320.0,
-					"harf_height": 400.0,
-					"radius": 0.0
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Wrap"
-				}
-			},
-			{
-				"Sprite": { "name": "back_ground" },
-				"Transform": {
-					"px": 320.0,
-					"py": -400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 20.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 320.0,
-					"harf_height": 400.0,
-					"radius": 0.0
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Wrap"
-				}
-			},
-			{
-				"Sprite": { "name": "back_star" },
-				"Transform": {
-					"px": 320.0,
-					"py": 400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 100.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 320.0,
-					"harf_height": 400.0,
-					"radius": 0.0
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Wrap"
-				}
-			},
-			{
-				"Sprite": { "name": "back_star" },
-				"Transform": {
-					"px": 320.0,
-					"py": -400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 100.0,
+					"dy": 0.0,
 					"anguler": 0.0,
 					"scale_rate": 0.0
 				},
@@ -99,6 +24,22 @@
 					"behavior": "Wrap"
 				}
 			}
-		]
+		],
+		"Title": {
+			"Sprite": { "name": "title" },
+			"Transform": {
+				"px": 300.0,
+				"py": 200.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"Velocity": {
+				"dx": 0.0,
+				"dy": 0.0,
+				"anguler": 0.0,
+				"scale_rate": 0.0
+			}
+		}
+
 	}
 }
