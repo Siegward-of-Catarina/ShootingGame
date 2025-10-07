@@ -3,23 +3,23 @@
 namespace
 {
 
-   // a ~ z + 0 ~ 9 + return,escape + right,left,down,up = 41
-   constexpr u32 MAX_KEYS { 42 };
+   // a ~ z + 0 ~ 9 + return,escape,backspace,tab,space + right,left,down,up = 45
+   constexpr u32 MAX_KEYS { 45 };
 
    // [ SDL_SCANCODE ]が、[ 4 ]スタートなのでそれを[ 0 ]始まりにするオフセット値
 
-   // 4 >= SDL_SCANCODE <= 41の場合
-   constexpr i32 RANGE4_TO_41_OFFSET { 4 };
+   // 4 >= SDL_SCANCODE <= 44の場合
+   constexpr i32 RANGE4_TO_44_OFFSET { 4 };
 
    // 79 >= SDL_SCANCODE <= 82の場合
-   constexpr i32 RANGE79_TO_82_OFFSET { 41 };
+   constexpr i32 RANGE79_TO_82_OFFSET { 38 };
 
    i32 getOffset( i32 key_code_ )
    {
 
       // SDL_SCANCODE_UNKNOWNは受けない前提とする
-      // a ~ z + 0 ~ 9 + return,escape
-      if ( key_code_ <= SDL_SCANCODE_ESCAPE ) { return RANGE4_TO_41_OFFSET; }
+      // a ~ z + 0 ~ 9 + return,escape,backspace,tab,space
+      if ( key_code_ <= SDL_SCANCODE_SPACE) { return RANGE4_TO_44_OFFSET; }
       // right & left & down & up keys
       if ( SDL_SCANCODE_RIGHT <= key_code_ && key_code_ <= SDL_SCANCODE_UP ) { return RANGE79_TO_82_OFFSET; }
 
@@ -28,7 +28,7 @@ namespace
 }    // namespace
 namespace sdl_engine
 {
-   InputManager::InputManager() : _key_state { MAX_KEYS, KeyState::KeyNone }, _down_keys {}, _up_keys {} {}
+    InputManager::InputManager() : _key_state{ MAX_KEYS, KeyState::KeyNone }, _down_keys{}, _up_keys{}, _any_key_inputs{false}{}
    InputManager::~InputManager() {}
    void InputManager::handleEvent( const SDL_Event& event_ )
    {
@@ -45,6 +45,8 @@ namespace sdl_engine
                _key_state[ idx ] = KeyState::KeyDown;
                // 押されたキーのインデックスを記憶
                _down_keys.emplace( idx );
+               //キーが押されたとだけのフラグを上げる
+               _any_key_inputs = true;
             }
          }
       }
@@ -71,6 +73,7 @@ namespace sdl_engine
          _key_state[ _up_keys.front() ] = KeyState::KeyNone;
          _up_keys.pop();
       }
+      
    }
    bool InputManager::isKeyDown( i32 scancode_ )
    {
@@ -122,6 +125,10 @@ namespace sdl_engine
        }
        return isKeyUp(scancode);
    }
+   bool InputManager::isAnyKeydown()
+   {
+       return !_down_keys.empty();
+   }
 }    // namespace sdl_engine
 // SDL_SCANCODE_A = 4, 0
 // SDL_SCANCODE_B = 5, 1
@@ -149,7 +156,6 @@ namespace sdl_engine
 // SDL_SCANCODE_X = 27, 23
 // SDL_SCANCODE_Y = 28, 24
 // SDL_SCANCODE_Z = 29, 25
-//
 // SDL_SCANCODE_1 = 30, 26
 // SDL_SCANCODE_2 = 31, 27
 // SDL_SCANCODE_3 = 32, 28
@@ -160,11 +166,13 @@ namespace sdl_engine
 // SDL_SCANCODE_8 = 37, 33
 // SDL_SCANCODE_9 = 38, 34
 // SDL_SCANCODE_0 = 39, 35
-//
 // SDL_SCANCODE_RETURN = 40, 36
-// SDL_SCANCODE_ESCAPE = 41, 37 -4
-
-// SDL_SCANCODE_RIGHT = 79, 38 -41
-// SDL_SCANCODE_LEFT = 80, 39
-// SDL_SCANCODE_DOWN = 81, 40
-// SDL_SCANCODE_UP = 82, 41
+// SDL_SCANCODE_ESCAPE = 41, 37
+// SDL_SCANCODE_BACKSPACE = 42, 38
+// SDL_SCANCODE_TAB = 43, 39
+// SDL_SCANCODE_SPACE = 44, 40 -4
+// 
+// SDL_SCANCODE_RIGHT = 79,41 -38
+// SDL_SCANCODE_LEFT = 80, 42
+// SDL_SCANCODE_DOWN = 81, 43
+// SDL_SCANCODE_UP = 82, 44

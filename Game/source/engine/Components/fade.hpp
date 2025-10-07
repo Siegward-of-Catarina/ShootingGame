@@ -12,7 +12,7 @@ namespace sdl_engine
          FadeInEnd,
          FadeOutEnd,
          Idel,
-      } state;
+      } state{State::Idel};
       f32 speed {};
       f32 black_out_time {};
    };

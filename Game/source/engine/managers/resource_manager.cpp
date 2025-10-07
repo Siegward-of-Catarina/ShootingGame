@@ -1,8 +1,8 @@
 ﻿#include <SDL3/SDL.h>
 #include <engine/managers/resource_manager.hpp>
-#include <engine/rendering/loader/sprite_anim_resource.hpp>
-#include <engine/rendering/loader/sprite_resource.hpp>
 #include <engine/rendering/renderer.hpp>
+#include <engine/rendering/resource/sprite_anim_resource.hpp>
+#include <engine/rendering/resource/sprite_resource.hpp>
 #include <engine/utils/json_utilities.hpp>
 #include <nlohmann/json.hpp>
 
@@ -58,7 +58,7 @@ namespace sdl_engine
       }
    }
 
-   void ResourceManager::addSpriteResources( std::string_view resources_name_, SDL_Texture* texture_, u32 depth_ )
+   void ResourceManager::addSpriteResources( std::string_view resources_name_, SDL_Texture* texture_, i32 depth_ )
    {
       auto handle = _sprite_cache.load( u32Hash( resources_name_.data() ), texture_, depth_ );
    }

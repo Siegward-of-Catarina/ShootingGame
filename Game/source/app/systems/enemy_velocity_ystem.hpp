@@ -10,6 +10,6 @@ namespace myge
       ~EnemyVelocitySystem() override;
 
       // SystemInterface ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
-      void update( sdl_engine::GameContext& context_ ) override;
+      virtual void  update( sdl_engine::GameContext& context_ ) override;
    };
 }    // namespace myge

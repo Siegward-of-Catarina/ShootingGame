@@ -1,9 +1,16 @@
+#include <app/components/background_tag.hpp>
 #include <app/components/bounding_box.hpp>
-#include <app/components/out_of_screen_behavior.hpp>
+#include <app/components/enemy_tag.hpp>
+#include <app/components/lifecycle_tags.hpp>
+#include <app/components/player_tag.hpp>
 #include <app/systems/out_of_screen_system.hpp>
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 
+namespace
+{
+
+}
 namespace myge
 {
    OutOfScreenSystem::OutOfScreenSystem( i32 priority_ ) : SystemInterface { priority_ } {}
@@ -14,56 +21,54 @@ namespace myge
       auto& window_size { context_.getWindowSize() };
       f32   w_right  = static_cast<f32>( window_size.x );
       f32   w_bottom = static_cast<f32>( window_size.y );
-      auto  view { getLogicUpdateable<OutOfScreenBehavior, BoundingBox, sdl_engine::Transform, sdl_engine::Velocity>(
+
+      auto player_view { getLogicUpdateable<BoundingBox, sdl_engine::Transform, sdl_engine::Velocity, PlayerTag>(
         registry ) };
-      for ( auto [ entity, behavior, box, trfm, velo ] : view.each() )
+      for ( auto [ entity, box, trfm, velo ] : player_view.each() )
       {
-         // ここはentityのタグごとに処理を決めるようにする
-         // player or enemy or bg...
-         switch ( behavior.type )
+         if ( box.state == BoundingBox::State::PartinalTop )
          {
-            case OutOfScreenBehavior::Type::Destroy :
-            {
-               if ( static_cast<u32>( box.state ) & static_cast<u32>( BoundingBox::State::Out ) )
-               {
-                  registry.destroy( entity );
-                  continue;
-               }
-               break;
-            }
-            case OutOfScreenBehavior::Type::Wrap :
-            {
-               if ( box.state == BoundingBox::State::OutTop ) { trfm.y = w_bottom + box.harf_hegiht; }
-               if ( box.state == BoundingBox::State::OutBottom ) { trfm.y = static_cast<f32>( -box.harf_hegiht ); }
-               if ( box.state == BoundingBox::State::OutLeft ) { trfm.x = w_right + box.harf_width; }
-               if ( box.state == BoundingBox::State::OutRight ) { trfm.x = static_cast<f32>( -box.harf_width ); }
-               break;
-            }
-            case OutOfScreenBehavior::Type::Stop :
-            {
-               if ( box.state == BoundingBox::State::PartinalTop )
-               {
-                  velo.dy = 0;
-                  trfm.y  = static_cast<f32>( box.harf_hegiht );
-               }
-               if ( box.state == BoundingBox::State::PartinalBottom )
-               {
-                  velo.dy = 0;
-                  trfm.y  = w_bottom - box.harf_hegiht;
-               }
-               if ( box.state == BoundingBox::State::PartinalLeft )
-               {
-                  velo.dx = 0;
-                  trfm.x  = static_cast<f32>( box.harf_width );
-               }
-               if ( box.state == BoundingBox::State::PartinalRight )
-               {
-                  velo.dx = 0;
-                  trfm.x  = w_right - box.harf_width;
-               }
-               break;
-            }
+            velo.dy = 0;
+            trfm.y  = static_cast<f32>( box.harf_hegiht );
+         }
+         if ( box.state == BoundingBox::State::PartinalBottom )
+         {
+            velo.dy = 0;
+            trfm.y  = w_bottom - box.harf_hegiht;
+         }
+         if ( box.state == BoundingBox::State::PartinalLeft )
+         {
+            velo.dx = 0;
+            trfm.x  = static_cast<f32>( box.harf_width );
+         }
+         if ( box.state == BoundingBox::State::PartinalRight )
+         {
+            velo.dx = 0;
+            trfm.x  = w_right - box.harf_width;
          }
       }
+
+      auto background_view {
+         getLogicUpdateable<BoundingBox, sdl_engine::Transform, sdl_engine::Velocity, BackgroundTag>( registry )
+      };
+      for ( auto [ entity, box, trfm, velo ] : background_view.each() )
+      {
+         // screen2枚分戻す
+         if ( box.state == BoundingBox::State::OutBottom ) { trfm.y -= w_bottom * 2; }
+      }
+
+      std::vector<entt::entity> destroy_entities {};
+      auto                      enemy_view { getLogicUpdateable<BoundingBox, EnemyTag>( registry ) };
+
+      for ( auto [ entity, box ] : enemy_view.each() )
+      {
+         if ( static_cast<u32>( box.state ) & static_cast<u32>( BoundingBox::State::Out ) )
+         {
+            destroy_entities.emplace_back( entity );
+         }
+      }
+
+      // 消去対象のエンティティがあればDeadにする
+      for ( auto& entity : destroy_entities ) { registry.emplace<DeadTag>( entity ); }
    }
 }    // namespace myge

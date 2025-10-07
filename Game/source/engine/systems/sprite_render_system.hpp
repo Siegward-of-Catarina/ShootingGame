@@ -8,6 +8,6 @@ namespace sdl_engine
       SpriteRenderSystem( i32 priority_ );
       virtual ~SpriteRenderSystem() override;
       // SystemInterface ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
-      void update( GameContext& context_ ) override;
+      virtual void  update( GameContext& context_ ) override;
    };
 }    // namespace sdl_engine

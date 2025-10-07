@@ -1,10 +1,8 @@
 {
-	"WaveCommon": {
-		"active_time": 200
-	},
 	"Entities": {
 		"Enemy": [
 			{
+				"EnemyTag": {},
 				"Sprite": { "name": "enemy1" },
 				"SpriteAnim": {
 					"name": "enemy1_anim",
@@ -27,12 +25,10 @@
 					"harf_width": 16.0,
 					"harf_height": 16.0,
 					"radius": 20.0
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Ignore"
 				}
 			},
 			{
+				"EnemyTag": {},
 				"Sprite": { "name": "enemy1" },
 				"SpriteAnim": {
 					"name": "enemy1_anim",
@@ -55,12 +51,10 @@
 					"harf_width": 16.0,
 					"harf_height": 16.0,
 					"radius": 20.0
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Ignore"
 				}
 			},
 			{
+				"EnemyTag": {},
 				"Sprite": { "name": "enemy1" },
 				"SpriteAnim": {
 					"name": "enemy1_anim",
@@ -83,12 +77,10 @@
 					"harf_width": 16.0,
 					"harf_height": 16.0,
 					"radius": 20.0
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Ignore"
 				}
 			},
 			{
+				"EnemyTag": {},
 				"Sprite": { "name": "enemy1" },
 				"SpriteAnim": {
 					"name": "enemy1_anim",
@@ -111,9 +103,6 @@
 					"harf_width": 16.0,
 					"harf_height": 16.0,
 					"radius": 20.0
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Ignore"
 				}
 			}
 		]

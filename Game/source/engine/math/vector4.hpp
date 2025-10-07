@@ -3,16 +3,17 @@
 #include <engine/core/forward_declarations.hpp>
 namespace sdl_engine
 {
-	class Vector4
-	{
-	public:
-		Vector4(f32 d_0_ = 0.0f, f32 d_1_ = 0.0f, f32 d_2_ = 0.0f, f32 d_3_ = 1.0f);
-		Vector4(std::array<f32, 4>& array_);
-	public:
-		union {
-			struct { f32 x, y, z, w; };
-			struct { f32 r, g, b, a; };
-			std::array<f32, 4> data;
-		};
-	};
+   class Vector4
+   {
+   public:
+      Vector4( f32 x_ = 0.0f, f32 y_ = 0.0f, f32 z_ = 0.0f, f32 w_ = 1.0f );
+      Vector4( std::array<f32, 4>& data_ );
+      f32& x() { return data[ 0 ]; }
+      f32& y() { return data[ 1 ]; }
+      f32& z() { return data[ 2 ]; }
+      f32& w() { return data[ 3 ]; }
+
+   public:
+      std::array<f32, 4> data;
+   };
 }    // namespace sdl_engine

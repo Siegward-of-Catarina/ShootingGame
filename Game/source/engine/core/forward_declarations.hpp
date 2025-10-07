@@ -9,7 +9,6 @@
 namespace sdl_engine
 {
    // クラスの前方宣言
-   class Game;
    class GameContext;
    class GameTimer;
    class Scene;
@@ -30,15 +29,11 @@ namespace sdl_engine
    class SpriteAnimLoader;
    struct SpriteAnimResource;
 
+   class ColorRGBA;
+
    class SystemInterface;
-   class TransformUpdateSystem;
-   class SpriteRenderSystem;
-
-   using Color = sdl_engine::Vector4;
-
    struct LogicUpdateableTag;
    struct RenderableTag;
-
 }    // namespace sdl_engine
 // SDLの前方宣言
 struct SDL_Texture;

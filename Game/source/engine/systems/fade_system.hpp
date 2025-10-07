@@ -9,6 +9,6 @@ namespace sdl_engine
       FadeSystem( i32 priority_ );
       virtual ~FadeSystem() override;
       // SystemInterface ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
-      void update( sdl_engine::GameContext& context_ ) override;
+      virtual void  update( sdl_engine::GameContext& context_ ) override;
    };
 }    // namespace sdl_engine

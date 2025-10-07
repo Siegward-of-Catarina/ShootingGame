@@ -3,7 +3,7 @@
 #include <engine/components/sprite_anim.hpp>
 #include <engine/core/game_context.hpp>
 #include <engine/core/game_timer.hpp>
-#include <engine/rendering/loader/sprite_anim_resource.hpp>
+#include <engine/rendering/resource/sprite_anim_resource.hpp>
 #include <engine/systems/sprite_animation_system.hpp>
 namespace sdl_engine
 {

@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\engine\rendering\resource\color.cpp" />
     <ClCompile Include="source\app\systems\life_cycle_system.cpp" />
     <ClCompile Include="source\app\scene\title_scene.cpp" />
     <ClCompile Include="source\app\systems\screen_bounds_system.cpp" />
@@ -117,8 +118,8 @@
     <ClCompile Include="source\engine\math\vector2.cpp" />
     <ClCompile Include="source\engine\math\vector4.cpp" />
     <ClCompile Include="source\engine\rendering\renderer.cpp" />
-    <ClCompile Include="source\engine\rendering\loader\sprite_anim_loader.cpp" />
-    <ClCompile Include="source\engine\rendering\loader\sprite_loader.cpp" />
+    <ClCompile Include="source\engine\rendering\resource\loader\sprite_anim_loader.cpp" />
+    <ClCompile Include="source\engine\rendering\resource\loader\sprite_loader.cpp" />
     <ClCompile Include="source\engine\scene\scene.cpp" />
     <ClCompile Include="source\app\scene\test_scene.cpp" />
     <ClCompile Include="source\engine\utils\json_utilities.cpp" />
@@ -130,6 +131,10 @@
     <ClCompile Include="source\engine\managers\system_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\engine\rendering\resource\color.hpp" />
+    <ClInclude Include="source\app\components\background_tag.hpp" />
+    <ClInclude Include="source\app\components\lifecycle_tags.hpp" />
+    <ClInclude Include="source\app\components\title_input.hpp" />
     <ClInclude Include="source\app\systems\life_cycle_system.hpp" />
     <ClInclude Include="source\app\scene\title_scene.hpp" />
     <ClInclude Include="source\app\systems\screen_bounds_system.hpp" />
@@ -174,7 +179,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="source\engine\rendering\loader\sprite_resource.hpp" />
+    <ClInclude Include="source\engine\rendering\resource\sprite_resource.hpp" />
     <ClInclude Include="source\engine\basic_system.hpp" />
     <ClInclude Include="source\engine\sdl_engine.hpp" />
     <ClInclude Include="source\engine\utils.hpp" />
@@ -233,10 +238,10 @@
     <ClInclude Include="source\engine\third_party\nlohmann\thirdparty\hedley\hedley.hpp" />
     <ClInclude Include="source\engine\third_party\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
     <ClInclude Include="source\engine\rendering\renderer.hpp" />
-    <ClInclude Include="source\engine\rendering\loader\sprite_anim_loader.hpp" />
-    <ClInclude Include="source\engine\rendering\loader\sprite_loader.hpp" />
+    <ClInclude Include="source\engine\rendering\resource\loader\sprite_anim_loader.hpp" />
+    <ClInclude Include="source\engine\rendering\resource\loader\sprite_loader.hpp" />
     <ClInclude Include="source\resource\resource_manager.hpp" />
-    <ClInclude Include="source\engine\rendering\loader\sprite_anim_resource.hpp" />
+    <ClInclude Include="source\engine\rendering\resource\sprite_anim_resource.hpp" />
     <ClInclude Include="source\engine\scene\scene.hpp" />
     <ClInclude Include="source\app\scene\test_scene.hpp" />
     <ClInclude Include="source\sequencer.hpp" />
@@ -247,6 +252,14 @@
     <ClInclude Include="source\engine\systems\transfrom_update_system.hpp" />
     <ClInclude Include="source\engine\systems\sprite_animation_system.hpp" />
     <ClInclude Include="source\engine\managers\system_manager.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\python\pillow\font_2_x16.png" />
+    <Image Include="..\..\..\..\python\pillow\font_2_x24.png" />
+    <Image Include="..\..\..\..\python\pillow\font_2_x8.png" />
+    <Image Include="..\..\..\..\python\pillow\font_x16.png" />
+    <Image Include="..\..\..\..\python\pillow\font_x24.png" />
+    <Image Include="..\..\..\..\python\pillow\font_x8.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

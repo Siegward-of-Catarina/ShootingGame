@@ -15,7 +15,9 @@ namespace
 {
    enum class SceneState
    {
+      WaveStart,
       Wave,
+      WaveEnd,
       End
    } scene_state;
 }
@@ -37,23 +39,35 @@ namespace myge
          setEntities( factory.createEntities( getGameContext(), scene_data.at( "Entities" ) ) );
       }
 
-      auto& registry { getGameContext().getRegistry() };
-      scene_state = SceneState::Wave;
+      scene_state = SceneState::WaveStart;
    }
-   void TestScene::start() { _waves[ 0 ]->start( getGameContext() ); }
+   void TestScene::start() {}
 
    void TestScene::update()
    {
       auto delta_time = getGameContext().getGameTimer().getDeltaTime();
       _scene_elapsed_time += delta_time;
-
+      // かり
+      static int idx = 0;
       switch ( scene_state )
       {
+         case SceneState::WaveStart :
+
+            _waves[ 0 ]->start( getGameContext() );
+            scene_state = SceneState::Wave;
+
+            break;
          case SceneState::Wave :
          {
             _waves[ 0 ]->update( getGameContext() );
-            if ( _scene_elapsed_time > 10 ) { scene_state = SceneState::End; }
+            if ( _waves[ 0 ]->isWaveEnd() ) { scene_state = SceneState::WaveEnd; }
+
             break;
+         }
+         case SceneState::WaveEnd :
+         {
+            idx++;    // 次へ
+            if ( _waves.size() == idx ) { scene_state = SceneState::End; }
          }
          case SceneState::End :
          {
@@ -88,7 +102,6 @@ namespace myge
       auto& system_manager { getGameContext().getSystemManager() };
       system_manager.addSystem( typeid( InputSystem ), std::make_unique<InputSystem>( 0 ) );
       system_manager.addSystem( typeid( ScreenBoundsSystem ), std::make_unique<ScreenBoundsSystem>( 95 ) );
-      system_manager.addSystem( typeid( LifeCycleSystem ), std::make_unique<LifeCycleSystem>( 96 ) );
       system_manager.addSystem( typeid( OutOfScreenSystem ), std::make_unique<OutOfScreenSystem>( 97 ) );
    }
 

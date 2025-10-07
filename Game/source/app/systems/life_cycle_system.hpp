@@ -10,6 +10,6 @@ namespace myge
       LifeCycleSystem( i32 priority_ );
       virtual ~LifeCycleSystem() override;
       // SystemInterface ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
-      void update( sdl_engine::GameContext& context_ ) override;
+      virtual void  update( sdl_engine::GameContext& context_ ) override;
    };
 }    // namespace myge

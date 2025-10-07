@@ -1,9 +1,14 @@
+#include <app/components/title_input.hpp>
 #include <app/scene/title_scene.hpp>
 #include <app/scene/test_scene.hpp>
 #include <app/entity_factory.hpp>
 #include <engine/basic_component.hpp>
+#include <app/systems/input_system.hpp>
 #include <engine/core.hpp>
 
+namespace {
+	entt::entity title_input{};
+}
 myge::TitleScene::TitleScene(sdl_engine::GameContext& ctx_) : Scene{ ctx_ }, _scene_elapsed_time{ 0 } {}
 
 myge::TitleScene::~TitleScene() {}
@@ -15,16 +20,21 @@ void myge::TitleScene::initialize() {
 		EntityFactory factory;
 		setEntities(factory.createEntities(getGameContext(), scene_data.at("Entities")));
 	}
-	auto size{ getEntities().size() };
+	for (auto& entity : getEntities()) {
+		if (getGameContext().getRegistry().all_of<TitleInput>(entity)) {
+			title_input = entity;
+		}
+	}
+	addSystems();
 }
 
 void myge::TitleScene::start() {}
 
 void myge::TitleScene::update()
 {
-	f64 delta{ getGameContext().getGameTimer().getDeltaTime() };
-	_scene_elapsed_time += delta;
-	if (_scene_elapsed_time > 3.0f) {
+	auto& registry{ getGameContext().getRegistry() };
+
+	if (registry.get<TitleInput>(title_input).any_key) {
 		getGameContext().getSceneManager().setNextScene(std::make_unique<TestScene>(getGameContext()));
 	}
 }
@@ -32,5 +42,7 @@ void myge::TitleScene::update()
 
 void myge::TitleScene::addSystems()
 {
+	auto& system_manager{ getGameContext().getSystemManager() };
+	system_manager.addSystem(typeid(InputSystem), std::make_unique<InputSystem>(0));
 }
 

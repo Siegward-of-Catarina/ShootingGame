@@ -9,6 +9,6 @@ namespace myge
       OutOfScreenSystem( i32 priority_ );
       virtual ~OutOfScreenSystem() override;
       // SystemInterface ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
-      virtual void update( sdl_engine::GameContext& context_ ) override;
+      virtual void  update( sdl_engine::GameContext& context_ ) override;
    };
 }    // namespace myge

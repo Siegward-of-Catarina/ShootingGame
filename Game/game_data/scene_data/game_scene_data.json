@@ -8,55 +8,8 @@
 	"Entities": {
 		"BackGround": [
 			{
+				"BackgroundTag": {},
 				"Sprite": { "name": "back_ground" },
-				"Transform": {
-					"px": 300.0,
-					"py": 400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 20.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 0.0,
-					"harf_height": 400.0,
-					"radius": 0.0,
-					"enable_axis": "top"
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Wrap"
-				}
-			},
-			{
-				"Sprite": { "name": "back_ground" },
-				"Transform": {
-					"px": 300.0,
-					"py": -400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 20.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 0.0,
-					"harf_height": 400.0,
-					"radius": 0.0,
-					"enable_axis": "top"
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Wrap"
-				}
-			},
-			{
-				"Sprite": { "name": "back_star" },
 				"Transform": {
 					"px": 300.0,
 					"py": 400.0,
@@ -80,7 +33,8 @@
 				}
 			},
 			{
-				"Sprite": { "name": "back_star" },
+				"BackgroundTag": {},
+				"Sprite": { "name": "back_ground" },
 				"Transform": {
 					"px": 300.0,
 					"py": -400.0,
@@ -90,6 +44,56 @@
 				"Velocity": {
 					"dx": 0.0,
 					"dy": 100.0,
+					"anguler": 0.0,
+					"scale_rate": 0.0
+				},
+				"BoundingBox": {
+					"harf_width": 0.0,
+					"harf_height": 400.0,
+					"radius": 0.0,
+					"enable_axis": "top"
+				},
+				"OutOfScreenBehavior": {
+					"behavior": "Wrap"
+				}
+			},
+			{
+				"BackgroundTag": {},
+				"Sprite": { "name": "back_star" },
+				"Transform": {
+					"px": 300.0,
+					"py": 400.0,
+					"angle": 0.0,
+					"scale": 1.0
+				},
+				"Velocity": {
+					"dx": 0.0,
+					"dy": 300.0,
+					"anguler": 0.0,
+					"scale_rate": 0.0
+				},
+				"BoundingBox": {
+					"harf_width": 0.0,
+					"harf_height": 400.0,
+					"radius": 0.0,
+					"enable_axis": "top"
+				},
+				"OutOfScreenBehavior": {
+					"behavior": "Wrap"
+				}
+			},
+			{
+				"BackgroundTag": {},
+				"Sprite": { "name": "back_star" },
+				"Transform": {
+					"px": 300.0,
+					"py": -400.0,
+					"angle": 0.0,
+					"scale": 1.0
+				},
+				"Velocity": {
+					"dx": 0.0,
+					"dy": 300.0,
 					"anguler": 0.0,
 					"scale_rate": 0.0
 				},
@@ -105,6 +109,7 @@
 			}
 		],
 		"Player": {
+			"PlayerTag": {},
 			"Sprite": { "name": "player" },
 			"SpriteAnim": {
 				"name": "player_anim",

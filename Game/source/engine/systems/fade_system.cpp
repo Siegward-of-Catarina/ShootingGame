@@ -21,11 +21,11 @@ namespace sdl_engine
          switch ( fade.state )
          {
             case Fade::State::FadeOut :
-               sprt.color.a += fade.speed * delta_time;
-               if ( sprt.color.a > 1.f )
+               sprt.color.a() += fade.speed * delta_time;
+               if ( sprt.color.a() > 1.f )
                {
-                  sprt.color.a = 1.0f;
-                  fade.state   = Fade::State::BlackOut;
+                  sprt.color.a() = 1.0f;
+                  fade.state     = Fade::State::BlackOut;
                }
                break;
             case Fade::State::BlackOut :
@@ -37,11 +37,11 @@ namespace sdl_engine
                }
                break;
             case Fade::State::FadeIn :
-               sprt.color.a -= fade.speed * delta_time;
-               if ( sprt.color.a < 0.f )
+               sprt.color.a() -= fade.speed * delta_time;
+               if ( sprt.color.a() < 0.f )
                {
-                  sprt.color.a = 0.0f;
-                  fade.state   = Fade::State::FadeInEnd;
+                  sprt.color.a() = 0.0f;
+                  fade.state     = Fade::State::FadeInEnd;
                }
                break;
             case Fade::State::FadeInEnd : fade.state = Fade::State::Idel; break;

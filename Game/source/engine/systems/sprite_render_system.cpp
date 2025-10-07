@@ -15,14 +15,10 @@ namespace sdl_engine
       auto& renderer = context_.getRenderer();
       renderer.renderClear( .3f, .3f, .3f, 1.f );
 
-      // 描画用にエンティティをソート
-      context_.getRegistry().sort<sdl_engine::Sprite>(
-        []( const sdl_engine::Sprite& l_sprt, const sdl_engine::Sprite& r_sprt )
-        { return l_sprt.texture->depth > r_sprt.texture->depth; } );
       for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform>().each() )
       {
-         SDL_SetTextureColorModFloat( sprt.texture->texture, sprt.color.r, sprt.color.g, sprt.color.b );
-         SDL_SetTextureAlphaModFloat( sprt.texture->texture, sprt.color.a );
+         SDL_SetTextureColorModFloat( sprt.texture->texture, sprt.color.r(), sprt.color.g(), sprt.color.b() );
+         SDL_SetTextureAlphaModFloat( sprt.texture->texture, sprt.color.a() );
 
          auto harf_w = sprt.dst.w / 2;
          auto harf_h = sprt.dst.h / 2;
@@ -30,6 +26,5 @@ namespace sdl_engine
          sprt.dst.y  = trfm.y - harf_h;
          renderer.renderTexture( sprt.texture->texture, &sprt.src, &sprt.dst, trfm.angle );
       }
-
    }
 }    // namespace sdl_engine
