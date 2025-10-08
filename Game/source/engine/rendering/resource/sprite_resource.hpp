@@ -5,8 +5,6 @@ namespace sdl_engine
    struct SpriteResource
    {
       SDL_Texture* texture;
-      // 表示順を決める値。0が最前面
-      i32 depth;
    };
    inline void SpriteResourceDeleter( SpriteResource* sprite_ )
    {

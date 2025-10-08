@@ -1,5 +1,4 @@
 #pragma once
-#include <SDL3/SDL_rect.h>
 #include <engine/core/forward_declarations.hpp>
 #include <vector>
 namespace sdl_engine

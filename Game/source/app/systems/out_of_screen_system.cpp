@@ -1,8 +1,6 @@
-#include <app/components/background_tag.hpp>
 #include <app/components/bounding_box.hpp>
-#include <app/components/enemy_tag.hpp>
+#include <app/components/entity_type_tag.hpp>
 #include <app/components/lifecycle_tags.hpp>
-#include <app/components/player_tag.hpp>
 #include <app/systems/out_of_screen_system.hpp>
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>

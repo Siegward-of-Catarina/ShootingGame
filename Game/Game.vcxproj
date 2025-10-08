@@ -88,16 +88,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\app\components\bounding_box.cpp" />
+    <ClCompile Include="source\app\components\entity_type_tag.cpp" />
+    <ClCompile Include="source\app\components\player_input.cpp" />
+    <ClCompile Include="source\engine\components\fade.cpp" />
+    <ClCompile Include="source\engine\components\render_type_tag.cpp" />
+    <ClCompile Include="source\engine\components\sprite.cpp" />
+    <ClCompile Include="source\engine\components\sprite_anim.cpp" />
+    <ClCompile Include="source\engine\components\text.cpp" />
+    <ClCompile Include="source\engine\components\transform.cpp" />
+    <ClCompile Include="source\engine\components\velocity.cpp" />
     <ClCompile Include="source\engine\rendering\resource\color.cpp" />
     <ClCompile Include="source\app\systems\life_cycle_system.cpp" />
     <ClCompile Include="source\app\scene\title_scene.cpp" />
     <ClCompile Include="source\app\systems\screen_bounds_system.cpp" />
+    <ClCompile Include="source\engine\rendering\resource\loader\font_loader.cpp" />
     <ClCompile Include="source\engine\systems\fade_system.cpp" />
     <ClCompile Include="source\engine\core\game_timer.cpp" />
     <ClCompile Include="source\app\systems\input_system.cpp" />
     <ClCompile Include="source\app\systems\out_of_screen_system.cpp" />
     <ClCompile Include="source\app\systems\player_movement_system.cpp" />
-    <ClCompile Include="source\engine\Components\basic_component_create_helper.cpp" />
     <ClCompile Include="source\app\systems\enemy_velocity_ystem.cpp" />
     <ClCompile Include="source\app\waves\wave_factory.cpp" />
     <ClCompile Include="source\app\entity_factory.cpp" />
@@ -131,18 +141,25 @@
     <ClCompile Include="source\engine\managers\system_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\app\components\entity_type_tag.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\engine\components\render_type_tag.hpp" />
+    <ClInclude Include="source\engine\components\text.hpp" />
     <ClInclude Include="source\engine\rendering\resource\color.hpp" />
-    <ClInclude Include="source\app\components\background_tag.hpp" />
     <ClInclude Include="source\app\components\lifecycle_tags.hpp" />
     <ClInclude Include="source\app\components\title_input.hpp" />
     <ClInclude Include="source\app\systems\life_cycle_system.hpp" />
     <ClInclude Include="source\app\scene\title_scene.hpp" />
     <ClInclude Include="source\app\systems\screen_bounds_system.hpp" />
     <ClInclude Include="source\engine\Components\active.hpp" />
-    <ClInclude Include="source\engine\Components\enable_tag_components.hpp" />
+    <ClInclude Include="source\engine\components\enable_tag_components.hpp" />
     <ClInclude Include="source\app\components\lifecycle.hpp" />
+    <ClInclude Include="source\engine\rendering\resource\font_resource.hpp" />
+    <ClInclude Include="source\engine\rendering\resource\loader\font_loader.hpp" />
     <ClInclude Include="source\engine\systems\fade_system.hpp" />
-    <ClInclude Include="source\engine\Components\fade.hpp" />
+    <ClInclude Include="source\engine\components\fade.hpp" />
     <ClInclude Include="source\engine\forward.hpp" />
     <ClInclude Include="source\engine\graphics.hpp" />
     <ClInclude Include="source\engine\math.hpp" />
@@ -152,23 +169,20 @@
     <ClInclude Include="source\app\components\out_of_screen_behavior.hpp" />
     <ClInclude Include="source\app\components\player_input.hpp" />
     <ClInclude Include="source\app\components\player_movement.hpp" />
-    <ClInclude Include="source\app\components\player_tag.hpp" />
     <ClInclude Include="source\app\systems\input_system.hpp" />
     <ClInclude Include="source\app\systems\out_of_screen_system.hpp" />
     <ClInclude Include="source\app\systems\player_movement_system.hpp" />
     <ClInclude Include="source\engine\basic_component.hpp" />
-    <ClInclude Include="source\engine\Components\basic_component_create_helper.hpp" />
     <ClInclude Include="source\app\components\enemy_follower.hpp" />
     <ClInclude Include="source\app\systems\enemy_velocity_ystem.hpp" />
     <ClInclude Include="source\app\forward_declarations.hpp" />
     <ClInclude Include="source\app\waves\wave_factory.hpp" />
     <ClInclude Include="source\Components\sprite.hpp" />
     <ClInclude Include="source\app\components\enemy_leader.hpp" />
-    <ClInclude Include="source\engine\Components\sprite_anim.hpp" />
-    <ClInclude Include="source\engine\Components\sprite.hpp" />
-    <ClInclude Include="source\app\components\enemy_tag.hpp" />
-    <ClInclude Include="source\engine\Components\transform.hpp" />
-    <ClInclude Include="source\engine\Components\velocity.hpp" />
+    <ClInclude Include="source\engine\components\sprite_anim.hpp" />
+    <ClInclude Include="source\engine\components\sprite.hpp" />
+    <ClInclude Include="source\engine\components\transform.hpp" />
+    <ClInclude Include="source\engine\components\velocity.hpp" />
     <ClInclude Include="source\app\entity_factory.hpp" />
     <ClInclude Include="source\engine\managers\input_manager.hpp" />
     <ClInclude Include="source\engine\managers\resource_manager.hpp" />
@@ -252,14 +266,6 @@
     <ClInclude Include="source\engine\systems\transfrom_update_system.hpp" />
     <ClInclude Include="source\engine\systems\sprite_animation_system.hpp" />
     <ClInclude Include="source\engine\managers\system_manager.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\python\pillow\font_2_x16.png" />
-    <Image Include="..\..\..\..\python\pillow\font_2_x24.png" />
-    <Image Include="..\..\..\..\python\pillow\font_2_x8.png" />
-    <Image Include="..\..\..\..\python\pillow\font_x16.png" />
-    <Image Include="..\..\..\..\python\pillow\font_x24.png" />
-    <Image Include="..\..\..\..\python\pillow\font_x8.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

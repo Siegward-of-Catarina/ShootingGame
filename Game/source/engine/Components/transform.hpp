@@ -1,5 +1,6 @@
 #pragma once
 #include <engine/core/forward_declarations.hpp>
+#include <engine/utils/json_utilities.hpp>
 namespace sdl_engine
 {
    struct Transform
@@ -9,4 +10,5 @@ namespace sdl_engine
       f32 angle;
       f32 scale;
    };
+   Transform createTransform(const json& data_);
 }    // namespace sdl_engine

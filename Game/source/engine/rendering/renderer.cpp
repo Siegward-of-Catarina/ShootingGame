@@ -3,6 +3,7 @@
 #include <engine/core/game_exception.hpp>
 #include <engine/rendering/renderer.hpp>
 #include <engine/rendering/resource/color.hpp>
+#include <engine/Components/text.hpp>
 namespace sdl_engine
 {
    Renderer::Renderer() : _sdl_renderer { nullptr, nullptr } {}
@@ -76,9 +77,16 @@ namespace sdl_engine
       SDL_RenderClear( _sdl_renderer.get() );
    }
 
-   void Renderer::renderDebugText( std::string_view text, f32 x_, f32 y_ )
+   void Renderer::renderSetDebugText( std::string_view text_, f32 x_, f32 y_ )
    {
-      SDL_RenderDebugText( _sdl_renderer.get(), x_, y_, text.data() );
+       std::string text{ text_ };
+       _text_render_queue.emplace( Text{ text, Text::Size::Small, ColorRGBA(1.0f,1.0f,0.0f,1.0f) } );
+
+   }
+
+   void Renderer::renderSetText(Text& text_)
+   {
+       _text_render_queue.emplace(text_);
    }
 
    void Renderer::renderTexture( SDL_Texture* texture_, const SDL_FRect* src_, const SDL_FRect* dst_, f32 angle_ )

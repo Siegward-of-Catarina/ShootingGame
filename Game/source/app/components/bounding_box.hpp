@@ -1,5 +1,6 @@
 #pragma once
 #include <engine/forward.hpp>
+#include <engine/utils/json_utilities.hpp>
 namespace myge
 {
    struct BoundingBox
@@ -34,4 +35,6 @@ namespace myge
          ALL    = ( TB | LR )
       } enable_axis;
    };
+
+   BoundingBox createBoundingBox(const json& data_);
 }    // namespace myge

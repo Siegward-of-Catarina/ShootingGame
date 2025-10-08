@@ -10,6 +10,6 @@ namespace sdl_engine
    {
    public:
       using result_type = std::shared_ptr<SpriteAnimResource>;
-      std::shared_ptr<SpriteAnimResource> operator()( const json& data ) const;
+      result_type operator()( const json& data ) const;
    };
 }    // namespace sdl_engine

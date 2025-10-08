@@ -27,10 +27,7 @@ namespace myge
       }
       auto& registry = context_.getRegistry();
 
-      for ( auto [ entity, sprt ] : registry.view<sdl_engine::Sprite>().each() )
-      {
-         SDL_Log( "%d", sprt.texture->depth );
-      }
+      for ( auto [ entity, sprt ] : registry.view<sdl_engine::Sprite>().each() ) { SDL_Log( "%d", sprt.render_order ); }
    }
    void Wave1::update( sdl_engine::GameContext& context_ )
    {

@@ -8,7 +8,8 @@
 	"Entities": {
 		"BackGround": [
 			{
-				"BackgroundTag": {},
+				"EntityType": "Background",
+				"RenderType": "Background",
 				"Sprite": { "name": "back_ground" },
 				"Transform": {
 					"px": 300.0,
@@ -27,13 +28,11 @@
 					"harf_height": 400.0,
 					"radius": 0.0,
 					"enable_axis": "top"
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Wrap"
 				}
 			},
 			{
-				"BackgroundTag": {},
+				"EntityType": "Background",
+				"RenderType": "Background",
 				"Sprite": { "name": "back_ground" },
 				"Transform": {
 					"px": 300.0,
@@ -52,14 +51,15 @@
 					"harf_height": 400.0,
 					"radius": 0.0,
 					"enable_axis": "top"
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Wrap"
 				}
 			},
 			{
-				"BackgroundTag": {},
-				"Sprite": { "name": "back_star" },
+				"EntityType": "Background",
+				"RenderType": "Background",
+				"Sprite": {
+					"name": "back_star",
+					"render_order": 0
+				},
 				"Transform": {
 					"px": 300.0,
 					"py": 400.0,
@@ -77,14 +77,15 @@
 					"harf_height": 400.0,
 					"radius": 0.0,
 					"enable_axis": "top"
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Wrap"
 				}
 			},
 			{
-				"BackgroundTag": {},
-				"Sprite": { "name": "back_star" },
+				"EntityType": "Background",
+				"RenderType": "Background",
+				"Sprite": {
+					"name": "back_star",
+					"render_order": 0
+				},
 				"Transform": {
 					"px": 300.0,
 					"py": -400.0,
@@ -102,15 +103,16 @@
 					"harf_height": 400.0,
 					"radius": 0.0,
 					"enable_axis": "top"
-				},
-				"OutOfScreenBehavior": {
-					"behavior": "Wrap"
 				}
 			}
 		],
 		"Player": {
-			"PlayerTag": {},
-			"Sprite": { "name": "player" },
+			"EntityType": "Player",
+			"RenderType": "GameSprite",
+			"Sprite": {
+				"name": "player",
+				"render_order": 0
+			},
 			"SpriteAnim": {
 				"name": "player_anim",
 				"current_frame": 1,

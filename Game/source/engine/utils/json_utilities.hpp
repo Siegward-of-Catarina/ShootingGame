@@ -3,23 +3,25 @@
 #include <engine/core/game_exception.hpp>
 #include <nlohmann/json.hpp>
 #include <source_location>
+#include <SDL3/SDL_log.h>
+#include <optional>
 using json = nlohmann::json;
 
 namespace sdl_engine
 {
 	json loadJson(std::string_view assets_path_);
 	template<typename T>
-	T getJsonData(const json& data_, std::string_view key_, const std::source_location location = std::source_location::current())
+	std::optional<T> getJsonData(const json& data_, std::string_view key_, const std::source_location location = std::source_location::current())
 	{
-		std::string error_msg =
-			"指定されたキーが存在しません: "
-			+ std::string(key_)
-			+ ", file :"
-			+ location.file_name();
-
 		if (!data_.contains(key_.data()))
 		{
-			throw GameException(error_msg.c_str());
+			std::string error_msg =
+				"指定されたキーが存在しません: "
+				+ std::string(key_)
+				+ ", file :"
+				+ location.file_name();
+			SDL_Log(error_msg.c_str());
+			return std::nullopt;
 		}
 		return data_.at(key_.data()).get<T>();
 	}

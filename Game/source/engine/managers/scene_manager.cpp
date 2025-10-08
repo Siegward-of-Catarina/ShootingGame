@@ -6,7 +6,7 @@
 #include <engine/systems/fade_system.hpp>
 namespace
 {
-   entt::entity createFade( sdl_engine::GameContext& context_ )
+   entt::entity createAndEmplaceFade( sdl_engine::GameContext& context_ )
    {
 
       auto& registry { context_.getRegistry() };
@@ -29,7 +29,7 @@ namespace
                                    .speed { 2.0f },
                                    .black_out_time { 1.0f } };
       registry.emplace<sdl_engine::Fade>( fade, fade_comp );
-
+      registry.emplace<sdl_engine::RenderFadeTag>( fade );
       return fade;
    }
 }    // namespace
@@ -47,7 +47,7 @@ namespace sdl_engine
       // 最前面 基本表示順は０からだが、絶対的に最前面に置くため-1とする
       resource_manager.addSpriteResources( "white", white_texture, -1 );
 
-      _fade = createFade( context_ );
+      _fade = createAndEmplaceFade( context_ );
 
       auto& system_manager { context_.getSystemManager() };
       system_manager.addSystem( typeid( FadeSystem ), std::make_unique<FadeSystem>( 99 ) );

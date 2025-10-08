@@ -86,8 +86,8 @@ namespace myge
          for ( const auto& wave_data : scene_data[ "Waves" ] )
          {
             // クラス名とデータパスを取得
-            auto wave_class_name = sdl_engine::getJsonData<std::string>( wave_data, "wave_class_name" );
-            auto wave_data_path  = sdl_engine::getJsonData<std::string>( wave_data, "wave_data_path" );
+            auto wave_class_name = sdl_engine::getJsonData<std::string>( wave_data, "wave_class_name" ).value();
+            auto wave_data_path  = sdl_engine::getJsonData<std::string>( wave_data, "wave_data_path" ).value();
 
             auto wave = createWave( wave_class_name );
 
