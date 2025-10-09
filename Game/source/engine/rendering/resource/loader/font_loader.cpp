@@ -1,12 +1,12 @@
-#include <engine/rendering/resource/loader/font_loader.hpp>
+﻿#include <engine/rendering/resource/loader/font_loader.hpp>
 #include <engine/rendering/resource/font_resource.hpp>
 namespace sdl_engine {
 	FontLoader::result_type FontLoader::operator()(const json& data_) const
 	{
 		FontResource res
 		{
-			.width{getJsonData<u32>(data_,"width").value()},
-			.height{getJsonData<u32>(data_,"height").value()}
+			.width{getJsonData<f32>(data_,"width").value()},
+			.height{getJsonData<f32>(data_,"height").value()}
 		};
 
 		u32 sprite_row{ getJsonData<u32>(data_,"sprite_row").value() };

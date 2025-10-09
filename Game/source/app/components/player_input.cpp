@@ -1,4 +1,4 @@
-#include <app/components/player_input.hpp>
+﻿#include <app/components/player_input.hpp>
 
 namespace myge {
 	PlayerInput createPlayerInput(const json& data_)

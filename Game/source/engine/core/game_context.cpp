@@ -1,4 +1,4 @@
-#include <SDL3/SDL.h>
+ï»¿#include <SDL3/SDL.h>
 #include <engine/core.hpp>
 #include <engine/core/game_context.hpp>
 #include <engine/rendering/renderer.hpp>
@@ -6,41 +6,44 @@
 #include <engine/basic_system.hpp>
 namespace sdl_engine
 {
-	GameContext::GameContext(std::string_view window_name_, i32 window_width_, i32 window_height_)
-		: _window{ nullptr, nullptr }
-		, _renderer{ nullptr }
-		, _scene_manager{ std::make_unique<SceneManager>() }
-		, _resource_manager{ std::make_unique<ResourceManager>() }
-		, _input_manager{ std::make_unique<InputManager>() }
-		, _window_size{ window_width_, window_height_ }
-		, _system_manager{ std::make_unique<SystemManager>() }
-		, _game_timer{ std::make_unique<GameTimer>() }
-	{
-		if (!SDL_Init(SDL_INIT_VIDEO)) { throw GameException("SDL‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½"); }
+   GameContext::GameContext( std::string_view window_name_, i32 window_width_, i32 window_height_ )
+     : _window { nullptr, nullptr }
+     , _renderer { nullptr }
+     , _scene_manager { std::make_unique<SceneManager>() }
+     , _resource_manager { std::make_unique<ResourceManager>() }
+     , _input_manager { std::make_unique<InputManager>() }
+     , _window_size { window_width_, window_height_ }
+     , _system_manager { std::make_unique<SystemManager>() }
+     , _game_timer { std::make_unique<GameTimer>() }
+   {
+      if ( !SDL_Init( SDL_INIT_VIDEO ) ) { throw GameException( "SDLã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸ" ); }
 
-		// window, renderer æ“¾
-		// ‚¢‚Á‚½‚ñ¶ƒ|ƒCƒ“ƒ^‚Åæ“¾‚µAunique_ptr‚Ö
-		SDL_Window* window_raw = SDL_CreateWindow(window_name_.data(), _window_size.x, _window_size.y, 0);
-		if (!window_raw) { throw GameException("SDLwindow‚ğì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½"); }
+#ifdef _DEBUG
+      SDL_SetLogPriority( SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INVALID );
+#endif
+      // window, renderer å–å¾—
+      // ã„ã£ãŸã‚“ç”Ÿãƒã‚¤ãƒ³ã‚¿ã§å–å¾—ã—ã€unique_ptrã¸
+      SDL_Window* window_raw = SDL_CreateWindow( window_name_.data(), _window_size.x, _window_size.y, 0 );
+      if ( !window_raw ) { throw GameException( "SDLwindowã‚’ä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸ" ); }
 
-		// unique‚Ö‘ã“ü
-		_window = { window_raw, &SDL_DestroyWindow };
+      // uniqueã¸ä»£å…¥
+      _window = { window_raw, &SDL_DestroyWindow };
 
-		_renderer = std::make_unique<Renderer>(window_raw);
-		_scene_manager->initialize(*this);
-	}
-	GameContext::~GameContext() {}
+      _renderer = std::make_unique<Renderer>( window_raw );
+      _scene_manager->initialize( *this );
+   }
+   GameContext::~GameContext() {}
 
-	void GameContext::update()
-	{
-		_game_timer->update();
-		_scene_manager->update(*this);
-		_system_manager->updateSystems(*this);
-		_renderer->renderPresent();
-		_input_manager->update();
-	}
-	void GameContext::loadAssets(std::string_view assets_path_)
-	{
-		_resource_manager->loadResources(*_renderer, assets_path_.data());
-	}
+   void GameContext::update()
+   {
+      _game_timer->update();
+      _scene_manager->update( *this );
+      _system_manager->updateSystems( *this );
+      _renderer->renderPresent();
+      _input_manager->update();
+   }
+   void GameContext::loadAssets( std::string_view assets_path_ )
+   {
+      _resource_manager->loadResources( *_renderer, assets_path_.data() );
+   }
 }    // namespace sdl_engine

@@ -1,15 +1,15 @@
-#include <engine/basic_system.hpp>
+ï»¿#include <engine/basic_system.hpp>
 #include <engine/managers/system_manager.hpp>
 namespace sdl_engine
 {
 
    SystemManager::SystemManager() : _systems {}, _sorted_view {}, _basic_systems { 3 }, _needs_rebuild_view { true }
    {
-      // ƒx[ƒVƒbƒN‚ÈƒVƒXƒeƒ€‚ğ’Ç‰Á
-      // ‚±‚ê‚ç‚Í•Ê˜g‚ÅŠÇ—‚µâ‘Î“I‚É‚±‚Ì‡”Ô‚ÅÀs‚³‚ê‚é
+      // ãƒ™ãƒ¼ã‚·ãƒƒã‚¯ãªã‚·ã‚¹ãƒ†ãƒ ã‚’è¿½åŠ 
+      // ã“ã‚Œã‚‰ã¯åˆ¥æ ã§ç®¡ç†ã—çµ¶å¯¾çš„ã«ã“ã®é †ç•ªã§å®Ÿè¡Œã•ã‚Œã‚‹
       _basic_systems[ 0 ] = std::make_unique<TransformUpdateSystem>( 98 );
-      // ƒAƒjƒ[ƒVƒ‡ƒ“‚Í•K—v‚È‚¢ê–Ê‚à‚ ‚é‚©‚à‚µ‚ê‚È‚¢‚ªA
-      // size‚O‚Åƒ‹[ƒv‚ğ”ğ‚¯‚é‚¾‚¯‚È‚Ì‚Å‹–—e‚·‚é
+      // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã¯å¿…è¦ãªã„å ´é¢ã‚‚ã‚ã‚‹ã‹ã‚‚ã—ã‚Œãªã„ãŒã€
+      // sizeï¼ã§ãƒ«ãƒ¼ãƒ—ã‚’é¿ã‘ã‚‹ã ã‘ãªã®ã§è¨±å®¹ã™ã‚‹
       _basic_systems[ 1 ] = std::make_unique<SpriteAnimationSystem>( 99 );
       _basic_systems[ 2 ] = std::make_unique<SpriteRenderSystem>( 100 );
    }
@@ -26,14 +26,14 @@ namespace sdl_engine
       {
          if ( system.second ) { _sorted_view[ i++ ] = system.second.get(); }
       }
-      // —Dæ“x‡‚Å•À‚×‚é
+      // å„ªå…ˆåº¦é †ã§ä¸¦ã¹ã‚‹
       std::sort( _sorted_view.begin(),
                  _sorted_view.end(),
                  []( const auto& rref, const auto& lref ) { return rref->getPriority() < lref->getPriority(); } );
    }
    void SystemManager::updateSystems( GameContext& context_ )
    {
-      // map‚É•ÏX‚ª‚ ‚Á‚½ê‡view‚ğÄ\’z
+      // mapã«å¤‰æ›´ãŒã‚ã£ãŸå ´åˆviewã‚’å†æ§‹ç¯‰
       if ( _needs_rebuild_view ) { rebuildSystemView(); }
 
       for ( auto& system : _systems )

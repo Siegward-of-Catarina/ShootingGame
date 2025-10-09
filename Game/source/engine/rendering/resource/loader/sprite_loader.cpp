@@ -1,4 +1,4 @@
-#include <SDL3/SDL.h>
+ï»¿#include <SDL3/SDL.h>
 #include <engine/rendering/renderer.hpp>
 #include <engine/rendering/resource/loader/sprite_loader.hpp>
 #include <engine/rendering/resource/sprite_resource.hpp>
@@ -8,23 +8,23 @@ namespace sdl_engine
    SpriteLoader::result_type SpriteLoader::operator()( Renderer& renderer_, const json& data_ ) const
    {
       auto path_ = data_.at( "file_path" ).get<std::string>();
-      if ( !std::filesystem::exists( path_ ) ) { SDL_Log( "‰æ‘œƒtƒ@ƒCƒ‹‚ª‘¶Ý‚µ‚Ü‚¹‚ñ:  %s ", path_.data() ); }
+      if ( !std::filesystem::exists( path_ ) ) { SDL_Log( "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ã¾ã›ã‚“:  %s ", path_.data() ); }
 
       SpriteResource* resource { new SpriteResource };
       resource->texture = renderer_.loadTexture( path_ );
-      if ( !resource->texture ) { SDL_Log( "‰æ‘œ‚ð“Ç‚Ýž‚ß‚Ü‚¹‚ñ‚Å‚µ‚½:  %s ", SDL_GetError() ); }
+      if ( !resource->texture ) { SDL_Log( "ç”»åƒã‚’èª­ã¿è¾¼ã‚ã¾ã›ã‚“ã§ã—ãŸ:  %s ", SDL_GetError() ); }
 
-      SDL_SetTextureBlendMode( resource->texture, SDL_BLENDMODE_BLEND );    // •W€‚ÍƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒh
+      SDL_SetTextureBlendMode( resource->texture, SDL_BLENDMODE_BLEND );    // æ¨™æº–ã¯ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰
       SDL_SetTextureScaleMode( resource->texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );
 
       return std::shared_ptr<SpriteResource>( resource, SpriteResourceDeleter );
    }
-   SpriteLoader::result_type SpriteLoader::operator()( SDL_Texture* texture_, u32 depth_ ) const
+   SpriteLoader::result_type SpriteLoader::operator()( SDL_Texture* texture_ ) const
    {
       SpriteResource* resource { new SpriteResource };
       resource->texture = texture_;
 
-      SDL_SetTextureBlendMode( resource->texture, SDL_BLENDMODE_BLEND );    // •W€‚ÍƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒh
+      SDL_SetTextureBlendMode( resource->texture, SDL_BLENDMODE_BLEND );    // æ¨™æº–ã¯ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰
       SDL_SetTextureScaleMode( resource->texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );
 
       return std::shared_ptr<SpriteResource>( resource, SpriteResourceDeleter );

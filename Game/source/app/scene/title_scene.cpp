@@ -1,4 +1,4 @@
-#include <app/components/title_input.hpp>
+﻿#include <app/components/title_input.hpp>
 #include <app/entity_factory.hpp>
 #include <app/scene/test_scene.hpp>
 #include <app/scene/title_scene.hpp>
@@ -6,6 +6,7 @@
 #include <app/systems/input_system.hpp>
 #include <app/systems/out_of_screen_system.hpp>
 #include <app/systems/screen_bounds_system.hpp>
+#include <app/systems/sprite_brink_system.hpp>
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 
@@ -49,6 +50,7 @@ void myge::TitleScene::addSystems()
 {
    auto& system_manager { getGameContext().getSystemManager() };
    system_manager.addSystem( typeid( InputSystem ), std::make_unique<InputSystem>( 0 ) );
+   system_manager.addSystem( typeid( SpriteBrinkSystem ), std::make_unique<SpriteBrinkSystem>( 94 ) );
    system_manager.addSystem( typeid( ScreenBoundsSystem ), std::make_unique<ScreenBoundsSystem>( 95 ) );
    system_manager.addSystem( typeid( OutOfScreenSystem ), std::make_unique<OutOfScreenSystem>( 97 ) );
 }

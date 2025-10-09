@@ -1,4 +1,4 @@
-#include <engine/basic_component.hpp>
+ï»¿#include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 #include <engine/graphics.hpp>
 #include <engine/managers/scene_manager.hpp>
@@ -42,10 +42,10 @@ namespace sdl_engine
       auto& renderer { context_.getRenderer() };
       auto& resource_manager { context_.getResourceManager() };
 
-      // whiteƒeƒNƒXƒ`ƒƒì¬
+      // whiteãƒ†ã‚¯ã‚¹ãƒãƒ£ä½œæˆ
       auto white_texture { renderer.createWhiteTexture() };
-      // Å‘O–Ê Šî–{•\Ž¦‡‚Í‚O‚©‚ç‚¾‚ªAâ‘Î“I‚ÉÅ‘O–Ê‚É’u‚­‚½‚ß-1‚Æ‚·‚é
-      resource_manager.addSpriteResources( "white", white_texture, -1 );
+      // æœ€å‰é¢ åŸºæœ¬è¡¨ç¤ºé †ã¯ï¼ã‹ã‚‰ã ãŒã€çµ¶å¯¾çš„ã«æœ€å‰é¢ã«ç½®ããŸã‚-1ã¨ã™ã‚‹
+      resource_manager.addSpriteResources( "white", white_texture );
 
       _fade = createAndEmplaceFade( context_ );
 
@@ -67,13 +67,13 @@ namespace sdl_engine
       switch ( fade_comp.state )
       {
          case Fade::State::FadeOutEnd :
-            // ƒV[ƒ““ü‚ê‘Ö‚¦&‰Šú‰»ŒãƒtƒF[ƒhƒCƒ“‚Ö
+            // ã‚·ãƒ¼ãƒ³å…¥ã‚Œæ›¿ãˆ&åˆæœŸåŒ–å¾Œãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã¸
             _current_scene = std::move( _next_scene );
             _current_scene->initialize();
             fade_comp.state = Fade::State::FadeIn;
             break;
          case Fade::State::FadeInEnd :
-            // ƒtƒF[ƒhƒCƒ“‚ª–¾‚¯‚½‚çƒV[ƒ“ŠJŽn
+            // ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ãŒæ˜Žã‘ãŸã‚‰ã‚·ãƒ¼ãƒ³é–‹å§‹
             _current_scene->start();
             break;
       }

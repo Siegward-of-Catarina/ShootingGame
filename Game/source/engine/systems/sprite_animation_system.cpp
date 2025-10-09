@@ -1,4 +1,4 @@
-#include <engine/Components/enable_tag_components.hpp>
+ï»¿#include <engine/Components/enable_tag_components.hpp>
 #include <engine/components/sprite.hpp>
 #include <engine/components/sprite_anim.hpp>
 #include <engine/core/game_context.hpp>
@@ -17,13 +17,13 @@ namespace sdl_engine
       {
          if ( !anim.is_playing || anim.sprite_anim->frame_num <= 1 ) { continue; }
 
-         // ƒ}ƒjƒ…ƒAƒ‹ƒ^ƒCƒvˆÈŠO‚ðƒAƒjƒ[ƒVƒ‡ƒ“‚³‚¹‚é
+         // ãƒžãƒ‹ãƒ¥ã‚¢ãƒ«ã‚¿ã‚¤ãƒ—ä»¥å¤–ã‚’ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã•ã›ã‚‹
          if ( anim.sprite_anim->anim_type != AnimType::Manual )
          {
 
-            // —ÝŒvŽžŠÔ‚É‰ÁŽZ
+            // ç´¯è¨ˆæ™‚é–“ã«åŠ ç®—
             anim.elapsed_time += delta_time;
-            // ƒtƒŒ[ƒ€ŽžŠÔ‚ð’´‚¦‚½Žž“_‚ÅØ‚è‘Ö‚¦
+            // ãƒ•ãƒ¬ãƒ¼ãƒ æ™‚é–“ã‚’è¶…ãˆãŸæ™‚ç‚¹ã§åˆ‡ã‚Šæ›¿ãˆ
             if ( anim.elapsed_time >= anim.sprite_anim->frame_time )
             {
                anim.elapsed_time -= anim.sprite_anim->frame_time;
@@ -39,7 +39,7 @@ namespace sdl_engine
                }
             }
          }
-         // sprt.src‚ÍAnimTypeŠÖŒW‚È‚µ‚ÉXV‚·‚é
+         // sprt.srcã¯AnimTypeé–¢ä¿‚ãªã—ã«æ›´æ–°ã™ã‚‹
          sprt.src = anim.sprite_anim->frames[ anim.current_frame ];
       }
    }

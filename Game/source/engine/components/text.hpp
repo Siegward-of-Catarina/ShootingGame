@@ -1,18 +1,12 @@
-#pragma once
+﻿#pragma once
 #include <engine/core/forward_declarations.hpp>
-#include <engine/rendering/resource/color.hpp>
 #include <engine/utils/json_utilities.hpp>
 namespace sdl_engine {
 
 	struct Text {
+		entt::resource<FontResource> font;
 		std::string text;
-		enum class Size {
-			Small,	// 8px
-			Medium,	// 16px
-			Large	// 24px
-		} size;
-		ColorRGBA color;
 	};
 
-	Text createText(const json& data_);
+	Text createText(ResourceManager& resource_manager_, const json& data_);
 }

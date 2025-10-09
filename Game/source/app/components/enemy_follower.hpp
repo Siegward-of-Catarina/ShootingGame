@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <engine/forward.hpp>
 #include <entt/entt.hpp>
 namespace myge

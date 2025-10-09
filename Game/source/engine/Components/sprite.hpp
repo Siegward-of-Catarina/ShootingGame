@@ -1,20 +1,20 @@
-#pragma once
+ï»¿#pragma once
 #include <engine/core/forward_declarations.hpp>
 #include <engine/rendering/resource/color.hpp>
-#include <engine/rendering/resource/sprite_resource.hpp>
+
 #include <engine/utils/json_utilities.hpp>
 namespace sdl_engine
 {
    struct Sprite
    {
       entt::resource<SpriteResource> texture;
-      SDL_FRect                      src;
-      SDL_FRect                      dst;
-      ColorRGBA                      color;
-      // render order‚ÍƒIƒvƒVƒ‡ƒ“B‰Šú’l100@Šî–{‚ÍƒŒƒ“ƒ_[ƒ^ƒCƒv‚²‚Æ‚ÉƒŒƒCƒ„[•ª‚¯‚³‚ê‚éB
-      // ‚»‚ÌƒŒƒCƒ„[“à‚Å—Dæ‡ˆÊ‚ğ‚Â‚¯‚½‚¢ê‡İ’è
+      SDL_FRect                      src{};
+      SDL_FRect                      dst{};
+      ColorRGBA                      color{};
+      // render orderã¯ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã€‚åˆæœŸå€¤100ã€€åŸºæœ¬ã¯ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ã‚¤ãƒ—ã”ã¨ã«ãƒ¬ã‚¤ãƒ¤ãƒ¼åˆ†ã‘ã•ã‚Œã‚‹ã€‚
+      // ãã®ãƒ¬ã‚¤ãƒ¤ãƒ¼å†…ã§å„ªå…ˆé †ä½ã‚’ã¤ã‘ãŸã„å ´åˆè¨­å®š
       u32 render_order;
    };
 
-   Sprite createSprite( entt::resource<sdl_engine::SpriteResource> resource_, const std::optional<u32> render_order_ );
+   Sprite createSprite( ResourceManager& resource_manager_, const json& data_);
 }    // namespace sdl_engine

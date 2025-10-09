@@ -1,4 +1,4 @@
-#include <app/waves/wave.hpp>
+﻿#include <app/waves/wave.hpp>
 #include <app/waves/wave1.hpp>
 #include <app/waves/wave_factory.hpp>
 namespace myge

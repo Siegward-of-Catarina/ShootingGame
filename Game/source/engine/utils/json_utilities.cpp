@@ -1,18 +1,18 @@
-#include <engine/core/game_exception.hpp>
+ï»¿#include <engine/core/game_exception.hpp>
 #include <engine/utils/json_utilities.hpp>
 #include <filesystem>
 #include <fstream>
 namespace sdl_engine
 {
    json loadJson( std::string_view assets_path_ )
-   {    // ƒAƒZƒbƒgƒtƒ@ƒCƒ‹“Ç‚İ‚İ
+   {    // ã‚¢ã‚»ãƒƒãƒˆãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
       std::ifstream stream( assets_path_.data() );
 
-      if ( !stream.is_open() ) { throw GameException( "ƒAƒZƒbƒgƒtƒ@ƒCƒ‹‚ğŠJ‚¯‚Ü‚¹‚ñ‚Å‚µ‚½B" ); }
+      if ( !stream.is_open() ) { throw GameException( "ã‚¢ã‚»ãƒƒãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“ã§ã—ãŸã€‚" ); }
 
-      if ( !json::accept( stream ) ) { throw GameException( "jsonƒtƒH[ƒ}ƒbƒg‚ª•s³B" ); }
+      if ( !json::accept( stream ) ) { throw GameException( "jsonãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆãŒä¸æ­£ã€‚" ); }
 
-      // accept‚ª“Ç‚İi‚ß‚é‚Ì‚Å“ª‚É–ß‚µ‚Ä‚¨‚­
+      // acceptãŒèª­ã¿é€²ã‚ã‚‹ã®ã§é ­ã«æˆ»ã—ã¦ãŠã
       stream.seekg( 0, std::ios::beg );
 
       return json::parse( stream );

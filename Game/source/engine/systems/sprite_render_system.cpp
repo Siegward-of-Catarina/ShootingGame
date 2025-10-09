@@ -1,8 +1,10 @@
-#include <cmath>
+ï»¿#include <cmath>
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 #include <engine/graphics.hpp>
 #include <engine/systems/sprite_render_system.hpp>
+//
+#include <engine/rendering/resource/font_resource.hpp>
 namespace sdl_engine
 {
    SpriteRenderSystem::SpriteRenderSystem( i32 priority_ ) : SystemInterface { priority_ } {}
@@ -14,8 +16,8 @@ namespace sdl_engine
       auto& renderer = context_.getRenderer();
       renderer.renderClear( .3f, .3f, .3f, 1.f );
 
-      // ”Ä—p•`‰æ
-      auto render_func = []( Renderer& renderer, Sprite& sprt, Transform& trfm )
+      // æ±ç”¨æç”»
+      auto common_render = []( Renderer& renderer, Sprite& sprt, Transform& trfm )
       {
          SDL_SetTextureColorModFloat( sprt.texture->texture, sprt.color.r(), sprt.color.g(), sprt.color.b() );
          SDL_SetTextureAlphaModFloat( sprt.texture->texture, sprt.color.a() );
@@ -27,27 +29,46 @@ namespace sdl_engine
          renderer.renderTexture( sprt.texture->texture, &sprt.src, &sprt.dst, trfm.angle );
       };
 
-      // ƒ^ƒO‚²‚Æ‚É•`‰æ
+      // ã‚¿ã‚°ã”ã¨ã«æç”»
       for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderBackgroundTag>().each() )
       {
-         render_func( renderer, sprt, trfm );
+         common_render( renderer, sprt, trfm );
       }
 
       for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderGameSpriteTag>().each() )
       {
-         render_func( renderer, sprt, trfm );
+         common_render( renderer, sprt, trfm );
       }
 
       for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderUITag>().each() )
       {
-         render_func( renderer, sprt, trfm );
+         common_render( renderer, sprt, trfm );
       }
 
-      for ( auto [ entity, trfm ] : registry.view<Transform, RenderTextTag>().each() ) {}
+      for ( auto [ entity, sprt, trfm, text ] : registry.view<Sprite, Transform, Text, RenderTextTag>().each() )
+      {
+         Transform char_trfm { 0, 0, 0, 1 };
+         for ( u32 i { 0 }, j { 0 }; auto& c : text.text )
+         {
+            if ( c == '\n' )
+            {
+               j++;
+               i = 0;
+               continue;
+            }
+
+            char_trfm.x = trfm.x + ( text.font->width * 1.f * i++ );
+            char_trfm.y = trfm.y + ( text.font->width * 1.f * j );
+            u32 idx     = c - ' ';
+            sprt.src    = text.font->font_rect[ idx ];
+            sprt.dst    = { 0, 0, text.font->width, text.font->height };
+            common_render( renderer, sprt, char_trfm );
+         }
+      }
 
       for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderFadeTag>().each() )
       {
-         render_func( renderer, sprt, trfm );
+         common_render( renderer, sprt, trfm );
       }
    }
 }    // namespace sdl_engine

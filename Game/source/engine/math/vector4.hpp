@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <array>
 #include <engine/core/forward_declarations.hpp>
 namespace sdl_engine

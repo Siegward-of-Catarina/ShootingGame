@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <engine/core/game_context.hpp>
 #include <engine/core/game_exception.hpp>
 #include <engine/core/game_timer.hpp>

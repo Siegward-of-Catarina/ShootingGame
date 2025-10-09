@@ -1,112 +1,110 @@
-{
+﻿{
 	"Waves": [
 		{
 			"wave_class_name": "Wave1",
 			"wave_data_path": "game_data/wave_data/wave1_data.json"
 		}
 	],
-	"Entities": {
-		"BackGround": [
-			{
-				"EntityType": "Background",
-				"RenderType": "Background",
-				"Sprite": { "name": "back_ground" },
-				"Transform": {
-					"px": 300.0,
-					"py": 400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 100.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 0.0,
-					"harf_height": 400.0,
-					"radius": 0.0,
-					"enable_axis": "top"
-				}
+	"Entities": [
+		{
+			"EntityType": "Background",
+			"RenderType": "Background",
+			"Sprite": { "name": "back_ground" },
+			"Transform": {
+				"px": 300.0,
+				"py": 400.0,
+				"angle": 0.0,
+				"scale": 1.0
 			},
-			{
-				"EntityType": "Background",
-				"RenderType": "Background",
-				"Sprite": { "name": "back_ground" },
-				"Transform": {
-					"px": 300.0,
-					"py": -400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 100.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 0.0,
-					"harf_height": 400.0,
-					"radius": 0.0,
-					"enable_axis": "top"
-				}
+			"Velocity": {
+				"dx": 0.0,
+				"dy": 70.0,
+				"anguler": 0.0,
+				"scale_rate": 0.0
 			},
-			{
-				"EntityType": "Background",
-				"RenderType": "Background",
-				"Sprite": {
-					"name": "back_star",
-					"render_order": 0
-				},
-				"Transform": {
-					"px": 300.0,
-					"py": 400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 300.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 0.0,
-					"harf_height": 400.0,
-					"radius": 0.0,
-					"enable_axis": "top"
-				}
-			},
-			{
-				"EntityType": "Background",
-				"RenderType": "Background",
-				"Sprite": {
-					"name": "back_star",
-					"render_order": 0
-				},
-				"Transform": {
-					"px": 300.0,
-					"py": -400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 300.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 0.0,
-					"harf_height": 400.0,
-					"radius": 0.0,
-					"enable_axis": "top"
-				}
+			"BoundingBox": {
+				"harf_width": 0.0,
+				"harf_height": 400.0,
+				"radius": 0.0,
+				"enable_axis": "top"
 			}
-		],
-		"Player": {
+		},
+		{
+			"EntityType": "Background",
+			"RenderType": "Background",
+			"Sprite": { "name": "back_ground" },
+			"Transform": {
+				"px": 300.0,
+				"py": -400.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"Velocity": {
+				"dx": 0.0,
+				"dy": 70.0,
+				"anguler": 0.0,
+				"scale_rate": 0.0
+			},
+			"BoundingBox": {
+				"harf_width": 0.0,
+				"harf_height": 400.0,
+				"radius": 0.0,
+				"enable_axis": "top"
+			}
+		},
+		{
+			"EntityType": "Background",
+			"RenderType": "Background",
+			"Sprite": {
+				"name": "back_star",
+				"render_order": 0
+			},
+			"Transform": {
+				"px": 300.0,
+				"py": 400.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"Velocity": {
+				"dx": 0.0,
+				"dy": 250.0,
+				"anguler": 0.0,
+				"scale_rate": 0.0
+			},
+			"BoundingBox": {
+				"harf_width": 0.0,
+				"harf_height": 400.0,
+				"radius": 0.0,
+				"enable_axis": "top"
+			}
+		},
+		{
+			"EntityType": "Background",
+			"RenderType": "Background",
+			"Sprite": {
+				"name": "back_star",
+				"render_order": 0
+			},
+			"Transform": {
+				"px": 300.0,
+				"py": -400.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"Velocity": {
+				"dx": 0.0,
+				"dy": 250.0,
+				"anguler": 0.0,
+				"scale_rate": 0.0
+			},
+			"BoundingBox": {
+				"harf_width": 0.0,
+				"harf_height": 400.0,
+				"radius": 0.0,
+				"enable_axis": "top"
+			}
+		},
+		{
 			"EntityType": "Player",
 			"RenderType": "GameSprite",
 			"Sprite": {
@@ -145,5 +143,5 @@
 				"right_sdl_key_name": "Right"
 			}
 		}
-	}
+	]
 }

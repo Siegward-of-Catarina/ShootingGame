@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <engine/core/forward_declarations.hpp>
 #include <engine/utils/json_utilities.hpp>
 namespace sdl_engine
@@ -11,4 +11,5 @@ namespace sdl_engine
       f32 scale;
    };
    Transform createTransform(const json& data_);
+   Transform createTransform();
 }    // namespace sdl_engine

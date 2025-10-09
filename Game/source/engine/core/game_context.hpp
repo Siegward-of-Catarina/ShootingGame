@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <engine/core/forward_declarations.hpp>
 #include <engine/math/vector2.hpp>
 #include <entt/entt.hpp>

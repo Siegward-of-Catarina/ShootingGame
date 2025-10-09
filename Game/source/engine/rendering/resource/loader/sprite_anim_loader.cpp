@@ -1,4 +1,4 @@
-
+ï»¿
 #include <engine/rendering/resource/loader/sprite_anim_loader.hpp>
 #include <engine/rendering/resource/sprite_anim_resource.hpp>
 #include <engine/utils/json_utilities.hpp>
@@ -9,11 +9,11 @@ namespace sdl_engine
 
       SpriteAnimResource res;
 
-      // keyname‚ÆƒXƒvƒ‰ƒCƒg‚Ì—ñAs”‚ğæ“¾
+      // keynameã¨ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®åˆ—ã€è¡Œæ•°ã‚’å–å¾—
       auto anim_name{ getJsonData<std::string>(data,"name") };
       u32 sprite_col{ getJsonData<u32>(data,"sprite_col").value() };
       u32 sprite_row{ getJsonData<u32>(data,"sprite_row").value() };
-      // SpriteAnimResource‚Éî•ñ‚ğŠi”[
+      // SpriteAnimResourceã«æƒ…å ±ã‚’æ ¼ç´
       res.frame_width = getJsonData<u32>(data, "frame_width").value();
       res.frame_height = getJsonData<u32>(data, "frame_height").value();
       res.frame_time = getJsonData<f64>(data, "frame_time").value();
@@ -22,12 +22,12 @@ namespace sdl_engine
       if (type == "Loop") { res.anim_type = AnimType::Loop; }
       else if (type == "Once") { res.anim_type = AnimType::Once; }
       else if (type == "Manual") { res.anim_type = AnimType::Manual; }
-      else { throw GameException("w’è‚³‚ê‚½AnimType‚ª‘¶İ‚µ‚Ü‚¹‚ñ"); }
+      else { throw GameException("æŒ‡å®šã•ã‚ŒãŸAnimTypeãŒå­˜åœ¨ã—ã¾ã›ã‚“"); }
 
-      // ƒtƒŒ[ƒ€”‚ğ‹‚ß‚ÄŠi”[
+      // ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã‚’æ±‚ã‚ã¦æ ¼ç´
       res.frame_num = sprite_col * sprite_row;
 
-      // ƒtƒŒ[ƒ€î•ñ‚ğ‹‚ß‚é‚ÄŠi”[
+      // ãƒ•ãƒ¬ãƒ¼ãƒ æƒ…å ±ã‚’æ±‚ã‚ã‚‹ã¦æ ¼ç´
       res.frames.reserve( res.frame_num );
       res.frames.resize( res.frame_num );
 

@@ -1,4 +1,4 @@
-#include <app/components/bounding_box.hpp>
+ï»¿#include <app/components/bounding_box.hpp>
 #include <app/components/entity_type_tag.hpp>
 #include <app/components/lifecycle_tags.hpp>
 #include <app/systems/out_of_screen_system.hpp>
@@ -51,7 +51,7 @@ namespace myge
       };
       for ( auto [ entity, box, trfm, velo ] : background_view.each() )
       {
-         // screen2–‡•ª–ß‚·
+         // screen2æšåˆ†æˆ»ã™
          if ( box.state == BoundingBox::State::OutBottom ) { trfm.y -= w_bottom * 2; }
       }
 
@@ -66,7 +66,7 @@ namespace myge
          }
       }
 
-      // Á‹‘ÎÛ‚ÌƒGƒ“ƒeƒBƒeƒB‚ª‚ ‚ê‚ÎDead‚É‚·‚é
+      // æ¶ˆå»å¯¾è±¡ã®ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ãŒã‚ã‚Œã°Deadã«ã™ã‚‹
       for ( auto& entity : destroy_entities ) { registry.emplace<DeadTag>( entity ); }
    }
 }    // namespace myge

@@ -1,4 +1,4 @@
-#include <SDL3/SDL_timer.h>
+ï»¿#include <SDL3/SDL_timer.h>
 #include <engine/core/game_timer.hpp>
 namespace sdl_engine
 {
@@ -9,18 +9,18 @@ namespace sdl_engine
    GameTimer::~GameTimer() {}
    void GameTimer::update()
    {
-      // ƒfƒ‹ƒ^ƒ^ƒCƒ€‚ðŒvŽZ
+      // ãƒ‡ãƒ«ã‚¿ã‚¿ã‚¤ãƒ ã‚’è¨ˆç®—
       u64 tick_time = SDL_GetPerformanceCounter();
       _delta_time   = static_cast<f32>( tick_time - _last_time ) / SDL_GetPerformanceFrequency();
       _last_time    = tick_time;
 
-      // Œo‰ßŽžŠÔ‚ð‰ÁŽZ
+      // çµŒéŽæ™‚é–“ã‚’åŠ ç®—
       _elapsed_time += _delta_time;
 
-      // ƒtƒŒ[ƒ€ƒJƒEƒ“ƒgƒAƒbƒv
+      // ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
       _frame_count++;
 
-      // fpsŒvŽZ
+      // fpsè¨ˆç®—
       if ( _elapsed_time >= 1.0 )
       {
          _fps          = static_cast<u32>( _frame_count / _elapsed_time );

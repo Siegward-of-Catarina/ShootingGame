@@ -1,4 +1,4 @@
-#include <SDL3/SDL.h>
+﻿#include <SDL3/SDL.h>
 #include <app/entity_factory.hpp>
 #include <app/waves/wave1.hpp>
 #include <engine/basic_component.hpp>

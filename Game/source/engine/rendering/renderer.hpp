@@ -1,11 +1,11 @@
-#pragma once
+ï»¿#pragma once
 #include <SDL3_ttf/SDL_ttf.h>
 #include <engine/core/forward_declarations.hpp>
 #include <engine/components/text.hpp>
 using SDL_RendererPtr = std::unique_ptr<SDL_Renderer, decltype( &SDL_DestroyRenderer )>;
 namespace sdl_engine
 {
-   // SDL_Rendererƒ‰ƒbƒvƒNƒ‰ƒX
+   // SDL_Rendererãƒ©ãƒƒãƒ—ã‚¯ãƒ©ã‚¹
    class Renderer
    {
    public:

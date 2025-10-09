@@ -1,4 +1,4 @@
-#include <app/components/bounding_box.hpp>
+ï»¿#include <app/components/bounding_box.hpp>
 #include <app/components/entity_type_tag.hpp>
 #include <app/systems/screen_bounds_system.hpp>
 #include <engine/basic_component.hpp>
@@ -6,7 +6,7 @@
 #include <engine/utils.hpp>
 namespace
 {
-   // —LŒø‚È•ûŒü‚Ì‚İ‚Å“à‘¤”»’è‚ğs‚¤
+   // æœ‰åŠ¹ãªæ–¹å‘ã®ã¿ã§å†…å´åˆ¤å®šã‚’è¡Œã†
    bool isInside( SDL_FRect& target_, SDL_FRect& screen_, myge::BoundingBox::EnableAxis& enable_axis_ )
    {
       switch ( enable_axis_ )
@@ -22,7 +22,7 @@ namespace
       }
       return false;
    }
-   // —LŒø•ûŒü‚ª Top TB ALL‚Ì‚É”»’è‚ğs‚¤
+   // æœ‰åŠ¹æ–¹å‘ãŒ Top TB ALLã®æ™‚ã«åˆ¤å®šã‚’è¡Œã†
    bool isPartinalTop( f32 t_top_, f32 s_top_, myge::BoundingBox::EnableAxis& enable_axis_ )
    {
       // Top or TB or ALL
@@ -32,7 +32,7 @@ namespace
       }
       return false;
    }
-   // —LŒø•ûŒü‚ª Bottom TB ALL‚Ì‚É”»’è‚ğs‚¤
+   // æœ‰åŠ¹æ–¹å‘ãŒ Bottom TB ALLã®æ™‚ã«åˆ¤å®šã‚’è¡Œã†
    bool isPartinalBottom( f32 t_bottom_, f32 s_bottom_, myge::BoundingBox::EnableAxis& enable_axis_ )
    {
       // Bottom or TB or ALL
@@ -42,7 +42,7 @@ namespace
       }
       return false;
    }
-   // —LŒø•ûŒü‚ª Left LR ALL‚Ì‚É”»’è‚ğs‚¤
+   // æœ‰åŠ¹æ–¹å‘ãŒ Left LR ALLã®æ™‚ã«åˆ¤å®šã‚’è¡Œã†
    bool isPartinalLeft( f32 t_left_, f32 s_left_, myge::BoundingBox::EnableAxis& enable_axis_ )
    {
       // Left or LR or ALL
@@ -52,7 +52,7 @@ namespace
       }
       return false;
    }
-   // —LŒø•ûŒü‚ª Right LR ALL‚Ì‚É”»’è‚ğs‚¤
+   // æœ‰åŠ¹æ–¹å‘ãŒ Right LR ALLã®æ™‚ã«åˆ¤å®šã‚’è¡Œã†
    bool isPartinalRight( f32 t_right_, f32 s_right_, myge::BoundingBox::EnableAxis& enable_axis_ )
    {
       // Right or LR or ALL
@@ -62,7 +62,7 @@ namespace
       }
       return false;
    }
-   // —LŒø•ûŒü‚ª Bottom TB ALL‚Ì‚É”»’è‚ğs‚¤
+   // æœ‰åŠ¹æ–¹å‘ãŒ Bottom TB ALLã®æ™‚ã«åˆ¤å®šã‚’è¡Œã†
    bool isOutTop( f32 t_bottom_, f32 s_top_, myge::BoundingBox::EnableAxis& enable_axis_ )
    {
       // Bottom or TB or ALL
@@ -73,7 +73,7 @@ namespace
       }
       return false;
    }
-   // —LŒø•ûŒü‚ª Top TB ALL‚Ì‚É”»’è‚ğs‚¤
+   // æœ‰åŠ¹æ–¹å‘ãŒ Top TB ALLã®æ™‚ã«åˆ¤å®šã‚’è¡Œã†
    bool isOutBottom( f32 t_top_, f32 s_bottom_, myge::BoundingBox::EnableAxis& enable_axis_ )
    {
       // TOP or TB or ALL
@@ -83,7 +83,7 @@ namespace
       }
       return false;
    }
-   // —LŒø•ûŒü‚ª Right LR ALL‚Ì‚É”»’è‚ğs‚¤
+   // æœ‰åŠ¹æ–¹å‘ãŒ Right LR ALLã®æ™‚ã«åˆ¤å®šã‚’è¡Œã†
    bool isOutLeft( f32 t_right_, f32 s_left_, myge::BoundingBox::EnableAxis& enable_axis_ )
    {
       // Right or LR or ALL
@@ -93,7 +93,7 @@ namespace
       }
       return false;
    }
-   // —LŒø•ûŒü‚ª Left LR ALL‚Ì‚É”»’è‚ğs‚¤
+   // æœ‰åŠ¹æ–¹å‘ãŒ Left LR ALLã®æ™‚ã«åˆ¤å®šã‚’è¡Œã†
    bool isOutRight( f32 t_left_, f32 s_right_, myge::BoundingBox::EnableAxis& enable_axis_ )
    {
       // Left or LR or ALL
@@ -127,11 +127,11 @@ namespace myge
                             .y { 0.f },
                             .w { static_cast<f32>( context_.getWindowSize().x ) },
                             .h { static_cast<f32>( context_.getWindowSize().y ) } };
-         // ‰æ–ÊŠO‚©‚ç“oê‚·‚éƒP[ƒX‚É‘Î‰‚·‚é‚½‚ßA
-         // ƒXƒe[ƒg‚ªNone‚Ìê‡Inside‚µ‚©”»’è‚ğæ‚ç‚È‚¢
+         // ç”»é¢å¤–ã‹ã‚‰ç™»å ´ã™ã‚‹ã‚±ãƒ¼ã‚¹ã«å¯¾å¿œã™ã‚‹ãŸã‚ã€
+         // ã‚¹ãƒ†ãƒ¼ãƒˆãŒNoneã®å ´åˆInsideã—ã‹åˆ¤å®šã‚’å–ã‚‰ãªã„
          if ( box.state == BoundingBox::State::None )
          {
-            // —LŒø•ûŒü[ enable_axis ]‚ğ‚à‚Æ‚É”»’è‚ğs‚¤
+            // æœ‰åŠ¹æ–¹å‘[ enable_axis ]ã‚’ã‚‚ã¨ã«åˆ¤å®šã‚’è¡Œã†
             if ( isInside( target, screen, box.enable_axis ) )
             {
                box.state = BoundingBox::State::Inside;
@@ -140,7 +140,7 @@ namespace myge
          }
          else
          {
-            // —LŒø•ûŒü[ enable_axis ]‚ğ‚à‚Æ‚É”»’è‚ğs‚¤
+            // æœ‰åŠ¹æ–¹å‘[ enable_axis ]ã‚’ã‚‚ã¨ã«åˆ¤å®šã‚’è¡Œã†
             if ( isOutTop( target.h, screen.y, box.enable_axis ) ) { box.state = BoundingBox::State::OutTop; }
             else if ( isOutBottom( target.y, screen.h, box.enable_axis ) )
             {

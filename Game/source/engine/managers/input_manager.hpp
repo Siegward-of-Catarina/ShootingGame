@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <engine/core/forward_declarations.hpp>
 #include <queue>
 namespace sdl_engine
@@ -17,8 +17,8 @@ namespace sdl_engine
 		~InputManager();
 		void handleEvent(const SDL_Event& event_);
 		/// <summary>
-		/// KeyState‚ğXV‚·‚é
-		/// ƒQ[ƒ€ƒ‹[ƒv‚ÌÅŒã‚ÅŒÄ‚Ô‚±‚ÆI
+		/// KeyStateã‚’æ›´æ–°ã™ã‚‹
+		/// ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—ã®æœ€å¾Œã§å‘¼ã¶ã“ã¨ï¼
 		/// </summary>
 		void update();
 		bool isKeyDown(i32 scancode_);
@@ -31,7 +31,7 @@ namespace sdl_engine
 
 	private:
 		std::vector<KeyState> _key_state;
-		// ƒtƒŒ[ƒ€’PˆÊ‚Ì“ü—ÍƒLƒ…[
+		// ãƒ•ãƒ¬ãƒ¼ãƒ å˜ä½ã®å…¥åŠ›ã‚­ãƒ¥ãƒ¼
 		std::queue<i32> _down_keys;
 		std::queue<i32> _up_keys;
 		bool			_any_key_inputs;

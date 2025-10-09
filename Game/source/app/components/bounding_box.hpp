@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <engine/forward.hpp>
 #include <engine/utils/json_utilities.hpp>
 namespace myge

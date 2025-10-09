@@ -1,11 +1,11 @@
-#include <app/components/bounding_box.hpp>
+ï»¿#include <app/components/bounding_box.hpp>
 #include <app/components/lifecycle_tags.hpp>
 #include <app/systems/life_cycle_system.hpp>
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 namespace
 {
-   // ƒ\[ƒg‚ğ•K—v‚Æ‚·‚éƒŒƒCƒ„‚Ì”»•Êƒrƒbƒgƒtƒ‰ƒO
+   // ã‚½ãƒ¼ãƒˆã‚’å¿…è¦ã¨ã™ã‚‹ãƒ¬ã‚¤ãƒ¤ã®åˆ¤åˆ¥ãƒ“ãƒƒãƒˆãƒ•ãƒ©ã‚°
    constexpr u8 NEED_SORT_BACKGROUND_TAG = 1;
    constexpr u8 NEED_SORT_GAMESPRITE_TAG = 2;
    constexpr u8 NEED_SORT_UI_TAG         = 4;
@@ -24,20 +24,20 @@ namespace myge
       //
       auto&                     registry { context_.getRegistry() };
       std::vector<entt::entity> change_tag_entities {};
-      // ‰æ–ÊŠO‚Å‘¶İ‚µ‚Ä‚¢‚é‚Æ‚«
+      // ç”»é¢å¤–ã§å­˜åœ¨ã—ã¦ã„ã‚‹ã¨ã
       for ( auto [ entity ] : registry.view<EnteringTag>().each() )
       {
-         // “oê‚Éƒ\[ƒg‘ÎÛ‚É‚·‚é
+         // ç™»å ´æ™‚ã«ã‚½ãƒ¼ãƒˆå¯¾è±¡ã«ã™ã‚‹
          need_sort = NEED_SORT_ALL;
 
-         // ƒoƒEƒ“ƒfƒBƒ“ƒOƒ{ƒbƒNƒX‚ğ‚ÂƒIƒuƒWƒFƒNƒg‚Ìê‡
+         // ãƒã‚¦ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ãƒœãƒƒã‚¯ã‚¹ã‚’æŒã¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å ´åˆ
          if ( registry.all_of<BoundingBox>( entity ) )
          {
-            // ˆê“xƒQ[ƒ€ƒGƒŠƒA“à‚É“ü‚Á‚½‚çƒAƒNƒeƒBƒuó‘Ô‚Æ‚·‚é
+            // ä¸€åº¦ã‚²ãƒ¼ãƒ ã‚¨ãƒªã‚¢å†…ã«å…¥ã£ãŸã‚‰ã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã¨ã™ã‚‹
             auto& box { registry.get<BoundingBox>( entity ) };
             if ( box.state == BoundingBox::State::Inside ) { change_tag_entities.emplace_back( entity ); }
          }
-         else    // ‚»‚Ì‘¼‚ÍoŒ»‚©‚çƒAƒNƒeƒBƒu‚É
+         else    // ãã®ä»–ã¯å‡ºç¾æ™‚ã‹ã‚‰ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
          {
             change_tag_entities.emplace_back( entity );
          }
@@ -46,7 +46,7 @@ namespace myge
       for ( auto [ entity ] : registry.view<DyingTag>().each() ) {}
       for ( auto [ entity ] : registry.view<DeadTag>().each() )
       {
-         // íœ‘ÎÛ‚ÌƒGƒ“ƒeƒBƒeƒB‚ª‚Ç‚ÌƒŒƒCƒ„‚É‚¢‚é‚©’²‚×‚é
+         // å‰Šé™¤å¯¾è±¡ã®ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ãŒã©ã®ãƒ¬ã‚¤ãƒ¤ã«ã„ã‚‹ã‹èª¿ã¹ã‚‹
          if ( registry.all_of<sdl_engine::RenderBackgroundTag>( entity ) ) { need_sort |= NEED_SORT_BACKGROUND_TAG; }
          else if ( registry.all_of<sdl_engine::RenderGameSpriteTag>( entity ) )
          {
@@ -56,19 +56,19 @@ namespace myge
          else if ( registry.all_of<sdl_engine::RenderTextTag>( entity ) ) { need_sort |= NEED_SORT_TEXT_TAG; }
          else if ( registry.all_of<sdl_engine::RenderFadeTag>( entity ) ) { need_sort |= NEED_SORT_FADE_TAG; }
          registry.destroy( entity );
-         // ‚P‘Ì‚Å‚àíœ‚µ‚½‚çÄƒ\[ƒg
+         // ï¼‘ä½“ã§ã‚‚å‰Šé™¤ã—ãŸã‚‰å†ã‚½ãƒ¼ãƒˆ
       }
 
-      // ~‡‚ÉƒGƒ“ƒeƒBƒeƒB‚ğƒ\[ƒg
+      // é™é †ã«ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã‚’ã‚½ãƒ¼ãƒˆ
       if ( need_sort )
       {
-         // ‚Ü‚¸‚ÍSprite‚ğƒ\[ƒg‚±‚ê‚ÍŒÅ’è
+         // ã¾ãšã¯Spriteã‚’ã‚½ãƒ¼ãƒˆã“ã‚Œã¯å›ºå®š
          registry.sort<sdl_engine::Sprite>( []( const sdl_engine::Sprite& l_sprt, const sdl_engine::Sprite& r_sprt )
                                             { return l_sprt.render_order > r_sprt.render_order; } );
-         // Sprite‚ğŠî€‚ÉTransform‚àƒ\[ƒg‚±‚ê‚àŒÅ’è
+         // Spriteã‚’åŸºæº–ã«Transformã‚‚ã‚½ãƒ¼ãƒˆã“ã‚Œã‚‚å›ºå®š
          registry.sort<sdl_engine::Transform, sdl_engine::Sprite>();
-         // ‚±‚±‚©‚ç‚Ííœ‚³‚ê‚½ƒGƒ“ƒeƒBƒeƒB‚ªŠ‘®‚µ‚Ä‚¢‚½ƒŒƒCƒ„‚²‚Æ‚Éƒ\[ƒg‚ª•K—v‚È‚ç
-         // Sprite‚ğŠî€‚Éƒ\[ƒg‚·‚é
+         // ã“ã“ã‹ã‚‰ã¯å‰Šé™¤ã•ã‚ŒãŸã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ãŒæ‰€å±ã—ã¦ã„ãŸãƒ¬ã‚¤ãƒ¤ã”ã¨ã«ã‚½ãƒ¼ãƒˆãŒå¿…è¦ãªã‚‰
+         // Spriteã‚’åŸºæº–ã«ã‚½ãƒ¼ãƒˆã™ã‚‹
          if ( need_sort & NEED_SORT_BACKGROUND_TAG )
          {
             registry.sort<sdl_engine::RenderBackgroundTag, sdl_engine::Sprite>();
@@ -78,9 +78,12 @@ namespace myge
             registry.sort<sdl_engine::RenderGameSpriteTag, sdl_engine::Sprite>();
          }
          if ( need_sort & NEED_SORT_UI_TAG ) { registry.sort<sdl_engine::RenderUITag, sdl_engine::Sprite>(); }
-         if ( need_sort & NEED_SORT_TEXT_TAG ) { registry.sort<sdl_engine::RenderTextTag, sdl_engine::Sprite>(); }
+         if ( need_sort & NEED_SORT_TEXT_TAG ) {
+             registry.sort<sdl_engine::RenderTextTag, sdl_engine::Sprite>(); 
+             registry.sort<sdl_engine::Text, sdl_engine::Sprite>();
+         }
          if ( need_sort & NEED_SORT_FADE_TAG ) { registry.sort<sdl_engine::RenderFadeTag, sdl_engine::Sprite>(); }
-         // ƒ\[ƒgŠ®—¹
+         // ã‚½ãƒ¼ãƒˆå®Œäº†
          need_sort = 0;
       }
 

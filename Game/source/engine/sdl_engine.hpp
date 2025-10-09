@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <engine/basic_component.hpp>
 #include <engine/basic_system.hpp>
 #include <engine/core.hpp>

@@ -1,4 +1,4 @@
-#include <app/components/entity_type_tag.hpp>
+﻿#include <app/components/entity_type_tag.hpp>
 namespace myge
 {
 

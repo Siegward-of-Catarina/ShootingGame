@@ -1,4 +1,4 @@
-#include <engine/core/game_exception.hpp>
+﻿#include <engine/core/game_exception.hpp>
 #include <engine/utils/common_utilities.hpp>
 
 namespace sdl_engine

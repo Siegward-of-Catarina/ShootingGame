@@ -1,139 +1,145 @@
-{
-	"Entities": {
-		"BackGround": [
-			{
-				"EntityType": "Background",
-				"RenderType": "Background",
-				"Sprite": { "name": "back_ground" },
-				"Transform": {
-					"px": 300.0,
-					"py": 400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 10.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 0.0,
-					"harf_height": 400.0,
-					"radius": 0.0,
-					"enable_axis": "top"
-				}
+﻿{
+	"Entities": [
+		{
+			"EntityType": "Background",
+			"RenderType": "Background",
+			"Sprite": { "name": "back_ground" },
+			"Transform": {
+				"px": 300.0,
+				"py": 400.0,
+				"angle": 0.0,
+				"scale": 1.0
 			},
-			{
-				"EntityType": "Background",
-				"RenderType": "Background",
-				"Sprite": { "name": "back_ground" },
-				"Transform": {
-					"px": 300.0,
-					"py": -400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 10.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 0.0,
-					"harf_height": 400.0,
-					"radius": 0.0,
-					"enable_axis": "top"
-				}
+			"Velocity": {
+				"dx": 0.0,
+				"dy": 10.0,
+				"anguler": 0.0,
+				"scale_rate": 0.0
 			},
-			{
-				"EntityType": "Background",
-				"RenderType": "Background",
-				"Sprite": {
-					"name": "back_star",
-					"render_order": 0
-				},
-				"Transform": {
-					"px": 300.0,
-					"py": 400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 80.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 0.0,
-					"harf_height": 400.0,
-					"radius": 0.0,
-					"enable_axis": "top"
-				}
-			},
-			{
-				"EntityType": "Background",
-				"RenderType": "Background",
-				"Sprite": {
-					"name": "back_star",
-					"render_order": 0
-				},
-				"Transform": {
-					"px": 300.0,
-					"py": -400.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 80.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 0.0,
-					"harf_height": 400.0,
-					"radius": 0.0,
-					"enable_axis": "top"
-				}
+			"BoundingBox": {
+				"harf_width": 0.0,
+				"harf_height": 400.0,
+				"radius": 0.0,
+				"enable_axis": "top"
 			}
-		],
-		"UI": [
-			{
-				"RenderType": "UI",
-				"Sprite": { "name": "title" },
-				"Transform": {
-					"px": 300.0,
-					"py": 200.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 0.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				}
+		},
+		{
+			"EntityType": "Background",
+			"RenderType": "Background",
+			"Sprite": {
+				"name": "back_ground"
 			},
-			{
-				"RenderType": "UI",
-				"Sprite": { "name": "any_key_start" },
-				"Transform": {
-					"px": 300.0,
-					"py": 600.0,
-					"angle": 0.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0.0,
-					"dy": 0.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"TitleInput": {}
+			"Transform": {
+				"px": 300.0,
+				"py": -400.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"Velocity": {
+				"dx": 0.0,
+				"dy": 10.0,
+				"anguler": 0.0,
+				"scale_rate": 0.0
+			},
+			"BoundingBox": {
+				"harf_width": 0.0,
+				"harf_height": 400.0,
+				"radius": 0.0,
+				"enable_axis": "top"
 			}
-		]
-	}
+		},
+		{
+			"EntityType": "Background",
+			"RenderType": "Background",
+			"Sprite": {
+				"name": "back_star",
+				"render_order": 0
+			},
+			"Transform": {
+				"px": 300.0,
+				"py": 400.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"Velocity": {
+				"dx": 0.0,
+				"dy": 80.0,
+				"anguler": 0.0,
+				"scale_rate": 0.0
+			},
+			"BoundingBox": {
+				"harf_width": 0.0,
+				"harf_height": 400.0,
+				"radius": 0.0,
+				"enable_axis": "top"
+			}
+		},
+		{
+			"EntityType": "Background",
+			"RenderType": "Background",
+			"Sprite": {
+				"name": "back_star",
+				"render_order": 0
+			},
+			"Transform": {
+				"px": 300.0,
+				"py": -400.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"Velocity": {
+				"dx": 0.0,
+				"dy": 80.0,
+				"anguler": 0.0,
+				"scale_rate": 0.0
+			},
+			"BoundingBox": {
+				"harf_width": 0.0,
+				"harf_height": 400.0,
+				"radius": 0.0,
+				"enable_axis": "top"
+			}
+		},
+		{
+			"RenderType": "UI",
+			"Sprite": { "name": "title" },
+			"Transform": {
+				"px": 300.0,
+				"py": 200.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"Velocity": {
+				"dx": 0.0,
+				"dy": 0.0,
+				"anguler": 0.0,
+				"scale_rate": 0.0
+			}
+		},
+		{
+			"RenderType": "Text",
+			"Sprite": {
+				"name": "font_1_x24",
+				"color": [ 1.0, 0.0, 0.8, 1.0 ]
+			},
+			"Transform": {
+				"px": 156.0,
+				"py": 700.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"Text": {
+				"font": "font_x24",
+				"text": "Press Any Key",
+				"size": "Large"
+			},
+			"SpriteBrink": {
+				"speed": 1.0,
+				"min_alpha": 0.3
+			}
+		},
+		{
+			"TitleInput": {}
+		}
+	]
 }

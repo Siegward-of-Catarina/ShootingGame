@@ -1,4 +1,4 @@
-#include <engine/basic_component.hpp>
+﻿#include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 #include <engine/systems/fade_system.hpp>
 namespace

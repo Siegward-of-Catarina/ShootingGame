@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <engine/forward.hpp>
 #include <engine/scene/scene.hpp>
 namespace myge
@@ -8,12 +8,12 @@ namespace myge
    public:
       TitleScene( sdl_engine::GameContext& ctx_ );
       virtual ~TitleScene() override;
-      // Scene ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
+      // Scene ã‚’ä»‹ã—ã¦ç¶™æ‰¿ã•ã‚Œã¾ã—ãŸ
       void initialize() override;
       void start() override;
       void update() override;
    private:
-      // Scene ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
+      // Scene ã‚’ä»‹ã—ã¦ç¶™æ‰¿ã•ã‚Œã¾ã—ãŸ
       virtual void addSystems() override;
    private:
        f64 _scene_elapsed_time;

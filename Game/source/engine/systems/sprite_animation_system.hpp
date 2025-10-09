@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <engine/systems/system_interface.hpp>
 namespace sdl_engine
 {
@@ -7,7 +7,7 @@ namespace sdl_engine
    public:
       SpriteAnimationSystem( i32 priority_ );
       virtual ~SpriteAnimationSystem() override;
-      // SystemInterface ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
+      // SystemInterface ã‚’ä»‹ã—ã¦ç¶™æ‰¿ã•ã‚Œã¾ã—ãŸ
       virtual void  update( GameContext& context_ ) override;
    };
 }    // namespace sdl_engine

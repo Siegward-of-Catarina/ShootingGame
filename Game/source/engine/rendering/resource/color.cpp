@@ -1,4 +1,4 @@
-#include <engine/rendering/resource/color.hpp>
+﻿#include <engine/rendering/resource/color.hpp>
 
 namespace sdl_engine
 {

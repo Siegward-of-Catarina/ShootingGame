@@ -1,12 +1,12 @@
-#pragma once
+ï»¿#pragma once
 #include <engine/core/forward_declarations.hpp>
 #include <engine/rendering/resource/color.hpp>
 namespace sdl_engine {
 	struct FontResource {
-		u32 width{};
-		u32 height{};
-		// ƒtƒHƒ“ƒg‰æ‘œ‚©‚çØ‚èo‚µ‚½‹éŒ`‚ğ•Û
-		// ã‚Ìwidth,height‚ğ‚à‚Æ‚ÉØ‚èo‚·
+		f32 width{};
+		f32 height{};
+		// ãƒ•ã‚©ãƒ³ãƒˆç”»åƒã‹ã‚‰åˆ‡ã‚Šå‡ºã—ãŸçŸ©å½¢ã‚’ä¿æŒ
+		// ä¸Šã®width,heightã‚’ã‚‚ã¨ã«åˆ‡ã‚Šå‡ºã™
 		std::vector<SDL_FRect> font_rect{};
 	};
 }

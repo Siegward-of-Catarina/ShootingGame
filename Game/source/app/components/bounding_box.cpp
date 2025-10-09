@@ -1,4 +1,4 @@
-#include <app/components/bounding_box.hpp>
+ï»¿#include <app/components/bounding_box.hpp>
 
 namespace myge {
 	BoundingBox createBoundingBox(const json& data_)
@@ -6,14 +6,14 @@ namespace myge {
 		BoundingBox box_comp{ .harf_width { data_.value("harf_width", 0) },
 							  .harf_hegiht { data_.value("harf_height",0) },
 							  .radius { data_.value("radius",0.0f) },
-							  .state { BoundingBox::State::None },    // ŒÅ’è
+							  .state { BoundingBox::State::None },    // å›ºå®š
 							  .enable_axis { BoundingBox::EnableAxis::ALL } };
 
-		// —LŒø”»’è•ûŒü‚Éw’è‚ª‚ ‚ê‚ÎÄİ’è
+		// æœ‰åŠ¹åˆ¤å®šæ–¹å‘ã«æŒ‡å®šãŒã‚ã‚Œã°å†è¨­å®š
 		auto axis{ sdl_engine::getJsonData<std::string>(data_,"enable_axis") };
 		if (axis)
 		{
-			// all‚Ìê‡‚·‚Å‚Éİ’è‚³‚ê‚Ä‚é‚Ì‚Å–³‹
+			// allã®å ´åˆã™ã§ã«è¨­å®šã•ã‚Œã¦ã‚‹ã®ã§ç„¡è¦–
 			if (axis != "all")
 			{
 				if (axis == "top") { box_comp.enable_axis = BoundingBox::EnableAxis::Top; }

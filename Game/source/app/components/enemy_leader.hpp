@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <deque>
 #include <engine/basic_component.hpp>
 namespace myge

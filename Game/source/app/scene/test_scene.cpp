@@ -58,22 +58,22 @@ namespace myge
 
             break;
          case SceneState::Wave :
-         {
+
             _waves[ 0 ]->update( getGameContext() );
             if ( _waves[ 0 ]->isWaveEnd() ) { scene_state = SceneState::WaveEnd; }
 
             break;
-         }
+
          case SceneState::WaveEnd :
-         {
+
             idx++;    // 次へ
             if ( _waves.size() == idx ) { scene_state = SceneState::End; }
-         }
+            break;
+
          case SceneState::End :
-         {
+
             getGameContext().getSceneManager().setNextScene( std::make_unique<TestScene>( getGameContext() ) );
             break;
-         }
       }
    }
 

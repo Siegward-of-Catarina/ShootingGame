@@ -46,6 +46,8 @@
     <ClCompile Include="source\engine\components\velocity.cpp" />
     <ClCompile Include="source\engine\rendering\resource\loader\font_loader.cpp" />
     <ClCompile Include="source\app\components\entity_type_tag.cpp" />
+    <ClCompile Include="source\app\components\sprite_brink.cpp" />
+    <ClCompile Include="source\app\systems\sprite_brink_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -167,5 +169,7 @@
     <ClInclude Include="source\engine\rendering\resource\font_resource.hpp" />
     <ClInclude Include="source\engine\rendering\resource\loader\font_loader.hpp" />
     <ClInclude Include="source\app\components\entity_type_tag.hpp" />
+    <ClInclude Include="source\app\components\sprite_brink.hpp" />
+    <ClInclude Include="source\app\systems\sprite_brink_system.hpp" />
   </ItemGroup>
 </Project>

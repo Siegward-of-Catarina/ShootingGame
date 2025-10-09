@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <engine/core/forward_declarations.hpp>
 #include <engine/utils/json_utilities.hpp>
 namespace sdl_engine

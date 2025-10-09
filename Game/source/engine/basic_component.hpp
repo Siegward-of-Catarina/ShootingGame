@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <engine/Components/enable_tag_components.hpp>
 #include <engine/Components/render_type_tag.hpp>
 #include <engine/Components/text.hpp>

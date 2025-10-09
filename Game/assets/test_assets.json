@@ -1,4 +1,4 @@
-{
+﻿{
 	"Sprites": {
 		"SpriteRootPath": "assets/sprite/",
 		"SpriteDatas": [
@@ -68,6 +68,20 @@
 			"name": "font_x8",
 			"width": 8,
 			"height": 8,
+			"sprite_row": 6,
+			"sprite_col": 16
+		},
+		{
+			"name": "font_x16",
+			"width": 16,
+			"height": 16,
+			"sprite_row": 6,
+			"sprite_col": 16
+		},
+		{
+			"name": "font_x24",
+			"width": 24,
+			"height": 24,
 			"sprite_row": 6,
 			"sprite_col": 16
 		}

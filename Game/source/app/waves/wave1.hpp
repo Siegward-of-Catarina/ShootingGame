@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <app/forward_declarations.hpp>
 #include <app/systems/enemy_velocity_ystem.hpp>
 #include <app/waves/wave.hpp>
@@ -10,7 +10,7 @@ namespace myge
    {
    public:
       Wave1();
-      // Wave ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
+      // Wave ã‚’ä»‹ã—ã¦ç¶™æ‰¿ã•ã‚Œã¾ã—ãŸ
       void start( sdl_engine::GameContext& context_ ) override;
       void update( sdl_engine::GameContext& context_ ) override;
 

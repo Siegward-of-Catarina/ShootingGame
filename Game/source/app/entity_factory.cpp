@@ -1,152 +1,108 @@
-#include <app/components/bounding_box.hpp>
+ï»¿#include <app/components/bounding_box.hpp>
 #include <app/components/entity_type_tag.hpp>
 #include <app/components/lifecycle_tags.hpp>
 #include <app/components/player_input.hpp>
 #include <app/components/title_input.hpp>
+#include <app/components/sprite_brink.hpp>
 #include <app/entity_factory.hpp>
 // basic_components
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 #include <engine/graphics.hpp>
-namespace
-{
-   // Sprite‚ÌƒŠƒ\[ƒX‚ğæ“¾‚µAƒGƒ“ƒeƒBƒeƒB‚ÉSprite‚ğ“o˜^
-   void getSpriteResourceAndEmplaceComponent( entt::registry&              registry_,
-                                              sdl_engine::ResourceManager& resource_manager_,
-                                              entt::entity                 entity_,
-                                              const json&                  sprite_data_ )
-   {    // SpriteResourceæ“¾
-      auto sprite_name { sdl_engine::getJsonData<std::string>( sprite_data_, "name" ) };
-      auto sprite = resource_manager_.getSprite( sprite_name.value() );
-      auto render_order { sdl_engine::getJsonData<u32>( sprite_data_, "render_order" ) };
-      // Sprite‚ğƒGƒ“ƒeƒBƒeƒB‚É“o˜^
-      auto sprt_comp = createSprite( sprite, render_order );
-      registry_.emplace<sdl_engine::Sprite>( entity_, sprt_comp );
-   }
-
-   // SpriteAnim‚ÌƒŠƒ\[ƒX‚ğæ“¾‚µAƒGƒ“ƒeƒBƒeƒB‚ÉSpriteAnim‚ğ“o˜^
-   void getSpriteAnimResourceAndEmplaceComponent( entt::registry&              registry_,
-                                                  sdl_engine::ResourceManager& resource_manager_,
-                                                  entt::entity                 entity_,
-                                                  const json&                  sprite_data_ )
-   {
-      // SpriterAnimResoruceæ“¾
-      auto sprite_anim_name { sdl_engine::getJsonData<std::string>( sprite_data_, "name" ) };
-      auto sprt_anim_data = resource_manager_.getSpriteAnim( sprite_anim_name.value() );
-
-      // SpriteAnim‚ª‘¶İ‚·‚é‚Æ‚¢‚¤‚±‚Æ‚ÍASprite‚à‘¶İ‚·‚é‚Í‚¸
-      // Sprite‚Ìdst‚ğSpriteAnim‚ÌƒtƒŒ[ƒ€ƒTƒCƒY‚Éİ’è‚µ‚Ä‚¨‚­
-      auto& sprt = registry_.get<sdl_engine::Sprite>( entity_ );
-      sprt.dst.w = static_cast<f32>( sprt_anim_data->frame_width );
-      sprt.dst.h = static_cast<f32>( sprt_anim_data->frame_height );
-
-      // SpriteAnimƒRƒ“ƒ|[ƒlƒ“ƒg‚ğì¬
-      auto sprt_anim_comp = sdl_engine::createSpriteAnim( sprt_anim_data, sprite_data_ );
-      // SpriteAnim‚ğƒGƒ“ƒeƒBƒeƒB‚É“o˜^
-      registry_.emplace<sdl_engine::SpriteAnim>( entity_, sprt_anim_comp );
-   }
-
-   void emplaceBasicComponents( entt::registry&              registry_,
-                                sdl_engine::ResourceManager& resource_manager_,
-                                entt::entity                 entity_,
-                                const json&                  data_ )
-   {
-      // [ Spriteæ“¾ ]
-      if ( !data_.contains( "Sprite" ) )
-      {
-         throw sdl_engine::GameException( "Entityƒf[ƒ^‚Ésprite‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñ" );
-      }
-      getSpriteResourceAndEmplaceComponent( registry_, resource_manager_, entity_, data_.at( "Sprite" ) );
-
-      // [ Transformæ“¾ ]
-      if ( !data_.contains( "Transform" ) )
-      {
-         throw sdl_engine::GameException( "Entityƒf[ƒ^‚Étransform‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñ" );
-      }
-      auto trfm_comp = sdl_engine::createTransform( data_.at( "Transform" ) );
-      registry_.emplace<sdl_engine::Transform>( entity_, trfm_comp );
-
-      // [ Velocityæ“¾ ]
-      if ( !data_.contains( "Velocity" ) )
-      {
-         throw sdl_engine::GameException( "Entityƒf[ƒ^‚Évelocity‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñ" );
-      }
-      auto vlcy_comp = sdl_engine::createVelocity( data_.at( "Velocity" ) );
-      registry_.emplace<sdl_engine::Velocity>( entity_, vlcy_comp );
-   }
-}    // namespace
 namespace myge
 {
-   std::vector<entt::entity> EntityFactory::createEntities( sdl_engine::GameContext& context_, json& data_ )
-   {
+	std::vector<entt::entity> EntityFactory::createEntities(sdl_engine::GameContext& context_, json& data_)
+	{
 
-      auto& registry { context_.getRegistry() };
-      auto& resource_manager { context_.getResourceManager() };
+		auto& registry{ context_.getRegistry() };
+		auto& resource_manager{ context_.getResourceManager() };
 
-      std::vector<json> entities_data;
-      entities_data.reserve( 20 );    // “K“–‚È”‚Å—\–ñ
+		std::vector<entt::entity> entities{ data_.size() };
 
-      // json‚©‚çƒGƒ“ƒeƒBƒeƒB’PˆÊ‚Åƒf[ƒ^‚ğæ‚èo‚µAvector‚Ö
-      if ( data_.contains( "Player" ) ) { entities_data.emplace_back( data_.at( "Player" ) ); }
+		// å–å¾—ã—ãŸãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã‚’ç”Ÿæˆ
+		for (i32 i{ 0 }; auto & entity_data : data_)
+		{
+			entities[i] = registry.create();
+			// ãƒ©ã‚¤ãƒ•ã‚µã‚¤ã‚¯ãƒ«ã‚¿ã‚° [ ç”»é¢å¤–ã‹ã‚‰ã‚²ãƒ¼ãƒ ã‚¨ãƒªã‚¢ã¸å‘ã‹ã† ]çŠ¶æ…‹ã‚’åˆæœŸå€¤ã¨ã™ã‚‹
+			registry.emplace<myge::EnteringTag>(entities[i]);
+			// åŸºæœ¬çš„ãªã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+			// [Transform]
+			if (auto trfm_data{ sdl_engine::getJsonData<json>(entity_data,"Transform") }; trfm_data)
+			{
+				auto trfm_comp{ sdl_engine::createTransform(trfm_data) };
+				registry.emplace<sdl_engine::Transform>(entities[i], trfm_comp);
+			}
+			else {
+				SDL_Log("Entityãƒ‡ãƒ¼ã‚¿ã«TransformãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã§ã—ãŸ.åˆæœŸå€¤ã§ç”Ÿæˆã—ã¾ã™");
+				registry.emplace<sdl_engine::Transform>(entities[i], sdl_engine::createTransform());
+			}
+			// [Sprite]
+			if (auto sprt_data{ sdl_engine::getJsonData<json>(entity_data,"Sprite") }; sprt_data)
+			{
+				auto sprt_comp = sdl_engine::createSprite(resource_manager, sprt_data);
+				registry.emplace<sdl_engine::Sprite>(entities[i], sprt_comp);
+			}
+			// [Velocity]
+			if (auto vlcy_data{ sdl_engine::getJsonData<json>(entity_data,"Velocity") }; vlcy_data)
+			{
+				auto vlcy_comp = sdl_engine::createVelocity(vlcy_data);
+				registry.emplace<sdl_engine::Velocity>(entities[i], vlcy_comp);
+			}
+			// [SpriteAnim]
+			if (auto anim_data{ sdl_engine::getJsonData<json>(entity_data,"SpriteAnim") }; anim_data)
+			{
+				// SpriteAnimã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ä½œæˆ
+				auto sprt_anim_comp = sdl_engine::createSpriteAnim(resource_manager, anim_data);
+				// SpriteAnimãŒå­˜åœ¨ã™ã‚‹ã¨ã„ã†ã“ã¨ã¯ã€Spriteã‚‚å­˜åœ¨ã™ã‚‹
+				// Spriteã®dstã‚’SpriteAnimã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‚µã‚¤ã‚ºã«è¨­å®šã—ã¦ãŠã
+				auto& sprt = registry.get<sdl_engine::Sprite>(entities[i]);
+				sprt.dst.w = static_cast<f32>(sprt_anim_comp.sprite_anim->frame_width);
+				sprt.dst.h = static_cast<f32>(sprt_anim_comp.sprite_anim->frame_height);
+				// SpriteAnimã‚’ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã«ç™»éŒ²
+				registry.emplace<sdl_engine::SpriteAnim>(entities[i], sprt_anim_comp);
+			}
+			// [PlayerInput]
+			if (auto pl_in_data{ sdl_engine::getJsonData<json>(entity_data,"PlayerInput") }; pl_in_data)
+			{
+				PlayerInput input_comp{ createPlayerInput(pl_in_data) };
+				registry.emplace<PlayerInput>(entities[i], input_comp);
+			}
+			// [BoundingBox]
+			if (auto bb_data{ sdl_engine::getJsonData<json>(entity_data,"BoundingBox") }; bb_data)
+			{
+				BoundingBox box_comp{ createBoundingBox(bb_data) };
 
-      if ( data_.contains( "Enemy" ) )
-      {
-         for ( auto& enemy_data : data_.at( "Enemy" ) ) { entities_data.emplace_back( enemy_data ); }
-      }
+				registry.emplace<myge::BoundingBox>(entities[i], box_comp);
+			}
+			// [TitleInput]
+			if (entity_data.contains("TitleInput")) { registry.emplace<TitleInput>(entities[i]); }
+			// [Text]
+			if (auto text_data{ sdl_engine::getJsonData<json>(entity_data,"Text") }; text_data)
+			{
+				sdl_engine::Text text_comp{ sdl_engine::createText(resource_manager,text_data) };
+				registry.emplace<sdl_engine::Text>(entities[i], text_comp);
+			}
+			// [SpriteBrink]
+			if (auto brink_data{ sdl_engine::getJsonData<json>(entity_data,"SpriteBrink") }; brink_data)
+			{
+				SpriteBrink brink_comp{ createSpriteBrink(brink_data) };
+				registry.emplace<SpriteBrink>(entities[i], brink_comp);
+			}
+			// [EntityType]
+			if (auto entity_type{ sdl_engine::getJsonData<std::string>(entity_data, "EntityType") }; entity_type)
+			{
+				emplaceEntityTypeTag(registry, entities[i], entity_type.value());
+			}
+			// [RenderType]
+			if (auto render_type{ sdl_engine::getJsonData<std::string>(entity_data, "RenderType") }; render_type)
+			{
+				sdl_engine::emplaceRenderTypeTag(registry, entities[i], render_type.value());
+			}
+			// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ã‚¤ãƒ—ã¯GameSpriteã¨ã™ã‚‹
+			else { registry.emplace<sdl_engine::RenderGameSpriteTag>(entities[i]); }
+			i++;
+		}
 
-      if ( data_.contains( "BackGround" ) )
-      {
-         for ( auto& bg_data : data_.at( "BackGround" ) ) { entities_data.emplace_back( bg_data ); };
-      }
-      if ( data_.contains( "UI" ) )
-      {
-         for ( auto& hud_data : data_.at( "UI" ) ) { entities_data.emplace_back( hud_data ); }
-      }
-      std::vector<entt::entity> entities { entities_data.size() };
-
-      // æ“¾‚µ‚½ƒf[ƒ^‚©‚çƒGƒ“ƒeƒBƒeƒB‚ğ¶¬
-      for ( i32 i { 0 }; auto& entity_data : entities_data )
-      {
-         entities[ i ] = registry.create();
-         // ƒ‰ƒCƒtƒTƒCƒNƒ‹ƒ^ƒO [ ‰æ–ÊŠO‚©‚çƒQ[ƒ€ƒGƒŠƒA‚ÖŒü‚©‚¤ ]ó‘Ô‚ğ‰Šú’l‚Æ‚·‚é
-         registry.emplace<myge::EnteringTag>( entities[ i ] );
-         // Šî–{“I‚ÈƒRƒ“ƒ|[ƒlƒ“ƒg
-         emplaceBasicComponents( registry, resource_manager, entities[ i ], entity_data );
-         // [spriteAnim]
-         if ( entity_data.contains( "SpriteAnim" ) )
-         {
-            getSpriteAnimResourceAndEmplaceComponent(
-              registry, resource_manager, entities[ i ], entity_data.at( "SpriteAnim" ) );
-         }
-         // [playerInput]
-         if ( entity_data.contains( "PlayerInput" ) )
-         {
-            auto& data = entity_data.at( "PlayerInput" );
-
-            PlayerInput input_comp { createPlayerInput( data ) };
-            registry.emplace<PlayerInput>( entities[ i ], input_comp );
-         }
-         // [BoundingBox]
-         if ( entity_data.contains( "BoundingBox" ) )
-         {
-            auto&             data = entity_data.at( "BoundingBox" );
-            myge::BoundingBox box_comp { createBoundingBox( data ) };
-
-            registry.emplace<myge::BoundingBox>( entities[ i ], box_comp );
-         }
-         // [TitleInput]
-         if ( entity_data.contains( "TitleInput" ) ) { registry.emplace<TitleInput>( entities[ i ] ); }
-         // [EntityType]
-         auto entity_type { sdl_engine::getJsonData<std::string>( entity_data, "EntityType" ) };
-         if ( entity_type ) { emplaceEntityTypeTag( registry, entities[ i ], entity_type.value() ); }
-         // [RenderType]
-         auto render_type { sdl_engine::getJsonData<std::string>( entity_data, "RenderType" ) };
-         if ( render_type ) { sdl_engine::emplaceRenderTypeTag( registry, entities[ i ], render_type.value() ); }
-         // ƒfƒtƒHƒ‹ƒg‚ÌƒŒƒ“ƒ_[ƒ^ƒCƒv‚ÍGameSprite‚Æ‚·‚é
-         else { registry.emplace<sdl_engine::RenderGameSpriteTag>( entities[ i ] ); }
-         i++;
-      }
-
-      return entities;
-   }
+		return entities;
+	}
 }    // namespace myge

@@ -1,4 +1,4 @@
-#include <SDL3/SDL_scancode.h>
+ï»¿#include <SDL3/SDL_scancode.h>
 #include <engine/managers/input_manager.hpp>
 namespace
 {
@@ -6,24 +6,24 @@ namespace
    // a ~ z + 0 ~ 9 + return,escape,backspace,tab,space + right,left,down,up = 45
    constexpr u32 MAX_KEYS { 45 };
 
-   // [ SDL_SCANCODE ]‚ªA[ 4 ]ƒXƒ^[ƒg‚È‚Ì‚Å‚»‚ê‚ð[ 0 ]Žn‚Ü‚è‚É‚·‚éƒIƒtƒZƒbƒg’l
+   // [ SDL_SCANCODE ]ãŒã€[ 4 ]ã‚¹ã‚¿ãƒ¼ãƒˆãªã®ã§ãã‚Œã‚’[ 0 ]å§‹ã¾ã‚Šã«ã™ã‚‹ã‚ªãƒ•ã‚»ãƒƒãƒˆå€¤
 
-   // 4 >= SDL_SCANCODE <= 44‚Ìê‡
+   // 4 >= SDL_SCANCODE <= 44ã®å ´åˆ
    constexpr i32 RANGE4_TO_44_OFFSET { 4 };
 
-   // 79 >= SDL_SCANCODE <= 82‚Ìê‡
+   // 79 >= SDL_SCANCODE <= 82ã®å ´åˆ
    constexpr i32 RANGE79_TO_82_OFFSET { 38 };
 
    i32 getOffset( i32 key_code_ )
    {
 
-      // SDL_SCANCODE_UNKNOWN‚ÍŽó‚¯‚È‚¢‘O’ñ‚Æ‚·‚é
+      // SDL_SCANCODE_UNKNOWNã¯å—ã‘ãªã„å‰æã¨ã™ã‚‹
       // a ~ z + 0 ~ 9 + return,escape,backspace,tab,space
       if ( key_code_ <= SDL_SCANCODE_SPACE) { return RANGE4_TO_44_OFFSET; }
       // right & left & down & up keys
       if ( SDL_SCANCODE_RIGHT <= key_code_ && key_code_ <= SDL_SCANCODE_UP ) { return RANGE79_TO_82_OFFSET; }
 
-      return 0;    // Žó‚¯•t‚¯‚È‚¢ƒL[
+      return 0;    // å—ã‘ä»˜ã‘ãªã„ã‚­ãƒ¼
    }
 }    // namespace
 namespace sdl_engine
@@ -43,9 +43,9 @@ namespace sdl_engine
             if ( _key_state[ idx ] == KeyState::KeyNone )
             {
                _key_state[ idx ] = KeyState::KeyDown;
-               // ‰Ÿ‚³‚ê‚½ƒL[‚ÌƒCƒ“ƒfƒbƒNƒX‚ð‹L‰¯
+               // æŠ¼ã•ã‚ŒãŸã‚­ãƒ¼ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¨˜æ†¶
                _down_keys.emplace( idx );
-               //ƒL[‚ª‰Ÿ‚³‚ê‚½‚Æ‚¾‚¯‚Ìƒtƒ‰ƒO‚ðã‚°‚é
+               //ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã¨ã ã‘ã®ãƒ•ãƒ©ã‚°ã‚’ä¸Šã’ã‚‹
                _any_key_inputs = true;
             }
          }
@@ -56,7 +56,7 @@ namespace sdl_engine
          {
             auto idx          = scancode - offset;
             _key_state[ idx ] = KeyState::KeyUp;
-            // ‰Ÿ‚³‚ê‚½ƒL[‚ÌƒCƒ“ƒfƒbƒNƒX‚ð‹L‰¯
+            // æŠ¼ã•ã‚ŒãŸã‚­ãƒ¼ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¨˜æ†¶
             _up_keys.emplace( idx );
          }
       }

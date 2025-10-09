@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <engine/forward.hpp>
 #include <engine/systems/system_interface.hpp>
 namespace myge
@@ -9,7 +9,7 @@ namespace myge
       PlayerMovementSystem( i32 priority_ );
       virtual ~PlayerMovementSystem() override;
 
-      // SystemInterface ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
+      // SystemInterface ã‚’ä»‹ã—ã¦ç¶™æ‰¿ã•ã‚Œã¾ã—ãŸ
       virtual void  update( sdl_engine::GameContext& context_ ) override;
    };
 }    // namespace myge

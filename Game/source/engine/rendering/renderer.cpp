@@ -1,4 +1,4 @@
-#include <SDL3/SDL.h>
+ï»¿#include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <engine/core/game_exception.hpp>
 #include <engine/rendering/renderer.hpp>
@@ -13,7 +13,7 @@ namespace sdl_engine
       SDL_Renderer* renderer_raw = SDL_CreateRenderer( window_, nullptr );
       if ( !renderer_raw )
       {
-         std::string msg = "SDL renderer‚ğì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½: " + std::string( SDL_GetError() );
+         std::string msg = "SDL rendererã‚’ä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸ: " + std::string( SDL_GetError() );
          throw GameException( msg.c_str() );
       }
       _sdl_renderer = { renderer_raw, &SDL_DestroyRenderer };
@@ -26,11 +26,11 @@ namespace sdl_engine
       auto texture { IMG_LoadTexture( _sdl_renderer.get(), path.data() ) };
       if ( !texture )
       {
-         std::string msg = "SDL_Texture‚ğƒ[ƒh‚É¸”s‚µ‚Ü‚µ‚½: " + std::string( SDL_GetError() );
+         std::string msg = "SDL_Textureã‚’ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ã¾ã—ãŸ: " + std::string( SDL_GetError() );
          throw GameException( msg.c_str() );
       }
 
-      SDL_SetTextureBlendMode( texture, SDL_BLENDMODE_BLEND );    // •W€‚ÍƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒh
+      SDL_SetTextureBlendMode( texture, SDL_BLENDMODE_BLEND );    // æ¨™æº–ã¯ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰
       SDL_SetTextureScaleMode( texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );
 
       return texture;
@@ -45,11 +45,11 @@ namespace sdl_engine
       auto texture { SDL_CreateTextureFromSurface( _sdl_renderer.get(), surface ) };
       if ( !texture )
       {
-         std::string msg = "SDL_Texture‚ğì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½: " + std::string( SDL_GetError() );
+         std::string msg = "SDL_Textureã‚’ä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸ: " + std::string( SDL_GetError() );
          throw GameException( msg.c_str() );
       }
 
-      SDL_SetTextureBlendMode( texture, SDL_BLENDMODE_BLEND );    // •W€‚ÍƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒh
+      SDL_SetTextureBlendMode( texture, SDL_BLENDMODE_BLEND );    // æ¨™æº–ã¯ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰
       SDL_SetTextureScaleMode( texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );
 
       return texture;
@@ -80,7 +80,7 @@ namespace sdl_engine
    void Renderer::renderSetDebugText( std::string_view text_, f32 x_, f32 y_ )
    {
        std::string text{ text_ };
-       _text_render_queue.emplace( Text{ text, Text::Size::Small, ColorRGBA(1.0f,1.0f,0.0f,1.0f) } );
+       //_text_render_queue.emplace( Text{ text, Text::Size::Small, ColorRGBA(1.0f,1.0f,0.0f,1.0f) } );
 
    }
 

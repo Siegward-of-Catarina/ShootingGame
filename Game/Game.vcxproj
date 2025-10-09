@@ -59,6 +59,7 @@
       <AdditionalIncludeDirectories>../third_party/SDL/include;../third_party/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CallingConvention>FastCall</CallingConvention>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -79,6 +80,7 @@
       <AdditionalIncludeDirectories>../third_party/SDL/include;../third_party/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CallingConvention>FastCall</CallingConvention>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -91,6 +93,8 @@
     <ClCompile Include="source\app\components\bounding_box.cpp" />
     <ClCompile Include="source\app\components\entity_type_tag.cpp" />
     <ClCompile Include="source\app\components\player_input.cpp" />
+    <ClCompile Include="source\app\components\sprite_brink.cpp" />
+    <ClCompile Include="source\app\systems\sprite_brink_system.cpp" />
     <ClCompile Include="source\engine\components\fade.cpp" />
     <ClCompile Include="source\engine\components\render_type_tag.cpp" />
     <ClCompile Include="source\engine\components\sprite.cpp" />
@@ -145,6 +149,8 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\app\components\sprite_brink.hpp" />
+    <ClInclude Include="source\app\systems\sprite_brink_system.hpp" />
     <ClInclude Include="source\engine\components\render_type_tag.hpp" />
     <ClInclude Include="source\engine\components\text.hpp" />
     <ClInclude Include="source\engine\rendering\resource\color.hpp" />

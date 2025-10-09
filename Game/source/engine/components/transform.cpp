@@ -1,4 +1,4 @@
-#include <engine/Components/transform.hpp>
+﻿#include <engine/Components/transform.hpp>
 
 namespace sdl_engine {
 	Transform createTransform(const json& data_)
@@ -8,5 +8,9 @@ namespace sdl_engine {
 							 .angle {  data_.value("angle",0.0f) },
 							 .scale {  data_.value("scale",1.0f) } };
 		return trfm_comp;
+	}
+	Transform createTransform()
+	{
+		return Transform{ 0.0f,0.0f,0.0f,1.0f };
 	}
 }

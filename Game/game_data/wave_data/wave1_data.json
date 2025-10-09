@@ -1,114 +1,112 @@
-{
-	"Entities": {
-		"Enemy": [
-			{
-				"EntityType": "Enemy",
-				"RenderType": "GameSprite",
-				"Sprite": { "name": "enemy1" },
-				"SpriteAnim": {
-					"name": "enemy1_anim",
-					"current_frame": 1,
-					"is_playing": true
-				},
-				"Transform": {
-					"px": 200,
-					"py": -50,
-					"angle": 180.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0,
-					"dy": 150.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 16.0,
-					"harf_height": 16.0,
-					"radius": 20.0
-				}
-			},
-			{
-				"EntityType": "Enemy",
-				"RenderType": "GameSprite",
-				"Sprite": { "name": "enemy1" },
-				"SpriteAnim": {
-					"name": "enemy1_anim",
-					"current_frame": 1,
-					"is_playing": true
-				},
-				"Transform": {
-					"px": 200,
-					"py": -100,
-					"angle": 180.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0,
-					"dy": 150.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 16.0,
-					"harf_height": 16.0,
-					"radius": 20.0
-				}
-			},
-			{
-				"EntityType": "Enemy",
-				"RenderType": "GameSprite",
-				"Sprite": { "name": "enemy1" },
-				"SpriteAnim": {
-					"name": "enemy1_anim",
-					"current_frame": 1,
-					"is_playing": true
-				},
-				"Transform": {
-					"px": 200,
-					"py": -150,
-					"angle": 180.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0,
-					"dy": 150.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 16.0,
-					"harf_height": 16.0,
-					"radius": 20.0
-				}
-			},
-			{
-				"EntityType": "Enemy",
-				"RenderType": "GameSprite",
-				"Sprite": { "name": "enemy1" },
-				"SpriteAnim": {
-					"name": "enemy1_anim",
-					"current_frame": 1,
-					"is_playing": true
-				},
-				"Transform": {
-					"px": 200,
-					"py": -200,
-					"angle": 180.0,
-					"scale": 1.0
-				},
-				"Velocity": {
-					"dx": 0,
-					"dy": 150.0,
-					"anguler": 0.0,
-					"scale_rate": 0.0
-				},
-				"BoundingBox": {
-					"harf_width": 16.0,
-					"harf_height": 16.0,
-					"radius": 20.0
-				}
-			}
-		]
-	}
+﻿{
+  "Entities": [
+    {
+      "EntityType": "Enemy",
+      "RenderType": "GameSprite",
+      "Sprite": { "name": "enemy1" },
+      "SpriteAnim": {
+        "name": "enemy1_anim",
+        "current_frame": 1,
+        "is_playing": true
+      },
+      "Transform": {
+        "px": 200,
+        "py": -50,
+        "angle": 180.0,
+        "scale": 1.0
+      },
+      "Velocity": {
+        "dx": 0,
+        "dy": 150.0,
+        "anguler": 0.0,
+        "scale_rate": 0.0
+      },
+      "BoundingBox": {
+        "harf_width": 16.0,
+        "harf_height": 16.0,
+        "radius": 20.0
+      }
+    },
+    {
+      "EntityType": "Enemy",
+      "RenderType": "GameSprite",
+      "Sprite": { "name": "enemy1" },
+      "SpriteAnim": {
+        "name": "enemy1_anim",
+        "current_frame": 1,
+        "is_playing": true
+      },
+      "Transform": {
+        "px": 200,
+        "py": -100,
+        "angle": 180.0,
+        "scale": 1.0
+      },
+      "Velocity": {
+        "dx": 0,
+        "dy": 150.0,
+        "anguler": 0.0,
+        "scale_rate": 0.0
+      },
+      "BoundingBox": {
+        "harf_width": 16.0,
+        "harf_height": 16.0,
+        "radius": 20.0
+      }
+    },
+    {
+      "EntityType": "Enemy",
+      "RenderType": "GameSprite",
+      "Sprite": { "name": "enemy1" },
+      "SpriteAnim": {
+        "name": "enemy1_anim",
+        "current_frame": 1,
+        "is_playing": true
+      },
+      "Transform": {
+        "px": 200,
+        "py": -150,
+        "angle": 180.0,
+        "scale": 1.0
+      },
+      "Velocity": {
+        "dx": 0,
+        "dy": 150.0,
+        "anguler": 0.0,
+        "scale_rate": 0.0
+      },
+      "BoundingBox": {
+        "harf_width": 16.0,
+        "harf_height": 16.0,
+        "radius": 20.0
+      }
+    },
+    {
+      "EntityType": "Enemy",
+      "RenderType": "GameSprite",
+      "Sprite": { "name": "enemy1" },
+      "SpriteAnim": {
+        "name": "enemy1_anim",
+        "current_frame": 1,
+        "is_playing": true
+      },
+      "Transform": {
+        "px": 200,
+        "py": -200,
+        "angle": 180.0,
+        "scale": 1.0
+      },
+      "Velocity": {
+        "dx": 0,
+        "dy": 150.0,
+        "anguler": 0.0,
+        "scale_rate": 0.0
+      },
+      "BoundingBox": {
+        "harf_width": 16.0,
+        "harf_height": 16.0,
+        "radius": 20.0
+      }
+    }
+  ]
 }

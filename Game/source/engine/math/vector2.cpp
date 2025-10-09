@@ -1,4 +1,4 @@
-#include <engine/math/vector2.hpp>
+﻿#include <engine/math/vector2.hpp>
 namespace sdl_engine
 {
    Vector2_f32::Vector2_f32( f32 d_0_, f32 d_1_ )

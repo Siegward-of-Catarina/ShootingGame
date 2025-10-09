@@ -1,19 +1,11 @@
-#include <engine/Components/text.hpp>
+﻿#include <engine/Components/text.hpp>
+#include <engine/managers/resource_manager.hpp>
+#include <engine/rendering/resource/font_resource.hpp>
 namespace sdl_engine {
-	Text createText(const json& data_)
+	Text createText(ResourceManager& resource_manager_, const json& data_)
 	{
-		Text text_comp{ "",Text::Size::Small,{} };
-		text_comp.text = data_.value("text", "");
-		auto color{ getJsonData<std::array<f32,4>>(data_,"color") };
-		if (color.has_value()) {
-			text_comp.color = color.value();
-		}
-		auto size{ getJsonData<std::string>(data_,"size") };
-		if ( size.has_value() ) {
-			if (size.value() == "small") { text_comp.size = Text::Size::Small; }
-			if (size.value() == "medium") { text_comp.size = Text::Size::Medium; }
-			if (size.value() == "large") { text_comp.size = Text::Size::Large; }
-		}
-		return text_comp;
+		auto font_name{ sdl_engine::getJsonData < std::string>(data_,"font").value() };
+		auto font{ resource_manager_.getFont(font_name) };
+		return Text{ font,data_.value("text", "") };
 	}
 }

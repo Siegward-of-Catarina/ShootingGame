@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 #include <engine/core/forward_declarations.hpp>
 #include <vector>
 namespace sdl_engine
@@ -14,7 +14,7 @@ namespace sdl_engine
       u32                    frame_width {};
       u32                    frame_height {};
       u32                    frame_num {};
-      f64                    frame_time {};    // ïbíPà 
+      f64                    frame_time {};    // ÁßíÂçò‰Ωç
       AnimType anim_type{};
    };
 
