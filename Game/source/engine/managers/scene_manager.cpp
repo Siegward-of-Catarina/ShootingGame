@@ -27,7 +27,7 @@ namespace
       // fade
       sdl_engine::Fade fade_comp { .state { sdl_engine::Fade::State::Idel },
                                    .speed { 2.0f },
-                                   .black_out_time { 1.0f } };
+                                   .black_out_duration { 1.0f } };
       registry.emplace<sdl_engine::Fade>( fade, fade_comp );
       registry.emplace<sdl_engine::RenderFadeTag>( fade );
       return fade;
@@ -67,10 +67,9 @@ namespace sdl_engine
       switch ( fade_comp.state )
       {
          case Fade::State::FadeOutEnd :
-            // シーン入れ替え&初期化後フェードインへ
+            // シーン入れ替え&初期化
             _current_scene = std::move( _next_scene );
             _current_scene->initialize();
-            fade_comp.state = Fade::State::FadeIn;
             break;
          case Fade::State::FadeInEnd :
             // フェードインが明けたらシーン開始

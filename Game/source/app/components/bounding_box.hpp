@@ -36,5 +36,5 @@ namespace myge
       } enable_axis;
    };
 
-   BoundingBox createBoundingBox(const json& data_);
+   BoundingBox createBoundingBox( const json& data_ );
 }    // namespace myge

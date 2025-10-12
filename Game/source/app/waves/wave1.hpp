@@ -1,9 +1,8 @@
 ﻿#pragma once
 #include <app/forward_declarations.hpp>
-#include <app/systems/enemy_velocity_ystem.hpp>
+#include <app/systems/enemy_movement_system.hpp>
 #include <app/waves/wave.hpp>
 #include <engine/core/forward_declarations.hpp>
-#include <engine/systems/transfrom_update_system.hpp>
 namespace myge
 {
    class Wave1 final : public Wave
@@ -17,7 +16,7 @@ namespace myge
    private:
 
    private:
-      std::unique_ptr<sdl_engine::TransformUpdateSystem> _move_system;
-      std::unique_ptr<EnemyVelocitySystem>               _enemy_system;
+      // std::unique_ptr<sdl_engine::MovementSystem> _move_system;
+      std::unique_ptr<EnemyMovementSystem> _enemy_system;
    };
 }    // namespace myge

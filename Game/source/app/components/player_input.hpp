@@ -1,15 +1,12 @@
 ﻿#pragma once
-#include <engine/forward.hpp>
-#include <engine/utils/json_utilities.hpp>
+#include <engine/math.hpp>
 namespace myge
 {
    struct PlayerInput
    {
-      std::string up_sdl_key_name;
-      std::string down_sdl_key_name;
-      std::string left_sdl_key_name;
-      std::string right_sdl_key_name;
+      sdl_engine::Vector2_f32 move_direction;
+      bool                    isShoot;
    };
 
-   PlayerInput createPlayerInput(const json& data_);
+   PlayerInput createPlayerInput();
 }    // namespace myge

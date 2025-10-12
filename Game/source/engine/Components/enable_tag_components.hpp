@@ -7,4 +7,5 @@ namespace sdl_engine
    struct RenderableTag
    {
    };
+
 }    // namespace sdl_engine

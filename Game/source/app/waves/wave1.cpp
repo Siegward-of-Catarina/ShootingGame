@@ -15,7 +15,7 @@ namespace
 }    // namespace
 namespace myge
 {
-   Wave1::Wave1() : Wave {}, _move_system {} {}
+   Wave1::Wave1() : Wave {} {}
 
    void Wave1::start( sdl_engine::GameContext& context_ )
    {

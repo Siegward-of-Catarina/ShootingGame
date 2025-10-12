@@ -9,7 +9,6 @@
     <ClCompile Include="source\engine\utils\common_utilities.cpp" />
     <ClCompile Include="source\app\game.cpp" />
     <ClCompile Include="source\engine\math\vector2.cpp" />
-    <ClCompile Include="source\engine\math\vector4.cpp" />
     <ClCompile Include="source\engine\rendering\renderer.cpp" />
     <ClCompile Include="source\engine\rendering\resource\loader\sprite_anim_loader.cpp" />
     <ClCompile Include="source\engine\rendering\resource\loader\sprite_loader.cpp" />
@@ -19,11 +18,11 @@
     <ClCompile Include="source\app\waves\wave.cpp" />
     <ClCompile Include="source\app\waves\wave_factory.cpp" />
     <ClCompile Include="source\app\waves\wave1.cpp" />
-    <ClCompile Include="source\app\systems\enemy_velocity_ystem.cpp" />
+    <ClCompile Include="source\app\systems\enemy_movement_system.cpp" />
     <ClCompile Include="source\app\systems\player_movement_system.cpp" />
     <ClCompile Include="source\engine\systems\sprite_render_system.cpp" />
     <ClCompile Include="source\engine\systems\system_interface.cpp" />
-    <ClCompile Include="source\engine\systems\transfrom_update_system.cpp" />
+    <ClCompile Include="source\engine\systems\movement_system.cpp" />
     <ClCompile Include="source\engine\systems\sprite_animation_system.cpp" />
     <ClCompile Include="source\app\systems\out_of_screen_system.cpp" />
     <ClCompile Include="source\app\systems\input_system.cpp" />
@@ -36,7 +35,6 @@
     <ClCompile Include="source\app\systems\life_cycle_system.cpp" />
     <ClCompile Include="source\engine\rendering\resource\color.cpp" />
     <ClCompile Include="source\app\components\bounding_box.cpp" />
-    <ClCompile Include="source\app\components\player_input.cpp" />
     <ClCompile Include="source\engine\components\fade.cpp" />
     <ClCompile Include="source\engine\components\render_type_tag.cpp" />
     <ClCompile Include="source\engine\components\sprite.cpp" />
@@ -48,6 +46,12 @@
     <ClCompile Include="source\app\components\entity_type_tag.cpp" />
     <ClCompile Include="source\app\components\sprite_brink.cpp" />
     <ClCompile Include="source\app\systems\sprite_brink_system.cpp" />
+    <ClCompile Include="source\app\components\player_input.cpp" />
+    <ClCompile Include="source\app\components\shooter.cpp" />
+    <ClCompile Include="source\app\systems\shoot_system.cpp" />
+    <ClCompile Include="source\engine\systems\rotate_system.cpp" />
+    <ClCompile Include="source\engine\systems\scale_system.cpp" />
+    <ClCompile Include="source\app\components\serpentine_movement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -71,7 +75,6 @@
     <ClInclude Include="source\engine\third_party\entt\entt.hpp" />
     <ClInclude Include="source\app\game.hpp" />
     <ClInclude Include="source\engine\math\vector2.hpp" />
-    <ClInclude Include="source\engine\math\vector4.hpp" />
     <ClInclude Include="source\engine\third_party\nlohmann\adl_serializer.hpp" />
     <ClInclude Include="source\engine\third_party\nlohmann\byte_container_with_subtype.hpp" />
     <ClInclude Include="source\engine\third_party\nlohmann\detail\abi_macros.hpp" />
@@ -130,14 +133,14 @@
     <ClInclude Include="source\app\waves\wave1.hpp" />
     <ClInclude Include="source\engine\rendering\resource\sprite_resource.hpp" />
     <ClInclude Include="source\app\forward_declarations.hpp" />
-    <ClInclude Include="source\app\systems\enemy_velocity_ystem.hpp" />
+    <ClInclude Include="source\app\systems\enemy_movement_system.hpp" />
     <ClInclude Include="source\app\components\enemy_leader.hpp" />
     <ClInclude Include="source\app\components\enemy_follower.hpp" />
     <ClInclude Include="source\engine\basic_component.hpp" />
     <ClInclude Include="source\app\components\player_movement.hpp" />
     <ClInclude Include="source\app\systems\player_movement_system.hpp" />
     <ClInclude Include="source\engine\systems\sprite_render_system.hpp" />
-    <ClInclude Include="source\engine\systems\transfrom_update_system.hpp" />
+    <ClInclude Include="source\engine\systems\movement_system.hpp" />
     <ClInclude Include="source\engine\systems\sprite_animation_system.hpp" />
     <ClInclude Include="source\app\components\out_of_screen_behavior.hpp" />
     <ClInclude Include="source\app\systems\out_of_screen_system.hpp" />
@@ -171,5 +174,12 @@
     <ClInclude Include="source\app\components\entity_type_tag.hpp" />
     <ClInclude Include="source\app\components\sprite_brink.hpp" />
     <ClInclude Include="source\app\systems\sprite_brink_system.hpp" />
+    <ClInclude Include="source\app\components\shooter.hpp" />
+    <ClInclude Include="source\app\systems\shoot_system.hpp" />
+    <ClInclude Include="source\engine\systems\rotate_system.hpp" />
+    <ClInclude Include="source\engine\systems\scale_system.hpp" />
+    <ClInclude Include="source\engine\Components\use_custom_update_transform_tags.hpp" />
+    <ClInclude Include="source\engine\Components\direct_control_tags.hpp" />
+    <ClInclude Include="source\app\components\serpentine_movement.hpp" />
   </ItemGroup>
 </Project>

@@ -3,11 +3,11 @@
 #include <engine/systems/system_interface.hpp>
 namespace sdl_engine
 {
-   class TransformUpdateSystem : public SystemInterface
+   class ScaleSystem : public SystemInterface
    {
    public:
-      TransformUpdateSystem( i32 priority_ );
-      ~TransformUpdateSystem() override;
+      ScaleSystem( i32 priority_ );
+      virtual ~ScaleSystem() override;
       // SystemInterface を介して継承されました
       virtual void update( GameContext& context_ ) override;
    };

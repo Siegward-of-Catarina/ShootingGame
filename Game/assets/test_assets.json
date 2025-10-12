@@ -23,8 +23,12 @@
 				"file_path": "title.png"
 			},
 			{
-				"name": "any_key_start",
-				"file_path": "menu.png"
+				"name": "player_bullet",
+				"file_path": "player_bullet.png"
+			},
+			{
+				"name": "enemy_bullet_small",
+				"file_path": "enemy_bullet.png"
 			},
 			{
 				"name": "font_1_x8",

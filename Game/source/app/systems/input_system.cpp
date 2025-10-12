@@ -12,32 +12,31 @@ namespace myge
    InputSystem::~InputSystem() {}
    void InputSystem::update( sdl_engine::GameContext& context_ )
    {
-      auto& registry = context_.getRegistry();
-      auto& input_manager_ = context_.getInputManager();
-      for ( auto [ entity, input, velo, anim ] :
-            getLogicUpdateable<PlayerInput, sdl_engine::Velocity, sdl_engine::SpriteAnim>( registry ).each() )
+      auto& registry      = context_.getRegistry();
+      auto& input_manager = context_.getInputManager();
+      for ( auto [ entity, input, anim ] : getLogicUpdateable<PlayerInput, sdl_engine::SpriteAnim>( registry ).each() )
       {
-         velo.dx              = 0;
-         velo.dy              = 0;
          anim.current_frame   = 1;
-         if ( input_manager_.isKeyPress( input.up_sdl_key_name ) ) { velo.dy = -300.0f; }
-         if ( input_manager_.isKeyPress( input.down_sdl_key_name ) ) { velo.dy = 300.0f; }
-         if ( input_manager_.isKeyPress( input.left_sdl_key_name ) )
+         input.move_direction = { 0.0f, 0.0f };
+         input.isShoot        = false;
+         if ( input_manager.isKeyPress( SDL_SCANCODE_UP ) ) { input.move_direction.y = -1.0f; }
+         if ( input_manager.isKeyPress( SDL_SCANCODE_DOWN ) ) { input.move_direction.y = 1.0f; }
+         if ( input_manager.isKeyPress( SDL_SCANCODE_LEFT ) )
          {
-            velo.dx            = -300.0f;
-            anim.current_frame = anim.sprite_anim->frame_num - 1;
+            input.move_direction.x = -1.0f;
+            anim.current_frame     = anim.sprite_anim->frame_num - 1;
          }
-         if ( input_manager_.isKeyPress( input.right_sdl_key_name ) )
+         if ( input_manager.isKeyPress( SDL_SCANCODE_RIGHT ) )
          {
-            velo.dx            = 300.0f;
-            anim.current_frame = 0;
+            input.move_direction.x = 1.0f;
+            anim.current_frame     = 0;
          }
+         if ( input_manager.isKeyPress( SDL_SCANCODE_Z ) ) { input.isShoot = true; };
       }
 
-      for (auto [entity, input] : registry.view<TitleInput>().each()) {
-          if (input_manager_.isAnyKeydown()) {
-              input.any_key = true;
-          }
+      for ( auto [ entity, input ] : registry.view<TitleInput>().each() )
+      {
+         if ( input_manager.isAnyKeydown() ) { input.any_key = true; }
       }
    }
 

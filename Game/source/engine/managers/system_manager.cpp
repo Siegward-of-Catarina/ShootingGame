@@ -3,15 +3,16 @@
 namespace sdl_engine
 {
 
-   SystemManager::SystemManager() : _systems {}, _sorted_view {}, _basic_systems { 3 }, _needs_rebuild_view { true }
+   SystemManager::SystemManager() : _systems {}, _sorted_view {}, _basic_systems { 5 }, _needs_rebuild_view { true }
    {
       // ベーシックなシステムを追加
-      // これらは別枠で管理し絶対的にこの順番で実行される
-      _basic_systems[ 0 ] = std::make_unique<TransformUpdateSystem>( 98 );
+      _basic_systems[ 0 ] = std::make_unique<MovementSystem>( 96 );
+      _basic_systems[ 1 ] = std::make_unique<RotateSystem>( 97 );
+      _basic_systems[ 2 ] = std::make_unique<ScaleSystem>( 98 );
       // アニメーションは必要ない場面もあるかもしれないが、
       // size０でループを避けるだけなので許容する
-      _basic_systems[ 1 ] = std::make_unique<SpriteAnimationSystem>( 99 );
-      _basic_systems[ 2 ] = std::make_unique<SpriteRenderSystem>( 100 );
+      _basic_systems[ 3 ] = std::make_unique<SpriteAnimationSystem>( 99 );
+      _basic_systems[ 4 ] = std::make_unique<SpriteRenderSystem>( 100 );
    }
    SystemManager::~SystemManager() {}
    void SystemManager::addSystem( const std::type_index& id_, SystemInterfacePtr system_ )

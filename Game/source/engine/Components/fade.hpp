@@ -3,6 +3,8 @@
 #include <engine/utils/json_utilities.hpp>
 namespace sdl_engine
 {
+
+
 	struct Fade
 	{
 		enum class State
@@ -14,8 +16,14 @@ namespace sdl_engine
 			FadeOutEnd,
 			Idel,
 		} state;
+		enum class Type {
+			OutIn,
+			In,
+			Out
+		} type;
 		f32 speed;
-		f32 black_out_time;
+		f32 black_out_wait;
+		f32 black_out_duration;
 	};
 
 	Fade createFade(const json& data_);

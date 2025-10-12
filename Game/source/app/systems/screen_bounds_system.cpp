@@ -132,11 +132,7 @@ namespace myge
          if ( box.state == BoundingBox::State::None )
          {
             // 有効方向[ enable_axis ]をもとに判定を行う
-            if ( isInside( target, screen, box.enable_axis ) )
-            {
-               box.state = BoundingBox::State::Inside;
-               SDL_Log( "x:%f, y:%f", trfm.x, trfm.y );
-            }
+            if ( isInside( target, screen, box.enable_axis ) ) { box.state = BoundingBox::State::Inside; }
          }
          else
          {

@@ -3,6 +3,10 @@
 		{
 			"wave_class_name": "Wave1",
 			"wave_data_path": "game_data/wave_data/wave1_data.json"
+		},
+		{
+			"wave_class_name": "Wave1",
+			"wave_data_path": "game_data/wave_data/wave1_data.json"
 		}
 	],
 	"Entities": [
@@ -136,11 +140,28 @@
 			"OutOfScreenBehavior": {
 				"behavior": "Stop"
 			},
-			"PlayerInput": {
-				"up_sdl_key_name": "Up",
-				"down_sdl_key_name": "Down",
-				"left_sdl_key_name": "Left",
-				"right_sdl_key_name": "Right"
+			"PlayerInput": {},
+			"Shooter": {
+				"cooldown": 0.2,
+				"bullet_velocity": [ 0.0, -500.0 ],
+				"bullet_type": "enemy_small"
+			}
+		},
+		{
+			"RenderType": "UI",
+			"Sprite": {
+				"name": "title",
+				"color": [ 1.0, 1.0, 1.0, 0.0 ]
+			},
+			"Transform": {
+				"px": 300.0,
+				"py": 400.0,
+				"angle": 0.0,
+				"scale": 1.0
+			},
+			"Fade": {
+				"speed": 2.0,
+				"type": "Out"
 			}
 		}
 	]
