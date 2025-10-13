@@ -11,6 +11,6 @@ namespace myge
       void run();
 
    private:
-      std::unique_ptr<sdl_engine::GameContext> _context;
+      std::unique_ptr<sdl_engine::EngineContext> _context;
    };
 }    // namespace myge

@@ -6,11 +6,13 @@
 #include <engine/systems/movement_system.hpp>
 namespace sdl_engine
 {
-   MovementSystem::MovementSystem( i32 priority_ ) : SystemInterface { priority_ } {}
-   MovementSystem::~MovementSystem() {}
-   void MovementSystem::update( GameContext& context_ )
+   MovementSystem::MovementSystem( i32 priority_, entt::registry& registry_ ) : SystemInterface { priority_, registry_ }
    {
-      auto& registry   = context_.getRegistry();
+   }
+   MovementSystem::~MovementSystem() {}
+   void MovementSystem::update( EngineContext& context_ )
+   {
+      auto& registry { getRegistry() };
       auto  delta_time = context_.getGameTimer().getDeltaTime();
       for ( auto [ entity, trfm, velo ] :
             registry.view<Transform, Velocity>( entt::exclude<DirectMovementTag> ).each() )

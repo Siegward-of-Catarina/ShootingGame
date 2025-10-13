@@ -8,12 +8,10 @@ namespace myge
    class Wave1 final : public Wave
    {
    public:
-      Wave1();
+      Wave1( WaveDependencies& dependencies_ );
       // Wave を介して継承されました
-      void start( sdl_engine::GameContext& context_ ) override;
-      void update( sdl_engine::GameContext& context_ ) override;
-
-   private:
+      virtual void start() override;
+      virtual void update( f32 delta_time_ ) override;
 
    private:
       // std::unique_ptr<sdl_engine::MovementSystem> _move_system;

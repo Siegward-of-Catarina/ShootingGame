@@ -11,13 +11,16 @@ namespace
 }    // namespace
 namespace myge
 {
-   EnemyMovementSystem::EnemyMovementSystem( i32 priority_ ) : SystemInterface { priority_ } {}
+   EnemyMovementSystem::EnemyMovementSystem( i32 priority_, entt::registry& registry_ )
+     : SystemInterface { priority_, registry_ }
+   {
+   }
 
    EnemyMovementSystem::~EnemyMovementSystem() {}
 
-   void EnemyMovementSystem::update( sdl_engine::GameContext& context_ )
+   void EnemyMovementSystem::update( sdl_engine::EngineContext& context_ )
    {
-      auto& registry   = context_.getRegistry();
+      auto& registry { getRegistry() };
       auto  delta_time = context_.getGameTimer().getDeltaTime();
       for ( auto [ entity, trfm, velo, movement ] :
             getLogicUpdateable<sdl_engine::Transform, sdl_engine::Velocity, SerpentineMovement, EnemyTag>( registry )
@@ -32,7 +35,7 @@ namespace myge
          velo.dx       = ( target - pre ) / ( delta_time );
 
          velo.dy = ( abs( sinv ) > movement.move_threshold ) ? movement.move_speed : 0.f;
-
+         // 後で分離
          trfm.angle = atan2( velo.dy, velo.dx ) * ( 180.0f / 3.141592f ) + 90;
       }
    }

@@ -177,6 +177,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="source\app\components\sprite_brink.hpp" />
+    <ClInclude Include="source\app\event\shoot_event.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\systems\shoot_system.hpp">
       <SubType>
       </SubType>

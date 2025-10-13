@@ -7,12 +7,16 @@
 #include <engine/systems/sprite_animation_system.hpp>
 namespace sdl_engine
 {
-   SpriteAnimationSystem::SpriteAnimationSystem( i32 priority_ ) : SystemInterface { priority_ } {}
-   SpriteAnimationSystem::~SpriteAnimationSystem() {}
-   void SpriteAnimationSystem::update( GameContext& context_ )
+   SpriteAnimationSystem::SpriteAnimationSystem( i32 priority_, entt::registry& registry_ )
+     : SystemInterface { priority_, registry_ }
    {
-      auto& registry   = context_.getRegistry();
+   }
+   SpriteAnimationSystem::~SpriteAnimationSystem() {}
+   void SpriteAnimationSystem::update( EngineContext& context_ )
+   {
+      auto& registry { getRegistry() };
       auto  delta_time = context_.getGameTimer().getDeltaTime();
+
       for ( auto [ entity, sprt, anim ] : registry.view<Sprite, SpriteAnim>().each() )
       {
          if ( !anim.is_playing || anim.sprite_anim->frame_num <= 1 ) { continue; }

@@ -17,12 +17,15 @@ namespace
 }    // namespace
 namespace myge
 {
-   LifeCycleSystem::LifeCycleSystem( i32 priority_ ) : SystemInterface { priority_ } {}
+   LifeCycleSystem::LifeCycleSystem( i32 priority_, entt::registry& registry_ )
+     : SystemInterface { priority_, registry_ }
+   {
+   }
    LifeCycleSystem::~LifeCycleSystem() {}
-   void LifeCycleSystem::update( sdl_engine::GameContext& context_ )
+   void LifeCycleSystem::update( sdl_engine::EngineContext& context_ )
    {
       //
-      auto&                     registry { context_.getRegistry() };
+      auto&                     registry { getRegistry() };
       std::vector<entt::entity> change_tag_entities {};
       // 画面外で存在しているとき
       for ( auto [ entity ] : registry.view<EnteringTag>().each() )
@@ -78,9 +81,10 @@ namespace myge
             registry.sort<sdl_engine::RenderGameSpriteTag, sdl_engine::Sprite>();
          }
          if ( need_sort & NEED_SORT_UI_TAG ) { registry.sort<sdl_engine::RenderUITag, sdl_engine::Sprite>(); }
-         if ( need_sort & NEED_SORT_TEXT_TAG ) {
-             registry.sort<sdl_engine::RenderTextTag, sdl_engine::Sprite>(); 
-             registry.sort<sdl_engine::Text, sdl_engine::Sprite>();
+         if ( need_sort & NEED_SORT_TEXT_TAG )
+         {
+            registry.sort<sdl_engine::RenderTextTag, sdl_engine::Sprite>();
+            registry.sort<sdl_engine::Text, sdl_engine::Sprite>();
          }
          if ( need_sort & NEED_SORT_FADE_TAG ) { registry.sort<sdl_engine::RenderFadeTag, sdl_engine::Sprite>(); }
          // ソート完了

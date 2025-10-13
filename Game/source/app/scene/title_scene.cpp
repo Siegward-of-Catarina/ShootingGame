@@ -14,43 +14,42 @@ namespace
 {
    entt::entity title_input {};
 }
-myge::TitleScene::TitleScene( sdl_engine::GameContext& ctx_ ) : Scene { ctx_ }, _scene_elapsed_time { 0 } {}
+myge::TitleScene::TitleScene( const sdl_engine::SceneDependencies& dependencies_ )
+  : Scene { dependencies_ }, _scene_elapsed_time { 0 }
+{
+}
 
 myge::TitleScene::~TitleScene() {}
 
 void myge::TitleScene::initialize()
 {
    loadSceneData( "game_data/scene_data/title_scene_data.json" );
-   auto& scene_data { getSceneData() };
+   auto& scene_data { sceneData() };
    if ( scene_data.contains( "Entities" ) )
    {
       EntityFactory factory;
-      setEntities( factory.createEntities( getGameContext(), scene_data.at( "Entities" ) ) );
+      setEntities( factory.createEntities( registry(), resourceManager(), scene_data.at( "Entities" ) ) );
    }
-   for ( auto& entity : getEntities() )
+   for ( auto& entity : entities() )
    {
-      if ( getGameContext().getRegistry().all_of<TitleInput>( entity ) ) { title_input = entity; }
+      if ( registry().all_of<TitleInput>( entity ) ) { title_input = entity; }
    }
-   addSystems();
 }
 
 void myge::TitleScene::start() {}
 
-void myge::TitleScene::update()
+void myge::TitleScene::update( f32 deita_time_ )
 {
-   auto& registry { getGameContext().getRegistry() };
 
-   if ( registry.get<TitleInput>( title_input ).any_key )
+   if ( registry().get<TitleInput>( title_input ).any_key )
    {
-      getGameContext().getSceneManager().setNextScene( std::make_unique<TestScene>( getGameContext() ) );
+      sceneManager().setNextScene( std::make_unique<TestScene>( sceneDependencies() ) );
    }
 }
 
 void myge::TitleScene::addSystems()
 {
-   auto& system_manager { getGameContext().getSystemManager() };
-   system_manager.addSystem( typeid( InputSystem ), std::make_unique<InputSystem>( 0 ) );
-   system_manager.addSystem( typeid( SpriteBrinkSystem ), std::make_unique<SpriteBrinkSystem>( 94 ) );
-   system_manager.addSystem( typeid( ScreenBoundsSystem ), std::make_unique<ScreenBoundsSystem>( 95 ) );
-   system_manager.addSystem( typeid( OutOfScreenSystem ), std::make_unique<OutOfScreenSystem>( 97 ) );
+   systemManager().addSystem( std::make_unique<SpriteBrinkSystem>( 94, registry() ) );
+   systemManager().addSystem( std::make_unique<ScreenBoundsSystem>( 95, registry() ) );
+   systemManager().addSystem( std::make_unique<OutOfScreenSystem>( 97, registry() ) );
 }

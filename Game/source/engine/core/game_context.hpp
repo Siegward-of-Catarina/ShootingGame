@@ -5,21 +5,21 @@
 namespace sdl_engine
 {
 
-   class GameContext
+   class EngineContext
    {
    public:
-      GameContext( std::string_view window_name_, i32 window_width_, i32 window_height_ );
-      ~GameContext();
-      void update();
-      void loadAssets(std::string_view assets_path_);
-      Vector2_i32& getWindowSize()  { return _window_size; }
-      Renderer&          getRenderer() { return *_renderer; }
-      SceneManager&      getSceneManager() { return *_scene_manager; }
-      ResourceManager&   getResourceManager() { return *_resource_manager; }
-      InputManager&      getInputManager() { return *_input_manager; }
-      SystemManager&     getSystemManager() { return *_system_manager; }
-      GameTimer&         getGameTimer() { return *_game_timer; }
-      entt::registry&    getRegistry() { return _registry; }
+      EngineContext( std::string_view window_name_, i32 window_width_, i32 window_height_ );
+      ~EngineContext();
+      void             update();
+      void             loadAssets( std::string_view assets_path_ );
+      Vector2_i32&     getWindowSize() { return _window_size; }
+      Renderer&        getRenderer() { return *_renderer; }
+      SceneManager&    getSceneManager() { return *_scene_manager; }
+      ResourceManager& getResourceManager() { return *_resource_manager; }
+      InputManager&    getInputManager() { return *_input_manager; }
+      SystemManager&   getSystemManager() { return *_system_manager; }
+      GameTimer&       getGameTimer() { return *_game_timer; }
+      entt::registry&  getRegistry() { return registry_; }
 
    private:
       SDL_WindowPtr                    _window;
@@ -30,7 +30,7 @@ namespace sdl_engine
       std::unique_ptr<SystemManager>   _system_manager;
 
       std::unique_ptr<GameTimer> _game_timer;
-      entt::registry             _registry;
+      entt::registry             registry_;
 
       Vector2_i32 _window_size;
    };

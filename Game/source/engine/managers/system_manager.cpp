@@ -3,23 +3,15 @@
 namespace sdl_engine
 {
 
-   SystemManager::SystemManager() : _systems {}, _sorted_view {}, _basic_systems { 5 }, _needs_rebuild_view { true }
+   SystemManager::SystemManager( entt::registry& registry_, Renderer& renderer_ )
+     : _systems {}, _sorted_view {}, _basic_systems { 2 }, _needs_rebuild_view { true }
    {
-      // ベーシックなシステムを追加
-      _basic_systems[ 0 ] = std::make_unique<MovementSystem>( 96 );
-      _basic_systems[ 1 ] = std::make_unique<RotateSystem>( 97 );
-      _basic_systems[ 2 ] = std::make_unique<ScaleSystem>( 98 );
-      // アニメーションは必要ない場面もあるかもしれないが、
       // size０でループを避けるだけなので許容する
-      _basic_systems[ 3 ] = std::make_unique<SpriteAnimationSystem>( 99 );
-      _basic_systems[ 4 ] = std::make_unique<SpriteRenderSystem>( 100 );
+      _basic_systems[ 0 ] = std::make_unique<SpriteAnimationSystem>( 99, registry_ );
+      _basic_systems[ 1 ] = std::make_unique<SpriteRenderSystem>( 100, registry_, renderer_ );
    }
    SystemManager::~SystemManager() {}
-   void SystemManager::addSystem( const std::type_index& id_, SystemInterfacePtr system_ )
-   {
-      _systems[ id_ ]     = std::move( system_ );
-      _needs_rebuild_view = true;
-   }
+
    void SystemManager::rebuildSystemView()
    {
       _sorted_view.resize( _systems.size() );
@@ -32,7 +24,7 @@ namespace sdl_engine
                  _sorted_view.end(),
                  []( const auto& rref, const auto& lref ) { return rref->getPriority() < lref->getPriority(); } );
    }
-   void SystemManager::updateSystems( GameContext& context_ )
+   void SystemManager::updateSystems( EngineContext& context_ )
    {
       // mapに変更があった場合viewを再構築
       if ( _needs_rebuild_view ) { rebuildSystemView(); }
@@ -43,10 +35,5 @@ namespace sdl_engine
          system.second->update( context_ );
       }
       for ( auto& basic_sys : _basic_systems ) { basic_sys->update( context_ ); }
-   }
-   void SystemManager::removeSystem( const std::type_index& id_ )
-   {
-      _systems.erase( id_ );
-      _needs_rebuild_view = true;
    }
 }    // namespace sdl_engine

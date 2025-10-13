@@ -6,12 +6,12 @@
 #include <engine/systems/scale_system.hpp>
 namespace sdl_engine
 {
-   ScaleSystem::ScaleSystem( i32 priority_ ) : SystemInterface { priority_ } {}
+   ScaleSystem::ScaleSystem( i32 priority_, entt::registry& registry_ ) : SystemInterface { priority_, registry_ } {}
    ScaleSystem::~ScaleSystem() {}
-   void ScaleSystem::update( GameContext& context_ )
+   void ScaleSystem::update( EngineContext& context_ )
    {
 
-      auto& registry { context_.getRegistry() };
+      auto& registry { getRegistry() };
       auto  delta_time { context_.getGameTimer().getDeltaTime() };
 
       for ( auto [ entity, trfm, velo ] : registry.view<Transform, Velocity>( entt::exclude<DirectScaleTag> ).each() )

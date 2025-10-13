@@ -6,9 +6,9 @@ namespace sdl_engine
    class MovementSystem : public SystemInterface
    {
    public:
-      MovementSystem( i32 priority_ );
+      MovementSystem( i32 priority_, entt::registry& registry_ );
       virtual ~MovementSystem() override;
       // SystemInterface を介して継承されました
-      virtual void update( GameContext& context_ ) override;
+      virtual void update( EngineContext& context_ ) override;
    };
 }    // namespace sdl_engine

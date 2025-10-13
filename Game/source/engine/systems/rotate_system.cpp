@@ -6,11 +6,11 @@
 #include <engine/systems/rotate_system.hpp>
 namespace sdl_engine
 {
-   RotateSystem::RotateSystem( i32 priority_ ) : SystemInterface { priority_ } {}
+   RotateSystem::RotateSystem( i32 priority_, entt::registry& registry_ ) : SystemInterface { priority_, registry_ } {}
    RotateSystem::~RotateSystem() {}
-   void RotateSystem::update( GameContext& context_ )
+   void RotateSystem::update( EngineContext& context_ )
    {
-      auto& registry { context_.getRegistry() };
+      auto& registry { getRegistry() };
       auto  delta_time { context_.getGameTimer().getDeltaTime() };
 
       for ( auto [ entity, trfm, velo ] : registry.view<Transform, Velocity>( entt::exclude<DirectRotateTag> ).each() )

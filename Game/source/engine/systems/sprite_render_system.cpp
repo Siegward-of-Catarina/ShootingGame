@@ -7,14 +7,16 @@
 #include <engine/rendering/resource/font_resource.hpp>
 namespace sdl_engine
 {
-   SpriteRenderSystem::SpriteRenderSystem( i32 priority_ ) : SystemInterface { priority_ } {}
+   SpriteRenderSystem::SpriteRenderSystem( i32 priority_, entt::registry& registry_, Renderer& renderer_ )
+     : SystemInterface { priority_, registry_ }, _renderer { renderer_ }
+   {
+   }
    SpriteRenderSystem::~SpriteRenderSystem() {}
 
-   void SpriteRenderSystem::update( GameContext& context_ )
+   void SpriteRenderSystem::update( EngineContext& context_ )
    {
-      auto& registry = context_.getRegistry();
-      auto& renderer = context_.getRenderer();
-      renderer.renderClear( .3f, .3f, .3f, 1.f );
+      auto& registry { getRegistry() };
+      _renderer.renderClear( .3f, .3f, .3f, 1.f );
 
       // 汎用描画
       auto common_render = []( Renderer& renderer, Sprite& sprt, Transform& trfm )
@@ -32,17 +34,17 @@ namespace sdl_engine
       // タグごとに描画
       for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderBackgroundTag>().each() )
       {
-         common_render( renderer, sprt, trfm );
+         common_render( _renderer, sprt, trfm );
       }
 
       for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderGameSpriteTag>().each() )
       {
-         common_render( renderer, sprt, trfm );
+         common_render( _renderer, sprt, trfm );
       }
 
       for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderUITag>().each() )
       {
-         common_render( renderer, sprt, trfm );
+         common_render( _renderer, sprt, trfm );
       }
 
       for ( auto [ entity, sprt, trfm, text ] : registry.view<Sprite, Transform, Text, RenderTextTag>().each() )
@@ -62,13 +64,13 @@ namespace sdl_engine
             u32 idx     = c - ' ';
             sprt.src    = text.font->font_rect[ idx ];
             sprt.dst    = { 0, 0, text.font->width, text.font->height };
-            common_render( renderer, sprt, char_trfm );
+            common_render( _renderer, sprt, char_trfm );
          }
       }
 
       for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderFadeTag>().each() )
       {
-         common_render( renderer, sprt, trfm );
+         common_render( _renderer, sprt, trfm );
       }
    }
 }    // namespace sdl_engine

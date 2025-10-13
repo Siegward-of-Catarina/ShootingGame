@@ -19,7 +19,7 @@ namespace
 
       // SDL_SCANCODE_UNKNOWNは受けない前提とする
       // a ~ z + 0 ~ 9 + return,escape,backspace,tab,space
-      if ( key_code_ <= SDL_SCANCODE_SPACE) { return RANGE4_TO_44_OFFSET; }
+      if ( key_code_ <= SDL_SCANCODE_SPACE ) { return RANGE4_TO_44_OFFSET; }
       // right & left & down & up keys
       if ( SDL_SCANCODE_RIGHT <= key_code_ && key_code_ <= SDL_SCANCODE_UP ) { return RANGE79_TO_82_OFFSET; }
 
@@ -28,7 +28,10 @@ namespace
 }    // namespace
 namespace sdl_engine
 {
-    InputManager::InputManager() : _key_state{ MAX_KEYS, KeyState::KeyNone }, _down_keys{}, _up_keys{}, _any_key_inputs{false}{}
+   InputManager::InputManager()
+     : _key_state { MAX_KEYS, KeyState::KeyNone }, _down_keys {}, _up_keys {}, _any_key_inputs { false }
+   {
+   }
    InputManager::~InputManager() {}
    void InputManager::handleEvent( const SDL_Event& event_ )
    {
@@ -45,7 +48,7 @@ namespace sdl_engine
                _key_state[ idx ] = KeyState::KeyDown;
                // 押されたキーのインデックスを記憶
                _down_keys.emplace( idx );
-               //キーが押されたとだけのフラグを上げる
+               // キーが押されたとだけのフラグを上げる
                _any_key_inputs = true;
             }
          }
@@ -63,17 +66,18 @@ namespace sdl_engine
    }
    void InputManager::update()
    {
-      for ( size_t i = 0; i < _down_keys.size(); i++ )
+      while ( !_down_keys.empty() )
       {
-         _key_state[ _down_keys.front() ] = KeyState::KeyPress;
+         auto idx { _down_keys.front() };
+         _key_state[ idx ] = KeyState::KeyPress;
          _down_keys.pop();
       }
-      for ( size_t i = 0; i < _up_keys.size(); i++ )
+      while ( !_up_keys.empty() )
       {
-         _key_state[ _up_keys.front() ] = KeyState::KeyNone;
+         auto idx { _up_keys.front() };
+         _key_state[ idx ] = KeyState::KeyNone;
          _up_keys.pop();
       }
-      
    }
    bool InputManager::isKeyDown( i32 scancode_ )
    {
@@ -102,33 +106,25 @@ namespace sdl_engine
       }
       return false;
    }
-   bool InputManager::isKeyDown(std::string_view key_name_)
+   bool InputManager::isKeyDown( std::string_view key_name_ )
    {
-       auto scancode{ SDL_GetScancodeFromName(key_name_.data()) };
-       if (scancode == SDL_SCANCODE_UNKNOWN) { return false;
-       }
-       return isKeyDown(scancode);
+      auto scancode { SDL_GetScancodeFromName( key_name_.data() ) };
+      if ( scancode == SDL_SCANCODE_UNKNOWN ) { return false; }
+      return isKeyDown( scancode );
    }
-   bool InputManager::isKeyPress(std::string_view key_name_)
+   bool InputManager::isKeyPress( std::string_view key_name_ )
    {
-       auto scancode{ SDL_GetScancodeFromName(key_name_.data()) };
-       if (scancode == SDL_SCANCODE_UNKNOWN) {
-           return false;
-       }
-       return isKeyPress(scancode);
+      auto scancode { SDL_GetScancodeFromName( key_name_.data() ) };
+      if ( scancode == SDL_SCANCODE_UNKNOWN ) { return false; }
+      return isKeyPress( scancode );
    }
-   bool InputManager::isKeyUp(std::string_view key_name_)
+   bool InputManager::isKeyUp( std::string_view key_name_ )
    {
-       auto scancode{ SDL_GetScancodeFromName(key_name_.data()) };
-       if (scancode == SDL_SCANCODE_UNKNOWN) {
-           return false;
-       }
-       return isKeyUp(scancode);
+      auto scancode { SDL_GetScancodeFromName( key_name_.data() ) };
+      if ( scancode == SDL_SCANCODE_UNKNOWN ) { return false; }
+      return isKeyUp( scancode );
    }
-   bool InputManager::isAnyKeydown()
-   {
-       return !_down_keys.empty();
-   }
+   bool InputManager::isAnyKeydown() { return !_down_keys.empty(); }
 }    // namespace sdl_engine
 // SDL_SCANCODE_A = 4, 0
 // SDL_SCANCODE_B = 5, 1
@@ -171,7 +167,7 @@ namespace sdl_engine
 // SDL_SCANCODE_BACKSPACE = 42, 38
 // SDL_SCANCODE_TAB = 43, 39
 // SDL_SCANCODE_SPACE = 44, 40 -4
-// 
+//
 // SDL_SCANCODE_RIGHT = 79,41 -38
 // SDL_SCANCODE_LEFT = 80, 42
 // SDL_SCANCODE_DOWN = 81, 43

@@ -15,27 +15,27 @@ namespace
 }    // namespace
 namespace myge
 {
-   Wave1::Wave1() : Wave {} {}
+   Wave1::Wave1( WaveDependencies& dependencies_ ) : Wave { dependencies_ } {}
 
-   void Wave1::start( sdl_engine::GameContext& context_ )
+   void Wave1::start()
    {
       auto& wave_data { getWaveData() };
       if ( wave_data.contains( "Entities" ) )
       {
          EntityFactory factory;
-         entities = factory.createEntities( context_, wave_data.at( "Entities" ) );
+         entities = factory.createEntities( registry(), resourceManager(), wave_data.at( "Entities" ) );
       }
-      auto& registry = context_.getRegistry();
-
-      for ( auto [ entity, sprt ] : registry.view<sdl_engine::Sprite>().each() ) { SDL_Log( "%d", sprt.render_order ); }
+      for ( auto [ entity, sprt ] : registry().view<sdl_engine::Sprite>().each() )
+      {
+         SDL_Log( "%d", sprt.render_order );
+      }
    }
-   void Wave1::update( sdl_engine::GameContext& context_ )
+   void Wave1::update( f32 delta_time_ )
    {
-      auto& registry = context_.getRegistry();
-      i32   i { 0 };
+      i32 i { 0 };
       for ( auto& entity : entities )
       {
-         if ( !registry.valid( entity ) ) { i++; }
+         if ( !registry().valid( entity ) ) { i++; }
          else { break; }
       }
 

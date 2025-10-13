@@ -181,5 +181,6 @@
     <ClInclude Include="source\engine\Components\use_custom_update_transform_tags.hpp" />
     <ClInclude Include="source\engine\Components\direct_control_tags.hpp" />
     <ClInclude Include="source\app\components\serpentine_movement.hpp" />
+    <ClInclude Include="source\app\event\shoot_event.hpp" />
   </ItemGroup>
 </Project>

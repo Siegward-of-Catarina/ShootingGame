@@ -3,13 +3,18 @@
 #include <engine/scene/scene.hpp>
 namespace sdl_engine
 {
-   Scene::Scene( GameContext& ctx_ ) : _context { ctx_ } {}
+   Scene::Scene( const SceneDependencies& dependencies_ )
+     : _registry { dependencies_.registry }
+     , _resource_manager { dependencies_.resource_manager }
+     , _scene_manager { dependencies_.scene_manager }
+     , _system_manager { dependencies_.system_manager }
+   {
+   }
    Scene::~Scene()
    {
-      auto& registry { _context.getRegistry() };
       for ( auto& entity : _entities )
       {
-         if ( registry.valid( entity ) ) { registry.destroy( entity ); }
+         if ( _registry.valid( entity ) ) { _registry.destroy( entity ); }
       }
    }
    void Scene::loadSceneData( std::string_view data_path_ )

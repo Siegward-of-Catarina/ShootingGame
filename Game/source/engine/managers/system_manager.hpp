@@ -7,11 +7,33 @@ namespace sdl_engine
    class SystemManager
    {
    public:
-      SystemManager();
+      SystemManager( entt::registry& registry_, Renderer& renderer_ );
       ~SystemManager();
-      void addSystem( const std::type_index& id_, SystemInterfacePtr system_ );
-      void updateSystems( GameContext& context_ );
-      void removeSystem( const std::type_index& id_ );
+      void updateSystems( EngineContext& context_ );
+
+      template<typename T, typename = std::enable_if<std::is_base_of<SystemInterface, T>::value>>
+      T& addSystem( std::unique_ptr<T> system_ )
+      {
+         auto& idx { typeid( T ) };
+         _systems[ idx ]     = std::move( system_ );
+         _needs_rebuild_view = true;
+         return *static_cast<T*>( _systems[ idx ].get() );
+      };
+
+      template<typename T, typename = std::enable_if<std::is_base_of<SystemInterface, T>::value>>
+      void removeSystem()
+      {
+         auto& id { typeid( T ) };
+         _systems.erase( id );
+         _needs_rebuild_view = true;
+      }
+
+      template<typename T, typename = std::enable_if<std::is_base_of<SystemInterface, T>::value>>
+      T& getSystem()
+      {
+         auto& idx { typeid( T ) };
+         return *static_cast<T*>( _systems[ idx ].get() );
+      };
 
    private:
       void rebuildSystemView();

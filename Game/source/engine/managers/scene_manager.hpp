@@ -7,8 +7,9 @@ namespace sdl_engine
    public:
       SceneManager();
       ~SceneManager();
-      void initialize( GameContext& context_ );
-      void update( GameContext& context_ );
+      // context廃止
+      void initialize( EngineContext& context_ );
+      void update( EngineContext& context_ );
       // 最初期シーン初期化後開始
       void   initStartCurrentScene( std::unique_ptr<Scene> current_ );
       void   setNextScene( std::unique_ptr<Scene> next_ ) { _next_scene = std::move( next_ ); };

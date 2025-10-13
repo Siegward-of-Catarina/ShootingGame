@@ -11,11 +11,14 @@ namespace
 }
 namespace myge
 {
-   OutOfScreenSystem::OutOfScreenSystem( i32 priority_ ) : SystemInterface { priority_ } {}
-   OutOfScreenSystem::~OutOfScreenSystem() {}
-   void OutOfScreenSystem::update( sdl_engine::GameContext& context_ )
+   OutOfScreenSystem::OutOfScreenSystem( i32 priority_, entt::registry& registry_ )
+     : SystemInterface { priority_, registry_ }
    {
-      auto& registry { context_.getRegistry() };
+   }
+   OutOfScreenSystem::~OutOfScreenSystem() {}
+   void OutOfScreenSystem::update( sdl_engine::EngineContext& context_ )
+   {
+      auto& registry { getRegistry() };
       auto& window_size { context_.getWindowSize() };
       f32   w_right  = static_cast<f32>( window_size.x );
       f32   w_bottom = static_cast<f32>( window_size.y );

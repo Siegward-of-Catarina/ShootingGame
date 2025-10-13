@@ -6,7 +6,7 @@
 #include <engine/systems/fade_system.hpp>
 namespace
 {
-   entt::entity createAndEmplaceFade( sdl_engine::GameContext& context_ )
+   entt::entity createAndEmplaceFade( sdl_engine::EngineContext& context_ )
    {
 
       auto& registry { context_.getRegistry() };
@@ -37,7 +37,7 @@ namespace sdl_engine
 {
    SceneManager::SceneManager() : _fade {}, _current_scene { nullptr }, _next_scene { nullptr } {}
    SceneManager::~SceneManager() {}
-   void SceneManager::initialize( GameContext& context_ )
+   void SceneManager::initialize( EngineContext& context_ )
    {
       auto& renderer { context_.getRenderer() };
       auto& resource_manager { context_.getResourceManager() };
@@ -50,9 +50,9 @@ namespace sdl_engine
       _fade = createAndEmplaceFade( context_ );
 
       auto& system_manager { context_.getSystemManager() };
-      system_manager.addSystem( typeid( FadeSystem ), std::make_unique<FadeSystem>( 99 ) );
+      system_manager.addSystem<FadeSystem>( std::make_unique<sdl_engine::FadeSystem>( 99, context_.getRegistry() ) );
    }
-   void SceneManager::update( GameContext& context_ )
+   void SceneManager::update( EngineContext& context_ )
    {
 
       auto& registry { context_.getRegistry() };
@@ -60,8 +60,14 @@ namespace sdl_engine
 
       if ( fade_comp.state == Fade::State::Idel )
       {
-         _current_scene->update();
-         if ( _next_scene ) { fade_comp.state = Fade::State::FadeOut; }
+         _current_scene->update( context_.getGameTimer().getDeltaTime() );
+         if ( _next_scene )
+         {
+            fade_comp.state = Fade::State::FadeOut;
+            /*_current_scene = std::move( _next_scene );
+            _current_scene->initialize();
+            _current_scene->start();*/
+         }
       }
 
       switch ( fade_comp.state )

@@ -6,17 +6,19 @@ namespace sdl_engine
    class SystemInterface
    {
    public:
-      SystemInterface( i32 priority_ );
+      SystemInterface( i32 priority_, entt::registry& registry_ );
       virtual ~SystemInterface();
-      virtual void update( sdl_engine::GameContext& context_ ) = 0;
-      i32          getPriority() const;
+      virtual void    update( sdl_engine::EngineContext& context_ ) = 0;
+      i32             getPriority() const { return _priority; };
+      entt::registry& getRegistry() { return registry_; };
       template<typename... Components>
       auto getLogicUpdateable( entt::registry& registry_ );
       template<typename... Components>
       auto getRenderable( entt::registry& registry_ );
 
    private:
-      i32 _priority;
+      i32             _priority;
+      entt::registry& registry_;
    };
 
    template<typename... Components>

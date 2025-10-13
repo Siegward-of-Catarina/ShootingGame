@@ -5,9 +5,9 @@ namespace sdl_engine
    class SpriteAnimationSystem : public SystemInterface
    {
    public:
-      SpriteAnimationSystem( i32 priority_ );
+      SpriteAnimationSystem( i32 priority_, entt::registry& registry_ );
       virtual ~SpriteAnimationSystem() override;
       // SystemInterface を介して継承されました
-      virtual void  update( GameContext& context_ ) override;
+      virtual void update( EngineContext& context_ ) override;
    };
 }    // namespace sdl_engine

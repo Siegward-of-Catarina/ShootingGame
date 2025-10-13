@@ -107,13 +107,16 @@ namespace
 }    // namespace
 namespace myge
 {
-   ScreenBoundsSystem::ScreenBoundsSystem( i32 priority_ ) : SystemInterface( priority_ ) {}
+   ScreenBoundsSystem::ScreenBoundsSystem( i32 priority_, entt::registry& registry_ )
+     : SystemInterface( priority_, registry_ )
+   {
+   }
 
    ScreenBoundsSystem::~ScreenBoundsSystem() {}
 
-   void ScreenBoundsSystem::update( sdl_engine::GameContext& context_ )
+   void ScreenBoundsSystem::update( sdl_engine::EngineContext& context_ )
    {
-      auto& registry { context_.getRegistry() };
+      auto& registry { getRegistry() };
 
       for ( auto [ entity, box, trfm ] : registry.view<BoundingBox, sdl_engine::Transform>().each() )
       {

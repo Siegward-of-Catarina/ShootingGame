@@ -1,8 +1,10 @@
-﻿#include <engine/systems/system_interface.hpp>
-#include <engine/basic_component.hpp>
+﻿#include <engine/basic_component.hpp>
+#include <engine/systems/system_interface.hpp>
 namespace sdl_engine
 {
-	SystemInterface::SystemInterface(i32 priority_) : _priority{ priority_ } {}
+   SystemInterface::SystemInterface( i32 priority_, entt::registry& registry_ )
+     : _priority { priority_ }, registry_ { registry_ }
+   {
+   }
    SystemInterface::~SystemInterface() {}
-   i32 SystemInterface::getPriority() const { return _priority; }
 }    // namespace sdl_engine

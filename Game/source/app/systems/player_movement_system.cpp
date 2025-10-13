@@ -4,13 +4,16 @@
 #include <engine/core.hpp>
 namespace myge
 {
-   PlayerMovementSystem::PlayerMovementSystem( i32 priority_ ) : SystemInterface { priority_ } {}
+   PlayerMovementSystem::PlayerMovementSystem( i32 priority_, entt::registry& registry_ )
+     : SystemInterface { priority_, registry_ }
+   {
+   }
 
    PlayerMovementSystem::~PlayerMovementSystem() {}
 
-   void PlayerMovementSystem::update( sdl_engine::GameContext& context_ )
+   void PlayerMovementSystem::update( sdl_engine::EngineContext& context_ )
    {
-      auto& registry = context_.getRegistry();
+      auto& registry { getRegistry() };
       for ( auto [ entity, input, velo ] : registry.view<PlayerInput, sdl_engine::Velocity>().each() )
       {
          velo.dx = 0;

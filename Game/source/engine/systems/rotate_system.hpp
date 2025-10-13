@@ -7,9 +7,9 @@ namespace sdl_engine
    class RotateSystem : public SystemInterface
    {
    public:
-      RotateSystem( i32 priority_ );
+      RotateSystem( i32 priority_, entt::registry& registry_ );
       virtual ~RotateSystem() override;
       // SystemInterface を介して継承されました
-      virtual void update( GameContext& context_ ) override;
+      virtual void update( EngineContext& context_ ) override;
    };
 }    // namespace sdl_engine

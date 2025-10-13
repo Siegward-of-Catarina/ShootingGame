@@ -5,11 +5,12 @@ namespace myge
    class ShootSystem final : public sdl_engine::SystemInterface
    {
    public:
-      ShootSystem( i32 priority_ );
+      ShootSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& disp_ );
       virtual ~ShootSystem() override;
+      // SystemInterface を介して継承されました
+      virtual void update( sdl_engine::EngineContext& context_ ) override;
 
    private:
-      // SystemInterface を介して継承されました
-      virtual void update( sdl_engine::GameContext& context_ ) override;
+      entt::dispatcher& _disp;
    };
 }    // namespace myge

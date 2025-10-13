@@ -3,9 +3,9 @@
 #include <app/waves/wave_factory.hpp>
 namespace myge
 {
-   std::unique_ptr<Wave> createWave( std::string_view waveType )
+   std::unique_ptr<Wave> createWave( std::string_view waveType, WaveDependencies& dependencies_ )
    {
-      if ( waveType == "Wave1" ) return std::make_unique<Wave1>();
+      if ( waveType == "Wave1" ) return std::make_unique<Wave1>( dependencies_ );
       return nullptr;
    }
 }    // namespace myge

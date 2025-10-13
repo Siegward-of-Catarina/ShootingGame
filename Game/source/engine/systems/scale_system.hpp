@@ -6,9 +6,9 @@ namespace sdl_engine
    class ScaleSystem : public SystemInterface
    {
    public:
-      ScaleSystem( i32 priority_ );
+      ScaleSystem( i32 priority_, entt::registry& registry_ );
       virtual ~ScaleSystem() override;
       // SystemInterface を介して継承されました
-      virtual void update( GameContext& context_ ) override;
+      virtual void update( EngineContext& context_ ) override;
    };
 }    // namespace sdl_engine
