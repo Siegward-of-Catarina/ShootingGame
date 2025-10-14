@@ -8,7 +8,7 @@ namespace myge
       ShootSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& disp_ );
       virtual ~ShootSystem() override;
       // SystemInterface を介して継承されました
-      virtual void update( sdl_engine::EngineContext& context_ ) override;
+      virtual void update(const sdl_engine::FrameData& frame_) override;
 
    private:
       entt::dispatcher& _disp;

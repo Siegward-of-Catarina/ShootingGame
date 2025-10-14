@@ -13,10 +13,9 @@ namespace myge
    {
    }
    InputSystem::~InputSystem() {}
-   void InputSystem::update( sdl_engine::EngineContext& context_ )
+   void InputSystem::update(const sdl_engine::FrameData& frame_)
    {
-      auto& registry { getRegistry() };
-      for ( auto [ entity, input, anim ] : getLogicUpdateable<PlayerInput, sdl_engine::SpriteAnim>( registry ).each() )
+      for ( auto [ entity, input, anim ] : getLogicUpdateable<PlayerInput, sdl_engine::SpriteAnim>( registry() ).each() )
       {
          anim.current_frame   = 1;
          input.move_direction = { 0.0f, 0.0f };
@@ -36,7 +35,7 @@ namespace myge
          if ( _input_manager.isKeyPress( SDL_SCANCODE_Z ) ) { input.isShoot = true; };
       }
 
-      for ( auto [ entity, input ] : registry.view<TitleInput>().each() )
+      for ( auto [ entity, input ] : registry().view<TitleInput>().each() )
       {
          if ( _input_manager.isAnyKeydown() ) { input.any_key = true; }
       }

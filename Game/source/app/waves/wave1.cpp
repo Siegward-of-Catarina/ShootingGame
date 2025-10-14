@@ -20,10 +20,19 @@ namespace myge
    void Wave1::start()
    {
       auto& wave_data { getWaveData() };
-      if ( wave_data.contains( "Entities" ) )
+      if ( auto entity_data { sdl_engine::getJsonData<json>( wave_data, "Entities" ) }; entity_data )
       {
-         EntityFactory factory;
-         entities = factory.createEntities( registry(), resourceManager(), wave_data.at( "Entities" ) );
+         EntityFactory factory { registry(), resourceManager() };
+         if ( auto wanderer_array { sdl_engine::getJsonData<json>( entity_data, "en_wanderer_array" ) };
+              wanderer_array )
+         {
+            for ( auto& wanderer : wanderer_array.value() )
+            {
+               auto entts { factory.createWandererEnemyArray( wanderer ) };
+               entities.insert(
+                 entities.end(), std::make_move_iterator( entts.begin() ), std::make_move_iterator( entts.end() ) );
+            }
+         }
       }
       for ( auto [ entity, sprt ] : registry().view<sdl_engine::Sprite>().each() )
       {

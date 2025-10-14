@@ -10,6 +10,6 @@ namespace sdl_engine
       RotateSystem( i32 priority_, entt::registry& registry_ );
       virtual ~RotateSystem() override;
       // SystemInterface を介して継承されました
-      virtual void update( EngineContext& context_ ) override;
+      virtual void update(const FrameData& frame_) override;
    };
 }    // namespace sdl_engine

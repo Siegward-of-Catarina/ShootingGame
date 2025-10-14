@@ -8,15 +8,12 @@ namespace sdl_engine
 {
    ScaleSystem::ScaleSystem( i32 priority_, entt::registry& registry_ ) : SystemInterface { priority_, registry_ } {}
    ScaleSystem::~ScaleSystem() {}
-   void ScaleSystem::update( EngineContext& context_ )
+   void ScaleSystem::update(const FrameData& frame_)
    {
 
-      auto& registry { getRegistry() };
-      auto  delta_time { context_.getGameTimer().getDeltaTime() };
-
-      for ( auto [ entity, trfm, velo ] : registry.view<Transform, Velocity>( entt::exclude<DirectScaleTag> ).each() )
+      for ( auto [ entity, trfm, velo ] : registry().view<Transform, Velocity>( entt::exclude<DirectScaleTag> ).each() )
       {
-         trfm.scale += velo.scale_rate * delta_time;
+         trfm.scale += velo.scale_rate * frame_.delta_time;
       }
    }
 }    // namespace sdl_engine

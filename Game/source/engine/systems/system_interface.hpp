@@ -8,9 +8,9 @@ namespace sdl_engine
    public:
       SystemInterface( i32 priority_, entt::registry& registry_ );
       virtual ~SystemInterface();
-      virtual void    update( sdl_engine::EngineContext& context_ ) = 0;
-      i32             getPriority() const { return _priority; };
-      entt::registry& getRegistry() { return registry_; };
+      virtual void    update(const FrameData& frame_) = 0;
+      i32             priority() const { return _priority; };
+      entt::registry& registry() { return registry_; };
       template<typename... Components>
       auto getLogicUpdateable( entt::registry& registry_ );
       template<typename... Components>

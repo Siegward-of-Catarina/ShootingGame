@@ -114,11 +114,10 @@ namespace myge
 
    ScreenBoundsSystem::~ScreenBoundsSystem() {}
 
-   void ScreenBoundsSystem::update( sdl_engine::EngineContext& context_ )
+   void ScreenBoundsSystem::update(const sdl_engine::FrameData& frame_)
    {
-      auto& registry { getRegistry() };
 
-      for ( auto [ entity, box, trfm ] : registry.view<BoundingBox, sdl_engine::Transform>().each() )
+      for ( auto [ entity, box, trfm ] : registry().view<BoundingBox, sdl_engine::Transform>().each() )
       {
 
          SDL_FRect target { .x { trfm.x - box.harf_width },
@@ -128,8 +127,8 @@ namespace myge
 
          SDL_FRect screen { .x { 0.f },
                             .y { 0.f },
-                            .w { static_cast<f32>( context_.getWindowSize().x ) },
-                            .h { static_cast<f32>( context_.getWindowSize().y ) } };
+                            .w { frame_.window_width },
+                            .h { frame_.window_height} };
          // 画面外から登場するケースに対応するため、
          // ステートがNoneの場合Insideしか判定を取らない
          if ( box.state == BoundingBox::State::None )

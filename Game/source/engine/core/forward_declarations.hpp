@@ -12,6 +12,7 @@ namespace sdl_engine
 {
    // クラスの前方宣言
    class EngineContext;
+   struct FrameData;
    class GameTimer;
    class Scene;
 
@@ -28,6 +29,7 @@ namespace sdl_engine
    class SpriteResourceDeleter;
    class SpriteAnimLoader;
    class ColorRGBA;
+
    struct SpriteResource;
    struct SpriteAnimResource;
    struct FontResource;

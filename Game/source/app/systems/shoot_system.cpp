@@ -16,20 +16,16 @@ namespace myge
 
    ShootSystem::~ShootSystem() {}
 
-   void ShootSystem::update( sdl_engine::EngineContext& context_ )
+   void ShootSystem::update(const sdl_engine::FrameData& frame_)
    {
-      auto& registry { getRegistry() };
-      auto  delta_time { context_.getGameTimer().getDeltaTime() };
-      for ( auto [ entity, shooter, input ] : getLogicUpdateable<Shooter, PlayerInput>( registry ).each() )
+      for ( auto [ entity, shooter, input ] : getLogicUpdateable<Shooter, PlayerInput>( registry() ).each() )
       {
          if ( shooter.wait > shooter.cooldown && input.isShoot )
          {
             shooter.wait = 0.0f;
-            EntityFactory factory;
-            // factory.createBullet( context_, entity );
             _disp.trigger( ShootEvent { entity } );
          }
-         else if ( shooter.wait <= shooter.cooldown ) { shooter.wait += delta_time; }
+         else if ( shooter.wait <= shooter.cooldown ) { shooter.wait += frame_.delta_time; }
       }
    }
 }    // namespace myge

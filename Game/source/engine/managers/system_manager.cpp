@@ -4,11 +4,12 @@ namespace sdl_engine
 {
 
    SystemManager::SystemManager( entt::registry& registry_, Renderer& renderer_ )
-     : _systems {}, _sorted_view {}, _basic_systems { 2 }, _needs_rebuild_view { true }
+     : _systems {}
+     , _sorted_view {}
+     , _sprite_animation_system { std::make_unique<SpriteAnimationSystem>( 99, registry_ ) }
+     , _render_system { std::make_unique<SpriteRenderSystem>( 100, registry_, renderer_ ) }
+     , _needs_rebuild_view { true }
    {
-      // size０でループを避けるだけなので許容する
-      _basic_systems[ 0 ] = std::make_unique<SpriteAnimationSystem>( 99, registry_ );
-      _basic_systems[ 1 ] = std::make_unique<SpriteRenderSystem>( 100, registry_, renderer_ );
    }
    SystemManager::~SystemManager() {}
 
@@ -22,18 +23,16 @@ namespace sdl_engine
       // 優先度順で並べる
       std::sort( _sorted_view.begin(),
                  _sorted_view.end(),
-                 []( const auto& rref, const auto& lref ) { return rref->getPriority() < lref->getPriority(); } );
+                 []( const auto& rref, const auto& lref ) { return rref->priority() < lref->priority(); } );
    }
-   void SystemManager::updateSystems( EngineContext& context_ )
+   void SystemManager::updateSystems( const sdl_engine::FrameData& frame_ )
    {
       // mapに変更があった場合viewを再構築
       if ( _needs_rebuild_view ) { rebuildSystemView(); }
 
-      for ( auto& system : _systems )
-      {
-         //
-         system.second->update( context_ );
-      }
-      for ( auto& basic_sys : _basic_systems ) { basic_sys->update( context_ ); }
+      for ( auto& system : _sorted_view ) { system->update( frame_ ); }
+      // 固定system
+      _sprite_animation_system->update( frame_ );
+      _render_system->update( frame_ );
    }
 }    // namespace sdl_engine

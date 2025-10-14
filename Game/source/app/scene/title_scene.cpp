@@ -27,13 +27,15 @@ void myge::TitleScene::initialize()
    auto& scene_data { sceneData() };
    if ( scene_data.contains( "Entities" ) )
    {
-      EntityFactory factory;
-      setEntities( factory.createEntities( registry(), resourceManager(), scene_data.at( "Entities" ) ) );
+       EntityFactory factory{ registry(), resourceManager()};
+      setEntities( factory.createEntities( scene_data.at( "Entities" ) ) );
    }
    for ( auto& entity : entities() )
    {
       if ( registry().all_of<TitleInput>( entity ) ) { title_input = entity; }
    }
+
+   addSystems();
 }
 
 void myge::TitleScene::start() {}

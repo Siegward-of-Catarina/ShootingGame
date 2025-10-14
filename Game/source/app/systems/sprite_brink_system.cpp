@@ -10,18 +10,16 @@ namespace myge
    {
    }
    SpriteBrinkSystem::~SpriteBrinkSystem() {}
-   void SpriteBrinkSystem::update( sdl_engine::EngineContext& context_ )
+   void SpriteBrinkSystem::update(const sdl_engine::FrameData& frame_)
    {
-      auto& registry { getRegistry() };
-      auto  delta_time { context_.getGameTimer().getDeltaTime() };
 
-      for ( auto [ entity, sprt, brink ] : getLogicUpdateable<sdl_engine::Sprite, SpriteBrink>( registry ).each() )
+      for ( auto [ entity, sprt, brink ] : getLogicUpdateable<sdl_engine::Sprite, SpriteBrink>( registry() ).each() )
       {
 
          switch ( brink.state )
          {
             case SpriteBrink::State::AddAlpha :
-               sprt.color.a() += brink.speed * delta_time;
+               sprt.color.a() += brink.speed * frame_.delta_time;
                if ( sprt.color.a() > 1.0f )
                {
                   sprt.color.a() = 1.0f;
@@ -29,7 +27,7 @@ namespace myge
                }
                break;
             case SpriteBrink::State::SubAlpha :
-               sprt.color.a() -= brink.speed * delta_time;
+               sprt.color.a() -= brink.speed * frame_.delta_time;
                if ( sprt.color.a() < brink.min_alpha )
                {
                   sprt.color.a() = brink.min_alpha;

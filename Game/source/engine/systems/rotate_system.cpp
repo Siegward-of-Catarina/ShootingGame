@@ -8,14 +8,11 @@ namespace sdl_engine
 {
    RotateSystem::RotateSystem( i32 priority_, entt::registry& registry_ ) : SystemInterface { priority_, registry_ } {}
    RotateSystem::~RotateSystem() {}
-   void RotateSystem::update( EngineContext& context_ )
+   void RotateSystem::update(const FrameData& frame_)
    {
-      auto& registry { getRegistry() };
-      auto  delta_time { context_.getGameTimer().getDeltaTime() };
-
-      for ( auto [ entity, trfm, velo ] : registry.view<Transform, Velocity>( entt::exclude<DirectRotateTag> ).each() )
+      for ( auto [ entity, trfm, velo ] : registry().view<Transform, Velocity>( entt::exclude<DirectRotateTag> ).each() )
       {
-         trfm.angle += velo.anguler * delta_time;
+         trfm.angle += velo.anguler * frame_.delta_time;
       }
    }
 }    // namespace sdl_engine

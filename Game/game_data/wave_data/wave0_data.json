@@ -1,6 +1,19 @@
 ﻿{
-  "WaveCommon" :{
-    "active_time": 200
-  }
-  
+	"Entities": {
+		"en_wanderer_array": [
+			{
+				"num": 3,
+				"offset": [ 40.0, -40.0 ],
+				"pos": [ 150.0, -80.0 ],
+				"dir": [ 0.0, 150.0 ],
+				"movement": {
+					"type": "serpentine",
+					"amplitude": 30.0,
+					"frequency": 2.0,
+					"speed": 150.0,
+					"threshold": 0.0
+				}
+			}
+		]
+	}
 }

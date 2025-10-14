@@ -6,6 +6,7 @@
 #include <app/waves/wave_factory.hpp>
 // system
 #include <app/systems/enemy_movement_system.hpp>
+#include <app/systems/facing_system.hpp>
 #include <app/systems/input_system.hpp>
 #include <app/systems/life_cycle_system.hpp>
 #include <app/systems/out_of_screen_system.hpp>
@@ -47,8 +48,8 @@ namespace myge
       auto& scene_data { sceneData() };
       if ( scene_data.contains( "Entities" ) )
       {
-         EntityFactory factory;
-         setEntities( factory.createEntities( registry(), resourceManager(), scene_data.at( "Entities" ) ) );
+         EntityFactory factory { registry(), resourceManager() };
+         setEntities( factory.createEntities( scene_data.at( "Entities" ) ) );
       }
 
       for ( auto entity : entities() )
@@ -97,16 +98,7 @@ namespace myge
             else { scene_state = SceneState::WaveStart; }
             break;
          case SceneState::End :
-
-            if ( fade_comp.state == sdl_engine::Fade::State::Idel )
-            {
-               fade_comp.state = sdl_engine::Fade::State::FadeOut;
-            }
-            if ( fade_comp.state == sdl_engine::Fade::State::FadeOutEnd )
-            {
-               //! TODO
-               // if ( inputManager().isAnyKeydown() ) { scene_state = SceneState::Destroy; }
-            }
+            if ( inputManager().isAnyKeydown() ) { scene_state = SceneState::Destroy; }
             break;
          case SceneState::Destroy :
             sceneManager().setNextScene( std::make_unique<TitleScene>( sceneDependencies() ) );
@@ -137,8 +129,8 @@ namespace myge
 
    void TestScene::onShoot( ShootEvent& e )
    {
-      EntityFactory factory;
-      entities().emplace_back( factory.createBullet( registry(), resourceManager(), e.shooter ) );
+      EntityFactory factory { registry(), resourceManager() };
+      entities().emplace_back( factory.createBullet( e.shooter ) );
    }
 
    void TestScene::addSystems()
@@ -146,6 +138,7 @@ namespace myge
       auto& system_manager { systemManager() };
       system_manager.addSystem( std::make_unique<PlayerMovementSystem>( 1, registry() ) );
       system_manager.addSystem( std::make_unique<ShootSystem>( 2, registry(), _disp ) );
+      system_manager.addSystem( std::make_unique<FacingSystem>( 2, registry() ) );
       system_manager.addSystem( std::make_unique<EnemyMovementSystem>( 2, registry() ) );
       system_manager.addSystem( std::make_unique<ScreenBoundsSystem>( 95, registry() ) );
       system_manager.addSystem( std::make_unique<OutOfScreenSystem>( 97, registry() ) );

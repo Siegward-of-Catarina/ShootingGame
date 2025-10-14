@@ -9,6 +9,6 @@ namespace sdl_engine
       MovementSystem( i32 priority_, entt::registry& registry_ );
       virtual ~MovementSystem() override;
       // SystemInterface を介して継承されました
-      virtual void update( EngineContext& context_ ) override;
+      virtual void update(const FrameData& frame_) override;
    };
 }    // namespace sdl_engine

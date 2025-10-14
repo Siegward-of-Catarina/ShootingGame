@@ -27,4 +27,8 @@ namespace myge
       }
       return box_comp;
    }
+   BoundingBox createBoundingBox( i32 harf_width_, i32 harf_height_, f32 radius_, BoundingBox::EnableAxis enable_axis_ )
+   {
+      return BoundingBox { harf_width_, harf_height_, radius_, BoundingBox::State::None, enable_axis_ };
+   }
 }    // namespace myge

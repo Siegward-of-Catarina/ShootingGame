@@ -12,12 +12,10 @@ namespace sdl_engine
    {
    }
    SpriteAnimationSystem::~SpriteAnimationSystem() {}
-   void SpriteAnimationSystem::update( EngineContext& context_ )
+   void SpriteAnimationSystem::update(const FrameData& frame_)
    {
-      auto& registry { getRegistry() };
-      auto  delta_time = context_.getGameTimer().getDeltaTime();
 
-      for ( auto [ entity, sprt, anim ] : registry.view<Sprite, SpriteAnim>().each() )
+      for ( auto [ entity, sprt, anim ] : registry().view<Sprite, SpriteAnim>().each() )
       {
          if ( !anim.is_playing || anim.sprite_anim->frame_num <= 1 ) { continue; }
 
@@ -26,7 +24,7 @@ namespace sdl_engine
          {
 
             // 累計時間に加算
-            anim.elapsed_time += delta_time;
+            anim.elapsed_time += frame_.delta_time;
             // フレーム時間を超えた時点で切り替え
             if ( anim.elapsed_time >= anim.sprite_anim->frame_time )
             {

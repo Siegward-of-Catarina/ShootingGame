@@ -3,14 +3,16 @@
 #include <typeindex>
 namespace sdl_engine
 {
+   class SpriteAnimationSystem;
+   class SpriteRenderSystem;
    using SystemInterfacePtr = std::unique_ptr<SystemInterface>;
    class SystemManager
    {
    public:
       SystemManager( entt::registry& registry_, Renderer& renderer_ );
       ~SystemManager();
-      void updateSystems( EngineContext& context_ );
-
+      void updateSystems( const sdl_engine::FrameData& frame_ );
+      // T型がSystemInterfaceを基底に持つもののみ通す
       template<typename T, typename = std::enable_if<std::is_base_of<SystemInterface, T>::value>>
       T& addSystem( std::unique_ptr<T> system_ )
       {
@@ -19,7 +21,7 @@ namespace sdl_engine
          _needs_rebuild_view = true;
          return *static_cast<T*>( _systems[ idx ].get() );
       };
-
+      // T型がSystemInterfaceを基底に持つもののみ通す
       template<typename T, typename = std::enable_if<std::is_base_of<SystemInterface, T>::value>>
       void removeSystem()
       {
@@ -27,7 +29,7 @@ namespace sdl_engine
          _systems.erase( id );
          _needs_rebuild_view = true;
       }
-
+      // T型がSystemInterfaceを基底に持つもののみ通す
       template<typename T, typename = std::enable_if<std::is_base_of<SystemInterface, T>::value>>
       T& getSystem()
       {
@@ -41,7 +43,8 @@ namespace sdl_engine
    private:
       std::map<std::type_index, SystemInterfacePtr> _systems;
       std::vector<SystemInterface*>                 _sorted_view;
-      std::vector<SystemInterfacePtr>               _basic_systems;
+      std::unique_ptr<SpriteAnimationSystem>        _sprite_animation_system;
+      std::unique_ptr<SpriteRenderSystem>           _render_system;
       bool                                          _needs_rebuild_view;
    };
 }    // namespace sdl_engine

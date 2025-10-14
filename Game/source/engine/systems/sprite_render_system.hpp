@@ -8,7 +8,7 @@ namespace sdl_engine
       SpriteRenderSystem( i32 priority_, entt::registry& registry_, Renderer& renderer_ );
       virtual ~SpriteRenderSystem() override;
       // SystemInterface を介して継承されました
-      virtual void update( EngineContext& context_ ) override;
+      virtual void update(const FrameData& frame_) override;
 
    private:
       Renderer& _renderer;

@@ -9,6 +9,6 @@ namespace myge
       OutOfScreenSystem( i32 priority_, entt::registry& registry_ );
       virtual ~OutOfScreenSystem() override;
       // SystemInterface を介して継承されました
-      virtual void update( sdl_engine::EngineContext& context_ ) override;
+      virtual void update(const sdl_engine::FrameData& frame_) override;
    };
 }    // namespace myge

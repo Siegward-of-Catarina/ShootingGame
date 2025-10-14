@@ -52,6 +52,7 @@
     <ClCompile Include="source\engine\systems\rotate_system.cpp" />
     <ClCompile Include="source\engine\systems\scale_system.cpp" />
     <ClCompile Include="source\app\components\serpentine_movement.cpp" />
+    <ClCompile Include="source\app\systems\facing_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -182,5 +183,7 @@
     <ClInclude Include="source\engine\Components\direct_control_tags.hpp" />
     <ClInclude Include="source\app\components\serpentine_movement.hpp" />
     <ClInclude Include="source\app\event\shoot_event.hpp" />
+    <ClInclude Include="source\engine\events\fade_events.hpp" />
+    <ClInclude Include="source\app\systems\facing_system.hpp" />
   </ItemGroup>
 </Project>

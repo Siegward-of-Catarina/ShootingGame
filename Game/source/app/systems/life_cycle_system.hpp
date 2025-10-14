@@ -10,6 +10,6 @@ namespace myge
       LifeCycleSystem( i32 priority_, entt::registry& registry_ );
       virtual ~LifeCycleSystem() override;
       // SystemInterface を介して継承されました
-      virtual void update( sdl_engine::EngineContext& context_ ) override;
+      virtual void update(const sdl_engine::FrameData& frame_) override;
    };
 }    // namespace myge

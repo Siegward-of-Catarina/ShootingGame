@@ -10,15 +10,13 @@ namespace sdl_engine
    {
    }
    MovementSystem::~MovementSystem() {}
-   void MovementSystem::update( EngineContext& context_ )
+   void MovementSystem::update(const FrameData& frame_)
    {
-      auto& registry { getRegistry() };
-      auto  delta_time = context_.getGameTimer().getDeltaTime();
       for ( auto [ entity, trfm, velo ] :
-            registry.view<Transform, Velocity>( entt::exclude<DirectMovementTag> ).each() )
+            registry().view<Transform, Velocity>( entt::exclude<DirectMovementTag> ).each() )
       {
-         trfm.x += velo.dx * delta_time;
-         trfm.y += velo.dy * delta_time;
+         trfm.x += velo.dx * frame_.delta_time;
+         trfm.y += velo.dy * frame_.delta_time;
       }
    }
 }    // namespace sdl_engine

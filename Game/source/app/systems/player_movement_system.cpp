@@ -11,10 +11,9 @@ namespace myge
 
    PlayerMovementSystem::~PlayerMovementSystem() {}
 
-   void PlayerMovementSystem::update( sdl_engine::EngineContext& context_ )
+   void PlayerMovementSystem::update(const sdl_engine::FrameData& frame_)
    {
-      auto& registry { getRegistry() };
-      for ( auto [ entity, input, velo ] : registry.view<PlayerInput, sdl_engine::Velocity>().each() )
+      for ( auto [ entity, input, velo ] : registry().view<PlayerInput, sdl_engine::Velocity>().each() )
       {
          velo.dx = 0;
          velo.dy = 0;

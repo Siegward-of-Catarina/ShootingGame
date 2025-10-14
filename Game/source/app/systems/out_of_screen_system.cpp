@@ -16,15 +16,12 @@ namespace myge
    {
    }
    OutOfScreenSystem::~OutOfScreenSystem() {}
-   void OutOfScreenSystem::update( sdl_engine::EngineContext& context_ )
+   void OutOfScreenSystem::update(const sdl_engine::FrameData& frame_)
    {
-      auto& registry { getRegistry() };
-      auto& window_size { context_.getWindowSize() };
-      f32   w_right  = static_cast<f32>( window_size.x );
-      f32   w_bottom = static_cast<f32>( window_size.y );
+      auto& reg { registry() };
 
       auto player_view { getLogicUpdateable<BoundingBox, sdl_engine::Transform, sdl_engine::Velocity, PlayerTag>(
-        registry ) };
+        reg ) };
       for ( auto [ entity, box, trfm, velo ] : player_view.each() )
       {
          if ( box.state == BoundingBox::State::PartinalTop )
@@ -35,7 +32,7 @@ namespace myge
          if ( box.state == BoundingBox::State::PartinalBottom )
          {
             velo.dy = 0;
-            trfm.y  = w_bottom - box.harf_hegiht;
+            trfm.y  = frame_.window_height - box.harf_hegiht;
          }
          if ( box.state == BoundingBox::State::PartinalLeft )
          {
@@ -45,21 +42,21 @@ namespace myge
          if ( box.state == BoundingBox::State::PartinalRight )
          {
             velo.dx = 0;
-            trfm.x  = w_right - box.harf_width;
+            trfm.x  = frame_.window_width - box.harf_width;
          }
       }
 
       auto background_view {
-         getLogicUpdateable<BoundingBox, sdl_engine::Transform, sdl_engine::Velocity, BackgroundTag>( registry )
+         getLogicUpdateable<BoundingBox, sdl_engine::Transform, sdl_engine::Velocity, BackgroundTag>( reg )
       };
       for ( auto [ entity, box, trfm, velo ] : background_view.each() )
       {
          // screen2枚分戻す
-         if ( box.state == BoundingBox::State::OutBottom ) { trfm.y -= w_bottom * 2; }
+         if ( box.state == BoundingBox::State::OutBottom ) { trfm.y -= frame_.window_height * 2; }
       }
 
       std::vector<entt::entity> destroy_entities {};
-      auto                      enemy_view { getLogicUpdateable<BoundingBox, EnemyTag>( registry ) };
+      auto                      enemy_view { getLogicUpdateable<BoundingBox, EnemyTag>( reg ) };
 
       for ( auto [ entity, box ] : enemy_view.each() )
       {
@@ -70,6 +67,6 @@ namespace myge
       }
 
       // 消去対象のエンティティがあればDeadにする
-      for ( auto& entity : destroy_entities ) { registry.emplace<DeadTag>( entity ); }
+      for ( auto& entity : destroy_entities ) { reg.emplace<DeadTag>( entity ); }
    }
 }    // namespace myge

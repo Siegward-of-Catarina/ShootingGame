@@ -25,7 +25,7 @@ namespace sdl_engine
 
       return sprt_comp;
    }
-   Sprite createSprite( entt::resource<SpriteResource> sprite_resource_ )
+   Sprite createSprite( entt::resource<SpriteResource> sprite_resource_, ColorRGBA color_, u32 render_order_ )
    {
       auto sprite = sprite_resource_;
 
@@ -33,8 +33,8 @@ namespace sdl_engine
          .texture { sprite },
          .src { 0.f, 0.f, static_cast<f32>( sprite->texture->w ), static_cast<f32>( sprite->texture->h ) },
          .dst { 0.f, 0.f, static_cast<f32>( sprite->texture->w ), static_cast<f32>( sprite->texture->h ) },
-         .color { 1.0f, 1.0f, 1.0f, 1.0f },
-         .render_order { 100 }
+         .color { color_ },
+         .render_order { render_order_ }
       };
 
       return sprt_comp;

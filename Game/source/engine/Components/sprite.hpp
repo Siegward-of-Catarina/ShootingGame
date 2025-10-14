@@ -16,5 +16,7 @@ namespace sdl_engine
    };
 
    Sprite createSprite( ResourceManager& resource_manager_, const json& data_ );
-   Sprite createSprite( entt::resource<SpriteResource> sprite_resource_ );
+   Sprite createSprite( entt::resource<SpriteResource> sprite_resource_,
+                        ColorRGBA                      color_        = { 1.0f, 1.0f, 1.0f, 1.0f },
+                        u32                            render_order_ = 100 );
 }    // namespace sdl_engine

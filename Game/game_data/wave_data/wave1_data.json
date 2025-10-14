@@ -1,208 +1,32 @@
 ﻿{
-	"Entities": [
-		{
-			"EntityType": "Enemy",
-			"RenderType": "GameSprite",
-			"Sprite": { "name": "enemy1" },
-			"SpriteAnim": {
-				"name": "enemy1_anim",
-				"current_frame": 1,
-				"is_playing": true
+	"Entities": {
+		"en_wanderer_array": [
+			{
+				"num": 5,
+				"offset": [ 40.0, -40.0 ],
+				"pos": [ 150.0, -80.0 ],
+				"dir": [ 0.0, 150.0 ],
+				"movement": {
+					"type": "serpentine",
+					"amplitude": 100.0,
+					"frequency": 2.0,
+					"speed": 150.0,
+					"threshold": 0.7
+				}
 			},
-			"Transform": {
-				"px": 300,
-				"py": -40,
-				"angle": 180.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0,
-				"dy": 150.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"SerpentineMovement": {
-				"center_x": 300,
-				"amplitude": 284,
-				"frequency": 2.0,
-				"move_speed": 200,
-				"move_threshold": 0.9
-			},
-			"BoundingBox": {
-				"harf_width": 16.0,
-				"harf_height": 16.0,
-				"radius": 20.0
+			{
+				"num": 5,
+				"offset": [ 0.0, -30.0 ],
+				"pos": [ 450.0, -40.0 ],
+				"dir": [ 0.0, 150.0 ],
+				"movement": {
+					"type": "serpentine",
+					"amplitude": 50.0,
+					"frequency": 4.0,
+					"speed": 100.0,
+					"threshold": 0.6
+				}
 			}
-		},
-		{
-			"EntityType": "Enemy",
-			"RenderType": "GameSprite",
-			"Sprite": { "name": "enemy1" },
-			"SpriteAnim": {
-				"name": "enemy1_anim",
-				"current_frame": 1,
-				"is_playing": true
-			},
-			"Transform": {
-				"px": 300,
-				"py": -80,
-				"angle": 180.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0,
-				"dy": 150.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"SerpentineMovement": {
-				"center_x": 300,
-				"amplitude": 284,
-				"frequency": 2.0,
-				"move_speed": 200,
-				"move_threshold": 0.9
-			},
-			"BoundingBox": {
-				"harf_width": 16.0,
-				"harf_height": 16.0,
-				"radius": 20.0
-			}
-		},
-		{
-			"EntityType": "Enemy",
-			"RenderType": "GameSprite",
-			"Sprite": { "name": "enemy1" },
-			"SpriteAnim": {
-				"name": "enemy1_anim",
-				"current_frame": 1,
-				"is_playing": true
-			},
-			"Transform": {
-				"px": 300,
-				"py": -120,
-				"angle": 180.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0,
-				"dy": 150.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"SerpentineMovement": {
-				"center_x": 300,
-				"amplitude": 284,
-				"frequency": 2.0,
-				"move_speed": 200,
-				"move_threshold": 0.9
-			},
-			"BoundingBox": {
-				"harf_width": 16.0,
-				"harf_height": 16.0,
-				"radius": 20.0
-			}
-		},
-		{
-			"EntityType": "Enemy",
-			"RenderType": "GameSprite",
-			"Sprite": { "name": "enemy1" },
-			"SpriteAnim": {
-				"name": "enemy1_anim",
-				"current_frame": 1,
-				"is_playing": true
-			},
-			"Transform": {
-				"px": 300,
-				"py": -160,
-				"angle": 180.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0,
-				"dy": 150.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"SerpentineMovement": {
-				"center_x": 300,
-				"amplitude": 284,
-				"frequency": 2.0,
-				"move_speed": 200,
-				"move_threshold": 0.9
-			},
-			"BoundingBox": {
-				"harf_width": 16.0,
-				"harf_height": 16.0,
-				"radius": 20.0
-			}
-		},
-		{
-			"EntityType": "Enemy",
-			"RenderType": "GameSprite",
-			"Sprite": { "name": "enemy1" },
-			"SpriteAnim": {
-				"name": "enemy1_anim",
-				"current_frame": 1,
-				"is_playing": true
-			},
-			"Transform": {
-				"px": 300,
-				"py": -200,
-				"angle": 180.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0,
-				"dy": 150.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"SerpentineMovement": {
-				"center_x": 300,
-				"amplitude": 284,
-				"frequency": 2.0,
-				"move_speed": 200,
-				"move_threshold": 0.9
-			},
-			"BoundingBox": {
-				"harf_width": 16.0,
-				"harf_height": 16.0,
-				"radius": 20.0
-			}
-		},
-		{
-			"EntityType": "Enemy",
-			"RenderType": "GameSprite",
-			"Sprite": { "name": "enemy1" },
-			"SpriteAnim": {
-				"name": "enemy1_anim",
-				"current_frame": 1,
-				"is_playing": true
-			},
-			"Transform": {
-				"px": 300,
-				"py": -240,
-				"angle": 180.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0,
-				"dy": 150.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"SerpentineMovement": {
-				"center_x": 300,
-				"amplitude": 284,
-				"frequency": 2.0,
-				"move_speed": 200,
-				"move_threshold": 0.9
-			},
-			"BoundingBox": {
-				"harf_width": 16.0,
-				"harf_height": 16.0,
-				"radius": 20.0
-			}
-		}
-	]
+		]
+	}
 }

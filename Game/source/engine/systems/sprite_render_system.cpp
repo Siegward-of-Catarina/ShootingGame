@@ -13,9 +13,9 @@ namespace sdl_engine
    }
    SpriteRenderSystem::~SpriteRenderSystem() {}
 
-   void SpriteRenderSystem::update( EngineContext& context_ )
+   void SpriteRenderSystem::update(const FrameData& frame_)
    {
-      auto& registry { getRegistry() };
+      auto& reg { registry() };
       _renderer.renderClear( .3f, .3f, .3f, 1.f );
 
       // 汎用描画
@@ -32,22 +32,22 @@ namespace sdl_engine
       };
 
       // タグごとに描画
-      for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderBackgroundTag>().each() )
+      for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderBackgroundTag>().each() )
       {
          common_render( _renderer, sprt, trfm );
       }
 
-      for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderGameSpriteTag>().each() )
+      for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderGameSpriteTag>().each() )
       {
          common_render( _renderer, sprt, trfm );
       }
 
-      for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderUITag>().each() )
+      for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderUITag>().each() )
       {
          common_render( _renderer, sprt, trfm );
       }
 
-      for ( auto [ entity, sprt, trfm, text ] : registry.view<Sprite, Transform, Text, RenderTextTag>().each() )
+      for ( auto [ entity, sprt, trfm, text ] : reg.view<Sprite, Transform, Text, RenderTextTag>().each() )
       {
          Transform char_trfm { 0, 0, 0, 1 };
          for ( u32 i { 0 }, j { 0 }; auto& c : text.text )
@@ -68,7 +68,7 @@ namespace sdl_engine
          }
       }
 
-      for ( auto [ entity, sprt, trfm ] : registry.view<Sprite, Transform, RenderFadeTag>().each() )
+      for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderFadeTag>().each() )
       {
          common_render( _renderer, sprt, trfm );
       }

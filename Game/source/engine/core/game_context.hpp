@@ -5,6 +5,12 @@
 namespace sdl_engine
 {
 
+    struct FrameData 
+    {
+        f32 delta_time;
+        f32 window_width;
+        f32 window_height;
+    };
    class EngineContext
    {
    public:
@@ -19,7 +25,10 @@ namespace sdl_engine
       InputManager&    getInputManager() { return *_input_manager; }
       SystemManager&   getSystemManager() { return *_system_manager; }
       GameTimer&       getGameTimer() { return *_game_timer; }
-      entt::registry&  getRegistry() { return registry_; }
+      entt::registry&  getRegistry() { return _registry; }
+      entt::dispatcher& getDispatcher() { return _dispatcher; }
+
+      FrameData framgeData();
 
    private:
       SDL_WindowPtr                    _window;
@@ -30,8 +39,8 @@ namespace sdl_engine
       std::unique_ptr<SystemManager>   _system_manager;
 
       std::unique_ptr<GameTimer> _game_timer;
-      entt::registry             registry_;
-
+      entt::registry             _registry;
+      entt::dispatcher          _dispatcher;
       Vector2_i32 _window_size;
    };
 }    // namespace sdl_engine

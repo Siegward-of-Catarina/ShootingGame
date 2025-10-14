@@ -37,4 +37,8 @@ namespace myge
    };
 
    BoundingBox createBoundingBox( const json& data_ );
+   BoundingBox createBoundingBox( i32                     harf_width_,
+                                  i32                     harf_height_,
+                                  f32                     radius_,
+                                  BoundingBox::EnableAxis enable_axis_ = BoundingBox::EnableAxis::ALL );
 }    // namespace myge

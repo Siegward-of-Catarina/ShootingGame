@@ -9,7 +9,7 @@ namespace myge
       InputSystem( i32 priority_, entt::registry& registry_, sdl_engine::InputManager& input_manager_ );
       virtual ~InputSystem() override;
       // SystemInterface を介して継承されました
-      virtual void update( sdl_engine::EngineContext& context_ ) override;
+      virtual void update(const sdl_engine::FrameData& frame_) override;
 
    private:
       sdl_engine::InputManager& _input_manager;

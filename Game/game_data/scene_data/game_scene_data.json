@@ -2,7 +2,7 @@
 	"Waves": [
 		{
 			"wave_class_name": "Wave1",
-			"wave_data_path": "game_data/wave_data/wave1_data.json"
+			"wave_data_path": "game_data/wave_data/wave0_data.json"
 		},
 		{
 			"wave_class_name": "Wave1",

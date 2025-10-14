@@ -9,6 +9,7 @@ namespace sdl_engine
    {
       entt::registry&  registry;
       ResourceManager& resource_manager;
+      InputManager& input_manager;
       SceneManager&    scene_manager;
       SystemManager&   system_manager;
    };
@@ -31,16 +32,18 @@ namespace sdl_engine
       json&                      sceneData() { return _scene_data; }
       entt::registry&            registry() { return _registry; };
       ResourceManager&           resourceManager() { return _resource_manager; };
+      InputManager&              inputManager() { return _input_manager; }
       SceneManager&              sceneManager() { return _scene_manager; };
       SystemManager&             systemManager() { return _system_manager; };
       SceneDependencies          sceneDependencies()
       {
-         return { _registry, _resource_manager, _scene_manager, _system_manager };
+         return { _registry, _resource_manager, _input_manager, _scene_manager, _system_manager };
       };
 
    private:
       entt::registry&  _registry;
       ResourceManager& _resource_manager;
+      InputManager&    _input_manager;
       SceneManager&    _scene_manager;
       SystemManager&   _system_manager;
 
