@@ -9,13 +9,13 @@ namespace myge
       TitleScene( const sdl_engine::SceneDependencies& dependencies_ );
       virtual ~TitleScene() override;
       // Scene を介して継承されました
-      void initialize() override;
+      void initialize( entt::dispatcher& dispatcher_ ) override;
       void start() override;
       void update( f32 deita_time_ ) override;
 
    private:
       // Scene を介して継承されました
-      virtual void addSystems() override;
+      virtual void addSystems( entt::dispatcher& dispatcher_ ) override;
 
    private:
       f64 _scene_elapsed_time;

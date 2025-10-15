@@ -9,160 +9,27 @@
 			"wave_data_path": "game_data/wave_data/wave1_data.json"
 		}
 	],
-	"Entities": [
-		{
-			"EntityType": "Background",
-			"RenderType": "Background",
-			"Sprite": { "name": "back_ground" },
-			"Transform": {
-				"px": 300.0,
-				"py": 400.0,
-				"angle": 0.0,
-				"scale": 1.0
+	"Entities": {
+		"background": [
+			{
+				"sprite_name": "back_ground",
+				"pos": [ 300.0, 400.0 ],
+				"dir": [ 0.0, 70.0 ]
 			},
-			"Velocity": {
-				"dx": 0.0,
-				"dy": 70.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"BoundingBox": {
-				"harf_width": 0.0,
-				"harf_height": 400.0,
-				"radius": 0.0,
-				"enable_axis": "top"
+			{
+				"sprite_name": "back_star",
+				"z_order": 0,
+				"pos": [ 300.0, 400.0 ],
+				"dir": [ 0.0, 250.0 ]
 			}
-		},
-		{
-			"EntityType": "Background",
-			"RenderType": "Background",
-			"Sprite": { "name": "back_ground" },
-			"Transform": {
-				"px": 300.0,
-				"py": -400.0,
-				"angle": 0.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0.0,
-				"dy": 70.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"BoundingBox": {
-				"harf_width": 0.0,
-				"harf_height": 400.0,
-				"radius": 0.0,
-				"enable_axis": "top"
+		],
+		"player": [
+			{
+				"pos": [ 300.0, 750.0 ],
+				"dir": [ 0.0, -150.0 ],
+				"shoot_cooldown": 0.2,
+				"bullet_velocity": [ 0.0, -500.0 ]
 			}
-		},
-		{
-			"EntityType": "Background",
-			"RenderType": "Background",
-			"Sprite": {
-				"name": "back_star",
-				"render_order": 0
-			},
-			"Transform": {
-				"px": 300.0,
-				"py": 400.0,
-				"angle": 0.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0.0,
-				"dy": 250.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"BoundingBox": {
-				"harf_width": 0.0,
-				"harf_height": 400.0,
-				"radius": 0.0,
-				"enable_axis": "top"
-			}
-		},
-		{
-			"EntityType": "Background",
-			"RenderType": "Background",
-			"Sprite": {
-				"name": "back_star",
-				"render_order": 0
-			},
-			"Transform": {
-				"px": 300.0,
-				"py": -400.0,
-				"angle": 0.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0.0,
-				"dy": 250.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"BoundingBox": {
-				"harf_width": 0.0,
-				"harf_height": 400.0,
-				"radius": 0.0,
-				"enable_axis": "top"
-			}
-		},
-		{
-			"EntityType": "Player",
-			"RenderType": "GameSprite",
-			"Sprite": {
-				"name": "player",
-				"render_order": 0
-			},
-			"SpriteAnim": {
-				"name": "player_anim",
-				"current_frame": 1,
-				"is_playing": true
-			},
-			"Transform": {
-				"px": 300,
-				"py": 750,
-				"angle": 0.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0,
-				"dy": -150.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"BoundingBox": {
-				"harf_width": 24.0,
-				"harf_height": 24.0,
-				"radius": 20.0
-			},
-			"OutOfScreenBehavior": {
-				"behavior": "Stop"
-			},
-			"PlayerInput": {},
-			"Shooter": {
-				"cooldown": 0.2,
-				"bullet_velocity": [ 0.0, -500.0 ],
-				"bullet_type": "enemy_small"
-			}
-		},
-		{
-			"RenderType": "UI",
-			"Sprite": {
-				"name": "title",
-				"color": [ 1.0, 1.0, 1.0, 0.0 ]
-			},
-			"Transform": {
-				"px": 300.0,
-				"py": 400.0,
-				"angle": 0.0,
-				"scale": 1.0
-			},
-			"Fade": {
-				"speed": 2.0,
-				"type": "Out"
-			}
-		}
-	]
+		]
+	}
 }

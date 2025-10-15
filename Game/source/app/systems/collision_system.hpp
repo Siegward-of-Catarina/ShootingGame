@@ -3,15 +3,16 @@
 #include <engine/systems/system_interface.hpp>
 namespace myge
 {
-   class OutOfScreenSystem final : public sdl_engine::SystemInterface
+   class CollisionSystem final : public sdl_engine::SystemInterface
    {
    public:
-      OutOfScreenSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatcher_ );
-      virtual ~OutOfScreenSystem() override;
+      CollisionSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatchar_ );
+      virtual ~CollisionSystem() override;
+
       // SystemInterface を介して継承されました
       virtual void update( const sdl_engine::FrameData& frame_ ) override;
 
    private:
-      entt::dispatcher& _dispatcher;
+      entt::dispatcher& _dispatchar;
    };
 }    // namespace myge

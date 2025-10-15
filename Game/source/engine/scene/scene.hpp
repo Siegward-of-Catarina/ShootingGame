@@ -9,7 +9,7 @@ namespace sdl_engine
    {
       entt::registry&  registry;
       ResourceManager& resource_manager;
-      InputManager& input_manager;
+      InputManager&    input_manager;
       SceneManager&    scene_manager;
       SystemManager&   system_manager;
    };
@@ -18,13 +18,13 @@ namespace sdl_engine
    public:
       Scene( const SceneDependencies& dependencies_ );
       virtual ~Scene();
-      virtual void initialize()              = 0;
-      virtual void start()                   = 0;
-      virtual void update( f32 deita_time_ ) = 0;
+      virtual void initialize( entt::dispatcher& dispatcher_ ) = 0;
+      virtual void start()                                     = 0;
+      virtual void update( f32 deita_time_ )                   = 0;
 
    protected:
       void         loadSceneData( std::string_view data_path_ );
-      virtual void addSystems() = 0;
+      virtual void addSystems( entt::dispatcher& dispatcher_ ) = 0;
 
    protected:
       void                       setEntities( const std::vector<entt::entity>& entities_ ) { _entities = entities_; }

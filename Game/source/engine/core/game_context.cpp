@@ -35,9 +35,9 @@ namespace sdl_engine
 
       _input_manager = std::make_unique<InputManager>();
 
-      _scene_manager = std::make_unique<SceneManager>(_dispatcher);
+      _scene_manager = std::make_unique<SceneManager>( _dispatcher );
 
-      _system_manager = std::make_unique<SystemManager>( _registry,*_renderer );
+      _system_manager = std::make_unique<SystemManager>( _registry, *_renderer );
    }
    EngineContext::~EngineContext() {}
 
@@ -55,6 +55,6 @@ namespace sdl_engine
    }
    FrameData EngineContext::framgeData()
    {
-       return {_game_timer->getDeltaTime(),static_cast<f32>(_window_size.x),static_cast<f32>(_window_size.y) };
+      return { _game_timer->getDeltaTime(), static_cast<f32>( _window_size.x ), static_cast<f32>( _window_size.y ) };
    }
 }    // namespace sdl_engine

@@ -23,20 +23,8 @@ namespace myge
       if ( auto entity_data { sdl_engine::getJsonData<json>( wave_data, "Entities" ) }; entity_data )
       {
          EntityFactory factory { registry(), resourceManager() };
-         if ( auto wanderer_array { sdl_engine::getJsonData<json>( entity_data, "en_wanderer_array" ) };
-              wanderer_array )
-         {
-            for ( auto& wanderer : wanderer_array.value() )
-            {
-               auto entts { factory.createWandererEnemyArray( wanderer ) };
-               entities.insert(
-                 entities.end(), std::make_move_iterator( entts.begin() ), std::make_move_iterator( entts.end() ) );
-            }
-         }
-      }
-      for ( auto [ entity, sprt ] : registry().view<sdl_engine::Sprite>().each() )
-      {
-         SDL_Log( "%d", sprt.render_order );
+         auto          entts { factory.createEntities( entity_data.value() ) };
+         entities = entts;
       }
    }
    void Wave1::update( f32 delta_time_ )

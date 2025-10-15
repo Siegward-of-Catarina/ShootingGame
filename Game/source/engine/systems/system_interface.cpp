@@ -1,5 +1,6 @@
 ﻿#include <engine/basic_component.hpp>
 #include <engine/systems/system_interface.hpp>
+
 namespace sdl_engine
 {
    SystemInterface::SystemInterface( i32 priority_, entt::registry& registry_ )

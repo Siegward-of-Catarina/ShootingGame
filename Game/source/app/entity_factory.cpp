@@ -48,6 +48,10 @@ namespace myge
       auto bullet_entt { _registry.create() };
 
       _registry.emplace<EnteringTag>( bullet_entt );
+      _registry.emplace<sdl_engine::RenderableTag>( bullet_entt );
+      _registry.emplace<sdl_engine::UpdateableTag>( bullet_entt );
+      _registry.emplace<PlayerBulletTag>( bullet_entt );
+      _registry.emplace<RenderGameSpriteTag>( bullet_entt );
 
       // shooterの位置をそのまま使う
       auto trfm_comp { _registry.get<Transform>( shooter_ ) };
@@ -78,140 +82,57 @@ namespace myge
       BoundingBox bb_comp { harf_w, harf_h, harf_w, BoundingBox::State::None, BoundingBox::EnableAxis::ALL };
       _registry.emplace<BoundingBox>( bullet_entt, bb_comp );
 
-      _registry.emplace<EnemyTag>( bullet_entt );
-      _registry.emplace<RenderGameSpriteTag>( bullet_entt );
       return bullet_entt;
    }
-   std::vector<entt::entity> EntityFactory::createEntities( json& data_ )
+   entt::entity EntityFactory::createPlayer( json& data_ )
    {
 
-      std::vector<entt::entity> entities { data_.size() };
+      auto entity { _registry.create() };
+      // リソース
+      auto sprt_resource { _resource_manager.getSprite( "player" ) };
+      auto sprt_anim_resource { _resource_manager.getSpriteAnim( "player_anim" ) };
 
-      // 取得したデータからエンティティを生成
-      for ( i32 i { 0 }; auto& entity_data : data_ )
+      // タグコンポーネント
+      _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
+      _registry.emplace<PlayerTag>( entity );
+      _registry.emplace<myge::EnteringTag>( entity );
+      _registry.emplace<sdl_engine::RenderableTag>( entity );
+      _registry.emplace<sdl_engine::UpdateableTag>( entity );
+      // Sprite
+      sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
+      sprt.dst.w = static_cast<f32>( sprt_anim_resource->frame_width );
+      sprt.dst.h = static_cast<f32>( sprt_anim_resource->frame_height );
+      _registry.emplace<sdl_engine::Sprite>( entity, sprt );
+      // SpriteAnim
+      sdl_engine::SpriteAnim sp_anim { sdl_engine::createSpriteAnim( sprt_anim_resource, 1u ) };
+      _registry.emplace<sdl_engine::SpriteAnim>( entity, sp_anim );
+      // Transform
+      sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
+      if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
       {
-         entities[ i ] = _registry.create();
-         // ライフサイクルタグ [ 画面外からゲームエリアへ向かう ]状態を初期値とする
-         _registry.emplace<myge::EnteringTag>( entities[ i ] );
-         // 基本的なコンポーネント
-         // [Transform]
-         if ( auto trfm_data { sdl_engine::getJsonData<json>( entity_data, "Transform" ) }; trfm_data )
-         {
-            auto trfm_comp { sdl_engine::createTransform( trfm_data ) };
-            _registry.emplace<sdl_engine::Transform>( entities[ i ], trfm_comp );
-         }
-         else
-         {
-            SDL_LogDebug( SDL_LOG_CATEGORY_APPLICATION,
-                          "EntityデータにTransformが設定されていませんでした.初期値で生成します" );
-            _registry.emplace<sdl_engine::Transform>( entities[ i ], sdl_engine::createTransform() );
-         }
-         // [Sprite]
-         if ( auto sprt_data { sdl_engine::getJsonData<json>( entity_data, "Sprite" ) }; sprt_data )
-         {
-            auto sprt_comp = sdl_engine::createSprite( _resource_manager, sprt_data );
-            _registry.emplace<sdl_engine::Sprite>( entities[ i ], sprt_comp );
-         }
-         // [Velocity]
-         if ( auto vlcy_data { sdl_engine::getJsonData<json>( entity_data, "Velocity" ) }; vlcy_data )
-         {
-            auto vlcy_comp = sdl_engine::createVelocity( vlcy_data );
-            _registry.emplace<sdl_engine::Velocity>( entities[ i ], vlcy_comp );
-         }
-         // [SpriteAnim]
-         if ( auto anim_data { sdl_engine::getJsonData<json>( entity_data, "SpriteAnim" ) }; anim_data )
-         {
-            // SpriteAnimコンポーネントを作成
-            auto sprt_anim_comp = sdl_engine::createSpriteAnim( _resource_manager, anim_data );
-            // SpriteAnimが存在するということは、Spriteも存在する
-            // SpriteのdstをSpriteAnimのフレームサイズに設定しておく
-            auto& sprt = _registry.get<sdl_engine::Sprite>( entities[ i ] );
-            sprt.dst.w = static_cast<f32>( sprt_anim_comp.sprite_anim->frame_width );
-            sprt.dst.h = static_cast<f32>( sprt_anim_comp.sprite_anim->frame_height );
-            // SpriteAnimをエンティティに登録
-            _registry.emplace<sdl_engine::SpriteAnim>( entities[ i ], sprt_anim_comp );
-         }
-
-         // [PlayerInput]
-         if ( auto pl_in_data { sdl_engine::getJsonData<json>( entity_data, "PlayerInput" ) }; pl_in_data )
-         {
-            _registry.emplace<PlayerInput>( entities[ i ], createPlayerInput() );
-         }
-         // [BoundingBox]
-         if ( auto bb_data { sdl_engine::getJsonData<json>( entity_data, "BoundingBox" ) }; bb_data )
-         {
-            BoundingBox box_comp { createBoundingBox( bb_data ) };
-
-            _registry.emplace<myge::BoundingBox>( entities[ i ], box_comp );
-         }
-         // [TitleInput]
-         if ( entity_data.contains( "TitleInput" ) ) { _registry.emplace<TitleInput>( entities[ i ] ); }
-         // [SpriteBrink]
-         if ( auto brink_data { sdl_engine::getJsonData<json>( entity_data, "SpriteBrink" ) }; brink_data )
-         {
-            SpriteBrink brink_comp { createSpriteBrink( brink_data ) };
-            _registry.emplace<SpriteBrink>( entities[ i ], brink_comp );
-         }
-         // [SerpentineMovement]
-         if ( auto serpentine_data { sdl_engine::getJsonData<json>( entity_data, "SerpentineMovement" ) };
-              serpentine_data )
-         {
-            SerpentineMovement serpentine_comp { createSerpentineMovement( serpentine_data ) };
-            _registry.emplace<SerpentineMovement>( entities[ i ], serpentine_comp );
-            // 直接Transformを変更するため必要なタグ
-            _registry.emplace<sdl_engine::DirectRotateTag>( entities[ i ] );
-         }
-         // [Text]
-         if ( auto text_data { sdl_engine::getJsonData<json>( entity_data, "Text" ) }; text_data )
-         {
-            sdl_engine::Text text_comp { sdl_engine::createText( _resource_manager, text_data ) };
-            _registry.emplace<sdl_engine::Text>( entities[ i ], text_comp );
-         }
-         // [Fade]
-         if ( auto fade_data { sdl_engine::getJsonData<json>( entity_data, "Fade" ) }; fade_data )
-         {
-            sdl_engine::Fade fade_comp { sdl_engine::createFade( fade_data ) };
-            _registry.emplace<sdl_engine::Fade>( entities[ i ], fade_comp );
-         }
-         // [Shooter]
-         if ( auto shtr_data { sdl_engine::getJsonData<json>( entity_data, "Shooter" ) }; shtr_data )
-         {
-            Shooter shtr_comp { createShooter( shtr_data ) };
-            _registry.emplace<Shooter>( entities[ i ], shtr_comp );
-         }
-         // [EntityType]
-         if ( auto entity_type { sdl_engine::getJsonData<std::string>( entity_data, "EntityType" ) }; entity_type )
-         {
-            emplaceEntityTypeTag( _registry, entities[ i ], entity_type.value() );
-         }
-         // [RenderType]
-         if ( auto render_type { sdl_engine::getJsonData<std::string>( entity_data, "RenderType" ) }; render_type )
-         {
-            sdl_engine::emplaceRenderTypeTag( _registry, entities[ i ], render_type.value() );
-         }
-         else    // デフォルトのレンダータイプはGameSpriteとする
-         {
-            _registry.emplace<sdl_engine::RenderGameSpriteTag>( entities[ i ] );
-         }
-         i++;
+         // array生成に対応するためoffsetを足す
+         trfm.x = pos.value()[ 0 ];
+         trfm.y = pos.value()[ 1 ];
       }
-
-      return entities;
-   }
-   std::vector<entt::entity> EntityFactory::createWandererEnemyArray( json& data_ )
-   {
-      auto                      num_enemy { sdl_engine::getJsonData<u32>( data_, "num" ) };
-      auto                      offset { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "offset" ) };
-      std::vector<entt::entity> entities { num_enemy.value() };
-
-      for ( u32 i = 0; i < num_enemy.value(); i++ )
+      _registry.emplace<sdl_engine::Transform>( entity, trfm );
+      // Velocity
+      sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
+      if ( auto dir { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "dir" ) }; dir )
       {
-         sdl_engine::Vector2_f32 vec;
-         vec.x         = offset.value()[ 0 ] * i;
-         vec.y         = offset.value()[ 1 ] * i;
-         entities[ i ] = createWandererEnemy( data_, vec );
+         velo.dx = dir.value()[ 0 ];
+         velo.dy = dir.value()[ 1 ];
       }
-      return entities;
+      _registry.emplace<sdl_engine::Velocity>( entity, velo );
+      // BBox
+      BoundingBox box { createBoundingBox( sprt.dst.w / 2, sprt.dst.h / 2, 20.0f ) };
+      _registry.emplace<BoundingBox>( entity, box );
+      // Input
+      _registry.emplace<PlayerInput>( entity );
+      // Shooter
+      Shooter shtr { createShooter( 0.2f, sdl_engine::Vector2_f32 { 0.0f, -500.0f }, "enemy_small" ) };
+
+      _registry.emplace<Shooter>( entity, shtr );
+      return entity;
    }
    entt::entity EntityFactory::createWandererEnemy( json& data_, sdl_engine::Vector2_f32 offset_pos_ )
    {
@@ -222,7 +143,16 @@ namespace myge
       // タグ
       _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
       _registry.emplace<EnemyTag>( entity );
-      _registry.emplace<EnteringTag>( entity );
+      if ( auto interval { sdl_engine::getJsonData<f32>( data_, "interval" ) }; interval )
+      {
+         _registry.emplace<WaitTag>( entity, interval.value(), 0.0f );
+      }
+      else
+      {
+         _registry.emplace<EnteringTag>( entity );
+         _registry.emplace<sdl_engine::RenderableTag>( entity );
+         _registry.emplace<sdl_engine::UpdateableTag>( entity );
+      }
 
       sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
       sprt.dst.w = static_cast<f32>( sprt_anim_resource->frame_width );
@@ -271,5 +201,196 @@ namespace myge
       _registry.emplace<BoundingBox>( entity, box );
 
       return entity;
+   }
+   entt::entity EntityFactory::createBasicUI( json& data_ )
+   {
+      auto entity { _registry.create() };
+      // リソース
+      // リソース
+      entt::resource<sdl_engine::SpriteResource> sprt_resource {};
+      if ( auto sp_name { sdl_engine::getJsonData<std::string>( data_, "sprite_name" ) }; sp_name )
+      {
+         sprt_resource = _resource_manager.getSprite( sp_name.value() );
+      }
+
+      // タグコンポーネント
+      _registry.emplace<sdl_engine::RenderUITag>( entity );
+      _registry.emplace<myge::EnteringTag>( entity );
+      _registry.emplace<sdl_engine::RenderableTag>( entity );
+      _registry.emplace<sdl_engine::UpdateableTag>( entity );
+      // Sprite
+      sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
+      _registry.emplace<sdl_engine::Sprite>( entity, sprt );
+      // Transform
+      sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
+      if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
+      {
+         // array生成に対応するためoffsetを足す
+         trfm.x = pos.value()[ 0 ];
+         trfm.y = pos.value()[ 1 ];
+      }
+      _registry.emplace<sdl_engine::Transform>( entity, trfm );
+      return entity;
+   }
+   entt::entity EntityFactory::createBrinkText( json& data_ )
+   {
+      auto entity { _registry.create() };
+      // リソース
+      entt::resource<sdl_engine::SpriteResource> sprt_resource {};
+      entt::resource<sdl_engine::FontResource>   font_resource {};
+      if ( auto font_size { sdl_engine::getJsonData<std::string>( data_, "font_size" ) }; font_size )
+      {
+         if ( font_size == "small" )
+         {
+            sprt_resource = _resource_manager.getSprite( "font_1_x8" );
+            font_resource = _resource_manager.getFont( "font_x8" );
+         }
+         else if ( font_size == "medium" )
+         {
+            sprt_resource = _resource_manager.getSprite( "font_1_x16" );
+            font_resource = _resource_manager.getFont( "font_x16" );
+         }
+         else if ( font_size == "large" )
+         {
+            sprt_resource = _resource_manager.getSprite( "font_1_x24" );
+            font_resource = _resource_manager.getFont( "font_x24" );
+         }
+      }
+      // タグコンポーネント
+      _registry.emplace<myge::EnteringTag>( entity );
+      _registry.emplace<sdl_engine::RenderableTag>( entity );
+      _registry.emplace<sdl_engine::UpdateableTag>( entity );
+      _registry.emplace<sdl_engine::RenderTextTag>( entity );
+      // Sprite
+      sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
+      auto               color { data_.value( "color", std::array<f32, 4> { 1.0f, 1.0f, 1.0f, 1.0f } ) };
+      sprt.color = sdl_engine::ColorRGBA( color );
+      _registry.emplace<sdl_engine::Sprite>( entity, sprt );
+      // Transform
+      sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
+      if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
+      {
+         // array生成に対応するためoffsetを足す
+         trfm.x = pos.value()[ 0 ];
+         trfm.y = pos.value()[ 1 ];
+      }
+      _registry.emplace<sdl_engine::Transform>( entity, trfm );
+      // Text
+      sdl_engine::Text text { font_resource, "none" };
+      if ( auto text_data { sdl_engine::getJsonData<std::string>( data_, "text" ) }; text_data )
+      {
+         text.text = text_data.value();
+      }
+      _registry.emplace<sdl_engine::Text>( entity, text );
+
+      // Brink
+      SpriteBrink brink { data_.value( "brink_speed", 1.0f ), data_.value( "brink_min_alpha", 0.3f ) };
+      _registry.emplace<SpriteBrink>( entity, brink );
+
+      return entity;
+   }
+   std::pair<entt::entity, entt::entity> EntityFactory::createBackGround( json& data_ )
+   {
+
+      std::array<entt::entity, 2> entities { _registry.create(), _registry.create() };
+      // リソース
+      entt::resource<sdl_engine::SpriteResource> sprt_resource {};
+      if ( auto sp_name { sdl_engine::getJsonData<std::string>( data_, "sprite_name" ) }; sp_name )
+      {
+         sprt_resource = _resource_manager.getSprite( sp_name.value() );
+      }
+      else { sprt_resource = _resource_manager.getSprite( "back_ground" ); }
+
+      for ( u32 i { 0 }; auto& entt : entities )
+      {
+         // タグコンポーネント
+         _registry.emplace<sdl_engine::RenderBackgroundTag>( entt );
+         _registry.emplace<BackgroundTag>( entt );
+         _registry.emplace<myge::EnteringTag>( entt );
+         _registry.emplace<sdl_engine::RenderableTag>( entt );
+         _registry.emplace<sdl_engine::UpdateableTag>( entt );
+         // Sprite
+         sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
+         sprt.render_order = data_.value( "z_order", 100 );
+         _registry.emplace<sdl_engine::Sprite>( entt, sprt );
+         // Transform
+         sdl_engine::Transform trfm { 300.0f, 0.0f, 0.0f, 1.0f };
+         if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
+         {
+            // array生成に対応するためoffsetを足す
+            trfm.x = pos.value()[ 0 ];
+            trfm.y = pos.value()[ 1 ] - sprt.dst.h * i++;
+         }
+         _registry.emplace<sdl_engine::Transform>( entt, trfm );
+         // Velocity
+         sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
+         if ( auto dir { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "dir" ) }; dir )
+         {
+            velo.dx = dir.value()[ 0 ];
+            velo.dy = dir.value()[ 1 ];
+         }
+         _registry.emplace<sdl_engine::Velocity>( entt, velo );
+         // BBox
+         BoundingBox box { createBoundingBox( sprt.dst.w / 2, sprt.dst.h / 2, 0.0f, BoundingBox::EnableAxis::Top ) };
+         _registry.emplace<BoundingBox>( entt, box );
+      }
+
+      return std::pair { entities[ 0 ], entities[ 1 ] };
+   }
+   std::vector<entt::entity> EntityFactory::createWandererEnemyArray( json& data_ )
+   {
+      auto                      num_enemy { sdl_engine::getJsonData<u32>( data_, "num" ) };
+      auto                      offset { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "offset_pos" ) };
+      std::vector<entt::entity> entities { num_enemy.value() };
+
+      for ( u32 i = 0; i < num_enemy.value(); i++ )
+      {
+         sdl_engine::Vector2_f32 vec;
+         vec.x         = offset.value()[ 0 ] * i;
+         vec.y         = offset.value()[ 1 ] * i;
+         entities[ i ] = createWandererEnemy( data_, vec );
+      }
+      return entities;
+   }
+   std::vector<entt::entity> EntityFactory::createEntities( json& data_ )
+   {
+
+      std::vector<entt::entity> entities {};
+
+      for ( auto& [ entity_type, data_array ] : data_.items() )
+      {
+         for ( auto& data : data_array )
+         {
+            if ( entity_type == "en_wanderer_array" )
+            {
+               auto entts { createWandererEnemyArray( data ) };
+               entities.insert(
+                 entities.end(), std::make_move_iterator( entts.begin() ), std::make_move_iterator( entts.end() ) );
+            }
+            else if ( entity_type == "player" )
+            {
+               auto entt { createPlayer( data ) };
+               entities.emplace_back( entt );
+            }
+            else if ( entity_type == "background" )
+            {
+               auto entts { createBackGround( data ) };
+               entities.emplace_back( entts.first );
+               entities.emplace_back( entts.second );
+            }
+            else if ( entity_type == "basic_ui" )
+            {
+               auto entt { createBasicUI( data ) };
+               entities.emplace_back( entt );
+            }
+            else if ( entity_type == "brink_text" )
+            {
+               auto entt { createBrinkText( data ) };
+               entities.emplace_back( entt );
+            }
+         }
+      }
+
+      return entities;
    }
 }    // namespace myge

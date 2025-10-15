@@ -1,102 +1,98 @@
 ﻿{
-  "Sprites": {
-    "SpriteRootPath": "assets/sprite/",
-    "SpriteDatas": [
-      {
-        "name": "back_ground",
-        "file_path": "back_ground.png"
-      },
-      {
-        "name": "back_star",
-        "file_path": "star.png"
-      },
-      {
-        "name": "player",
-        "file_path": "player_sprite.png"
-      },
-      {
-        "name": "enemy1",
-        "file_path": "enemy01_sprite.png"
-      },
-      {
-        "name": "title",
-        "file_path": "title.png"
-      },
-      {
-        "name": "player_bullet",
-        "file_path": "player_bullet.png"
-      },
-      {
-        "name": "enemy_bullet_small",
-        "file_path": "enemy_bullet.png"
-      },
-      {
-        "name": "font_1_x8",
-        "file_path": "fonts/font_x8.png"
-      },
-      {
-        "name": "font_1_x16",
-        "file_path": "fonts/font_x16.png"
-      },
-      {
-        "name": "font_1_x24",
-        "file_path": "fonts/font_x24.png"
-      },
-      {
-        "name": "font_1_x24",
-        "file_path": "fonts/font_x24.png"
-      },
-      {
-        "name": "white",
-        "file_path": "white.png"
-      }
+	"Sprites": {
+		"SpriteRootPath": "assets/sprite/",
+		"SpriteDatas": [
+			{
+				"name": "back_ground",
+				"file_path": "back_ground.png"
+			},
+			{
+				"name": "back_star",
+				"file_path": "star.png"
+			},
+			{
+				"name": "player",
+				"file_path": "player_sprite.png"
+			},
+			{
+				"name": "enemy1",
+				"file_path": "enemy01_sprite.png"
+			},
+			{
+				"name": "title",
+				"file_path": "title.png"
+			},
+			{
+				"name": "player_bullet",
+				"file_path": "player_bullet.png"
+			},
+			{
+				"name": "enemy_bullet_small",
+				"file_path": "enemy_bullet.png"
+			},
+			{
+				"name": "font_1_x8",
+				"file_path": "fonts/font_x8.png"
+			},
+			{
+				"name": "font_1_x16",
+				"file_path": "fonts/font_x16.png"
+			},
+			{
+				"name": "font_1_x24",
+				"file_path": "fonts/font_x24.png"
+			},
+			{
+				"name": "white",
+				"file_path": "white.png"
+			}
 
-    ]
-  },
-  "SpriteAnims": [
-    {
-      "name": "player_anim",
-      "sprite_name": "player",
-      "sprite_col": 3,
-      "sprite_row": 1,
-      "frame_width": 48,
-      "frame_height": 48,
-      "frame_time": 0,
-      "anim_type": "Manual"
-    },
-    {
-      "name": "enemy1_anim",
-      "sprite_name": "enemy1",
-      "sprite_col": 8,
-      "sprite_row": 1,
-      "frame_width": 32,
-      "frame_height": 40,
-      "frame_time": 0.03,
-      "anim_type": "Loop"
-    }
-  ],
-  "FontDatas": [
-    {
-      "name": "font_x8",
-      "width": 8,
-      "height": 8,
-      "sprite_row": 6,
-      "sprite_col": 16
-    },
-    {
-      "name": "font_x16",
-      "width": 16,
-      "height": 16,
-      "sprite_row": 6,
-      "sprite_col": 16
-    },
-    {
-      "name": "font_x24",
-      "width": 24,
-      "height": 24,
-      "sprite_row": 6,
-      "sprite_col": 16
-    }
-  ]
+		]
+	},
+	"SpriteAnims": [
+		{
+			"name": "player_anim",
+			"sprite_name": "player",
+			"sprite_col": 3,
+			"sprite_row": 1,
+			"frame_width": 48,
+			"frame_height": 48,
+			"frame_time": 0,
+			"anim_type": "Manual"
+		},
+		{
+			"name": "enemy1_anim",
+			"sprite_name": "enemy1",
+			"sprite_col": 8,
+			"sprite_row": 1,
+			"frame_width": 32,
+			"frame_height": 40,
+			"frame_time": 0.03,
+			"anim_type": "Loop"
+		}
+	],
+	"FontDatas": [
+		{
+			"name": "font_x8",
+			"width": 8,
+			"height": 8,
+			"sprite_row": 6,
+			"sprite_col": 16
+		},
+		{
+			"name": "font_x16",
+			"width": 16,
+			"height": 16,
+			"sprite_row": 6,
+			"sprite_col": 16
+		},
+		{
+			"name": "font_x24",
+			"width": 24,
+			"height": 24,
+			"sprite_row": 6,
+			"sprite_col": 16
+		}
+	]
 
 }

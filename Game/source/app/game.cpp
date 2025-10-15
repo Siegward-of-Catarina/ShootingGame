@@ -44,7 +44,8 @@ namespace myge
       _context->getSystemManager().addSystem( std::make_unique<sdl_engine::MovementSystem>( 96, registry ) );
       _context->getSystemManager().addSystem( std::make_unique<sdl_engine::RotateSystem>( 97, registry ) );
       _context->getSystemManager().addSystem( std::make_unique<sdl_engine::ScaleSystem>( 98, registry ) );
-      _context->getSystemManager().addSystem( std::make_unique<LifeCycleSystem>( 100, registry ) );
+      _context->getSystemManager().addSystem(
+        std::make_unique<LifeCycleSystem>( 100, registry, _context->getDispatcher() ) );
    }
 
    Game::~Game() { SDL_Quit(); }

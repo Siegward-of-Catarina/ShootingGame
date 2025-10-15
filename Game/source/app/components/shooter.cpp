@@ -29,4 +29,12 @@ namespace myge
 
       return shtr;
    }
+   Shooter createShooter( f32 cooldown_, sdl_engine::Vector2_f32 dir, std::string_view type )
+   {
+      Shooter shtr { cooldown_, 0.0f, dir };
+      if ( type == "player" ) { shtr.bullet_type = BulletType::Player; }
+      if ( type == "enemy_small" ) { shtr.bullet_type = BulletType::Enemy_small; }
+      if ( type == "enemy_large" ) { shtr.bullet_type = BulletType::Enemy_Large; }
+      return shtr;
+   }
 }    // namespace myge

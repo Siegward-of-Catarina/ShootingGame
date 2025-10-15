@@ -19,23 +19,21 @@ myge::TitleScene::TitleScene( const sdl_engine::SceneDependencies& dependencies_
 {
 }
 
-myge::TitleScene::~TitleScene() {}
+myge::TitleScene::~TitleScene() { registry().destroy( title_input ); }
 
-void myge::TitleScene::initialize()
+void myge::TitleScene::initialize( entt::dispatcher& dispatcher_ )
 {
    loadSceneData( "game_data/scene_data/title_scene_data.json" );
    auto& scene_data { sceneData() };
    if ( scene_data.contains( "Entities" ) )
    {
-       EntityFactory factory{ registry(), resourceManager()};
+      EntityFactory factory { registry(), resourceManager() };
       setEntities( factory.createEntities( scene_data.at( "Entities" ) ) );
    }
-   for ( auto& entity : entities() )
-   {
-      if ( registry().all_of<TitleInput>( entity ) ) { title_input = entity; }
-   }
+   title_input = registry().create();
+   registry().emplace<TitleInput>( title_input );
 
-   addSystems();
+   addSystems( dispatcher_ );
 }
 
 void myge::TitleScene::start() {}
@@ -49,9 +47,9 @@ void myge::TitleScene::update( f32 deita_time_ )
    }
 }
 
-void myge::TitleScene::addSystems()
+void myge::TitleScene::addSystems( entt::dispatcher& dispatcher_ )
 {
    systemManager().addSystem( std::make_unique<SpriteBrinkSystem>( 94, registry() ) );
    systemManager().addSystem( std::make_unique<ScreenBoundsSystem>( 95, registry() ) );
-   systemManager().addSystem( std::make_unique<OutOfScreenSystem>( 97, registry() ) );
+   systemManager().addSystem( std::make_unique<OutOfScreenSystem>( 97, registry(), dispatcher_ ) );
 }

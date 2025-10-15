@@ -5,6 +5,7 @@
 #include <app/waves/wave.hpp>
 #include <app/waves/wave_factory.hpp>
 // system
+#include <app/systems/collision_system.hpp>
 #include <app/systems/enemy_movement_system.hpp>
 #include <app/systems/facing_system.hpp>
 #include <app/systems/input_system.hpp>
@@ -39,28 +40,17 @@ namespace myge
    {
    }
    TestScene::~TestScene() { _disp.clear(); }
-   void TestScene::initialize()
+   void TestScene::initialize( entt::dispatcher& dispatcher_ )
    {
       loadSceneData( "game_data/scene_data/game_scene_data.json" );
-      addSystems();
+      addSystems( dispatcher_ );
       createWaves();
-
       auto& scene_data { sceneData() };
       if ( scene_data.contains( "Entities" ) )
       {
          EntityFactory factory { registry(), resourceManager() };
          setEntities( factory.createEntities( scene_data.at( "Entities" ) ) );
       }
-
-      for ( auto entity : entities() )
-      {
-         if ( registry().all_of<sdl_engine::RenderUITag>( entity ) )
-         {
-            fade = entity;
-            break;
-         }
-      }
-
       _disp.sink<ShootEvent>().connect<&TestScene::onShoot>( this );
       scene_state = SceneState::WaveStart;
    }
@@ -71,7 +61,6 @@ namespace myge
       _scene_elapsed_time += deita_time_;
       // かり
       static int idx = 0;
-      auto&      fade_comp { registry().get<sdl_engine::Fade>( fade ) };
       switch ( scene_state )
       {
          case SceneState::WaveStart :
@@ -133,7 +122,7 @@ namespace myge
       entities().emplace_back( factory.createBullet( e.shooter ) );
    }
 
-   void TestScene::addSystems()
+   void TestScene::addSystems( entt::dispatcher& dispatcher_ )
    {
       auto& system_manager { systemManager() };
       system_manager.addSystem( std::make_unique<PlayerMovementSystem>( 1, registry() ) );
@@ -141,7 +130,8 @@ namespace myge
       system_manager.addSystem( std::make_unique<FacingSystem>( 2, registry() ) );
       system_manager.addSystem( std::make_unique<EnemyMovementSystem>( 2, registry() ) );
       system_manager.addSystem( std::make_unique<ScreenBoundsSystem>( 95, registry() ) );
-      system_manager.addSystem( std::make_unique<OutOfScreenSystem>( 97, registry() ) );
+      system_manager.addSystem( std::make_unique<CollisionSystem>( 95, registry(), dispatcher_ ) );
+      system_manager.addSystem( std::make_unique<OutOfScreenSystem>( 97, registry(), dispatcher_ ) );
    }
 
 }    // namespace myge

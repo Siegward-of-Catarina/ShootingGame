@@ -36,6 +36,7 @@ namespace sdl_engine
 
    class SystemInterface;
    struct LogicUpdateableTag;
+   struct UpdateableTag;
    struct RenderableTag;
    struct Text;
 }    // namespace sdl_engine

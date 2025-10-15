@@ -102,6 +102,7 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="source\app\components\sprite_brink.cpp" />
+    <ClCompile Include="source\app\systems\collision_system.cpp" />
     <ClCompile Include="source\app\systems\facing_system.cpp">
       <SubType>
       </SubType>
@@ -172,6 +173,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\app\components\life.hpp" />
     <ClInclude Include="source\app\components\serpentine_movement.hpp">
       <SubType>
       </SubType>
@@ -181,10 +183,15 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="source\app\components\sprite_brink.hpp" />
+    <ClInclude Include="source\app\event\dead_event.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\event\shoot_event.hpp">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\app\systems\collision_system.hpp" />
     <ClInclude Include="source\app\systems\facing_system.hpp">
       <SubType>
       </SubType>

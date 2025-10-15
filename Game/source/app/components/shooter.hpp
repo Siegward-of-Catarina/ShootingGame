@@ -19,4 +19,5 @@ namespace myge
    };
 
    Shooter createShooter( const json& data_ );
+   Shooter createShooter( f32 cooldown_, sdl_engine::Vector2_f32 dir, std::string_view type );
 }    // namespace myge

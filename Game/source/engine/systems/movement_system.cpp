@@ -12,8 +12,8 @@ namespace sdl_engine
    MovementSystem::~MovementSystem() {}
    void MovementSystem::update(const FrameData& frame_)
    {
-      for ( auto [ entity, trfm, velo ] :
-            registry().view<Transform, Velocity>( entt::exclude<DirectMovementTag> ).each() )
+       auto view{ getUpdateable<Transform, Velocity>(registry()) };
+      for ( auto [ entity, trfm, velo ] : view.each() )
       {
          trfm.x += velo.dx * frame_.delta_time;
          trfm.y += velo.dy * frame_.delta_time;

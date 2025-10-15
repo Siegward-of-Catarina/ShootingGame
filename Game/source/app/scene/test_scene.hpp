@@ -12,11 +12,11 @@ namespace myge
       TestScene( const sdl_engine::SceneDependencies& dependencies_ );
       ~TestScene();
       // Scene を介して継承されました
-      virtual void initialize() override;
+      virtual void initialize( entt::dispatcher& dispatcher_ ) override;
       virtual void start() override;
       virtual void update( f32 deita_time_ ) override;
 
-      virtual void addSystems() override;
+      virtual void addSystems( entt::dispatcher& dispatcher_ ) override;
 
    private:
       void createWaves();

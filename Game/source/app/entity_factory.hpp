@@ -11,11 +11,15 @@ namespace myge
       EntityFactory( entt::registry& registry_, sdl_engine::ResourceManager& resource_manager_ );
       ~EntityFactory();
 
-      entt::entity              createDefaultFadeEntity( f32 window_width, f32 window_height );
-      entt::entity              createBullet( entt::entity& shooter_ );
-      std::vector<entt::entity> createEntities( json& data_ );
-      std::vector<entt::entity> createWandererEnemyArray( json& data_ );
+      entt::entity createDefaultFadeEntity( f32 window_width, f32 window_height );
+      entt::entity createBullet( entt::entity& shooter_ );
+      entt::entity createPlayer( json& data_ );
       entt::entity createWandererEnemy( json& data_, sdl_engine::Vector2_f32 offset_pos_ = { 0.0f, 0.0f } );
+      entt::entity createBasicUI( json& data_ );
+      entt::entity createBrinkText( json& data_ );
+      std::pair<entt::entity, entt::entity> createBackGround( json& data_ );
+      std::vector<entt::entity>             createWandererEnemyArray( json& data_ );
+      std::vector<entt::entity>             createEntities( json& data_ );
 
    private:
       entt::registry&              _registry;

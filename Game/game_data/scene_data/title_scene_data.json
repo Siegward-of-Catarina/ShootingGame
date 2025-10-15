@@ -1,145 +1,33 @@
 ﻿{
-	"Entities": [
-		{
-			"EntityType": "Background",
-			"RenderType": "Background",
-			"Sprite": { "name": "back_ground" },
-			"Transform": {
-				"px": 300.0,
-				"py": 400.0,
-				"angle": 0.0,
-				"scale": 1.0
+	"Entities": {
+		"background": [
+			{
+				"sprite_name": "back_ground",
+				"pos": [ 300.0, 400.0 ],
+				"dir": [ 0.0, 10.0 ]
 			},
-			"Velocity": {
-				"dx": 0.0,
-				"dy": 10.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"BoundingBox": {
-				"harf_width": 0.0,
-				"harf_height": 400.0,
-				"radius": 0.0,
-				"enable_axis": "top"
+			{
+				"sprite_name": "back_star",
+				"z_order": 0,
+				"pos": [ 300.0, 400.0 ],
+				"dir": [ 0.0, 80.0 ]
 			}
-		},
-		{
-			"EntityType": "Background",
-			"RenderType": "Background",
-			"Sprite": {
-				"name": "back_ground"
-			},
-			"Transform": {
-				"px": 300.0,
-				"py": -400.0,
-				"angle": 0.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0.0,
-				"dy": 10.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"BoundingBox": {
-				"harf_width": 0.0,
-				"harf_height": 400.0,
-				"radius": 0.0,
-				"enable_axis": "top"
+		],
+		"basic_ui": [
+			{
+				"sprite_name": "title",
+				"pos": [ 300.0, 200.0 ]
 			}
-		},
-		{
-			"EntityType": "Background",
-			"RenderType": "Background",
-			"Sprite": {
-				"name": "back_star",
-				"render_order": 0
-			},
-			"Transform": {
-				"px": 300.0,
-				"py": 400.0,
-				"angle": 0.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0.0,
-				"dy": 80.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"BoundingBox": {
-				"harf_width": 0.0,
-				"harf_height": 400.0,
-				"radius": 0.0,
-				"enable_axis": "top"
-			}
-		},
-		{
-			"EntityType": "Background",
-			"RenderType": "Background",
-			"Sprite": {
-				"name": "back_star",
-				"render_order": 0
-			},
-			"Transform": {
-				"px": 300.0,
-				"py": -400.0,
-				"angle": 0.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0.0,
-				"dy": 80.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			},
-			"BoundingBox": {
-				"harf_width": 0.0,
-				"harf_height": 400.0,
-				"radius": 0.0,
-				"enable_axis": "top"
-			}
-		},
-		{
-			"RenderType": "UI",
-			"Sprite": { "name": "title" },
-			"Transform": {
-				"px": 300.0,
-				"py": 200.0,
-				"angle": 0.0,
-				"scale": 1.0
-			},
-			"Velocity": {
-				"dx": 0.0,
-				"dy": 0.0,
-				"anguler": 0.0,
-				"scale_rate": 0.0
-			}
-		},
-		{
-			"RenderType": "Text",
-			"Sprite": {
-				"name": "font_1_x24",
-				"color": [ 1.0, 0.0, 0.8, 1.0 ]
-			},
-			"Transform": {
-				"px": 156.0,
-				"py": 700.0,
-				"angle": 0.0,
-				"scale": 1.0
-			},
-			"Text": {
-				"font": "font_x24",
+		],
+		"brink_text": [
+			{
+				"font_size": "large",
+				"color": [ 1.0, 0.0, 0.8, 1.0 ],
+				"pos": [ 156.0, 700.0 ],
 				"text": "Press Any Key",
-				"size": "Large"
-			},
-			"SpriteBrink": {
-				"speed": 1.0,
-				"min_alpha": 0.3
+				"brink_speed": 1.0,
+				"brink_min_alpha": 0.3
 			}
-		},
-		{
-			"TitleInput": {}
-		}
-	]
+		]
+	}
 }

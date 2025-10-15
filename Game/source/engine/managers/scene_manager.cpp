@@ -34,7 +34,7 @@ namespace sdl_engine
    void SceneManager::initStartCurrentScene( std::unique_ptr<Scene> current_ )
    {
       _current_scene = std::move( current_ );
-      _current_scene->initialize();
+      _current_scene->initialize( _dispatchar );
       _current_scene->start();
    }
    void SceneManager::onFadeOutEnd( FadeOutEndEvent& e )
@@ -42,7 +42,7 @@ namespace sdl_engine
       if ( _fade == e.owner )
       {
          _current_scene = std::move( _next_scene );
-         _current_scene->initialize();
+         _current_scene->initialize( _dispatchar );
       }
    }
    void SceneManager::onFadeInEnd( FadeInEndEvent& e )

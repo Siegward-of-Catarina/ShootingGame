@@ -1,9 +1,10 @@
 ﻿#include <app/components/bounding_box.hpp>
 #include <app/components/entity_type_tag.hpp>
-#include <app/components/lifecycle_tags.hpp>
 #include <app/systems/out_of_screen_system.hpp>
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
+// event
+#include <app/event/dead_event.hpp>
 
 namespace
 {
@@ -11,12 +12,12 @@ namespace
 }
 namespace myge
 {
-   OutOfScreenSystem::OutOfScreenSystem( i32 priority_, entt::registry& registry_ )
-     : SystemInterface { priority_, registry_ }
+   OutOfScreenSystem::OutOfScreenSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatcher_ )
+     : SystemInterface { priority_, registry_ }, _dispatcher { dispatcher_ }
    {
    }
    OutOfScreenSystem::~OutOfScreenSystem() {}
-   void OutOfScreenSystem::update(const sdl_engine::FrameData& frame_)
+   void OutOfScreenSystem::update( const sdl_engine::FrameData& frame_ )
    {
       auto& reg { registry() };
 
@@ -55,18 +56,18 @@ namespace myge
          if ( box.state == BoundingBox::State::OutBottom ) { trfm.y -= frame_.window_height * 2; }
       }
 
-      std::vector<entt::entity> destroy_entities {};
-      auto                      enemy_view { getLogicUpdateable<BoundingBox, EnemyTag>( reg ) };
+      std::unordered_set<entt::entity> destroy_entities {};
+      auto                             enemy_view { getLogicUpdateable<BoundingBox, EnemyTag>( reg ) };
 
       for ( auto [ entity, box ] : enemy_view.each() )
       {
          if ( static_cast<u32>( box.state ) & static_cast<u32>( BoundingBox::State::Out ) )
          {
-            destroy_entities.emplace_back( entity );
+            destroy_entities.emplace( entity );
          }
       }
 
       // 消去対象のエンティティがあればDeadにする
-      for ( auto& entity : destroy_entities ) { reg.emplace<DeadTag>( entity ); }
+      if ( !destroy_entities.empty() ) { _dispatcher.trigger<DeadEvent>( { destroy_entities } ); }
    }
 }    // namespace myge
