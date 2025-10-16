@@ -12,7 +12,7 @@ namespace sdl_engine
    public:
       SceneManager( entt::dispatcher& dispatcher_ );
       ~SceneManager();
-      void update( EngineContext& context_ );
+      void update( const FrameData& frame_ );
       // 最初期シーン初期化後開始
       void   initStartCurrentScene( std::unique_ptr<Scene> current_ );
       void   setNextScene( std::unique_ptr<Scene> next_ ) { _next_scene = std::move( next_ ); };
@@ -25,7 +25,7 @@ namespace sdl_engine
       void onFadeInEnd( FadeInEndEvent& e );
 
    private:
-      entt::dispatcher&           _dispatchar;
+      entt::dispatcher&           _dispatcher;
       std::optional<entt::entity> _fade;
       std::unique_ptr<Scene>      _current_scene;
       std::unique_ptr<Scene>      _next_scene;

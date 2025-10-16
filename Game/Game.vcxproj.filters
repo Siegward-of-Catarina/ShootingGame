@@ -54,6 +54,7 @@
     <ClCompile Include="source\app\components\serpentine_movement.cpp" />
     <ClCompile Include="source\app\systems\facing_system.cpp" />
     <ClCompile Include="source\app\systems\collision_system.cpp" />
+    <ClCompile Include="source\app\systems\highlight_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -189,5 +190,9 @@
     <ClInclude Include="source\app\systems\collision_system.hpp" />
     <ClInclude Include="source\app\components\life.hpp" />
     <ClInclude Include="source\app\event\dead_event.hpp" />
+    <ClInclude Include="source\engine\events\quit_event.hpp" />
+    <ClInclude Include="source\app\systems\highlight_system.hpp" />
+    <ClInclude Include="source\app\event\highlight_event.hpp" />
+    <ClInclude Include="source\app\components\highlightable.hpp" />
   </ItemGroup>
 </Project>

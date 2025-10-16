@@ -31,6 +31,7 @@ namespace myge
       _context->getSceneManager().enableFadeOutIn( fade );
       // 次のシーンとしてセットする
       sdl_engine::SceneDependencies dependencies { .registry { registry },
+                                                   .dispatcher{_context->getDispatcher()},
                                                    .resource_manager { resource_manager },
                                                    .input_manager { _context->getInputManager() },
                                                    .scene_manager { _context->getSceneManager() },
@@ -55,7 +56,7 @@ namespace myge
       bool      quit = false;
       SDL_Event event;
 
-      while ( !quit )
+      while ( !quit)
       {
          // msg loop
          while ( SDL_PollEvent( &event ) )
@@ -68,6 +69,8 @@ namespace myge
             _context->getInputManager().handleEvent( event );
          }
          _context->update();
+         //エンジン側でquitが呼ばれた
+         if (_context->isQuit()) { quit = true; }
       }
    }
 }    // namespace myge

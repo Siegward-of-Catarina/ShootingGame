@@ -24,7 +24,7 @@ namespace myge
    {
       _dispatcher.sink<DeadEvent>().connect<&LifeCycleSystem::onEntityDead>( this );
    }
-   LifeCycleSystem::~LifeCycleSystem() {}
+   LifeCycleSystem::~LifeCycleSystem() { _dispatcher.sink<DeadEvent>().disconnect( this ); }
    void LifeCycleSystem::update( const sdl_engine::FrameData& frame_ )
    {
       auto&                     reg { registry() };

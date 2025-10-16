@@ -35,128 +35,122 @@
    to have the SDL_main implementation (from this header) in another source file
    than their main() function, for example if SDL_main requires C++
    and main() is implemented in plain C */
-#if !defined(SDL_MAIN_HANDLED) && !defined(SDL_MAIN_NOIMPL)
+#if !defined( SDL_MAIN_HANDLED ) && !defined( SDL_MAIN_NOIMPL )
 
-    /* the implementations below must be able to use the implement real main(), nothing renamed
-       (the user's main() will be renamed to SDL_main so it can be called from here) */
-    #ifdef main
-        #undef main
-    #endif
+/* the implementations below must be able to use the implement real main(), nothing renamed
+   (the user's main() will be renamed to SDL_main so it can be called from here) */
+#ifdef main
+#undef main
+#endif
 
-    #ifdef SDL_MAIN_USE_CALLBACKS
+#ifdef SDL_MAIN_USE_CALLBACKS
 
-        #if 0
+#if 0
             /* currently there are no platforms that _need_ a magic entry point here
                for callbacks, but if one shows up, implement it here. */
 
-        #else /* use a standard SDL_main, which the app SHOULD NOT ALSO SUPPLY. */
+#else /* use a standard SDL_main, which the app SHOULD NOT ALSO SUPPLY. */
 
-            /* this define makes the normal SDL_main entry point stuff work...we just provide SDL_main() instead of the app. */
-            #define SDL_MAIN_CALLBACK_STANDARD 1
+/* this define makes the normal SDL_main entry point stuff work...we just provide SDL_main() instead of the app. */
+#define SDL_MAIN_CALLBACK_STANDARD 1
 
-            int SDL_main(int argc, char **argv)
-            {
-                return SDL_EnterAppMainCallbacks(argc, argv, SDL_AppInit, SDL_AppIterate, SDL_AppEvent, SDL_AppQuit);
-            }
+int SDL_main( int argc, char** argv )
+{
+   return SDL_EnterAppMainCallbacks( argc, argv, SDL_AppInit, SDL_AppIterate, SDL_AppEvent, SDL_AppQuit );
+}
 
-        #endif  /* platform-specific tests */
+#endif /* platform-specific tests */
 
-    #endif  /* SDL_MAIN_USE_CALLBACKS */
+#endif /* SDL_MAIN_USE_CALLBACKS */
 
+/* set up the usual SDL_main stuff if we're not using callbacks or if we are but need the normal entry point,
+   unless the real entry point needs to be somewhere else entirely, like Android where it's in Java code */
+#if ( !defined( SDL_MAIN_USE_CALLBACKS ) || defined( SDL_MAIN_CALLBACK_STANDARD ) ) && !defined( SDL_MAIN_EXPORTED )
 
-    /* set up the usual SDL_main stuff if we're not using callbacks or if we are but need the normal entry point,
-       unless the real entry point needs to be somewhere else entirely, like Android where it's in Java code */
-    #if (!defined(SDL_MAIN_USE_CALLBACKS) || defined(SDL_MAIN_CALLBACK_STANDARD)) && !defined(SDL_MAIN_EXPORTED)
+#if defined( SDL_PLATFORM_PRIVATE_MAIN )
+/* Private platforms may have their own ideas about entry points. */
+#include "SDL_main_impl_private.h"
 
-        #if defined(SDL_PLATFORM_PRIVATE_MAIN)
-            /* Private platforms may have their own ideas about entry points. */
-            #include "SDL_main_impl_private.h"
+#elif defined( SDL_PLATFORM_WINDOWS )
 
-        #elif defined(SDL_PLATFORM_WINDOWS)
+/* these defines/typedefs are needed for the WinMain() definition */
+#ifndef WINAPI
+#define WINAPI __stdcall
+#endif
 
-            /* these defines/typedefs are needed for the WinMain() definition */
-            #ifndef WINAPI
-                #define WINAPI __stdcall
-            #endif
+typedef struct HINSTANCE__* HINSTANCE;
+typedef char*               LPSTR;
+typedef wchar_t*            PWSTR;
 
-            typedef struct HINSTANCE__ * HINSTANCE;
-            typedef char *LPSTR;
-            typedef wchar_t *PWSTR;
+/* The VC++ compiler needs main/wmain defined, but not for GDK */
+#if defined( _MSC_VER ) && !defined( SDL_PLATFORM_GDK )
 
-            /* The VC++ compiler needs main/wmain defined, but not for GDK */
-            #if defined(_MSC_VER) && !defined(SDL_PLATFORM_GDK)
+/* This is where execution begins [console apps] */
+#if defined( UNICODE ) && UNICODE
+int wmain( int argc, wchar_t* wargv[], wchar_t* wenvp )
+{
+   (void)argc;
+   (void)wargv;
+   (void)wenvp;
+   return SDL_RunApp( 0, NULL, SDL_main, NULL );
+}
+#else  /* ANSI */
+int main( int argc, char* argv[] )
+{
+   (void)argc;
+   (void)argv;
+   return SDL_RunApp( 0, NULL, SDL_main, NULL );
+}
+#endif /* UNICODE */
 
-                /* This is where execution begins [console apps] */
-                #if defined(UNICODE) && UNICODE
-                    int wmain(int argc, wchar_t *wargv[], wchar_t *wenvp)
-                    {
-                        (void)argc;
-                        (void)wargv;
-                        (void)wenvp;
-                        return SDL_RunApp(0, NULL, SDL_main, NULL);
-                    }
-                #else /* ANSI */
-                    int main(int argc, char *argv[])
-                    {
-                        (void)argc;
-                        (void)argv;
-                        return SDL_RunApp(0, NULL, SDL_main, NULL);
-                    }
-                #endif /* UNICODE */
+#endif /* _MSC_VER && ! SDL_PLATFORM_GDK */
 
-            #endif /* _MSC_VER && ! SDL_PLATFORM_GDK */
+/* This is where execution begins [windowed apps and GDK] */
 
-            /* This is where execution begins [windowed apps and GDK] */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
-            #ifdef __cplusplus
-            extern "C" {
-            #endif
+#if defined( UNICODE ) && UNICODE
+   int WINAPI wWinMain( HINSTANCE hInst, HINSTANCE hPrev, PWSTR szCmdLine, int sw )
+#else /* ANSI */
+int WINAPI WinMain( HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw )
+#endif
+   {
+      (void)hInst;
+      (void)hPrev;
+      (void)szCmdLine;
+      (void)sw;
+      return SDL_RunApp( 0, NULL, SDL_main, NULL );
+   }
 
-            #if defined(UNICODE) && UNICODE
-            int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrev, PWSTR szCmdLine, int sw)
-            #else /* ANSI */
-            int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
-            #endif
-            {
-                (void)hInst;
-                (void)hPrev;
-                (void)szCmdLine;
-                (void)sw;
-                return SDL_RunApp(0, NULL, SDL_main, NULL);
-            }
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
-            #ifdef __cplusplus
-            } /* extern "C" */
-            #endif
+/* end of SDL_PLATFORM_WINDOWS impls */
 
-            /* end of SDL_PLATFORM_WINDOWS impls */
+#elif defined( SDL_PLATFORM_NGAGE )
+/* same typedef as in ngage SDKs e32def.h */
+typedef signed int TInt;
+/* TODO: if it turns out that this only works when built as C++,
+         move SDL_PLATFORM_NGAGE into the C++ section in SDL_main.h */
+TInt E32Main() { return SDL_RunApp( 0, NULL, SDL_main, NULL ); }
 
-        #elif defined(SDL_PLATFORM_NGAGE)
-            /* same typedef as in ngage SDKs e32def.h */
-            typedef signed int TInt;
-            /* TODO: if it turns out that this only works when built as C++,
-                     move SDL_PLATFORM_NGAGE into the C++ section in SDL_main.h */
-            TInt E32Main()
-            {
-                return SDL_RunApp(0, NULL, SDL_main, NULL);
-            }
+/* end of SDL_PLATFORM_NGAGE impl */
 
-            /* end of SDL_PLATFORM_NGAGE impl */
+#else /* platforms that use a standard main() and just call SDL_RunApp(), like iOS and 3DS */
+int main( int argc, char* argv[] ) { return SDL_RunApp( argc, argv, SDL_main, NULL ); }
 
-        #else /* platforms that use a standard main() and just call SDL_RunApp(), like iOS and 3DS */
-            int main(int argc, char *argv[])
-            {
-                return SDL_RunApp(argc, argv, SDL_main, NULL);
-            }
+/* end of impls for standard-conforming platforms */
 
-            /* end of impls for standard-conforming platforms */
+#endif /* SDL_PLATFORM_WIN32 etc */
 
-        #endif /* SDL_PLATFORM_WIN32 etc */
+#endif /* !defined(SDL_MAIN_USE_CALLBACKS) || defined(SDL_MAIN_CALLBACK_STANDARD) */
 
-    #endif /* !defined(SDL_MAIN_USE_CALLBACKS) || defined(SDL_MAIN_CALLBACK_STANDARD) */
-
-    /* rename users main() function to SDL_main() so it can be called from the wrappers above */
-    #define main    SDL_main
+/* rename users main() function to SDL_main() so it can be called from the wrappers above */
+#define main SDL_main
 
 #endif /* SDL_MAIN_HANDLED */
 

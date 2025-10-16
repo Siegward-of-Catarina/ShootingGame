@@ -9,32 +9,34 @@
 namespace sdl_engine
 {
    SceneManager::SceneManager( entt::dispatcher& dispatcher_ )
-     : _dispatchar { dispatcher_ }
+     : _dispatcher { dispatcher_ }
      , _fade {}
      , _current_scene { nullptr }
      , _next_scene { nullptr }
      , _enable_update { true }
    {
-      _dispatchar.sink<FadeOutEndEvent>().connect<&SceneManager::onFadeOutEnd>( this );
-      _dispatchar.sink<FadeInEndEvent>().connect<&SceneManager::onFadeInEnd>( this );
+      _dispatcher.sink<FadeOutEndEvent>().connect<&SceneManager::onFadeOutEnd>( this );
+      _dispatcher.sink<FadeInEndEvent>().connect<&SceneManager::onFadeInEnd>( this );
    }
-   SceneManager::~SceneManager() {}
-   void SceneManager::update( EngineContext& context_ )
+   SceneManager::~SceneManager()
    {
-
-      auto& registry { context_.getRegistry() };
+      _dispatcher.sink<FadeOutEndEvent>().disconnect<&SceneManager::onFadeOutEnd>( this );
+      _dispatcher.sink<FadeInEndEvent>().disconnect<&SceneManager::onFadeInEnd>( this );
+   }
+   void SceneManager::update( const FrameData& frame_ )
+   {
       if ( _next_scene && _enable_update )
       {
-         _dispatchar.trigger<FadeOutStartEvent>( { _fade.value() } );
+         _dispatcher.trigger<FadeOutStartEvent>( { _fade.value() } );
          _enable_update = false;
       }
 
-      if ( _enable_update ) { _current_scene->update( context_.getGameTimer().getDeltaTime() ); }
+      if ( _enable_update ) { _current_scene->update( frame_ ); }
    }
    void SceneManager::initStartCurrentScene( std::unique_ptr<Scene> current_ )
    {
       _current_scene = std::move( current_ );
-      _current_scene->initialize( _dispatchar );
+      _current_scene->initialize();
       _current_scene->start();
    }
    void SceneManager::onFadeOutEnd( FadeOutEndEvent& e )
@@ -42,7 +44,7 @@ namespace sdl_engine
       if ( _fade == e.owner )
       {
          _current_scene = std::move( _next_scene );
-         _current_scene->initialize( _dispatchar );
+         _current_scene->initialize();
       }
    }
    void SceneManager::onFadeInEnd( FadeInEndEvent& e )

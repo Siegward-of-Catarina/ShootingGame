@@ -7,7 +7,7 @@ namespace sdl_engine
    class FadeSystem : public SystemInterface
    {
    public:
-      FadeSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatchar_ );
+      FadeSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatcher_ );
       virtual ~FadeSystem() override;
       // SystemInterface を介して継承されました
       virtual void update( const FrameData& frame_ ) override;
@@ -16,7 +16,7 @@ namespace sdl_engine
       void onFadeOutStart( FadeOutStartEvent& e );
 
    private:
-      entt::dispatcher&                _dispatchar;
+      entt::dispatcher&                _dispatcher;
       std::unordered_set<entt::entity> _fades;
    };
 }    // namespace sdl_engine

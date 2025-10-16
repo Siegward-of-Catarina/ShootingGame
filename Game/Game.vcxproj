@@ -107,6 +107,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="source\app\systems\highlight_system.cpp" />
     <ClCompile Include="source\app\systems\shoot_system.cpp">
       <SubType>
       </SubType>
@@ -174,6 +175,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="source\app\components\life.hpp" />
+    <ClInclude Include="source\app\components\highlightable.hpp" />
     <ClInclude Include="source\app\components\serpentine_movement.hpp">
       <SubType>
       </SubType>
@@ -191,11 +193,13 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\app\event\highlight_event.hpp" />
     <ClInclude Include="source\app\systems\collision_system.hpp" />
     <ClInclude Include="source\app\systems\facing_system.hpp">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\app\systems\highlight_system.hpp" />
     <ClInclude Include="source\app\systems\shoot_system.hpp">
       <SubType>
       </SubType>
@@ -209,6 +213,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="source\engine\events\fade_events.hpp" />
+    <ClInclude Include="source\engine\events\quit_event.hpp" />
     <ClInclude Include="source\engine\rendering\resource\color.hpp" />
     <ClInclude Include="source\app\components\lifecycle_tags.hpp" />
     <ClInclude Include="source\app\components\title_input.hpp" />

@@ -18,7 +18,7 @@ namespace sdl_engine
       // color
       if ( auto color { getJsonData<std::array<f32, 4>>( data_, "color" ) }; color )
       {
-         sprt_comp.color.data = color.value();
+         sprt_comp.color = color.value();
       }
       // render orderはオプション。基本はレンダータイプごとにレイヤー分けされる。
       if ( auto order { getJsonData<u32>( data_, "render_order" ) }; order ) { sprt_comp.render_order = order.value(); }

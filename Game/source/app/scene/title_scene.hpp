@@ -9,15 +9,17 @@ namespace myge
       TitleScene( const sdl_engine::SceneDependencies& dependencies_ );
       virtual ~TitleScene() override;
       // Scene を介して継承されました
-      void initialize( entt::dispatcher& dispatcher_ ) override;
+      void initialize() override;
       void start() override;
-      void update( f32 deita_time_ ) override;
+      void update( const sdl_engine::FrameData& frame_ ) override;
 
    private:
       // Scene を介して継承されました
-      virtual void addSystems( entt::dispatcher& dispatcher_ ) override;
+      virtual void addSystems() override;
 
    private:
-      f64 _scene_elapsed_time;
+      f64          _scene_elapsed_time;
+      entt::entity _game_start_ui;
+      entt::entity _exit_game_ui;
    };
 }    // namespace myge

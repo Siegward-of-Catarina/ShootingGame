@@ -26,8 +26,8 @@ namespace
 }    // namespace
 namespace myge
 {
-   CollisionSystem::CollisionSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatchar_ )
-     : SystemInterface { priority_, registry_ }, _dispatchar { dispatchar_ }
+   CollisionSystem::CollisionSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatcher_ )
+     : SystemInterface { priority_, registry_ }, _dispatcher { dispatcher_ }
    {
    }
    CollisionSystem::~CollisionSystem() {}
@@ -88,6 +88,6 @@ namespace myge
       next_bullet:;
       }
 
-      if ( !hit_entites.empty() ) { _dispatchar.trigger<DeadEvent>( { hit_entites } ); }
+      if ( !hit_entites.empty() ) { _dispatcher.trigger<DeadEvent>( { hit_entites } ); }
    }
 }    // namespace myge

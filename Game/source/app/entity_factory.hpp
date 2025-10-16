@@ -16,10 +16,13 @@ namespace myge
       entt::entity createPlayer( json& data_ );
       entt::entity createWandererEnemy( json& data_, sdl_engine::Vector2_f32 offset_pos_ = { 0.0f, 0.0f } );
       entt::entity createBasicUI( json& data_ );
+      entt::entity createHighlightableUI( json& data_ );
+      entt::entity createBasicText( json& data_ );
       entt::entity createBrinkText( json& data_ );
+      entt::entity createHighlightableText( json& data_ );
       std::pair<entt::entity, entt::entity> createBackGround( json& data_ );
       std::vector<entt::entity>             createWandererEnemyArray( json& data_ );
-      std::vector<entt::entity>             createEntities( json& data_ );
+      std::vector<entt::entity>             createEntities( json& data_, const std::vector<std::string>& exclude = {} );
 
    private:
       entt::registry&              _registry;

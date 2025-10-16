@@ -4,6 +4,8 @@
 #include <engine/rendering/renderer.hpp>
 // basic systems
 #include <engine/basic_system.hpp>
+// event
+#include <engine/events/quit_event.hpp>
 namespace sdl_engine
 {
    EngineContext::EngineContext( std::string_view window_name_, i32 window_width_, i32 window_height_ )
@@ -38,13 +40,21 @@ namespace sdl_engine
       _scene_manager = std::make_unique<SceneManager>( _dispatcher );
 
       _system_manager = std::make_unique<SystemManager>( _registry, *_renderer );
+
+      // 終了イベントを登録
+      _dispatcher.sink<QuitEvent>().connect<&EngineContext::onQuitEvent>( this );
    }
-   EngineContext::~EngineContext() {}
+   EngineContext::~EngineContext()
+   {
+      _dispatcher.sink<QuitEvent>().disconnect( this );
+      _registry.clear();
+      _dispatcher.clear();
+   }
 
    void EngineContext::update()
    {
       _game_timer->update();
-      _scene_manager->update( *this );
+      _scene_manager->update( framgeData() );
       _system_manager->updateSystems( framgeData() );
       _renderer->renderPresent();
       _input_manager->update();
@@ -57,4 +67,5 @@ namespace sdl_engine
    {
       return { _game_timer->getDeltaTime(), static_cast<f32>( _window_size.x ), static_cast<f32>( _window_size.y ) };
    }
+   void EngineContext::onQuitEvent( QuitEvent& e ) { is_quit = true; }
 }    // namespace sdl_engine

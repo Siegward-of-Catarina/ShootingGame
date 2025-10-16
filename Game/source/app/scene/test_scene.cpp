@@ -39,11 +39,22 @@ namespace myge
      : Scene { dependencies_ }, _scene_elapsed_time { 0.f }
    {
    }
-   TestScene::~TestScene() { _disp.clear(); }
-   void TestScene::initialize( entt::dispatcher& dispatcher_ )
+   TestScene::~TestScene()
+   {
+
+      auto& system_manager { systemManager() };
+      system_manager.removeSystem<PlayerMovementSystem>();
+      system_manager.removeSystem<ShootSystem>();
+      system_manager.removeSystem<FacingSystem>();
+      system_manager.removeSystem<EnemyMovementSystem>();
+      system_manager.removeSystem<ScreenBoundsSystem>();
+      system_manager.removeSystem<CollisionSystem>();
+      system_manager.removeSystem<OutOfScreenSystem>();
+   }
+   void TestScene::initialize()
    {
       loadSceneData( "game_data/scene_data/game_scene_data.json" );
-      addSystems( dispatcher_ );
+      addSystems();
       createWaves();
       auto& scene_data { sceneData() };
       if ( scene_data.contains( "Entities" ) )
@@ -56,9 +67,9 @@ namespace myge
    }
    void TestScene::start() {}
 
-   void TestScene::update( f32 deita_time_ )
+   void TestScene::update( const sdl_engine::FrameData& frame_ )
    {
-      _scene_elapsed_time += deita_time_;
+      _scene_elapsed_time += frame_.delta_time;
       // かり
       static int idx = 0;
       switch ( scene_state )
@@ -71,7 +82,7 @@ namespace myge
             break;
          case SceneState::Wave :
 
-            _waves[ idx ]->update( deita_time_ );
+            _waves[ idx ]->update( frame_.delta_time );
             if ( _waves[ idx ]->isWaveEnd() ) { scene_state = SceneState::WaveEnd; }
 
             break;
@@ -122,7 +133,7 @@ namespace myge
       entities().emplace_back( factory.createBullet( e.shooter ) );
    }
 
-   void TestScene::addSystems( entt::dispatcher& dispatcher_ )
+   void TestScene::addSystems()
    {
       auto& system_manager { systemManager() };
       system_manager.addSystem( std::make_unique<PlayerMovementSystem>( 1, registry() ) );
@@ -130,8 +141,8 @@ namespace myge
       system_manager.addSystem( std::make_unique<FacingSystem>( 2, registry() ) );
       system_manager.addSystem( std::make_unique<EnemyMovementSystem>( 2, registry() ) );
       system_manager.addSystem( std::make_unique<ScreenBoundsSystem>( 95, registry() ) );
-      system_manager.addSystem( std::make_unique<CollisionSystem>( 95, registry(), dispatcher_ ) );
-      system_manager.addSystem( std::make_unique<OutOfScreenSystem>( 97, registry(), dispatcher_ ) );
+      system_manager.addSystem( std::make_unique<CollisionSystem>( 95, registry(), dispatcher() ) );
+      system_manager.addSystem( std::make_unique<OutOfScreenSystem>( 97, registry(), dispatcher() ) );
    }
 
 }    // namespace myge

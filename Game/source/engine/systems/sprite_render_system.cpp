@@ -13,7 +13,7 @@ namespace sdl_engine
    }
    SpriteRenderSystem::~SpriteRenderSystem() {}
 
-   void SpriteRenderSystem::update(const FrameData& frame_)
+   void SpriteRenderSystem::update( const FrameData& frame_ )
    {
       auto& reg { registry() };
       _renderer.renderClear( .3f, .3f, .3f, 1.f );
@@ -21,8 +21,8 @@ namespace sdl_engine
       // 汎用描画
       auto common_render = []( Renderer& renderer, Sprite& sprt, Transform& trfm )
       {
-         SDL_SetTextureColorModFloat( sprt.texture->texture, sprt.color.r(), sprt.color.g(), sprt.color.b() );
-         SDL_SetTextureAlphaModFloat( sprt.texture->texture, sprt.color.a() );
+         SDL_SetTextureColorModFloat( sprt.texture->texture, sprt.color.r, sprt.color.g, sprt.color.b );
+         SDL_SetTextureAlphaModFloat( sprt.texture->texture, sprt.color.a );
 
          auto harf_w = sprt.dst.w / 2;
          auto harf_h = sprt.dst.h / 2;
@@ -49,23 +49,8 @@ namespace sdl_engine
 
       for ( auto [ entity, sprt, trfm, text ] : reg.view<Sprite, Transform, Text, RenderTextTag>().each() )
       {
-         Transform char_trfm { 0, 0, 0, 1 };
-         for ( u32 i { 0 }, j { 0 }; auto& c : text.text )
-         {
-            if ( c == '\n' )
-            {
-               j++;
-               i = 0;
-               continue;
-            }
-
-            char_trfm.x = trfm.x + ( text.font->width * 1.f * i++ );
-            char_trfm.y = trfm.y + ( text.font->width * 1.f * j );
-            u32 idx     = c - ' ';
-            sprt.src    = text.font->font_rect[ idx ];
-            sprt.dst    = { 0, 0, text.font->width, text.font->height };
-            common_render( _renderer, sprt, char_trfm );
-         }
+         RenderTransform r_trfm { trfm.x, trfm.y, trfm.angle, trfm.scale };
+         _renderer.renderText( sprt.texture->texture, *text.font, text.text, r_trfm, sprt.color );
       }
 
       for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderFadeTag>().each() )

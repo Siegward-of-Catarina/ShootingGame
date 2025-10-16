@@ -23,6 +23,14 @@
 				"file_path": "title.png"
 			},
 			{
+				"name": "start",
+				"file_path": "start.png"
+			},
+			{
+				"name": "exit",
+				"file_path": "exit.png"
+			},
+			{
 				"name": "player_bullet",
 				"file_path": "player_bullet.png"
 			},

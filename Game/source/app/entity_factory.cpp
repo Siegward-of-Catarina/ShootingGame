@@ -1,5 +1,6 @@
 ﻿#include <app/components/bounding_box.hpp>
 #include <app/components/entity_type_tag.hpp>
+#include <app/components/highlightable.hpp>
 #include <app/components/lifecycle_tags.hpp>
 #include <app/components/player_input.hpp>
 #include <app/components/serpentine_movement.hpp>
@@ -34,7 +35,7 @@ namespace myge
       sprt_comp.color   = { 0.0f, 0.0f, 0.0f, 0.0f };
       _registry.emplace<sdl_engine::Sprite>( fade, sprt_comp );
       // fade
-      sdl_engine::Fade fade_comp { .state { sdl_engine::Fade::State::Idel },
+      sdl_engine::Fade fade_comp { .state { sdl_engine::Fade::State::Idle },
                                    .speed { 2.0f },
                                    .black_out_duration { 1.0f } };
       _registry.emplace<sdl_engine::Fade>( fade, fade_comp );
@@ -232,7 +233,20 @@ namespace myge
       _registry.emplace<sdl_engine::Transform>( entity, trfm );
       return entity;
    }
-   entt::entity EntityFactory::createBrinkText( json& data_ )
+   entt::entity EntityFactory::createHighlightableUI( json& data_ )
+   {
+      auto          entity { createBasicUI( data_ ) };    // selectable
+      auto          sprt { _registry.get<sdl_engine::Sprite>( entity ) };
+      auto          inactive_color { sprt.color * 0.5 };
+      Highlightable selectable { false, sprt.color, inactive_color };
+      if ( auto active_data { sdl_engine::getJsonData<u32>( data_, "highlightable" ) }; active_data )
+      {
+         selectable.active = active_data.value();
+      }
+      _registry.emplace<Highlightable>( entity, selectable );
+      return entity;
+   }
+   entt::entity EntityFactory::createBasicText( json& data_ )
    {
       auto entity { _registry.create() };
       // リソース
@@ -283,10 +297,31 @@ namespace myge
       }
       _registry.emplace<sdl_engine::Text>( entity, text );
 
+      return entity;
+   }
+   entt::entity EntityFactory::createBrinkText( json& data_ )
+   {
+      auto entity { createBasicText( data_ ) };
+
       // Brink
       SpriteBrink brink { data_.value( "brink_speed", 1.0f ), data_.value( "brink_min_alpha", 0.3f ) };
       _registry.emplace<SpriteBrink>( entity, brink );
 
+      return entity;
+   }
+   entt::entity EntityFactory::createHighlightableText( json& data_ )
+   {
+
+      auto entity { createBasicText( data_ ) };
+      // selectable
+      auto          sprt { _registry.get<sdl_engine::Sprite>( entity ) };
+      auto          inactive_color { sprt.color * 0.5 };
+      Highlightable selectable { false, sprt.color, inactive_color };
+      if ( auto active_data { sdl_engine::getJsonData<u32>( data_, "highlightable" ) }; active_data )
+      {
+         selectable.active = active_data.value();
+      }
+      _registry.emplace<Highlightable>( entity, selectable );
       return entity;
    }
    std::pair<entt::entity, entt::entity> EntityFactory::createBackGround( json& data_ )
@@ -352,13 +387,18 @@ namespace myge
       }
       return entities;
    }
-   std::vector<entt::entity> EntityFactory::createEntities( json& data_ )
+   std::vector<entt::entity> EntityFactory::createEntities( json& data_, const std::vector<std::string>& exclude_ )
    {
 
       std::vector<entt::entity> entities {};
 
       for ( auto& [ entity_type, data_array ] : data_.items() )
       {
+         // 一斉生成から除外する対象があったら次のタイプへ進む
+         for ( auto& exc : exclude_ )
+         {
+            if ( exc == entity_type ) { goto next_type; }
+         }
          for ( auto& data : data_array )
          {
             if ( entity_type == "en_wanderer_array" )
@@ -388,7 +428,19 @@ namespace myge
                auto entt { createBrinkText( data ) };
                entities.emplace_back( entt );
             }
+            else if ( entity_type == "highlightable_text" )
+            {
+               auto entt { createHighlightableText( data ) };
+               entities.emplace_back( entt );
+            }
+            else if ( entity_type == "highlightable_ui" )
+            {
+               auto entt { createHighlightableUI( data ) };
+               entities.emplace_back( entt );
+            }
          }
+
+      next_type:;
       }
 
       return entities;

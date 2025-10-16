@@ -8,13 +8,16 @@ namespace
 }
 namespace sdl_engine
 {
-   sdl_engine::FadeSystem::FadeSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatchar_ )
-     : SystemInterface { priority_, registry_ }, _dispatchar { dispatchar_ }, _fades {}
+   sdl_engine::FadeSystem::FadeSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatcher_ )
+     : SystemInterface { priority_, registry_ }, _dispatcher { dispatcher_ }, _fades {}
    {
-      _dispatchar.sink<FadeOutStartEvent>().connect<&FadeSystem::onFadeOutStart>( this );
+      _dispatcher.sink<FadeOutStartEvent>().connect<&FadeSystem::onFadeOutStart>( this );
    }
 
-   sdl_engine::FadeSystem::~FadeSystem() {}
+   sdl_engine::FadeSystem::~FadeSystem()
+   {
+      _dispatcher.sink<FadeOutStartEvent>().disconnect<&FadeSystem::onFadeOutStart>( this );
+   }
 
    void sdl_engine::FadeSystem::update( const FrameData& frame_ )
    {
@@ -32,19 +35,19 @@ namespace sdl_engine
          switch ( fade.state )
          {
             case Fade::State::FadeIn :
-               sprt.color.a() -= fade.speed * frame_.delta_time;
-               if ( sprt.color.a() < 0.f )
+               sprt.color.a -= fade.speed * frame_.delta_time;
+               if ( sprt.color.a < 0.f )
                {
-                  sprt.color.a() = 0.0f;
-                  fade.state     = Fade::State::FadeInEnd;
+                  sprt.color.a = 0.0f;
+                  fade.state   = Fade::State::FadeInEnd;
                }
                break;
             case Fade::State::FadeOut :
-               sprt.color.a() += fade.speed * frame_.delta_time;
-               if ( sprt.color.a() > MAX_ALPHA )
+               sprt.color.a += fade.speed * frame_.delta_time;
+               if ( sprt.color.a > MAX_ALPHA )
                {
-                  sprt.color.a() = MAX_ALPHA;
-                  fade.state     = Fade::State::BlackOut;
+                  sprt.color.a = MAX_ALPHA;
+                  fade.state   = Fade::State::BlackOut;
                }
                break;
             case Fade::State::BlackOut :
@@ -56,11 +59,11 @@ namespace sdl_engine
                }
                break;
             case Fade::State::FadeInEnd :
-               fade.state = Fade::State::Idel;
-               _dispatchar.trigger<FadeInEndEvent>( { entity } );
+               fade.state = Fade::State::Idle;
+               _dispatcher.trigger<FadeInEndEvent>( { entity } );
                break;
             case Fade::State::FadeOutEnd :
-               _dispatchar.trigger<FadeOutEndEvent>( { entity } );
+               _dispatcher.trigger<FadeOutEndEvent>( { entity } );
                // OutInの場合Inを始める
                if ( fade.type == Fade::Type::OutIn ) { fade.state = Fade::State::FadeIn; }
                break;

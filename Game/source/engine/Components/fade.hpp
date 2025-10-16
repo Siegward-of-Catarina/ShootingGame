@@ -14,7 +14,7 @@ namespace sdl_engine
 			BlackOut,
 			FadeInEnd,
 			FadeOutEnd,
-			Idel,
+			Idle,
 		} state;
 		enum class Type {
 			OutIn,

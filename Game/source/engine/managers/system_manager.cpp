@@ -6,6 +6,7 @@ namespace sdl_engine
    SystemManager::SystemManager( entt::registry& registry_, Renderer& renderer_ )
      : _systems {}
      , _sorted_view {}
+     , _to_remove {}
      , _sprite_animation_system { std::make_unique<SpriteAnimationSystem>( 99, registry_ ) }
      , _render_system { std::make_unique<SpriteRenderSystem>( 100, registry_, renderer_ ) }
      , _needs_rebuild_view { true }
@@ -24,6 +25,7 @@ namespace sdl_engine
       std::sort( _sorted_view.begin(),
                  _sorted_view.end(),
                  []( const auto& rref, const auto& lref ) { return rref->priority() < lref->priority(); } );
+      _needs_rebuild_view = false;
    }
    void SystemManager::updateSystems( const sdl_engine::FrameData& frame_ )
    {
@@ -31,8 +33,20 @@ namespace sdl_engine
       if ( _needs_rebuild_view ) { rebuildSystemView(); }
 
       for ( auto& system : _sorted_view ) { system->update( frame_ ); }
+
+      // 削除予約されているシステムを削除
+      for ( auto& id : _to_remove )
+      {
+         _systems.erase( id );
+         _needs_rebuild_view = true;
+      }
       // 固定system
       _sprite_animation_system->update( frame_ );
       _render_system->update( frame_ );
+   }
+   void SystemManager::clearSystems()
+   {
+      _systems.clear();
+      _to_remove.clear();
    }
 }    // namespace sdl_engine
