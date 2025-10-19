@@ -6,7 +6,9 @@ namespace myge
    struct PlayerTag
    {
    };
-   struct PlayerBulletTag{};
+   struct PlayerBulletTag
+   {
+   };
    struct EnemyTag
    {
    };

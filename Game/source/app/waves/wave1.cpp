@@ -1,4 +1,5 @@
 ﻿#include <SDL3/SDL.h>
+#include <app/components/affiliation.hpp>
 #include <app/entity_factory.hpp>
 #include <app/waves/wave1.hpp>
 #include <engine/basic_component.hpp>
@@ -23,11 +24,11 @@ namespace myge
       if ( auto entity_data { sdl_engine::getJsonData<json>( wave_data, "Entities" ) }; entity_data )
       {
          EntityFactory factory { registry(), resourceManager() };
-         auto          entts { factory.createEntities( entity_data.value() ) };
+         auto          entts { factory.createEntities( entity_data.value(), typeid( AffilGameScene ) ) };
          entities = entts;
       }
    }
-   void Wave1::update( f32 delta_time_ )
+   void Wave1::update( [[maybe_unused]] f32 delta_time_ )
    {
       i32 i { 0 };
       for ( auto& entity : entities )

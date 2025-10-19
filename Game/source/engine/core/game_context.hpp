@@ -26,6 +26,7 @@ namespace sdl_engine
       ResourceManager&  getResourceManager() { return *_resource_manager; }
       InputManager&     getInputManager() { return *_input_manager; }
       SystemManager&    getSystemManager() { return *_system_manager; }
+      EventListener&    getEventListener() { return *_event_listener; }
       GameTimer&        getGameTimer() { return *_game_timer; }
       entt::registry&   getRegistry() { return _registry; }
       entt::dispatcher& getDispatcher() { return _dispatcher; }
@@ -36,6 +37,7 @@ namespace sdl_engine
       void onQuitEvent( QuitEvent& e );
 
    private:
+      // 依存関係的にこの順で宣言する
       entt::dispatcher                 _dispatcher;
       entt::registry                   _registry;
       SDL_WindowPtr                    _window;
@@ -43,6 +45,7 @@ namespace sdl_engine
       std::unique_ptr<ResourceManager> _resource_manager;
       std::unique_ptr<SystemManager>   _system_manager;
       std::unique_ptr<SceneManager>    _scene_manager;
+      std::unique_ptr<EventListener>   _event_listener;
       std::unique_ptr<InputManager>    _input_manager;
 
       std::unique_ptr<GameTimer> _game_timer;

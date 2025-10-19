@@ -1,31 +1,46 @@
 ﻿#include <engine/core.hpp>
+#include <engine/events/event_listener.hpp>
 #include <engine/managers/resource_manager.hpp>
 #include <engine/scene/scene.hpp>
 namespace sdl_engine
 {
-	Scene::Scene(const SceneDependencies& dependencies_)
-		: _registry{ dependencies_.registry }
-		, _dispatcher{ dependencies_.dispatcher }
-		, _resource_manager{ dependencies_.resource_manager }
-		, _input_manager{ dependencies_.input_manager }
-		, _scene_manager{ dependencies_.scene_manager }
-		, _system_manager{ dependencies_.system_manager }
-	{
-	}
-	Scene::~Scene()
-	{
-		for (auto& entity : _entities)
-		{
-			if (_registry.valid(entity)) { _registry.destroy(entity); }
-		}
-	}
-	void Scene::loadSceneData(std::string_view data_path_)
-	{
-		// jsonからシーンデータを読み込む
-		_scene_data = sdl_engine::loadJson(data_path_.data());
-		std::string msg{ data_path_.data() };
-		msg += "をロードしました";
-		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, msg.c_str());
-	}
+   Scene::Scene( const SceneDependencies& dependencies_, const std::string_view _data_path )
+     : _registry { dependencies_.registry }
+     , _event_listener { nullptr }
+     , _resource_manager { dependencies_.resource_manager }
+     , _input_manager { dependencies_.input_manager }
+     , _scene_manager { dependencies_.scene_manager }
+     , _system_manager { dependencies_.system_manager }
+     , _data_path { _data_path }
+   {
+      _event_listener = std::make_unique<EventListener>( dependencies_.dispatcher );
+   }
+   Scene::~Scene() {}
+
+   void Scene::initialize()
+   {
+      loadSceneData();
+      createEntities();
+      postEntityCreation();
+      addSystems();
+      postSystemAddition();
+      setupEventHandlers();
+   }
+
+   SceneDependencies Scene::sceneDependencies()
+   {
+      return SceneDependencies { _registry,         _event_listener->dispatcher(),
+                                 _resource_manager, _input_manager,
+                                 _scene_manager,    _system_manager };
+   }
+
+   void Scene::loadSceneData()
+   {
+      // jsonからシーンデータを読み込む
+      _scene_data = sdl_engine::loadJson( _data_path.data() );
+      std::string msg { _data_path.data() };
+      msg += "をロードしました";
+      SDL_LogDebug( SDL_LOG_CATEGORY_APPLICATION, msg.c_str() );
+   }
 
 }    // namespace sdl_engine

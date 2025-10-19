@@ -4,18 +4,24 @@
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 #include <engine/graphics.hpp>
+// event
+#include <app/event/key_down_event.hpp>
 
 namespace myge
 {
 
-   InputSystem::InputSystem( i32 priority_, entt::registry& registry_, sdl_engine::InputManager& input_manager_ )
-     : SystemInterface { priority_, registry_ }, _input_manager { input_manager_ }
+   InputSystem::InputSystem( i32                        priority_,
+                             entt::registry&            registry_,
+                             sdl_engine::EventListener& event_listener_,
+                             sdl_engine::InputManager&  input_manager_ )
+     : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }, _input_manager { input_manager_ }
    {
    }
    InputSystem::~InputSystem() {}
-   void InputSystem::update(const sdl_engine::FrameData& frame_)
+   void InputSystem::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ )
    {
-      for ( auto [ entity, input, anim ] : getLogicUpdateable<PlayerInput, sdl_engine::SpriteAnim>( registry() ).each() )
+      for ( auto [ entity, input, anim ] :
+            getLogicUpdateable<PlayerInput, sdl_engine::SpriteAnim>( registry() ).each() )
       {
          anim.current_frame   = 1;
          input.move_direction = { 0.0f, 0.0f };
@@ -37,7 +43,19 @@ namespace myge
 
       for ( auto [ entity, input ] : registry().view<TitleInput>().each() )
       {
-         if ( _input_manager.isAnyKeydown() ) { input.any_key = true; }
+         if ( _input_manager.isKeyDown( SDL_SCANCODE_SPACE ) )
+         {
+
+            _event_listener.trigger<KeyDownEvent>( { KeyDownEvent::EnableKeys::Space } );
+         }
+         if ( _input_manager.isKeyDown( SDL_SCANCODE_UP ) )
+         {
+            _event_listener.trigger<KeyDownEvent>( { KeyDownEvent::EnableKeys::Up } );
+         }
+         if ( _input_manager.isKeyDown( SDL_SCANCODE_DOWN ) )
+         {
+            _event_listener.trigger<KeyDownEvent>( { KeyDownEvent::EnableKeys::Down } );
+         }
       }
    }
 

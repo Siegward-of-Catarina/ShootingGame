@@ -12,8 +12,10 @@ namespace
 }
 namespace myge
 {
-   OutOfScreenSystem::OutOfScreenSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatcher_ )
-     : SystemInterface { priority_, registry_ }, _dispatcher { dispatcher_ }
+   OutOfScreenSystem::OutOfScreenSystem( i32                        priority_,
+                                         entt::registry&            registry_,
+                                         sdl_engine::EventListener& event_listener_ )
+     : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }
    {
    }
    OutOfScreenSystem::~OutOfScreenSystem() {}
@@ -67,7 +69,16 @@ namespace myge
          }
       }
 
+      auto player_bullet_view { getLogicUpdateable<BoundingBox, PlayerBulletTag>( reg ) };
+      for ( auto [ entity, box ] : player_bullet_view.each() )
+      {
+         if ( static_cast<u32>( box.state ) & static_cast<u32>( BoundingBox::State::Out ) )
+         {
+            destroy_entities.emplace( entity );
+         }
+      }
+
       // 消去対象のエンティティがあればDeadにする
-      if ( !destroy_entities.empty() ) { _dispatcher.trigger<DeadEvent>( { destroy_entities } ); }
+      if ( !destroy_entities.empty() ) { _event_listener.trigger<DeadEvent>( { destroy_entities } ); }
    }
 }    // namespace myge

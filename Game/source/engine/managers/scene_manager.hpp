@@ -14,7 +14,10 @@ namespace sdl_engine
       ~SceneManager();
       void update( const FrameData& frame_ );
       // 最初期シーン初期化後開始
-      void   initStartCurrentScene( std::unique_ptr<Scene> current_ );
+      void initStartCurrentScene( std::unique_ptr<Scene> current_ );
+
+      void quitGame();
+
       void   setNextScene( std::unique_ptr<Scene> next_ ) { _next_scene = std::move( next_ ); };
       void   enableFadeOutIn( entt::entity fade_ ) { _fade = fade_; };
       Scene& currentScene() { return *_current_scene; };
@@ -25,10 +28,10 @@ namespace sdl_engine
       void onFadeInEnd( FadeInEndEvent& e );
 
    private:
-      entt::dispatcher&           _dispatcher;
-      std::optional<entt::entity> _fade;
-      std::unique_ptr<Scene>      _current_scene;
-      std::unique_ptr<Scene>      _next_scene;
-      bool                        _enable_update;
+      std::unique_ptr<EventListener> _event_listener;
+      std::optional<entt::entity>    _fade;
+      std::unique_ptr<Scene>         _current_scene;
+      std::unique_ptr<Scene>         _next_scene;
+      bool                           _enable_update;
    };
 }    // namespace sdl_engine

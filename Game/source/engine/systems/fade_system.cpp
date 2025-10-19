@@ -8,16 +8,14 @@ namespace
 }
 namespace sdl_engine
 {
-   sdl_engine::FadeSystem::FadeSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatcher_ )
-     : SystemInterface { priority_, registry_ }, _dispatcher { dispatcher_ }, _fades {}
+   sdl_engine::FadeSystem::FadeSystem( i32 priority_, entt::registry& registry_, EventListener& event_listener_ )
+     : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }, _fades {}
    {
-      _dispatcher.sink<FadeOutStartEvent>().connect<&FadeSystem::onFadeOutStart>( this );
+
+      _event_listener.connect<&FadeSystem::onFadeOutStart, FadeOutStartEvent>( this );
    }
 
-   sdl_engine::FadeSystem::~FadeSystem()
-   {
-      _dispatcher.sink<FadeOutStartEvent>().disconnect<&FadeSystem::onFadeOutStart>( this );
-   }
+   sdl_engine::FadeSystem::~FadeSystem() {}
 
    void sdl_engine::FadeSystem::update( const FrameData& frame_ )
    {
@@ -60,10 +58,10 @@ namespace sdl_engine
                break;
             case Fade::State::FadeInEnd :
                fade.state = Fade::State::Idle;
-               _dispatcher.trigger<FadeInEndEvent>( { entity } );
+               _event_listener.trigger<FadeInEndEvent>( { entity } );
                break;
             case Fade::State::FadeOutEnd :
-               _dispatcher.trigger<FadeOutEndEvent>( { entity } );
+               _event_listener.trigger<FadeOutEndEvent>( { entity } );
                // OutInの場合Inを始める
                if ( fade.type == Fade::Type::OutIn ) { fade.state = Fade::State::FadeIn; }
                break;

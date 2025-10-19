@@ -12,10 +12,10 @@ namespace myge
    };
    struct Shooter
    {
-      f32                     cooldown;
-      f32                     wait;
-      sdl_engine::Vector2_f32 bullet_velocity;
-      BulletType              bullet_type;
+      f32                     cooldown {};
+      f32                     wait {};
+      sdl_engine::Vector2_f32 bullet_velocity {};
+      BulletType              bullet_type { BulletType::Player };
    };
 
    Shooter createShooter( const json& data_ );

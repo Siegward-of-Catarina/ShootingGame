@@ -108,6 +108,7 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="source\app\systems\highlight_system.cpp" />
+    <ClCompile Include="source\app\systems\menu_system.cpp" />
     <ClCompile Include="source\app\systems\shoot_system.cpp">
       <SubType>
       </SubType>
@@ -120,6 +121,10 @@
     <ClCompile Include="source\engine\components\text.cpp" />
     <ClCompile Include="source\engine\components\transform.cpp" />
     <ClCompile Include="source\engine\components\velocity.cpp" />
+    <ClCompile Include="source\engine\events\event_listener.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="source\engine\rendering\resource\color.cpp" />
     <ClCompile Include="source\app\systems\life_cycle_system.cpp" />
     <ClCompile Include="source\app\scene\title_scene.cpp" />
@@ -170,6 +175,11 @@
     <ClCompile Include="source\engine\managers\system_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\app\components\affiliation.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\app\components\button_ui.hpp" />
     <ClInclude Include="source\app\components\entity_type_tag.hpp">
       <SubType>
       </SubType>
@@ -185,21 +195,25 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="source\app\components\sprite_brink.hpp" />
+    <ClInclude Include="source\app\components\title_menu.hpp" />
     <ClInclude Include="source\app\event\dead_event.hpp">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\app\event\key_down_event.hpp" />
     <ClInclude Include="source\app\event\shoot_event.hpp">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="source\app\event\highlight_event.hpp" />
+    <ClInclude Include="source\app\event\title_ui_event.hpp" />
     <ClInclude Include="source\app\systems\collision_system.hpp" />
     <ClInclude Include="source\app\systems\facing_system.hpp">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="source\app\systems\highlight_system.hpp" />
+    <ClInclude Include="source\app\systems\menu_system.hpp" />
     <ClInclude Include="source\app\systems\shoot_system.hpp">
       <SubType>
       </SubType>
@@ -209,6 +223,10 @@
     <ClInclude Include="source\engine\components\render_type_tag.hpp" />
     <ClInclude Include="source\engine\components\text.hpp" />
     <ClInclude Include="source\engine\Components\use_custom_update_transform_tags.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\engine\events\event_listener.hpp">
       <SubType>
       </SubType>
     </ClInclude>

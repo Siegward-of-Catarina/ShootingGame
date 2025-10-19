@@ -2,18 +2,19 @@
 #include <app/event/highlight_event.hpp>
 #include <app/systems/highlight_system.hpp>
 #include <engine/basic_component.hpp>
+#include <engine/events/event_listener.hpp>
 namespace myge
 {
-   HighlightSystem::HighlightSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatcher_ )
-     : SystemInterface { priority_, registry_ }, _dispatcher { dispatcher_ }, _is_changed { true }
+   HighlightSystem::HighlightSystem( i32                        priority_,
+                                     entt::registry&            registry_,
+                                     sdl_engine::EventListener& event_listener_ )
+     : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }, _is_changed { true }
    {
-      _dispatcher.sink<HighlightEvent>().connect<&HighlightSystem::onHighlight>( this );
+
+      _event_listener.connect<&HighlightSystem::onHighlight, HighlightEvent>( this );
    }
-   HighlightSystem::~HighlightSystem()
-   {
-      _dispatcher.sink<HighlightEvent>().disconnect<&HighlightSystem::onHighlight>( this );
-   }
-   void HighlightSystem::update( const sdl_engine::FrameData& frame_ )
+   HighlightSystem::~HighlightSystem() {}
+   void HighlightSystem::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ )
    {
       if ( _is_changed )
       {

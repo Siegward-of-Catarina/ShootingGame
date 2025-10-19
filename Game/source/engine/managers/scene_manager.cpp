@@ -1,33 +1,31 @@
 ﻿#include <engine/basic_component.hpp>
 #include <engine/core.hpp>
-#include <engine/events/fade_events.hpp>
 #include <engine/graphics.hpp>
 #include <engine/managers/scene_manager.hpp>
 #include <engine/scene/scene.hpp>
 #include <engine/systems/fade_system.hpp>
+// event
+#include <engine/events/fade_events.hpp>
+#include <engine/events/quit_event.hpp>
 
 namespace sdl_engine
 {
    SceneManager::SceneManager( entt::dispatcher& dispatcher_ )
-     : _dispatcher { dispatcher_ }
+     : _event_listener { std::make_unique<EventListener>( dispatcher_ ) }
      , _fade {}
      , _current_scene { nullptr }
      , _next_scene { nullptr }
      , _enable_update { true }
    {
-      _dispatcher.sink<FadeOutEndEvent>().connect<&SceneManager::onFadeOutEnd>( this );
-      _dispatcher.sink<FadeInEndEvent>().connect<&SceneManager::onFadeInEnd>( this );
+      _event_listener->connect<&SceneManager::onFadeOutEnd, FadeOutEndEvent>( this );
+      _event_listener->connect<&SceneManager::onFadeInEnd, FadeInEndEvent>( this );
    }
-   SceneManager::~SceneManager()
-   {
-      _dispatcher.sink<FadeOutEndEvent>().disconnect<&SceneManager::onFadeOutEnd>( this );
-      _dispatcher.sink<FadeInEndEvent>().disconnect<&SceneManager::onFadeInEnd>( this );
-   }
+   SceneManager::~SceneManager() {}
    void SceneManager::update( const FrameData& frame_ )
    {
       if ( _next_scene && _enable_update )
       {
-         _dispatcher.trigger<FadeOutStartEvent>( { _fade.value() } );
+         _event_listener->trigger<FadeOutStartEvent>( { _fade.value() } );
          _enable_update = false;
       }
 
@@ -39,12 +37,24 @@ namespace sdl_engine
       _current_scene->initialize();
       _current_scene->start();
    }
+   void SceneManager::quitGame()
+   {
+      // ここではフェードを呼ぶだけ
+      _event_listener->trigger<FadeOutStartEvent>( { _fade.value() } );
+   }
    void SceneManager::onFadeOutEnd( FadeOutEndEvent& e )
    {
       if ( _fade == e.owner )
       {
-         _current_scene = std::move( _next_scene );
-         _current_scene->initialize();
+         if ( _next_scene )
+         {
+            _current_scene = std::move( _next_scene );
+            _current_scene->initialize();
+         }
+         else
+         {    // quitGame時はnext_sceneはセットされないためここで判定する
+            _event_listener->trigger<QuitEvent>( {} );
+         }
       }
    }
    void SceneManager::onFadeInEnd( FadeInEndEvent& e )

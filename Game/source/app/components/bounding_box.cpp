@@ -4,8 +4,8 @@ namespace myge
 {
    BoundingBox createBoundingBox( const json& data_ )
    {
-      BoundingBox box_comp { .harf_width { data_.value( "harf_width", 0 ) },
-                             .harf_hegiht { data_.value( "harf_height", 0 ) },
+      BoundingBox box_comp { .harf_width { data_.value( "harf_width", 0.0f ) },
+                             .harf_hegiht { data_.value( "harf_height", 0.0f ) },
                              .radius { data_.value( "radius", 0.0f ) },
                              .state { BoundingBox::State::None },    // 固定
                              .enable_axis { BoundingBox::EnableAxis::ALL } };
@@ -27,7 +27,7 @@ namespace myge
       }
       return box_comp;
    }
-   BoundingBox createBoundingBox( i32 harf_width_, i32 harf_height_, f32 radius_, BoundingBox::EnableAxis enable_axis_ )
+   BoundingBox createBoundingBox( f32 harf_width_, f32 harf_height_, f32 radius_, BoundingBox::EnableAxis enable_axis_ )
    {
       return BoundingBox { harf_width_, harf_height_, radius_, BoundingBox::State::None, enable_axis_ };
    }

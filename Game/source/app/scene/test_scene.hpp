@@ -10,13 +10,15 @@ namespace myge
    {
    public:
       TestScene( const sdl_engine::SceneDependencies& dependencies_ );
-      ~TestScene();
-      // Scene を介して継承されました
-      virtual void initialize() override;
+      virtual ~TestScene() override;
       virtual void start() override;
       virtual void update( const sdl_engine::FrameData& frame_ ) override;
 
+   private:
       virtual void addSystems() override;
+      virtual void createEntities() override;
+      virtual void postSystemAddition() override;
+      virtual void setupEventHandlers() override;
 
    private:
       void createWaves();
@@ -25,6 +27,5 @@ namespace myge
    private:
       std::vector<std::unique_ptr<Wave>> _waves;
       f64                                _scene_elapsed_time;
-      entt::dispatcher                   _disp;
    };
 }    // namespace myge

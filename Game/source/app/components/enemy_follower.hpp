@@ -5,7 +5,7 @@ namespace myge
 {
    struct EnemyFollower
    {
-      entt::entity leader;
-      u32          delay_frames;
+      entt::entity leader {};
+      u32          delay_frames {};
    };
 }    // namespace myge

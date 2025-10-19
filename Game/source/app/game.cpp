@@ -17,7 +17,6 @@ namespace myge
    {
       _context->loadAssets( "assets/test_assets.json" );
 
-      auto& renderer { _context->getRenderer() };
       auto& resource_manager { _context->getResourceManager() };
       auto& registry { _context->getRegistry() };
 
@@ -26,12 +25,12 @@ namespace myge
       auto          fade = factory.createDefaultFadeEntity( window_size.convertf32().x, window_size.convertf32().y );
 
       _context->getSystemManager().addSystem(
-        std::make_unique<sdl_engine::FadeSystem>( 99, registry, _context->getDispatcher() ) );
+        std::make_unique<sdl_engine::FadeSystem>( 99, registry, _context->getEventListener() ) );
 
       _context->getSceneManager().enableFadeOutIn( fade );
       // 次のシーンとしてセットする
       sdl_engine::SceneDependencies dependencies { .registry { registry },
-                                                   .dispatcher{_context->getDispatcher()},
+                                                   .dispatcher { _context->getDispatcher() },
                                                    .resource_manager { resource_manager },
                                                    .input_manager { _context->getInputManager() },
                                                    .scene_manager { _context->getSceneManager() },
@@ -41,12 +40,12 @@ namespace myge
 
       // アプリケーションの基幹システム
       _context->getSystemManager().addSystem(
-        std::make_unique<InputSystem>( 0, registry, _context->getInputManager() ) );
+        std::make_unique<InputSystem>( 0, registry, _context->getEventListener(), _context->getInputManager() ) );
       _context->getSystemManager().addSystem( std::make_unique<sdl_engine::MovementSystem>( 96, registry ) );
       _context->getSystemManager().addSystem( std::make_unique<sdl_engine::RotateSystem>( 97, registry ) );
       _context->getSystemManager().addSystem( std::make_unique<sdl_engine::ScaleSystem>( 98, registry ) );
       _context->getSystemManager().addSystem(
-        std::make_unique<LifeCycleSystem>( 100, registry, _context->getDispatcher() ) );
+        std::make_unique<LifeCycleSystem>( 100, registry, _context->getEventListener() ) );
    }
 
    Game::~Game() { SDL_Quit(); }
@@ -56,7 +55,7 @@ namespace myge
       bool      quit = false;
       SDL_Event event;
 
-      while ( !quit)
+      while ( !quit )
       {
          // msg loop
          while ( SDL_PollEvent( &event ) )
@@ -69,8 +68,8 @@ namespace myge
             _context->getInputManager().handleEvent( event );
          }
          _context->update();
-         //エンジン側でquitが呼ばれた
-         if (_context->isQuit()) { quit = true; }
+         // エンジン側でquitが呼ばれた
+         if ( _context->isQuit() ) { quit = true; }
       }
    }
 }    // namespace myge

@@ -1,8 +1,8 @@
 ﻿#include <app/components/bounding_box.hpp>
 #include <app/components/entity_type_tag.hpp>
-#include <app/components/lifecycle_tags.hpp>
 #include <app/systems/collision_system.hpp>
 #include <engine/components/transform.hpp>
+#include <engine/events/event_listener.hpp>
 #include <engine/math.hpp>
 // event
 #include <app/event/dead_event.hpp>
@@ -26,12 +26,14 @@ namespace
 }    // namespace
 namespace myge
 {
-   CollisionSystem::CollisionSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatcher_ )
-     : SystemInterface { priority_, registry_ }, _dispatcher { dispatcher_ }
+   CollisionSystem::CollisionSystem( i32                        priority_,
+                                     entt::registry&            registry_,
+                                     sdl_engine::EventListener& event_listener_ )
+     : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }
    {
    }
    CollisionSystem::~CollisionSystem() {}
-   void CollisionSystem::update( const sdl_engine::FrameData& frame_ )
+   void CollisionSystem::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ )
    {
       // first transform second boundingbox
       std::unordered_map<u32, std::vector<Enemy> > enemies {};
@@ -80,14 +82,16 @@ namespace myge
                      SDL_Log( "hit" );
                      hit_entites.emplace( bu );
                      hit_entites.emplace( enemy.entity );
+                     // 一つの弾丸は一つの敵にしか当たらないためgotoで抜ける
                      goto next_bullet;
                   }
                }
             }
          }
+      // 次の弾丸へ
       next_bullet:;
       }
 
-      if ( !hit_entites.empty() ) { _dispatcher.trigger<DeadEvent>( { hit_entites } ); }
+      if ( !hit_entites.empty() ) { _event_listener.trigger<DeadEvent>( { hit_entites } ); }
    }
 }    // namespace myge

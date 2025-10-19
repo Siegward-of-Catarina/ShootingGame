@@ -2,6 +2,7 @@
 #include <engine/core/game_context.hpp>
 #include <engine/core/game_exception.hpp>
 #include <engine/core/game_timer.hpp>
+#include <engine/events/event_listener.hpp>
 #include <engine/managers/input_manager.hpp>
 #include <engine/managers/resource_manager.hpp>
 #include <engine/managers/scene_manager.hpp>

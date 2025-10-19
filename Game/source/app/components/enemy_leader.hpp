@@ -5,7 +5,7 @@ namespace myge
 {
    struct EnemyLeader
    {
-      std::deque<sdl_engine::Transform> history;
+      std::deque<sdl_engine::Transform> history {};
       size_t                            max_history_size {};
    };
 }    // namespace myge

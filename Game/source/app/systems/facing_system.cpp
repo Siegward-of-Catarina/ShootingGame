@@ -7,7 +7,7 @@ namespace myge
 {
    FacingSystem::FacingSystem( i32 priority_, entt::registry& registry_ ) : SystemInterface { priority_, registry_ } {}
    FacingSystem::~FacingSystem() {}
-   void FacingSystem::update( const sdl_engine::FrameData& frame_ )
+   void FacingSystem::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ )
    {
       auto view { getLogicUpdateable<sdl_engine::Transform, sdl_engine::Velocity, EnemyTag>( registry() ) };
       for ( auto [ entt, trfm, velo ] : view.each() )

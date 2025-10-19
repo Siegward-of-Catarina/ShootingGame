@@ -1,4 +1,6 @@
-﻿#include <app/components/bounding_box.hpp>
+﻿#include <app/components/affiliation.hpp>
+#include <app/components/bounding_box.hpp>
+#include <app/components/button_ui.hpp>
 #include <app/components/entity_type_tag.hpp>
 #include <app/components/highlightable.hpp>
 #include <app/components/lifecycle_tags.hpp>
@@ -7,11 +9,13 @@
 #include <app/components/shooter.hpp>
 #include <app/components/sprite_brink.hpp>
 #include <app/components/title_input.hpp>
+#include <app/components/title_menu.hpp>
 #include <app/entity_factory.hpp>
 // basic_components
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 #include <engine/graphics.hpp>
+
 namespace myge
 {
    EntityFactory::EntityFactory( entt::registry& registry_, sdl_engine::ResourceManager& resource_manager_ )
@@ -42,11 +46,14 @@ namespace myge
       _registry.emplace<sdl_engine::RenderFadeTag>( fade );
       return fade;
    }
-   entt::entity EntityFactory::createBullet( entt::entity& shooter_ )
+   entt::entity EntityFactory::createBullet( entt::entity& shooter_, const std::type_index& affiliation_id_ )
    {
       using namespace sdl_engine;
 
       auto bullet_entt { _registry.create() };
+
+      // affiliation
+      setAffiliationTag( bullet_entt, affiliation_id_ );
 
       _registry.emplace<EnteringTag>( bullet_entt );
       _registry.emplace<sdl_engine::RenderableTag>( bullet_entt );
@@ -85,10 +92,13 @@ namespace myge
 
       return bullet_entt;
    }
-   entt::entity EntityFactory::createPlayer( json& data_ )
+   entt::entity EntityFactory::createPlayer( json& data_, const std::type_index& affiliation_id_ )
    {
 
       auto entity { _registry.create() };
+
+      setAffiliationTag( entity, affiliation_id_ );
+
       // リソース
       auto sprt_resource { _resource_manager.getSprite( "player" ) };
       auto sprt_anim_resource { _resource_manager.getSpriteAnim( "player_anim" ) };
@@ -135,9 +145,12 @@ namespace myge
       _registry.emplace<Shooter>( entity, shtr );
       return entity;
    }
-   entt::entity EntityFactory::createWandererEnemy( json& data_, sdl_engine::Vector2_f32 offset_pos_ )
+   entt::entity EntityFactory::createWandererEnemy( json&                   data_,
+                                                    const std::type_index&  affiliation_id_,
+                                                    sdl_engine::Vector2_f32 offset_pos_ )
    {
       auto entity { _registry.create() };
+      setAffiliationTag( entity, affiliation_id_ );
       // リソース
       auto sprt_resource { _resource_manager.getSprite( "enemy1" ) };
       auto sprt_anim_resource { _resource_manager.getSpriteAnim( "enemy1_anim" ) };
@@ -203,10 +216,10 @@ namespace myge
 
       return entity;
    }
-   entt::entity EntityFactory::createBasicUI( json& data_ )
+   entt::entity EntityFactory::createBasicUI( json& data_, const std::type_index& affiliation_id_ )
    {
       auto entity { _registry.create() };
-      // リソース
+      setAffiliationTag( entity, affiliation_id_ );
       // リソース
       entt::resource<sdl_engine::SpriteResource> sprt_resource {};
       if ( auto sp_name { sdl_engine::getJsonData<std::string>( data_, "sprite_name" ) }; sp_name )
@@ -233,22 +246,19 @@ namespace myge
       _registry.emplace<sdl_engine::Transform>( entity, trfm );
       return entity;
    }
-   entt::entity EntityFactory::createHighlightableUI( json& data_ )
+   entt::entity EntityFactory::createHighlightableUI( json& data_, const std::type_index& affiliation_id_ )
    {
-      auto          entity { createBasicUI( data_ ) };    // selectable
+      auto          entity { createBasicUI( data_, affiliation_id_ ) };    // selectable
       auto          sprt { _registry.get<sdl_engine::Sprite>( entity ) };
       auto          inactive_color { sprt.color * 0.5 };
       Highlightable selectable { false, sprt.color, inactive_color };
-      if ( auto active_data { sdl_engine::getJsonData<u32>( data_, "highlightable" ) }; active_data )
-      {
-         selectable.active = active_data.value();
-      }
       _registry.emplace<Highlightable>( entity, selectable );
       return entity;
    }
-   entt::entity EntityFactory::createBasicText( json& data_ )
+   entt::entity EntityFactory::createBasicText( json& data_, const std::type_index& affiliation_id_ )
    {
       auto entity { _registry.create() };
+      setAffiliationTag( entity, affiliation_id_ );
       // リソース
       entt::resource<sdl_engine::SpriteResource> sprt_resource {};
       entt::resource<sdl_engine::FontResource>   font_resource {};
@@ -299,9 +309,9 @@ namespace myge
 
       return entity;
    }
-   entt::entity EntityFactory::createBrinkText( json& data_ )
+   entt::entity EntityFactory::createBrinkText( json& data_, const std::type_index& affiliation_id_ )
    {
-      auto entity { createBasicText( data_ ) };
+      auto entity { createBasicText( data_, affiliation_id_ ) };
 
       // Brink
       SpriteBrink brink { data_.value( "brink_speed", 1.0f ), data_.value( "brink_min_alpha", 0.3f ) };
@@ -309,10 +319,10 @@ namespace myge
 
       return entity;
    }
-   entt::entity EntityFactory::createHighlightableText( json& data_ )
+   entt::entity EntityFactory::createHighlightableText( json& data_, const std::type_index& affiliation_id_ )
    {
 
-      auto entity { createBasicText( data_ ) };
+      auto entity { createBasicText( data_, affiliation_id_ ) };
       // selectable
       auto          sprt { _registry.get<sdl_engine::Sprite>( entity ) };
       auto          inactive_color { sprt.color * 0.5 };
@@ -324,10 +334,33 @@ namespace myge
       _registry.emplace<Highlightable>( entity, selectable );
       return entity;
    }
-   std::pair<entt::entity, entt::entity> EntityFactory::createBackGround( json& data_ )
+   entt::entity EntityFactory::createTitleMenu( json& data_, const std::type_index& affiliation_id_ )
+   {
+      entt::entity entity { _registry.create() };
+      setAffiliationTag( entity, affiliation_id_ );
+      TitleMenu menu { .menu_ui {}, .selected { 0 } };
+      auto      highlight_ui { sdl_engine::getJsonData<json>( data_, "highlightable_ui" ).value() };
+      for ( auto& ui_data : highlight_ui )
+      {
+         auto     ui_entt { createHighlightableUI( ui_data, affiliation_id_ ) };
+         ButtonUI button_ui {};
+         auto     button { sdl_engine::getJsonData<std::string>( ui_data, "button_type" ).value() };
+         if ( button == "start" ) { button_ui.type = ButtonUI::Type::Start; }
+         else if ( button == "exit" ) { button_ui.type = ButtonUI::Type::Exit; }
+         _registry.emplace<ButtonUI>( ui_entt, button_ui );
+         menu.menu_ui.emplace_back( ui_entt );
+      }
+      _registry.emplace<TitleMenu>( entity, menu );
+      _registry.emplace<TitleInput>( entity );
+      return entity;
+   }
+   std::pair<entt::entity, entt::entity> EntityFactory::createBackGround( json&                  data_,
+                                                                          const std::type_index& affiliation_id_ )
    {
 
       std::array<entt::entity, 2> entities { _registry.create(), _registry.create() };
+      setAffiliationTag( entities[ 0 ], affiliation_id_ );
+      setAffiliationTag( entities[ 1 ], affiliation_id_ );
       // リソース
       entt::resource<sdl_engine::SpriteResource> sprt_resource {};
       if ( auto sp_name { sdl_engine::getJsonData<std::string>( data_, "sprite_name" ) }; sp_name )
@@ -372,7 +405,8 @@ namespace myge
 
       return std::pair { entities[ 0 ], entities[ 1 ] };
    }
-   std::vector<entt::entity> EntityFactory::createWandererEnemyArray( json& data_ )
+   std::vector<entt::entity> EntityFactory::createWandererEnemyArray( json&                  data_,
+                                                                      const std::type_index& affiliation_id_ )
    {
       auto                      num_enemy { sdl_engine::getJsonData<u32>( data_, "num" ) };
       auto                      offset { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "offset_pos" ) };
@@ -383,11 +417,13 @@ namespace myge
          sdl_engine::Vector2_f32 vec;
          vec.x         = offset.value()[ 0 ] * i;
          vec.y         = offset.value()[ 1 ] * i;
-         entities[ i ] = createWandererEnemy( data_, vec );
+         entities[ i ] = createWandererEnemy( data_, affiliation_id_, vec );
       }
       return entities;
    }
-   std::vector<entt::entity> EntityFactory::createEntities( json& data_, const std::vector<std::string>& exclude_ )
+   std::vector<entt::entity> EntityFactory::createEntities( json&                           data_,
+                                                            const std::type_index&          affiliation_id_,
+                                                            const std::vector<std::string>& exclude_ )
    {
 
       std::vector<entt::entity> entities {};
@@ -403,39 +439,44 @@ namespace myge
          {
             if ( entity_type == "en_wanderer_array" )
             {
-               auto entts { createWandererEnemyArray( data ) };
+               auto entts { createWandererEnemyArray( data, affiliation_id_ ) };
                entities.insert(
                  entities.end(), std::make_move_iterator( entts.begin() ), std::make_move_iterator( entts.end() ) );
             }
             else if ( entity_type == "player" )
             {
-               auto entt { createPlayer( data ) };
+               auto entt { createPlayer( data, affiliation_id_ ) };
                entities.emplace_back( entt );
             }
             else if ( entity_type == "background" )
             {
-               auto entts { createBackGround( data ) };
+               auto entts { createBackGround( data, affiliation_id_ ) };
                entities.emplace_back( entts.first );
                entities.emplace_back( entts.second );
             }
             else if ( entity_type == "basic_ui" )
             {
-               auto entt { createBasicUI( data ) };
+               auto entt { createBasicUI( data, affiliation_id_ ) };
                entities.emplace_back( entt );
             }
             else if ( entity_type == "brink_text" )
             {
-               auto entt { createBrinkText( data ) };
+               auto entt { createBrinkText( data, affiliation_id_ ) };
                entities.emplace_back( entt );
             }
             else if ( entity_type == "highlightable_text" )
             {
-               auto entt { createHighlightableText( data ) };
+               auto entt { createHighlightableText( data, affiliation_id_ ) };
                entities.emplace_back( entt );
             }
             else if ( entity_type == "highlightable_ui" )
             {
-               auto entt { createHighlightableUI( data ) };
+               auto entt { createHighlightableUI( data, affiliation_id_ ) };
+               entities.emplace_back( entt );
+            }
+            else if ( entity_type == "menu" )
+            {
+               auto entt { createTitleMenu( data, affiliation_id_ ) };
                entities.emplace_back( entt );
             }
          }
@@ -444,5 +485,10 @@ namespace myge
       }
 
       return entities;
+   }
+   void EntityFactory::setAffiliationTag( entt::entity entity_, const std::type_index& affiliation_id_ )
+   {
+      if ( affiliation_id_ == typeid( AffilTitleScene ) ) { _registry.emplace<AffilTitleScene>( entity_ ); }
+      else if ( affiliation_id_ == typeid( AffilGameScene ) ) { _registry.emplace<AffilGameScene>( entity_ ); }
    }
 }    // namespace myge

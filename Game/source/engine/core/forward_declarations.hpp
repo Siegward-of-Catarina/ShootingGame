@@ -15,7 +15,7 @@ namespace sdl_engine
    struct FrameData;
    class GameTimer;
    class Scene;
-
+   class EventListener;
    class SceneManager;
    class ResourceManager;
    class InputManager;

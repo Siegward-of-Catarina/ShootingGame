@@ -9,18 +9,11 @@ namespace myge
    };
    struct PlayerMovement
    {
-      f32 speed;
+      f32 speed {};
    };
    struct PlayerAutoPilotMove
    {
-      PlayerMovementType type;
-      f32                auto_pilot_time;
-   };
-   struct PlayerInputMove
-   {
-      u32 up_code;
-      u32 down_code;
-      u32 left_code;
-      u32 right_code;
+      PlayerMovementType type {};
+      f32                auto_pilot_time {};
    };
 }    // namespace myge

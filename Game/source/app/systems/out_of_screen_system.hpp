@@ -6,12 +6,12 @@ namespace myge
    class OutOfScreenSystem final : public sdl_engine::SystemInterface
    {
    public:
-      OutOfScreenSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& dispatcher_ );
+      OutOfScreenSystem( i32 priority_, entt::registry& registry_, sdl_engine::EventListener& event_listener_ );
       virtual ~OutOfScreenSystem() override;
       // SystemInterface を介して継承されました
       virtual void update( const sdl_engine::FrameData& frame_ ) override;
 
    private:
-      entt::dispatcher& _dispatcher;
+      sdl_engine::EventListener& _event_listener;
    };
 }    // namespace myge

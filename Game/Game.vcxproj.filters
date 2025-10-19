@@ -55,6 +55,8 @@
     <ClCompile Include="source\app\systems\facing_system.cpp" />
     <ClCompile Include="source\app\systems\collision_system.cpp" />
     <ClCompile Include="source\app\systems\highlight_system.cpp" />
+    <ClCompile Include="source\app\systems\menu_system.cpp" />
+    <ClCompile Include="source\engine\events\event_listener.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -194,5 +196,12 @@
     <ClInclude Include="source\app\systems\highlight_system.hpp" />
     <ClInclude Include="source\app\event\highlight_event.hpp" />
     <ClInclude Include="source\app\components\highlightable.hpp" />
+    <ClInclude Include="source\app\systems\menu_system.hpp" />
+    <ClInclude Include="source\app\event\title_ui_event.hpp" />
+    <ClInclude Include="source\app\event\key_down_event.hpp" />
+    <ClInclude Include="source\app\components\title_menu.hpp" />
+    <ClInclude Include="source\app\components\button_ui.hpp" />
+    <ClInclude Include="source\app\components\affiliation.hpp" />
+    <ClInclude Include="source\engine\events\event_listener.hpp" />
   </ItemGroup>
 </Project>

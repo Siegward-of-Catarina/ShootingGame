@@ -13,7 +13,7 @@ namespace sdl_engine
    }
    SpriteRenderSystem::~SpriteRenderSystem() {}
 
-   void SpriteRenderSystem::update( const FrameData& frame_ )
+   void SpriteRenderSystem::update( [[maybe_unused]] const FrameData& frame_ )
    {
       auto& reg { registry() };
       _renderer.renderClear( .3f, .3f, .3f, 1.f );

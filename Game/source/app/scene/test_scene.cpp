@@ -5,6 +5,7 @@
 #include <app/waves/wave.hpp>
 #include <app/waves/wave_factory.hpp>
 // system
+#include <app/components/affiliation.hpp>
 #include <app/systems/collision_system.hpp>
 #include <app/systems/enemy_movement_system.hpp>
 #include <app/systems/facing_system.hpp>
@@ -36,12 +37,11 @@ namespace
 namespace myge
 {
    TestScene::TestScene( const sdl_engine::SceneDependencies& dependencies_ )
-     : Scene { dependencies_ }, _scene_elapsed_time { 0.f }
+     : Scene { dependencies_, "game_data/scene_data/game_scene_data.json" }, _scene_elapsed_time { 0.f }
    {
    }
    TestScene::~TestScene()
    {
-
       auto& system_manager { systemManager() };
       system_manager.removeSystem<PlayerMovementSystem>();
       system_manager.removeSystem<ShootSystem>();
@@ -50,20 +50,11 @@ namespace myge
       system_manager.removeSystem<ScreenBoundsSystem>();
       system_manager.removeSystem<CollisionSystem>();
       system_manager.removeSystem<OutOfScreenSystem>();
-   }
-   void TestScene::initialize()
-   {
-      loadSceneData( "game_data/scene_data/game_scene_data.json" );
-      addSystems();
-      createWaves();
-      auto& scene_data { sceneData() };
-      if ( scene_data.contains( "Entities" ) )
+      auto& reg { registry() };
+      for ( auto entt : reg.view<AffilGameScene>() )
       {
-         EntityFactory factory { registry(), resourceManager() };
-         setEntities( factory.createEntities( scene_data.at( "Entities" ) ) );
+         if ( reg.valid( entt ) ) { reg.destroy( entt ); }
       }
-      _disp.sink<ShootEvent>().connect<&TestScene::onShoot>( this );
-      scene_state = SceneState::WaveStart;
    }
    void TestScene::start() {}
 
@@ -130,19 +121,34 @@ namespace myge
    void TestScene::onShoot( ShootEvent& e )
    {
       EntityFactory factory { registry(), resourceManager() };
-      entities().emplace_back( factory.createBullet( e.shooter ) );
+      factory.createBullet( e.shooter, typeid( AffilGameScene ) );
    }
+
+   void TestScene::createEntities()
+   {
+      createWaves();
+      auto& scene_data { sceneData() };
+      if ( auto entity_data { sdl_engine::getJsonData<json>( scene_data, "Entities" ) }; entity_data )
+      {
+         EntityFactory factory { registry(), resourceManager() };
+         factory.createEntities( entity_data.value(), typeid( AffilGameScene ) );
+      }
+   }
+
+   void TestScene::postSystemAddition() { scene_state = SceneState::WaveStart; }
+
+   void TestScene::setupEventHandlers() { eventListener().connect<&TestScene::onShoot, ShootEvent>( this ); }
 
    void TestScene::addSystems()
    {
       auto& system_manager { systemManager() };
       system_manager.addSystem( std::make_unique<PlayerMovementSystem>( 1, registry() ) );
-      system_manager.addSystem( std::make_unique<ShootSystem>( 2, registry(), _disp ) );
+      system_manager.addSystem( std::make_unique<ShootSystem>( 2, registry(), eventListener() ) );
       system_manager.addSystem( std::make_unique<FacingSystem>( 2, registry() ) );
       system_manager.addSystem( std::make_unique<EnemyMovementSystem>( 2, registry() ) );
       system_manager.addSystem( std::make_unique<ScreenBoundsSystem>( 95, registry() ) );
-      system_manager.addSystem( std::make_unique<CollisionSystem>( 95, registry(), dispatcher() ) );
-      system_manager.addSystem( std::make_unique<OutOfScreenSystem>( 97, registry(), dispatcher() ) );
+      system_manager.addSystem( std::make_unique<CollisionSystem>( 95, registry(), eventListener() ) );
+      system_manager.addSystem( std::make_unique<OutOfScreenSystem>( 97, registry(), eventListener() ) );
    }
 
 }    // namespace myge

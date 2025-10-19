@@ -1,6 +1,7 @@
 ﻿#include <SDL3/SDL.h>
 #include <engine/core.hpp>
 #include <engine/core/game_context.hpp>
+#include <engine/events/event_listener.hpp>
 #include <engine/rendering/renderer.hpp>
 // basic systems
 #include <engine/basic_system.hpp>
@@ -10,13 +11,17 @@ namespace sdl_engine
 {
    EngineContext::EngineContext( std::string_view window_name_, i32 window_width_, i32 window_height_ )
      : _window { nullptr, nullptr }
+     , _dispatcher {}
+     , _registry {}
+     , _window_size { window_width_, window_height_ }
      , _renderer { nullptr }
      , _scene_manager { nullptr }
      , _resource_manager { nullptr }
      , _input_manager { nullptr }
-     , _window_size { window_width_, window_height_ }
      , _system_manager { nullptr }
-     , _game_timer { std::make_unique<GameTimer>() }
+     , _event_listener { nullptr }
+     , _game_timer { nullptr }
+     , is_quit { false }
    {
       if ( !SDL_Init( SDL_INIT_VIDEO ) ) { throw GameException( "SDLの初期化に失敗しました" ); }
 
@@ -37,16 +42,16 @@ namespace sdl_engine
 
       _input_manager = std::make_unique<InputManager>();
 
-      _scene_manager = std::make_unique<SceneManager>( _dispatcher );
-
+      _event_listener = std::make_unique<EventListener>( _dispatcher );
       _system_manager = std::make_unique<SystemManager>( _registry, *_renderer );
+      _scene_manager  = std::make_unique<SceneManager>( _dispatcher );
+      _game_timer     = std::make_unique<GameTimer>();
 
       // 終了イベントを登録
-      _dispatcher.sink<QuitEvent>().connect<&EngineContext::onQuitEvent>( this );
+      _event_listener->connect<&EngineContext::onQuitEvent, QuitEvent>( this );
    }
    EngineContext::~EngineContext()
    {
-      _dispatcher.sink<QuitEvent>().disconnect( this );
       _registry.clear();
       _dispatcher.clear();
    }
@@ -67,5 +72,5 @@ namespace sdl_engine
    {
       return { _game_timer->getDeltaTime(), static_cast<f32>( _window_size.x ), static_cast<f32>( _window_size.y ) };
    }
-   void EngineContext::onQuitEvent( QuitEvent& e ) { is_quit = true; }
+   void EngineContext::onQuitEvent( [[maybe_unused]] QuitEvent& e ) { is_quit = true; }
 }    // namespace sdl_engine

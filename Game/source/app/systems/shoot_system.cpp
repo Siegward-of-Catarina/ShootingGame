@@ -9,21 +9,21 @@
 namespace myge
 {
 
-   ShootSystem::ShootSystem( i32 priority_, entt::registry& registry_, entt::dispatcher& disp_ )
-     : SystemInterface { priority_, registry_ }, _disp { disp_ }
+   ShootSystem::ShootSystem( i32 priority_, entt::registry& registry_, sdl_engine::EventListener& event_listener_ )
+     : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }
    {
    }
 
    ShootSystem::~ShootSystem() {}
 
-   void ShootSystem::update(const sdl_engine::FrameData& frame_)
+   void ShootSystem::update( const sdl_engine::FrameData& frame_ )
    {
       for ( auto [ entity, shooter, input ] : getLogicUpdateable<Shooter, PlayerInput>( registry() ).each() )
       {
          if ( shooter.wait > shooter.cooldown && input.isShoot )
          {
             shooter.wait = 0.0f;
-            _disp.trigger( ShootEvent { entity } );
+            _event_listener.trigger<ShootEvent>( { entity } );
          }
          else if ( shooter.wait <= shooter.cooldown ) { shooter.wait += frame_.delta_time; }
       }

@@ -5,8 +5,8 @@ namespace myge
 {
    struct BoundingBox
    {
-      i32 harf_width;
-      i32 harf_hegiht;
+      f32 harf_width;
+      f32 harf_hegiht;
       f32 radius;
       enum class State
       {
@@ -37,8 +37,8 @@ namespace myge
    };
 
    BoundingBox createBoundingBox( const json& data_ );
-   BoundingBox createBoundingBox( i32                     harf_width_,
-                                  i32                     harf_height_,
+   BoundingBox createBoundingBox( f32                     harf_width_,
+                                  f32                     harf_height_,
                                   f32                     radius_,
                                   BoundingBox::EnableAxis enable_axis_ = BoundingBox::EnableAxis::ALL );
 }    // namespace myge
