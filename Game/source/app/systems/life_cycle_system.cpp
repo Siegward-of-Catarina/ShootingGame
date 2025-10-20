@@ -5,6 +5,7 @@
 #include <engine/core.hpp>
 // event
 #include <app/event/dead_event.hpp>
+#include <engine/events/sprite_anim_end_event.hpp>
 namespace
 {
    constexpr std::size_t DEFAULT_RESERVE_SIZE = 128;
@@ -23,6 +24,7 @@ namespace myge
       _change_tag_entities.reserve( DEFAULT_RESERVE_SIZE );
       _dead_entities.reserve( DEFAULT_RESERVE_SIZE );
       _event_listener.connect<&LifeCycleSystem::onEntityDead, DeadEvent>( this );
+      _event_listener.connect<&LifeCycleSystem::onSpriteAnimEnd, sdl_engine::SpriteAnimEndEvent>( this );
    }
    LifeCycleSystem::~LifeCycleSystem() {}
    void LifeCycleSystem::update( const sdl_engine::FrameData& frame_ )
@@ -49,6 +51,7 @@ namespace myge
 
       for ( auto& entity : _change_tag_entities )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          if ( reg.all_of<WaitTag>( entity ) )
          {
             reg.remove<WaitTag>( entity );
@@ -99,6 +102,7 @@ namespace myge
       auto& reg { registry() };
       for ( auto [ entity, wait ] : reg.view<WaitTag>().each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          wait.elapsed += frame_.delta_time;
          if ( wait.elapsed > wait.wait_time ) { _change_tag_entities.emplace_back( entity ); }
       }
@@ -109,6 +113,7 @@ namespace myge
       // 画面外で存在しているとき
       for ( auto [ entity ] : reg.view<EnteringTag>().each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          // 削除対象のエンティティがどのレイヤにいるか調べる
          if ( reg.all_of<sdl_engine::RenderBackgroundTag>( entity ) ) { _need_sort |= NEED_SORT_BACKGROUND_TAG; }
          else if ( reg.all_of<sdl_engine::RenderGameSpriteTag>( entity ) ) { _need_sort |= NEED_SORT_GAMESPRITE_TAG; }
@@ -143,6 +148,7 @@ namespace myge
       auto& reg { registry() };
       for ( auto [ entity ] : reg.view<DeadTag>().each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          _dead_entities.emplace_back( entity );
          // 削除対象のエンティティがどのレイヤにいるか調べる
          if ( reg.all_of<sdl_engine::RenderBackgroundTag>( entity ) ) { _need_sort |= NEED_SORT_BACKGROUND_TAG; }
@@ -160,6 +166,17 @@ namespace myge
       auto& reg { registry() };
       for ( auto entity : e.dead_entities )
       {
+         if ( !reg.valid( entity ) ) { continue; }
+         reg.remove<ActiveTag>( entity );
+         reg.emplace<DeadTag>( entity );
+      }
+   }
+   void LifeCycleSystem::onSpriteAnimEnd( sdl_engine::SpriteAnimEndEvent& e )
+   {
+      auto& reg { registry() };
+      for ( auto entity : e.animend_entities )
+      {
+         if ( !reg.valid( entity ) ) { continue; }
          reg.remove<ActiveTag>( entity );
          reg.emplace<DeadTag>( entity );
       }

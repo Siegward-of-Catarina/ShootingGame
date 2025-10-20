@@ -2,7 +2,7 @@
 #include <engine/forward.hpp>
 namespace myge
 {
-   struct DeadEvent
+   struct AppedDeadEffectEvent
    {
       std::vector<entt::entity> dead_entities;
    };

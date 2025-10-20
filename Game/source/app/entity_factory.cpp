@@ -1,6 +1,11 @@
-﻿#include <app/components/affiliation.hpp>
+﻿// my header
+#include <app/entity_factory.hpp>
+
+// components
+#include <app/components/affiliation.hpp>
 #include <app/components/bounding_box.hpp>
 #include <app/components/button_ui.hpp>
+#include <app/components/damage.hpp>
 #include <app/components/entity_type_tag.hpp>
 #include <app/components/highlightable.hpp>
 #include <app/components/lifecycle_tags.hpp>
@@ -8,9 +13,10 @@
 #include <app/components/serpentine_movement.hpp>
 #include <app/components/shooter.hpp>
 #include <app/components/sprite_brink.hpp>
+#include <app/components/status.hpp>
 #include <app/components/title_input.hpp>
 #include <app/components/title_menu.hpp>
-#include <app/entity_factory.hpp>
+
 // basic_components
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
@@ -50,47 +56,90 @@ namespace myge
    {
       using namespace sdl_engine;
 
-      auto bullet_entt { _registry.create() };
+      auto entity { _registry.create() };
 
       // affiliation
-      setAffiliationTag( bullet_entt, affiliation_id_ );
+      setAffiliationTag( entity, affiliation_id_ );
 
-      _registry.emplace<EnteringTag>( bullet_entt );
-      _registry.emplace<sdl_engine::RenderableTag>( bullet_entt );
-      _registry.emplace<sdl_engine::UpdateableTag>( bullet_entt );
-      _registry.emplace<PlayerBulletTag>( bullet_entt );
-      _registry.emplace<RenderGameSpriteTag>( bullet_entt );
+      _registry.emplace<EnteringTag>( entity );
+      _registry.emplace<sdl_engine::RenderableTag>( entity );
+      _registry.emplace<sdl_engine::UpdateableTag>( entity );
+      _registry.emplace<PlayerBulletTag>( entity );
+      _registry.emplace<RenderGameSpriteTag>( entity );
 
-      // shooterの位置をそのまま使う
-      auto trfm_comp { _registry.get<Transform>( shooter_ ) };
-      _registry.emplace<Transform>( bullet_entt, trfm_comp );
+      // [status]
+      {
+         Status status { .hp { 1 }, .max_hp { 1 }, .atk { 1 } };
+         _registry.emplace<Status>( entity, status );
+      }
 
-      // shooterがvelocityを決める
+      // [transform] shooterの位置をそのまま使う
+      {
+         auto trfm_comp { _registry.get<Transform>( shooter_ ) };
+         _registry.emplace<Transform>( entity, trfm_comp );
+      }
+      // [velocity] shooterがvelocityを決める
       const auto& shooter_comp { _registry.get<Shooter>( shooter_ ) };
-      Velocity    velo { shooter_comp.bullet_velocity.x, shooter_comp.bullet_velocity.y };
-      _registry.emplace<Velocity>( bullet_entt, velo );
+      {
+         Velocity velo { shooter_comp.bullet_velocity.x, shooter_comp.bullet_velocity.y };
+         _registry.emplace<Velocity>( entity, velo );
+      }
 
       // sprite
       Sprite sprt_comp {};
-      switch ( shooter_comp.bullet_type )
       {
-         case BulletType::Player : sprt_comp = createSprite( _resource_manager.getSprite( "player_bullet" ) ); break;
-         case BulletType::Enemy_small :
-            sprt_comp = createSprite( _resource_manager.getSprite( "enemy_bullet_small" ) );
-            break;
-         case BulletType::Enemy_Large :
-            sprt_comp = createSprite( _resource_manager.getSprite( "player_bullet" ) );
-            break;
+         switch ( shooter_comp.bullet_type )
+         {
+            case BulletType::Player : sprt_comp = createSprite( _resource_manager.getSprite( "player_bullet" ) ); break;
+
+            case BulletType::Enemy_small :
+               sprt_comp = createSprite( _resource_manager.getSprite( "enemy_bullet_small" ) );
+               break;
+            case BulletType::Enemy_Large :
+               sprt_comp = createSprite( _resource_manager.getSprite( "player_bullet" ) );
+               break;
+         }
+         _registry.emplace<Sprite>( entity, sprt_comp );
       }
-      _registry.emplace<Sprite>( bullet_entt, sprt_comp );
+      // bbox
+      {
+         auto        harf_w { sprt_comp.src.w / 2 };
+         auto        harf_h { sprt_comp.src.h / 2 };
+         BoundingBox bb_comp { harf_w, harf_h, harf_w, BoundingBox::State::None, BoundingBox::EnableAxis::ALL };
+         _registry.emplace<BoundingBox>( entity, bb_comp );
+      }
+      return entity;
+   }
+   entt::entity EntityFactory::createHitEffect( sdl_engine::Transform& bullet_trfm_,
+                                                const std::type_index& affiliation_id_ )
+   {
 
-      //
-      auto        harf_w { sprt_comp.src.w / 2 };
-      auto        harf_h { sprt_comp.src.h / 2 };
-      BoundingBox bb_comp { harf_w, harf_h, harf_w, BoundingBox::State::None, BoundingBox::EnableAxis::ALL };
-      _registry.emplace<BoundingBox>( bullet_entt, bb_comp );
+      auto sprite = _resource_manager.getSprite( "enemy_bullet_hit" );
+      auto anim   = _resource_manager.getSpriteAnim( "enemy_bullet_hit_anim" );
 
-      return bullet_entt;
+      auto entity { _registry.create() };
+      setAffiliationTag( entity, affiliation_id_ );
+
+      _registry.emplace<EnteringTag>( entity );
+      _registry.emplace<sdl_engine::RenderableTag>( entity );
+      _registry.emplace<sdl_engine::UpdateableTag>( entity );
+      _registry.emplace<PlayerBulletTag>( entity );
+      _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
+
+      // shooterの位置をそのまま使う
+      auto trfm { bullet_trfm_ };
+      _registry.emplace<sdl_engine::Transform>( entity, trfm );
+
+      auto sprt { sdl_engine::createSprite( sprite ) };
+      auto sprt_anim { sdl_engine::createSpriteAnim( anim ) };
+
+      sprt.dst.w = static_cast<f32>( anim->frame_width );
+      sprt.dst.h = static_cast<f32>( anim->frame_height );
+
+      _registry.emplace<sdl_engine::Sprite>( entity, sprt );
+      _registry.emplace<sdl_engine::SpriteAnim>( entity, sprt_anim );
+
+      return entity;
    }
    entt::entity EntityFactory::createPlayer( json& data_, const std::type_index& affiliation_id_ )
    {
@@ -102,6 +151,8 @@ namespace myge
       // リソース
       auto sprt_resource { _resource_manager.getSprite( "player" ) };
       auto sprt_anim_resource { _resource_manager.getSpriteAnim( "player_anim" ) };
+      f32  frame_w { static_cast<f32>( sprt_anim_resource->frame_width ) };
+      f32  frame_h { static_cast<f32>( sprt_anim_resource->frame_height ) };
 
       // タグコンポーネント
       _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
@@ -109,40 +160,56 @@ namespace myge
       _registry.emplace<myge::EnteringTag>( entity );
       _registry.emplace<sdl_engine::RenderableTag>( entity );
       _registry.emplace<sdl_engine::UpdateableTag>( entity );
-      // Sprite
-      sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
-      sprt.dst.w = static_cast<f32>( sprt_anim_resource->frame_width );
-      sprt.dst.h = static_cast<f32>( sprt_anim_resource->frame_height );
-      _registry.emplace<sdl_engine::Sprite>( entity, sprt );
-      // SpriteAnim
-      sdl_engine::SpriteAnim sp_anim { sdl_engine::createSpriteAnim( sprt_anim_resource, 1u ) };
-      _registry.emplace<sdl_engine::SpriteAnim>( entity, sp_anim );
-      // Transform
-      sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
-      if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
+      // [Sprite]
       {
-         // array生成に対応するためoffsetを足す
-         trfm.x = pos.value()[ 0 ];
-         trfm.y = pos.value()[ 1 ];
+         sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
+         sprt.dst.w = frame_w;
+         sprt.dst.h = frame_h;
+         _registry.emplace<sdl_engine::Sprite>( entity, sprt );
       }
-      _registry.emplace<sdl_engine::Transform>( entity, trfm );
-      // Velocity
-      sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
-      if ( auto dir { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "dir" ) }; dir )
+      // [SpriteAnim]
       {
-         velo.dx = dir.value()[ 0 ];
-         velo.dy = dir.value()[ 1 ];
+         sdl_engine::SpriteAnim sp_anim { sdl_engine::createSpriteAnim( sprt_anim_resource, 1u ) };
+         _registry.emplace<sdl_engine::SpriteAnim>( entity, sp_anim );
       }
-      _registry.emplace<sdl_engine::Velocity>( entity, velo );
-      // BBox
-      BoundingBox box { createBoundingBox( sprt.dst.w / 2, sprt.dst.h / 2, 20.0f ) };
-      _registry.emplace<BoundingBox>( entity, box );
-      // Input
+      // [Transform]
+      {
+         sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
+         if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
+         {
+            // array生成に対応するためoffsetを足す
+            trfm.x = pos.value()[ 0 ];
+            trfm.y = pos.value()[ 1 ];
+         }
+         _registry.emplace<sdl_engine::Transform>( entity, trfm );
+      }
+      // [Velocity]
+      {
+         sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
+         if ( auto dir { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "dir" ) }; dir )
+         {
+            velo.dx = dir.value()[ 0 ];
+            velo.dy = dir.value()[ 1 ];
+         }
+         _registry.emplace<sdl_engine::Velocity>( entity, velo );
+      }
+      // [BBox]
+      {
+         BoundingBox box { createBoundingBox( frame_w / 2, frame_h / 2, 20.0f ) };
+         _registry.emplace<BoundingBox>( entity, box );
+      }
+      // [Input]
       _registry.emplace<PlayerInput>( entity );
-      // Shooter
-      Shooter shtr { createShooter( 0.2f, sdl_engine::Vector2_f32 { 0.0f, -500.0f }, "enemy_small" ) };
-
-      _registry.emplace<Shooter>( entity, shtr );
+      // [Shooter]
+      {
+         Shooter shtr { createShooter( 0.2f, sdl_engine::Vector2_f32 { 0.0f, -500.0f }, "enemy_small" ) };
+         _registry.emplace<Shooter>( entity, shtr );
+      }
+      // [status]
+      {
+         Status status { .hp { 3 }, .max_hp { 3 }, .atk { 0 } };
+         _registry.emplace<Status>( entity, status );
+      }
       return entity;
    }
    entt::entity EntityFactory::createWandererEnemy( json&                   data_,
@@ -154,65 +221,88 @@ namespace myge
       // リソース
       auto sprt_resource { _resource_manager.getSprite( "enemy1" ) };
       auto sprt_anim_resource { _resource_manager.getSpriteAnim( "enemy1_anim" ) };
+
+      f32 frame_w { static_cast<f32>( sprt_anim_resource->frame_width ) };
+      f32 frame_h { static_cast<f32>( sprt_anim_resource->frame_height ) };
+
       // タグ
-      _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
-      _registry.emplace<EnemyTag>( entity );
-      if ( auto interval { sdl_engine::getJsonData<f32>( data_, "interval" ) }; interval )
       {
-         _registry.emplace<WaitTag>( entity, interval.value(), 0.0f );
-      }
-      else
-      {
-         _registry.emplace<EnteringTag>( entity );
-         _registry.emplace<sdl_engine::RenderableTag>( entity );
-         _registry.emplace<sdl_engine::UpdateableTag>( entity );
-      }
-
-      sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
-      sprt.dst.w = static_cast<f32>( sprt_anim_resource->frame_width );
-      sprt.dst.h = static_cast<f32>( sprt_anim_resource->frame_height );
-      _registry.emplace<sdl_engine::Sprite>( entity, sprt );
-
-      sdl_engine::SpriteAnim sp_anim { sdl_engine::createSpriteAnim( sprt_anim_resource ) };
-      _registry.emplace<sdl_engine::SpriteAnim>( entity, sp_anim );
-
-      sdl_engine::Transform trfm { 0.0f, 0.0f, 180.0f, 1.0f };
-      if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
-      {
-         // array生成に対応するためoffsetを足す
-         trfm.x = pos.value()[ 0 ] + offset_pos_.x;
-         trfm.y = pos.value()[ 1 ] + offset_pos_.y;
-      }
-      _registry.emplace<sdl_engine::Transform>( entity, trfm );
-
-      sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
-      if ( auto dir { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "dir" ) }; dir )
-      {
-         velo.dx = dir.value()[ 0 ];
-         velo.dy = dir.value()[ 1 ];
-      }
-      _registry.emplace<sdl_engine::Velocity>( entity, velo );
-
-      auto move_data { sdl_engine::getJsonData<json>( data_, "movement" ) };
-      if ( move_data )
-      {
-         auto data { move_data.value() };
-         auto type { sdl_engine::getJsonData<std::string>( data, "type" ) };
-         if ( type == "serpentine" )
+         _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
+         _registry.emplace<EnemyTag>( entity );
+         if ( auto interval { sdl_engine::getJsonData<f32>( data_, "interval" ) }; interval )
          {
-            SerpentineMovement serpent {
-               .center_x { trfm.x },
-               .amplitude { data.value( "amplitude", 200.0f ) },
-               .frequency { data.value( "frequency", 2.0f ) },
-               .move_speed { data.value( "speed", 200.0f ) },
-               .move_threshold { data.value( "threshold", 0.9f ) },
-            };
-            _registry.emplace<SerpentineMovement>( entity, serpent );
+            _registry.emplace<WaitTag>( entity, interval.value(), 0.0f );
+         }
+         else
+         {
+            _registry.emplace<EnteringTag>( entity );
+            _registry.emplace<sdl_engine::RenderableTag>( entity );
+            _registry.emplace<sdl_engine::UpdateableTag>( entity );
          }
       }
-
-      BoundingBox box { createBoundingBox( sprt.dst.w / 2, sprt.dst.h / 2, 20.0f ) };
-      _registry.emplace<BoundingBox>( entity, box );
+      // [Sprite]
+      {
+         sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
+         sprt.dst.w = frame_w;
+         sprt.dst.h = frame_h;
+         _registry.emplace<sdl_engine::Sprite>( entity, sprt );
+      }
+      // [SpriteAnim]
+      {
+         sdl_engine::SpriteAnim sp_anim { sdl_engine::createSpriteAnim( sprt_anim_resource ) };
+         _registry.emplace<sdl_engine::SpriteAnim>( entity, sp_anim );
+      }
+      // [Transform]
+      sdl_engine::Transform trfm { 0.0f, 0.0f, 180.0f, 1.0f };
+      {
+         if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
+         {
+            // array生成に対応するためoffsetを足す
+            trfm.x = pos.value()[ 0 ] + offset_pos_.x;
+            trfm.y = pos.value()[ 1 ] + offset_pos_.y;
+         }
+         _registry.emplace<sdl_engine::Transform>( entity, trfm );
+      }
+      // [Velocity]
+      {
+         sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
+         if ( auto dir { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "dir" ) }; dir )
+         {
+            velo.dx = dir.value()[ 0 ];
+            velo.dy = dir.value()[ 1 ];
+         }
+         _registry.emplace<sdl_engine::Velocity>( entity, velo );
+      }
+      // [movement]
+      {
+         auto move_data { sdl_engine::getJsonData<json>( data_, "movement" ) };
+         if ( move_data )
+         {
+            auto data { move_data.value() };
+            auto type { sdl_engine::getJsonData<std::string>( data, "type" ) };
+            if ( type == "serpentine" )
+            {
+               SerpentineMovement serpent {
+                  .center_x { trfm.x },
+                  .amplitude { data.value( "amplitude", 200.0f ) },
+                  .frequency { data.value( "frequency", 2.0f ) },
+                  .move_speed { data.value( "speed", 200.0f ) },
+                  .move_threshold { data.value( "threshold", 0.9f ) },
+               };
+               _registry.emplace<SerpentineMovement>( entity, serpent );
+            }
+         }
+      }
+      // [BBox]
+      {
+         BoundingBox box { createBoundingBox( frame_w / 2, frame_h / 2, 20.0f ) };
+         _registry.emplace<BoundingBox>( entity, box );
+      }
+      // [Status]
+      {
+         Status status { .hp { 3 }, .max_hp { 3 }, .atk { 1 } };
+         _registry.emplace<Status>( entity, status );
+      }
 
       return entity;
    }

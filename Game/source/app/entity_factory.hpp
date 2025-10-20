@@ -3,9 +3,11 @@
 #include <engine/math.hpp>
 #include <engine/utils.hpp>
 #include <typeindex>
+namespace sdl_engine {
+    struct Transform;
+}
 namespace myge
 {
-
    class EntityFactory
    {
    public:
@@ -14,6 +16,7 @@ namespace myge
 
       entt::entity createDefaultFadeEntity( f32 window_width, f32 window_height );
       entt::entity createBullet( entt::entity& shooter_, const std::type_index& affiliation_id_ );
+      entt::entity createHitEffect(sdl_engine::Transform& bullet_trfm_, const std::type_index& affiliation_id_);
       entt::entity createPlayer( json& data_, const std::type_index& affiliation_id_ );
       entt::entity createWandererEnemy( json&                   data_,
                                         const std::type_index&  affiliation_id_,

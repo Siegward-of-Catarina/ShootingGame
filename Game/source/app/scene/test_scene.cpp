@@ -9,13 +9,15 @@
 #include <app/systems/collision_system.hpp>
 #include <app/systems/enemy_movement_system.hpp>
 #include <app/systems/facing_system.hpp>
-#include <app/systems/input_system.hpp>
-#include <app/systems/life_cycle_system.hpp>
+#include <app/systems/hit_resolution_system.hpp>
 #include <app/systems/out_of_screen_system.hpp>
 #include <app/systems/player_movement_system.hpp>
 #include <app/systems/screen_bounds_system.hpp>
 #include <app/systems/shoot_system.hpp>
+#include <app/systems/sprite_brink_system.hpp>
 // event
+#include <app/event/append_dead_effect_event.hpp>
+#include <app/event/dead_event.hpp>
 #include <app/event/shoot_event.hpp>
 // engine
 #include <engine/basic_component.hpp>
@@ -49,7 +51,9 @@ namespace myge
       system_manager.removeSystem<EnemyMovementSystem>();
       system_manager.removeSystem<ScreenBoundsSystem>();
       system_manager.removeSystem<CollisionSystem>();
+      system_manager.removeSystem<HitResolutionSystem>();
       system_manager.removeSystem<OutOfScreenSystem>();
+      system_manager.removeSystem<SpriteBrinkSystem>();
       auto& reg { registry() };
       for ( auto entt : reg.view<AffilGameScene>() )
       {
@@ -124,6 +128,21 @@ namespace myge
       factory.createBullet( e.shooter, typeid( AffilGameScene ) );
    }
 
+   void TestScene::onDeadEffectAppend( AppedDeadEffectEvent& e )
+   {
+      auto& reg { registry() };
+      for ( auto& entt : e.dead_entities )
+      {
+         if ( reg.valid( entt ) && reg.all_of<sdl_engine::Transform>( entt ) )
+         {
+            auto          trfm { reg.get<sdl_engine::Transform>( entt ) };
+            EntityFactory factory { registry(), resourceManager() };
+            factory.createHitEffect( trfm, typeid( AffilGameScene ) );
+         }
+      }
+      eventListener().trigger<DeadEvent>( { e.dead_entities } );
+   }
+
    void TestScene::createEntities()
    {
       createWaves();
@@ -137,7 +156,11 @@ namespace myge
 
    void TestScene::postSystemAddition() { scene_state = SceneState::WaveStart; }
 
-   void TestScene::setupEventHandlers() { eventListener().connect<&TestScene::onShoot, ShootEvent>( this ); }
+   void TestScene::setupEventHandlers()
+   {
+      eventListener().connect<&TestScene::onShoot, ShootEvent>( this );
+      eventListener().connect<&TestScene::onDeadEffectAppend, AppedDeadEffectEvent>( this );
+   }
 
    void TestScene::addSystems()
    {
@@ -148,7 +171,9 @@ namespace myge
       system_manager.addSystem( std::make_unique<EnemyMovementSystem>( 2, registry() ) );
       system_manager.addSystem( std::make_unique<ScreenBoundsSystem>( 95, registry() ) );
       system_manager.addSystem( std::make_unique<CollisionSystem>( 95, registry(), eventListener() ) );
+      system_manager.addSystem( std::make_unique<HitResolutionSystem>( 96, registry(), eventListener() ) );
       system_manager.addSystem( std::make_unique<OutOfScreenSystem>( 97, registry(), eventListener() ) );
+      system_manager.addSystem( std::make_unique<SpriteBrinkSystem>( 98, registry() ) );
    }
 
 }    // namespace myge

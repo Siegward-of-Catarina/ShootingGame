@@ -4,14 +4,19 @@
 namespace myge
 {
 
-   class CollisionSystem final : public sdl_engine::SystemInterface
+   struct HitEvent;
+
+   class HitResolutionSystem final : public sdl_engine::SystemInterface
    {
    public:
-      CollisionSystem( i32 priority_, entt::registry& registry_, sdl_engine::EventListener& event_listener_ );
-      virtual ~CollisionSystem() override;
+      HitResolutionSystem( i32 priority_, entt::registry& registry_, sdl_engine::EventListener& event_listener_ );
+      virtual ~HitResolutionSystem() override;
 
       // SystemInterface を介して継承されました
       virtual void update( const sdl_engine::FrameData& frame_ ) override;
+
+   private:
+      void onHit( HitEvent& e );
 
    private:
       sdl_engine::EventListener& _event_listener;

@@ -57,6 +57,7 @@
     <ClCompile Include="source\app\systems\highlight_system.cpp" />
     <ClCompile Include="source\app\systems\menu_system.cpp" />
     <ClCompile Include="source\engine\events\event_listener.cpp" />
+    <ClCompile Include="source\app\systems\hit_resolution_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -203,5 +204,11 @@
     <ClInclude Include="source\app\components\button_ui.hpp" />
     <ClInclude Include="source\app\components\affiliation.hpp" />
     <ClInclude Include="source\engine\events\event_listener.hpp" />
+    <ClInclude Include="source\app\components\damage.hpp" />
+    <ClInclude Include="source\app\components\status.hpp" />
+    <ClInclude Include="source\engine\events\sprite_anim_end_event.hpp" />
+    <ClInclude Include="source\app\event\hit_event.hpp" />
+    <ClInclude Include="source\app\systems\hit_resolution_system.hpp" />
+    <ClInclude Include="source\app\event\append_dead_effect_event.hpp" />
   </ItemGroup>
 </Project>

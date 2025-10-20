@@ -8,11 +8,12 @@ namespace sdl_engine
 {
    ScaleSystem::ScaleSystem( i32 priority_, entt::registry& registry_ ) : SystemInterface { priority_, registry_ } {}
    ScaleSystem::~ScaleSystem() {}
-   void ScaleSystem::update(const FrameData& frame_)
+   void ScaleSystem::update( const FrameData& frame_ )
    {
-
-      for ( auto [ entity, trfm, velo ] : registry().view<Transform, Velocity>( entt::exclude<DirectScaleTag> ).each() )
+      auto& reg { registry() };
+      for ( auto [ entity, trfm, velo ] : reg.view<Transform, Velocity>( entt::exclude<DirectScaleTag> ).each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          trfm.scale += velo.scale_rate * frame_.delta_time;
       }
    }

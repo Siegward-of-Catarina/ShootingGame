@@ -9,7 +9,7 @@ namespace sdl_engine
    class SystemManager
    {
    public:
-      SystemManager( entt::registry& registry_, Renderer& renderer_ );
+      SystemManager( entt::registry& registry_, Renderer& renderer_, EventListener& event_listener_ );
       ~SystemManager();
       void updateSystems( const sdl_engine::FrameData& frame_ );
       void clearSystems();

@@ -27,6 +27,7 @@ namespace myge
         reg ) };
       for ( auto [ entity, box, trfm, velo ] : player_view.each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          if ( box.state == BoundingBox::State::PartinalTop )
          {
             velo.dy = 0;
@@ -54,27 +55,30 @@ namespace myge
       };
       for ( auto [ entity, box, trfm, velo ] : background_view.each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          // screen2枚分戻す
          if ( box.state == BoundingBox::State::OutBottom ) { trfm.y -= frame_.window_height * 2; }
       }
 
-      std::unordered_set<entt::entity> destroy_entities {};
-      auto                             enemy_view { getLogicUpdateable<BoundingBox, EnemyTag>( reg ) };
+      std::vector<entt::entity> destroy_entities {};
+      auto                      enemy_view { getLogicUpdateable<BoundingBox, EnemyTag>( reg ) };
 
       for ( auto [ entity, box ] : enemy_view.each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          if ( static_cast<u32>( box.state ) & static_cast<u32>( BoundingBox::State::Out ) )
          {
-            destroy_entities.emplace( entity );
+            destroy_entities.emplace_back( entity );
          }
       }
 
       auto player_bullet_view { getLogicUpdateable<BoundingBox, PlayerBulletTag>( reg ) };
       for ( auto [ entity, box ] : player_bullet_view.each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          if ( static_cast<u32>( box.state ) & static_cast<u32>( BoundingBox::State::Out ) )
          {
-            destroy_entities.emplace( entity );
+            destroy_entities.emplace_back( entity );
          }
       }
 

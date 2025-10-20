@@ -19,8 +19,10 @@ namespace myge
       if ( _is_changed )
       {
          _is_changed = false;
+         auto& reg { registry() };
          for ( auto [ entt, select_txt, sprt ] : registry().view<Highlightable, sdl_engine::Sprite>().each() )
          {
+            if ( !reg.valid( entt ) ) { continue; }
             if ( select_txt.active ) { sprt.color = select_txt.active_color; }
             else { sprt.color = select_txt.inactive_color; }
          }
@@ -28,8 +30,10 @@ namespace myge
    }
    void HighlightSystem::onHighlight( HighlightEvent& e )
    {
-      for ( auto [ entt, select_txt ] : registry().view<Highlightable>().each() )
+      auto& reg { registry() };
+      for ( auto [ entt, select_txt ] : reg.view<Highlightable>().each() )
       {
+         if ( !reg.valid( entt ) ) { continue; }
          if ( entt == e.entity ) { select_txt.active = true; }
          else { select_txt.active = false; }
       }

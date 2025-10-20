@@ -27,6 +27,17 @@ namespace sdl_engine
          _dispatcher.enqueue<Event>( std::forward<Event>( event ) );
       }
 
+      template<typename Event>
+      bool empty()
+      {
+          return _dispatcher.sink<Event>().empty();
+      }
+
+      size_t size()
+      {
+          return _dispatcher.size();
+      }
+
       // 接続されているイベントをすべてクリア
       void clear() { _connections.clear(); }
 

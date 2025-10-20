@@ -10,11 +10,13 @@ namespace sdl_engine
    {
    }
    MovementSystem::~MovementSystem() {}
-   void MovementSystem::update(const FrameData& frame_)
+   void MovementSystem::update( const FrameData& frame_ )
    {
-       auto view{ getUpdateable<Transform, Velocity>(registry()) };
+      auto& reg { registry() };
+      auto  view { getUpdateable<Transform, Velocity>( reg ) };
       for ( auto [ entity, trfm, velo ] : view.each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          trfm.x += velo.dx * frame_.delta_time;
          trfm.y += velo.dy * frame_.delta_time;
       }

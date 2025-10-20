@@ -8,10 +8,12 @@ namespace sdl_engine
 {
    RotateSystem::RotateSystem( i32 priority_, entt::registry& registry_ ) : SystemInterface { priority_, registry_ } {}
    RotateSystem::~RotateSystem() {}
-   void RotateSystem::update(const FrameData& frame_)
+   void RotateSystem::update( const FrameData& frame_ )
    {
-      for ( auto [ entity, trfm, velo ] : registry().view<Transform, Velocity>( entt::exclude<DirectRotateTag> ).each() )
+      auto& reg { registry() };
+      for ( auto [ entity, trfm, velo ] : reg.view<Transform, Velocity>( entt::exclude<DirectRotateTag> ).each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          trfm.angle += velo.anguler * frame_.delta_time;
       }
    }

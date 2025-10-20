@@ -34,27 +34,32 @@ namespace sdl_engine
       // タグごとに描画
       for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderBackgroundTag>().each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          common_render( _renderer, sprt, trfm );
       }
 
       for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderGameSpriteTag>().each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          common_render( _renderer, sprt, trfm );
       }
 
       for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderUITag>().each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          common_render( _renderer, sprt, trfm );
       }
 
       for ( auto [ entity, sprt, trfm, text ] : reg.view<Sprite, Transform, Text, RenderTextTag>().each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          RenderTransform r_trfm { trfm.x, trfm.y, trfm.angle, trfm.scale };
          _renderer.renderText( sprt.texture->texture, *text.font, text.text, r_trfm, sprt.color );
       }
 
       for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderFadeTag>().each() )
       {
+         if ( !reg.valid( entity ) ) { continue; }
          common_render( _renderer, sprt, trfm );
       }
    }
