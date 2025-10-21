@@ -4,6 +4,7 @@
 #include <engine/core.hpp>
 // component
 #include <app/components/damage.hpp>
+#include <app/components/entity_type_tag.hpp>
 #include <app/components/status.hpp>
 // event
 #include <app/event/append_dead_effect_event.hpp>
@@ -30,18 +31,30 @@ namespace myge
          {
             auto& status_a = reg.get<Status>( entity_a );
             auto& status_b = reg.get<Status>( entity_b );
-            status_a.hp -= status_b.atk;
-            status_b.hp -= status_a.atk;
-
-            if ( status_a.hp <= 0 ) { dead_entities.emplace_back( entity_a ); }
-            else { damage_entities.emplace_back( entity_a ); }
-            if ( status_b.hp <= 0 ) { dead_entities.emplace_back( entity_b ); }
+            if ( !reg.all_of<DamageEffect>( entity_a ) && status_b.atk )
+            {
+               status_a.hp -= status_b.atk;
+               if ( status_a.hp <= 0 ) { dead_entities.emplace_back( entity_a ); }
+               else { damage_entities.emplace_back( entity_a ); }
+            }
+            if ( !reg.all_of<DamageEffect>( entity_b ) && status_a.atk )
+            {
+               status_b.hp -= status_a.atk;
+               if ( status_b.hp <= 0 ) { dead_entities.emplace_back( entity_b ); }
+               else { damage_entities.emplace_back( entity_b ); }
+            }
          }
       }
       for ( auto entity : damage_entities )
       {
          if ( !reg.valid( entity ) || reg.all_of<DamageEffect>( entity ) ) { continue; }
-         reg.emplace<DamageEffect>( entity, DamageEffect { 1.0f, 1.0f / 10, 0.0f } );
+         DamageEffect damage { 0.5f, 0.5f / 7, 0.0f };
+         if ( reg.all_of<PlayerTag>( entity ) )
+         {
+            damage.red_brink_time = 1.0f;
+            damage.brink_interval = 1.0f / 15;
+         }
+         reg.emplace<DamageEffect>( entity, damage );
       }
       _event_listener.trigger<AppedDeadEffectEvent>( { dead_entities } );
    }

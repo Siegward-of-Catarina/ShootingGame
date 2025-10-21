@@ -27,8 +27,8 @@
 			{
 				"pos": [ 300.0, 750.0 ],
 				"dir": [ 0.0, -150.0 ],
-				"shoot_cooldown": 0.2,
-				"bullet_velocity": [ 0.0, -500.0 ]
+				"shoot_cooldown": 0.1,
+				"bullet_velocity": [ 0.0, -700.0 ]
 			}
 		]
 	}

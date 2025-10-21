@@ -14,6 +14,7 @@ namespace myge
       virtual void update( const sdl_engine::FrameData& frame_ ) override;
 
    private:
-      sdl_engine::EventListener& _event_listener;
+      sdl_engine::EventListener&                         _event_listener;
+      std::vector<std::pair<entt::entity, entt::entity>> _hit_entity_pairs;
    };
 }    // namespace myge

@@ -9,21 +9,34 @@ using json = nlohmann::json;
 
 namespace sdl_engine
 {
-   json loadJson( std::string_view assets_path_ );
+   json                                              loadJson( std::string_view assets_path_ );
+   std::optional<std::reference_wrapper<const json>> tryGetJson( const json& data_, std::string_view key_ );
    template<typename T>
-   std::optional<T> getJsonData( const json&                data_,
-                                 std::string_view           key_,
-                                 const std::source_location location = std::source_location::current() )
+   const T getRequireData( const json& data_, std::string_view key_ )
    {
-      if ( !data_.contains( key_.data() ) )
+      auto key_str = std::string( key_ );
+      if ( !data_.contains( key_str ) || data_.at( key_str ).is_null() )
       {
-         std::string file_full_path { location.file_name() };
-         auto        file_name { file_full_path.substr( file_full_path.rfind( '\\' ) + 1 ) };
-         std::string error_msg =
-           "loadJsonNotice::[" + std::string( key_ ) + "]:キーが存在しないため初期値で生成されました";
-         SDL_LogDebug( SDL_LOG_CATEGORY_APPLICATION, error_msg.c_str() );
-         return std::nullopt;
+         std::string error_msg = "loadJsonNotice::[" + key_str + "]:必須キーが存在しないため作成できません";
+         throw GameException( error_msg.c_str() );
       }
-      return data_.at( key_.data() ).get<T>();
+      return data_.at( key_str ).get<T>();
    }
+   template<typename T>
+   const T
+   getOptionalData( const json& data_, std::string_view key_, const T& default_value_, bool log_when_default_ = false )
+   {
+      auto key_str = std::string( key_ );
+      if ( !data_.contains( key_str ) || data_.at( key_str ).is_null() )
+      {
+         if ( log_when_default_ )
+         {
+            std::string error_msg = "loadJsonNotice::[" + key_str + "]:キーが存在しないため初期値で生成されました";
+            SDL_LogDebug( SDL_LOG_CATEGORY_APPLICATION, error_msg.c_str() );
+         }
+         return default_value_;
+      }
+      return data_.at( key_str ).get<T>();
+   }
+
 }    // namespace sdl_engine

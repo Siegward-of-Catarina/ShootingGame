@@ -17,4 +17,10 @@ namespace sdl_engine
 
       return json::parse( stream );
    }
+   std::optional<std::reference_wrapper<const json>> tryGetJson( const json& data_, std::string_view key_ )
+   {
+      auto d { data_.find( std::string( key_ ) ) };
+      if ( d == data_.end() || data_.is_null() ) { return std::nullopt; }
+      return std::cref( *d );
+   }
 }    // namespace sdl_engine

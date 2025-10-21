@@ -110,12 +110,27 @@ namespace myge
       }
       return entity;
    }
-   entt::entity EntityFactory::createHitEffect( sdl_engine::Transform& bullet_trfm_,
-                                                const std::type_index& affiliation_id_ )
+   entt::entity EntityFactory::createHitEffect( entt::entity dead_entt_, const std::type_index& affiliation_id_ )
    {
 
-      auto sprite = _resource_manager.getSprite( "enemy_bullet_hit" );
-      auto anim   = _resource_manager.getSpriteAnim( "enemy_bullet_hit_anim" );
+      entt::resource<sdl_engine::SpriteResource>     sprite {};
+      entt::resource<sdl_engine::SpriteAnimResource> anim {};
+
+      if ( _registry.all_of<PlayerBulletTag>( dead_entt_ ) )
+      {
+         sprite = _resource_manager.getSprite( "enemy_bullet_hit" );
+         anim   = _resource_manager.getSpriteAnim( "enemy_bullet_hit_anim" );
+      }
+      else if ( _registry.all_of<EnemyTag>( dead_entt_ ) )
+      {
+         sprite = _resource_manager.getSprite( "enemy_dead" );
+         anim   = _resource_manager.getSpriteAnim( "enemy_dead_anim" );
+      }
+      else if ( _registry.all_of<PlayerTag>( dead_entt_ ) )
+      {
+         sprite = _resource_manager.getSprite( "enemy_dead" );
+         anim   = _resource_manager.getSpriteAnim( "enemy_dead_anim" );
+      }
 
       auto entity { _registry.create() };
       setAffiliationTag( entity, affiliation_id_ );
@@ -123,11 +138,10 @@ namespace myge
       _registry.emplace<EnteringTag>( entity );
       _registry.emplace<sdl_engine::RenderableTag>( entity );
       _registry.emplace<sdl_engine::UpdateableTag>( entity );
-      _registry.emplace<PlayerBulletTag>( entity );
       _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
 
       // shooterの位置をそのまま使う
-      auto trfm { bullet_trfm_ };
+      auto trfm { _registry.get<sdl_engine::Transform>( dead_entt_ ) };
       _registry.emplace<sdl_engine::Transform>( entity, trfm );
 
       auto sprt { sdl_engine::createSprite( sprite ) };
@@ -141,7 +155,7 @@ namespace myge
 
       return entity;
    }
-   entt::entity EntityFactory::createPlayer( json& data_, const std::type_index& affiliation_id_ )
+   entt::entity EntityFactory::createPlayer( const json& data_, const std::type_index& affiliation_id_ )
    {
 
       auto entity { _registry.create() };
@@ -175,22 +189,18 @@ namespace myge
       // [Transform]
       {
          sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
-         if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
-         {
-            // array生成に対応するためoffsetを足す
-            trfm.x = pos.value()[ 0 ];
-            trfm.y = pos.value()[ 1 ];
-         }
+         auto                  pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
+         // array生成に対応するためoffsetを足す
+         trfm.x = pos[ 0 ];
+         trfm.y = pos[ 1 ];
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
       // [Velocity]
       {
          sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
-         if ( auto dir { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "dir" ) }; dir )
-         {
-            velo.dx = dir.value()[ 0 ];
-            velo.dy = dir.value()[ 1 ];
-         }
+         auto                 dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
+         velo.dx = dir[ 0 ];
+         velo.dy = dir[ 1 ];
          _registry.emplace<sdl_engine::Velocity>( entity, velo );
       }
       // [BBox]
@@ -202,7 +212,9 @@ namespace myge
       _registry.emplace<PlayerInput>( entity );
       // [Shooter]
       {
-         Shooter shtr { createShooter( 0.2f, sdl_engine::Vector2_f32 { 0.0f, -500.0f }, "enemy_small" ) };
+         f32     cooldown { sdl_engine::getOptionalData<f32>( data_, "shoot_cooldown", 0.2f ) };
+         auto    dir { sdl_engine::getOptionalData<std::array<f32, 2>>( data_, "bullet_velocity", { 0.0f, -500.0f } ) };
+         Shooter shtr { createShooter( cooldown, dir, "enemy_small" ) };
          _registry.emplace<Shooter>( entity, shtr );
       }
       // [status]
@@ -212,7 +224,7 @@ namespace myge
       }
       return entity;
    }
-   entt::entity EntityFactory::createWandererEnemy( json&                   data_,
+   entt::entity EntityFactory::createWandererEnemy( const json&             data_,
                                                     const std::type_index&  affiliation_id_,
                                                     sdl_engine::Vector2_f32 offset_pos_ )
    {
@@ -229,10 +241,8 @@ namespace myge
       {
          _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
          _registry.emplace<EnemyTag>( entity );
-         if ( auto interval { sdl_engine::getJsonData<f32>( data_, "interval" ) }; interval )
-         {
-            _registry.emplace<WaitTag>( entity, interval.value(), 0.0f );
-         }
+         auto interval { sdl_engine::getOptionalData<f32>( data_, "interval", 0.0f, true ) };
+         if ( interval > 0.0f ) { _registry.emplace<WaitTag>( entity, interval, 0.0f ); }
          else
          {
             _registry.emplace<EnteringTag>( entity );
@@ -255,40 +265,31 @@ namespace myge
       // [Transform]
       sdl_engine::Transform trfm { 0.0f, 0.0f, 180.0f, 1.0f };
       {
-         if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
-         {
-            // array生成に対応するためoffsetを足す
-            trfm.x = pos.value()[ 0 ] + offset_pos_.x;
-            trfm.y = pos.value()[ 1 ] + offset_pos_.y;
-         }
+
+         // array生成に対応するためoffsetを足す
+         auto pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
+         trfm.x = pos[ 0 ] + offset_pos_.x;
+         trfm.y = pos[ 1 ] + offset_pos_.y;
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
       // [Velocity]
       {
          sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
-         if ( auto dir { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "dir" ) }; dir )
-         {
-            velo.dx = dir.value()[ 0 ];
-            velo.dy = dir.value()[ 1 ];
-         }
+         auto                 dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
+         velo.dx = dir[ 0 ];
+         velo.dy = dir[ 1 ];
          _registry.emplace<sdl_engine::Velocity>( entity, velo );
       }
       // [movement]
       {
-         auto move_data { sdl_engine::getJsonData<json>( data_, "movement" ) };
+         auto move_data { sdl_engine::tryGetJson( data_, "movement" ) };
          if ( move_data )
          {
-            auto data { move_data.value() };
-            auto type { sdl_engine::getJsonData<std::string>( data, "type" ) };
+            auto type { sdl_engine::getRequireData<std::string>( move_data.value(), "type" ) };
             if ( type == "serpentine" )
             {
-               SerpentineMovement serpent {
-                  .center_x { trfm.x },
-                  .amplitude { data.value( "amplitude", 200.0f ) },
-                  .frequency { data.value( "frequency", 2.0f ) },
-                  .move_speed { data.value( "speed", 200.0f ) },
-                  .move_threshold { data.value( "threshold", 0.9f ) },
-               };
+               SerpentineMovement serpent { createSerpentineMovement( move_data.value() ) };
+               serpent.center_x = trfm.x;
                _registry.emplace<SerpentineMovement>( entity, serpent );
             }
          }
@@ -300,22 +301,20 @@ namespace myge
       }
       // [Status]
       {
-         Status status { .hp { 3 }, .max_hp { 3 }, .atk { 1 } };
+         Status status { .hp { 2 }, .max_hp { 2 }, .atk { 1 } };
          _registry.emplace<Status>( entity, status );
       }
 
       return entity;
    }
-   entt::entity EntityFactory::createBasicUI( json& data_, const std::type_index& affiliation_id_ )
+   entt::entity EntityFactory::createBasicUI( const json& data_, const std::type_index& affiliation_id_ )
    {
       auto entity { _registry.create() };
       setAffiliationTag( entity, affiliation_id_ );
       // リソース
       entt::resource<sdl_engine::SpriteResource> sprt_resource {};
-      if ( auto sp_name { sdl_engine::getJsonData<std::string>( data_, "sprite_name" ) }; sp_name )
-      {
-         sprt_resource = _resource_manager.getSprite( sp_name.value() );
-      }
+      auto sp_name { sdl_engine::getRequireData<std::string>( data_, "sprite_name" ) };
+      sprt_resource = _resource_manager.getSprite( sp_name );
 
       // タグコンポーネント
       _registry.emplace<sdl_engine::RenderUITag>( entity );
@@ -323,20 +322,22 @@ namespace myge
       _registry.emplace<sdl_engine::RenderableTag>( entity );
       _registry.emplace<sdl_engine::UpdateableTag>( entity );
       // Sprite
-      sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
-      _registry.emplace<sdl_engine::Sprite>( entity, sprt );
-      // Transform
-      sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
-      if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
       {
-         // array生成に対応するためoffsetを足す
-         trfm.x = pos.value()[ 0 ];
-         trfm.y = pos.value()[ 1 ];
+         sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
+         _registry.emplace<sdl_engine::Sprite>( entity, sprt );
       }
-      _registry.emplace<sdl_engine::Transform>( entity, trfm );
+      // Transform
+      {
+         sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
+         auto                  pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
+         // array生成に対応するためoffsetを足す
+         trfm.x = pos[ 0 ];
+         trfm.y = pos[ 1 ];
+         _registry.emplace<sdl_engine::Transform>( entity, trfm );
+      }
       return entity;
    }
-   entt::entity EntityFactory::createHighlightableUI( json& data_, const std::type_index& affiliation_id_ )
+   entt::entity EntityFactory::createHighlightableUI( const json& data_, const std::type_index& affiliation_id_ )
    {
       auto          entity { createBasicUI( data_, affiliation_id_ ) };    // selectable
       auto          sprt { _registry.get<sdl_engine::Sprite>( entity ) };
@@ -345,30 +346,28 @@ namespace myge
       _registry.emplace<Highlightable>( entity, selectable );
       return entity;
    }
-   entt::entity EntityFactory::createBasicText( json& data_, const std::type_index& affiliation_id_ )
+   entt::entity EntityFactory::createBasicText( const json& data_, const std::type_index& affiliation_id_ )
    {
       auto entity { _registry.create() };
       setAffiliationTag( entity, affiliation_id_ );
       // リソース
       entt::resource<sdl_engine::SpriteResource> sprt_resource {};
       entt::resource<sdl_engine::FontResource>   font_resource {};
-      if ( auto font_size { sdl_engine::getJsonData<std::string>( data_, "font_size" ) }; font_size )
+      auto font_size { sdl_engine::getRequireData<std::string>( data_, "font_size" ) };
+      if ( font_size == "small" )
       {
-         if ( font_size == "small" )
-         {
-            sprt_resource = _resource_manager.getSprite( "font_1_x8" );
-            font_resource = _resource_manager.getFont( "font_x8" );
-         }
-         else if ( font_size == "medium" )
-         {
-            sprt_resource = _resource_manager.getSprite( "font_1_x16" );
-            font_resource = _resource_manager.getFont( "font_x16" );
-         }
-         else if ( font_size == "large" )
-         {
-            sprt_resource = _resource_manager.getSprite( "font_1_x24" );
-            font_resource = _resource_manager.getFont( "font_x24" );
-         }
+         sprt_resource = _resource_manager.getSprite( "font_1_x8" );
+         font_resource = _resource_manager.getFont( "font_x8" );
+      }
+      else if ( font_size == "medium" )
+      {
+         sprt_resource = _resource_manager.getSprite( "font_1_x16" );
+         font_resource = _resource_manager.getFont( "font_x16" );
+      }
+      else if ( font_size == "large" )
+      {
+         sprt_resource = _resource_manager.getSprite( "font_1_x24" );
+         font_resource = _resource_manager.getFont( "font_x24" );
       }
       // タグコンポーネント
       _registry.emplace<myge::EnteringTag>( entity );
@@ -376,40 +375,45 @@ namespace myge
       _registry.emplace<sdl_engine::UpdateableTag>( entity );
       _registry.emplace<sdl_engine::RenderTextTag>( entity );
       // Sprite
-      sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
-      auto               color { data_.value( "color", std::array<f32, 4> { 1.0f, 1.0f, 1.0f, 1.0f } ) };
-      sprt.color = sdl_engine::ColorRGBA( color );
-      _registry.emplace<sdl_engine::Sprite>( entity, sprt );
+      {
+         sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
+         auto color { sdl_engine::getOptionalData<std::array<f32, 4>>( data_, "color", { 1.0f, 1.0f, 1.0f, 1.0f } ) };
+         sprt.color = sdl_engine::ColorRGBA( color );
+         _registry.emplace<sdl_engine::Sprite>( entity, sprt );
+      }
       // Transform
-      sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
-      if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
       {
+         sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
+         auto                  pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
          // array生成に対応するためoffsetを足す
-         trfm.x = pos.value()[ 0 ];
-         trfm.y = pos.value()[ 1 ];
+         trfm.x = pos[ 0 ];
+         trfm.y = pos[ 1 ];
+         _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
-      _registry.emplace<sdl_engine::Transform>( entity, trfm );
+
       // Text
-      sdl_engine::Text text { font_resource, "none" };
-      if ( auto text_data { sdl_engine::getJsonData<std::string>( data_, "text" ) }; text_data )
       {
-         text.text = text_data.value();
+         sdl_engine::Text text { font_resource, "none" };
+         auto             text_data { sdl_engine::getRequireData<std::string>( data_, "text" ) };
+         text.text = text_data;
+         _registry.emplace<sdl_engine::Text>( entity, text );
       }
-      _registry.emplace<sdl_engine::Text>( entity, text );
 
       return entity;
    }
-   entt::entity EntityFactory::createBrinkText( json& data_, const std::type_index& affiliation_id_ )
+   entt::entity EntityFactory::createBrinkText( const json& data_, const std::type_index& affiliation_id_ )
    {
       auto entity { createBasicText( data_, affiliation_id_ ) };
 
       // Brink
-      SpriteBrink brink { data_.value( "brink_speed", 1.0f ), data_.value( "brink_min_alpha", 0.3f ) };
+      auto        speed { sdl_engine::getOptionalData<f32>( data_, "brink_speed", 1.0f ) };
+      auto        min_alpha { sdl_engine::getOptionalData<f32>( data_, "brink_min_alpha", 0.3f ) };
+      SpriteBrink brink { speed, min_alpha };
       _registry.emplace<SpriteBrink>( entity, brink );
 
       return entity;
    }
-   entt::entity EntityFactory::createHighlightableText( json& data_, const std::type_index& affiliation_id_ )
+   entt::entity EntityFactory::createHighlightableText( const json& data_, const std::type_index& affiliation_id_ )
    {
 
       auto entity { createBasicText( data_, affiliation_id_ ) };
@@ -417,34 +421,35 @@ namespace myge
       auto          sprt { _registry.get<sdl_engine::Sprite>( entity ) };
       auto          inactive_color { sprt.color * 0.5 };
       Highlightable selectable { false, sprt.color, inactive_color };
-      if ( auto active_data { sdl_engine::getJsonData<u32>( data_, "highlightable" ) }; active_data )
-      {
-         selectable.active = active_data.value();
-      }
+      auto          active_data { sdl_engine::getOptionalData<u32>( data_, "highlightable", false ) };
+      selectable.active = active_data;
       _registry.emplace<Highlightable>( entity, selectable );
       return entity;
    }
-   entt::entity EntityFactory::createTitleMenu( json& data_, const std::type_index& affiliation_id_ )
+   entt::entity EntityFactory::createTitleMenu( const json& data_, const std::type_index& affiliation_id_ )
    {
       entt::entity entity { _registry.create() };
       setAffiliationTag( entity, affiliation_id_ );
       TitleMenu menu { .menu_ui {}, .selected { 0 } };
-      auto      highlight_ui { sdl_engine::getJsonData<json>( data_, "highlightable_ui" ).value() };
-      for ( auto& ui_data : highlight_ui )
+      if ( auto highlight_ui { sdl_engine::tryGetJson( data_, "highlightable_ui" ) }; highlight_ui )
       {
-         auto     ui_entt { createHighlightableUI( ui_data, affiliation_id_ ) };
-         ButtonUI button_ui {};
-         auto     button { sdl_engine::getJsonData<std::string>( ui_data, "button_type" ).value() };
-         if ( button == "start" ) { button_ui.type = ButtonUI::Type::Start; }
-         else if ( button == "exit" ) { button_ui.type = ButtonUI::Type::Exit; }
-         _registry.emplace<ButtonUI>( ui_entt, button_ui );
-         menu.menu_ui.emplace_back( ui_entt );
+         for ( auto& ui_data : highlight_ui->get() )
+         {
+            auto     ui_entt { createHighlightableUI( ui_data, affiliation_id_ ) };
+            ButtonUI button_ui {};
+            auto     button { sdl_engine::getRequireData<std::string>( ui_data, "button_type" ) };
+            if ( button == "start" ) { button_ui.type = ButtonUI::Type::Start; }
+            else if ( button == "exit" ) { button_ui.type = ButtonUI::Type::Exit; }
+            _registry.emplace<ButtonUI>( ui_entt, button_ui );
+            menu.menu_ui.emplace_back( ui_entt );
+         }
       }
+
       _registry.emplace<TitleMenu>( entity, menu );
       _registry.emplace<TitleInput>( entity );
       return entity;
    }
-   std::pair<entt::entity, entt::entity> EntityFactory::createBackGround( json&                  data_,
+   std::pair<entt::entity, entt::entity> EntityFactory::createBackGround( const json&            data_,
                                                                           const std::type_index& affiliation_id_ )
    {
 
@@ -453,11 +458,8 @@ namespace myge
       setAffiliationTag( entities[ 1 ], affiliation_id_ );
       // リソース
       entt::resource<sdl_engine::SpriteResource> sprt_resource {};
-      if ( auto sp_name { sdl_engine::getJsonData<std::string>( data_, "sprite_name" ) }; sp_name )
-      {
-         sprt_resource = _resource_manager.getSprite( sp_name.value() );
-      }
-      else { sprt_resource = _resource_manager.getSprite( "back_ground" ); }
+      auto sp_name { sdl_engine::getRequireData<std::string>( data_, "sprite_name" ) };
+      sprt_resource = _resource_manager.getSprite( sp_name );
 
       for ( u32 i { 0 }; auto& entt : entities )
       {
@@ -469,24 +471,21 @@ namespace myge
          _registry.emplace<sdl_engine::UpdateableTag>( entt );
          // Sprite
          sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
-         sprt.render_order = data_.value( "z_order", 100 );
+         sprt.render_order = sdl_engine::getOptionalData<u32>( data_, "z_order", 100 );
          _registry.emplace<sdl_engine::Sprite>( entt, sprt );
+
          // Transform
          sdl_engine::Transform trfm { 300.0f, 0.0f, 0.0f, 1.0f };
-         if ( auto pos { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "pos" ) }; pos )
-         {
-            // array生成に対応するためoffsetを足す
-            trfm.x = pos.value()[ 0 ];
-            trfm.y = pos.value()[ 1 ] - sprt.dst.h * i++;
-         }
+         auto                  pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
+         trfm.x = pos[ 0 ];
+         trfm.y = pos[ 1 ] - sprt.dst.h * i++;
          _registry.emplace<sdl_engine::Transform>( entt, trfm );
+
          // Velocity
          sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
-         if ( auto dir { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "dir" ) }; dir )
-         {
-            velo.dx = dir.value()[ 0 ];
-            velo.dy = dir.value()[ 1 ];
-         }
+         auto                 dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
+         velo.dx = dir[ 0 ];
+         velo.dy = dir[ 1 ];
          _registry.emplace<sdl_engine::Velocity>( entt, velo );
          // BBox
          BoundingBox box { createBoundingBox( sprt.dst.w / 2, sprt.dst.h / 2, 0.0f, BoundingBox::EnableAxis::Top ) };
@@ -495,23 +494,23 @@ namespace myge
 
       return std::pair { entities[ 0 ], entities[ 1 ] };
    }
-   std::vector<entt::entity> EntityFactory::createWandererEnemyArray( json&                  data_,
+   std::vector<entt::entity> EntityFactory::createWandererEnemyArray( const json&            data_,
                                                                       const std::type_index& affiliation_id_ )
    {
-      auto                      num_enemy { sdl_engine::getJsonData<u32>( data_, "num" ) };
-      auto                      offset { sdl_engine::getJsonData<std::array<f32, 2>>( data_, "offset_pos" ) };
-      std::vector<entt::entity> entities { num_enemy.value() };
+      auto                      num_enemy { sdl_engine::getRequireData<u32>( data_, "num" ) };
+      auto                      offset { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "offset_pos" ) };
+      std::vector<entt::entity> entities { num_enemy };
 
-      for ( u32 i = 0; i < num_enemy.value(); i++ )
+      for ( u32 i = 0; i < num_enemy; i++ )
       {
          sdl_engine::Vector2_f32 vec;
-         vec.x         = offset.value()[ 0 ] * i;
-         vec.y         = offset.value()[ 1 ] * i;
+         vec.x         = offset[ 0 ] * i;
+         vec.y         = offset[ 1 ] * i;
          entities[ i ] = createWandererEnemy( data_, affiliation_id_, vec );
       }
       return entities;
    }
-   std::vector<entt::entity> EntityFactory::createEntities( json&                           data_,
+   std::vector<entt::entity> EntityFactory::createEntities( const json&                     data_,
                                                             const std::type_index&          affiliation_id_,
                                                             const std::vector<std::string>& exclude_ )
    {

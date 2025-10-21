@@ -1,4 +1,5 @@
 ﻿#include <app/components/bounding_box.hpp>
+#include <app/components/damage.hpp>
 #include <app/components/entity_type_tag.hpp>
 #include <app/systems/collision_system.hpp>
 #include <engine/components/transform.hpp>
@@ -30,12 +31,57 @@ namespace myge
    CollisionSystem::CollisionSystem( i32                        priority_,
                                      entt::registry&            registry_,
                                      sdl_engine::EventListener& event_listener_ )
-     : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }
+     : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }, _hit_entity_pairs {}
    {
    }
    CollisionSystem::~CollisionSystem() {}
    void CollisionSystem::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ )
    {
+      _hit_entity_pairs.clear();
+      // common collision
+      auto commonCollision = [ & ]( entt::entity&                                target_,
+                                    sdl_engine::Transform&                       target_trfm_,
+                                    myge::BoundingBox&                           target_box_,
+                                    std::unordered_map<u32, std::vector<Enemy>>& enemies_ )
+      {
+         auto [ gx, gy ] { getGridCoord( target_trfm_.x, target_trfm_.y ) };
+         // 弾丸のいるグリッドとその周囲8マスをチェック
+         for ( i32 row { -1 }; row <= 1; row++ )    // 行 [ 上(-1), 現在グリッド, 下(+1) ]
+         {
+            for ( i32 col { -1 }; col <= 1; col++ )    // 列 [ 左(-1), 現在グリッド, 右(+1) ]
+            {
+               /* 現在グリッドとその周囲8マス
+                * [ gx-1,gy-1 ] [ gx,gy-1 ] [ gx+1,gy-1 ]
+                * [ gx-1,gy   ] [ gx,gy   ] [ gx+1,gy   ]
+                * [ gx-1,gy+1 ] [ gx,gy+1 ] [ gx+1,gy+1 ]
+                */
+               auto tx { gx + col };
+               auto ty { gy + row };
+
+               // グリッド外ならスキップ
+               if ( tx < 0 || ty < 0 || tx >= GRID_WIDTH || ty >= GRID_HEIGHT ) { continue; }
+
+               // グリッドを線形化
+               auto id { ty * GRID_WIDTH + tx };
+
+               // グリッド内のみ判定する
+               for ( auto& enemy : enemies_[ id ] )
+               {
+                  sdl_engine::Vector2_f32 dir { target_trfm_.x - enemy.trfm.x, target_trfm_.y - enemy.trfm.y };
+                  f32                     rad = target_box_.radius + enemy.box.radius;
+                  rad *= rad;
+                  auto len { dir.lengthSq() };
+                  if ( len <= rad )
+                  {
+                     SDL_Log( "hit" );
+                     _hit_entity_pairs.emplace_back( enemy.entity, target_ );
+                     // 一つの弾丸は一つの敵にしか当たらないためgotoで抜ける
+                     return;
+                  }
+               }
+            }
+         }
+      };
       // first transform second boundingbox
       std::unordered_map<u32, std::vector<Enemy>> enemies {};
       auto&                                       reg { registry() };
@@ -51,46 +97,22 @@ namespace myge
          }
       }
 
-      std::vector<std::pair<entt::entity, entt::entity>> hit_entity_pairs {};
+      // 弾丸と敵の当たり判定
       for ( auto [ bullet, bu_trfm, bu_box ] :
             getLogicUpdateable<sdl_engine::Transform, BoundingBox, PlayerBulletTag>( reg ).each() )
       {
-
          if ( !reg.valid( bullet ) ) { continue; }
-         auto [ gx, gy ] { getGridCoord( bu_trfm.x, bu_trfm.y ) };
-
-         for ( i32 row { -1 }; row <= 1; row++ )
-         {
-            for ( i32 col { -1 }; col <= 1; col++ )
-            {
-
-               auto tx { gx + col };
-               auto ty { gy + row };
-
-               if ( tx < 0 || ty < 0 || tx >= GRID_WIDTH || ty >= GRID_HEIGHT ) { continue; }
-
-               auto id { ty * GRID_WIDTH + tx };
-
-               for ( auto& enemy : enemies[ id ] )
-               {
-                  sdl_engine::Vector2_f32 dir { bu_trfm.x - enemy.trfm.x, bu_trfm.y - enemy.trfm.y };
-                  f32                     rad = bu_box.radius + enemy.box.radius;
-                  rad *= rad;
-                  auto len { dir.lengthSq() };
-                  if ( len <= rad )
-                  {
-                     SDL_Log( "hit" );
-                     hit_entity_pairs.emplace_back( enemy.entity, bullet );
-                     // 一つの弾丸は一つの敵にしか当たらないためgotoで抜ける
-                     goto next_bullet;
-                  }
-               }
-            }
-         }
-         // 次の弾丸へ
-      next_bullet:;
+         commonCollision( bullet, bu_trfm, bu_box, enemies );
       }
 
-      if ( !hit_entity_pairs.empty() ) { _event_listener.trigger<HitEvent>( { hit_entity_pairs } ); }
+      for ( auto [ player, trfm, box ] :
+            getLogicUpdateable<sdl_engine::Transform, BoundingBox, PlayerTag>( reg, entt::exclude<DamageEffect> )
+              .each() )
+      {
+         if ( !reg.valid( player ) || reg.all_of<DamageEffect>( player ) ) { continue; }
+         commonCollision( player, trfm, box, enemies );
+      }
+
+      if ( !_hit_entity_pairs.empty() ) { _event_listener.trigger<HitEvent>( { _hit_entity_pairs } ); }
    }
 }    // namespace myge

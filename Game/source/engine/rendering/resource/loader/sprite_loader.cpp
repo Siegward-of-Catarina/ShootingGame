@@ -19,10 +19,11 @@ namespace sdl_engine
 
       return std::shared_ptr<SpriteResource>( resource, SpriteResourceDeleter );
    }
-   SpriteLoader::result_type SpriteLoader::operator()( SDL_Texture* texture_ ) const
+   SpriteLoader::result_type SpriteLoader::operator()( SDL_Texture*& texture_ ) const
    {
       SpriteResource* resource { new SpriteResource };
       resource->texture = texture_;
+      texture_          = nullptr;
 
       SDL_SetTextureBlendMode( resource->texture, SDL_BLENDMODE_BLEND );    // 標準はアルファブレンド
       SDL_SetTextureScaleMode( resource->texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );

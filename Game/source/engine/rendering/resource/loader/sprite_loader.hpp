@@ -8,6 +8,6 @@ namespace sdl_engine
    public:
       using result_type = std::shared_ptr<SpriteResource>;
       result_type operator()( Renderer& renderer_, const json& data_ ) const;
-      result_type operator()( SDL_Texture* texture_ ) const;
+      result_type operator()( SDL_Texture*& texture_ ) const;
    };
 }    // namespace sdl_engine

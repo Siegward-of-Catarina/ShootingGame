@@ -16,20 +16,20 @@ namespace myge
 
       entt::entity createDefaultFadeEntity( f32 window_width, f32 window_height );
       entt::entity createBullet( entt::entity& shooter_, const std::type_index& affiliation_id_ );
-      entt::entity createHitEffect(sdl_engine::Transform& bullet_trfm_, const std::type_index& affiliation_id_);
-      entt::entity createPlayer( json& data_, const std::type_index& affiliation_id_ );
-      entt::entity createWandererEnemy( json&                   data_,
+      entt::entity createHitEffect(entt::entity dead_entt_, const std::type_index& affiliation_id_);
+      entt::entity createPlayer( const json& data_, const std::type_index& affiliation_id_ );
+      entt::entity createWandererEnemy( const json&                   data_,
                                         const std::type_index&  affiliation_id_,
                                         sdl_engine::Vector2_f32 offset_pos_ = { 0.0f, 0.0f } );
-      entt::entity createBasicUI( json& data_, const std::type_index& affiliation_id_ );
-      entt::entity createHighlightableUI( json& data_, const std::type_index& affiliation_id_ );
-      entt::entity createBasicText( json& data_, const std::type_index& affiliation_id_ );
-      entt::entity createBrinkText( json& data_, const std::type_index& affiliation_id_ );
-      entt::entity createHighlightableText( json& data_, const std::type_index& affiliation_id_ );
-      entt::entity createTitleMenu( json& data_, const std::type_index& affiliation_id_ );
-      std::pair<entt::entity, entt::entity> createBackGround( json& data_, const std::type_index& affiliation_id_ );
-      std::vector<entt::entity> createWandererEnemyArray( json& data_, const std::type_index& affiliation_id_ );
-      std::vector<entt::entity> createEntities( json&                           data_,
+      entt::entity createBasicUI( const json& data_, const std::type_index& affiliation_id_ );
+      entt::entity createHighlightableUI( const json& data_, const std::type_index& affiliation_id_ );
+      entt::entity createBasicText( const json& data_, const std::type_index& affiliation_id_ );
+      entt::entity createBrinkText( const json& data_, const std::type_index& affiliation_id_ );
+      entt::entity createHighlightableText( const json& data_, const std::type_index& affiliation_id_ );
+      entt::entity createTitleMenu( const json& data_, const std::type_index& affiliation_id_ );
+      std::pair<entt::entity, entt::entity> createBackGround( const json& data_, const std::type_index& affiliation_id_ );
+      std::vector<entt::entity> createWandererEnemyArray( const json& data_, const std::type_index& affiliation_id_ );
+      std::vector<entt::entity> createEntities( const json&                           data_,
                                                 const std::type_index&          affiliation_id_,
                                                 const std::vector<std::string>& exclude = {} );
 

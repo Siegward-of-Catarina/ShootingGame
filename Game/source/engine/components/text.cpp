@@ -2,10 +2,12 @@
 #include <engine/managers/resource_manager.hpp>
 #include <engine/rendering/resource/font_resource.hpp>
 namespace sdl_engine {
-	Text createText(ResourceManager& resource_manager_, const json& data_)
+	
+	Text createText(entt::resource<sdl_engine::FontResource>& resource_, json& data_)
 	{
-		auto font_name{ sdl_engine::getJsonData < std::string>(data_,"font").value() };
-		auto font{ resource_manager_.getFont(font_name) };
-		return Text{ font,data_.value("text", "") };
+		sdl_engine::Text text{ resource_, "none" };
+		auto text_data{ sdl_engine::getRequireData<std::string>(data_, "text") };
+		text.text = text_data;
+		return text;
 	}
 }

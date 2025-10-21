@@ -59,10 +59,10 @@ void myge::TitleScene::onTitleMenuAction( const TitleMenuEvent& e )
 void myge::TitleScene::createEntities()
 {
    auto& scene_data { sceneData() };
-   if ( auto entity_data { sdl_engine::getJsonData<json>( scene_data, "Entities" ) }; entity_data )
+   if ( auto data { sdl_engine::tryGetJson( scene_data, "Entities" ) }; data )
    {
       EntityFactory factory { registry(), resourceManager() };
-      factory.createEntities( entity_data.value(), typeid( AffilTitleScene ) );
+      factory.createEntities( *data, typeid( AffilTitleScene ) );
    }
 }
 

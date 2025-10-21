@@ -106,13 +106,13 @@ namespace myge
       // jsonからWaveを生成
       auto&            scene_data { sceneData() };
       WaveDependencies depend { registry(), resourceManager() };
-      if ( scene_data.contains( "Waves" ) )
+      if ( auto data { sdl_engine::tryGetJson( scene_data, "Waves" ) }; data )
       {
-         for ( const auto& wave_data : scene_data[ "Waves" ] )
+         for ( const auto& wave_data : data->get() )
          {
             // クラス名とデータパスを取得
-            auto wave_class_name = sdl_engine::getJsonData<std::string>( wave_data, "wave_class_name" ).value();
-            auto wave_data_path  = sdl_engine::getJsonData<std::string>( wave_data, "wave_data_path" ).value();
+            auto wave_class_name = sdl_engine::getRequireData<std::string>( wave_data, "wave_class_name" );
+            auto wave_data_path  = sdl_engine::getRequireData<std::string>( wave_data, "wave_data_path" );
 
             auto wave = createWave( wave_class_name, depend );
 
@@ -122,35 +122,14 @@ namespace myge
       }
    }
 
-   void TestScene::onShoot( ShootEvent& e )
-   {
-      EntityFactory factory { registry(), resourceManager() };
-      factory.createBullet( e.shooter, typeid( AffilGameScene ) );
-   }
-
-   void TestScene::onDeadEffectAppend( AppedDeadEffectEvent& e )
-   {
-      auto& reg { registry() };
-      for ( auto& entt : e.dead_entities )
-      {
-         if ( reg.valid( entt ) && reg.all_of<sdl_engine::Transform>( entt ) )
-         {
-            auto          trfm { reg.get<sdl_engine::Transform>( entt ) };
-            EntityFactory factory { registry(), resourceManager() };
-            factory.createHitEffect( trfm, typeid( AffilGameScene ) );
-         }
-      }
-      eventListener().trigger<DeadEvent>( { e.dead_entities } );
-   }
-
    void TestScene::createEntities()
    {
       createWaves();
       auto& scene_data { sceneData() };
-      if ( auto entity_data { sdl_engine::getJsonData<json>( scene_data, "Entities" ) }; entity_data )
+      if ( auto data { sdl_engine::tryGetJson( scene_data, "Entities" ) }; data )
       {
          EntityFactory factory { registry(), resourceManager() };
-         factory.createEntities( entity_data.value(), typeid( AffilGameScene ) );
+         factory.createEntities( *data, typeid( AffilGameScene ) );
       }
    }
 
@@ -176,4 +155,23 @@ namespace myge
       system_manager.addSystem( std::make_unique<SpriteBrinkSystem>( 98, registry() ) );
    }
 
+   void TestScene::onShoot( ShootEvent& e )
+   {
+      EntityFactory factory { registry(), resourceManager() };
+      factory.createBullet( e.shooter, typeid( AffilGameScene ) );
+   }
+
+   void TestScene::onDeadEffectAppend( AppedDeadEffectEvent& e )
+   {
+      auto& reg { registry() };
+      for ( auto& entt : e.dead_entities )
+      {
+         if ( reg.valid( entt ) && reg.all_of<sdl_engine::Transform>( entt ) )
+         {
+            EntityFactory factory { registry(), resourceManager() };
+            factory.createHitEffect( entt, typeid( AffilGameScene ) );
+         }
+      }
+      eventListener().trigger<DeadEvent>( { e.dead_entities } );
+   }
 }    // namespace myge

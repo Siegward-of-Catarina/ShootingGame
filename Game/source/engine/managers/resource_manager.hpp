@@ -16,7 +16,7 @@ namespace sdl_engine
       ResourceManager();
       ~ResourceManager();
       void loadResources( Renderer& renderer_, std::string_view assets_path_ );
-      void addSpriteResources( std::string_view resources_name_, SDL_Texture* texture_ );
+      void addSpriteResources( std::string_view resources_name_, SDL_Texture*& texture_ );
       // 今回は規模的に個々のデータごとにgetterを用意する
       entt::resource<SpriteResource>     getSprite( std::string_view key_ );
       entt::resource<SpriteAnimResource> getSpriteAnim( std::string_view key_ );

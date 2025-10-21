@@ -5,12 +5,12 @@ namespace sdl_engine {
 	{
 		FontResource res
 		{
-			.width{getJsonData<f32>(data_,"width").value()},
-			.height{getJsonData<f32>(data_,"height").value()}
+			.width{getRequireData<f32>(data_,"width")},
+			.height{getRequireData<f32>(data_,"height")}
 		};
 
-		u32 sprite_row{ getJsonData<u32>(data_,"sprite_row").value() };
-		u32 sprite_col{ getJsonData<u32>(data_,"sprite_col").value() };
+		u32 sprite_row{ getRequireData<u32>(data_,"sprite_row") };
+		u32 sprite_col{ getRequireData<u32>(data_,"sprite_col") };
 		u32 font_num{ sprite_row * sprite_col };
 
 		res.font_rect.reserve(font_num);

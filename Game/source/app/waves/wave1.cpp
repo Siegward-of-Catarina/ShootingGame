@@ -21,10 +21,10 @@ namespace myge
    void Wave1::start()
    {
       auto& wave_data { getWaveData() };
-      if ( auto entity_data { sdl_engine::getJsonData<json>( wave_data, "Entities" ) }; entity_data )
+      if ( auto data { sdl_engine::tryGetJson( wave_data, "Entities" ) }; data )
       {
          EntityFactory factory { registry(), resourceManager() };
-         auto          entts { factory.createEntities( entity_data.value(), typeid( AffilGameScene ) ) };
+         auto          entts { factory.createEntities( *data, typeid( AffilGameScene ) ) };
          entities = entts;
       }
    }

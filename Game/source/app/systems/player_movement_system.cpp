@@ -4,7 +4,7 @@
 #include <engine/core.hpp>
 namespace
 {
-   constexpr f32           max_speed    = 300.0f;
+   constexpr f32           max_speed    = 400.0f;
    f32                     acceleration = 5.0f;
    sdl_engine::Vector2_f32 dir { 0.0f, 0.0f };
 }    // namespace

@@ -8,5 +8,5 @@ namespace sdl_engine {
 		std::string text;
 	};
 
-	Text createText(ResourceManager& resource_manager_, const json& data_);
+	Text createText(entt::resource<sdl_engine::FontResource>& resource_, json& data_);
 }

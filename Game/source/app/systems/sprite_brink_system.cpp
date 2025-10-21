@@ -56,8 +56,8 @@ namespace myge
             f32 cycle = std::fmodf( damage.elapsed_time, damage.brink_interval * 2.0f );
             if ( cycle < damage.brink_interval )
             {
-               sprt.color.g = 1.0f;
-               sprt.color.b = 1.0f;
+               sprt.color.g = 0.8f;
+               sprt.color.b = 0.8f;
             }
             else
             {
