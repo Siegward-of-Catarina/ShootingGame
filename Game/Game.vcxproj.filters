@@ -44,20 +44,18 @@
     <ClCompile Include="source\engine\components\velocity.cpp" />
     <ClCompile Include="source\engine\rendering\resource\loader\font_loader.cpp" />
     <ClCompile Include="source\app\components\entity_type_tag.cpp" />
-    <ClCompile Include="source\app\components\sprite_brink.cpp" />
     <ClCompile Include="source\app\systems\sprite_brink_system.cpp" />
     <ClCompile Include="source\app\components\player_input.cpp" />
-    <ClCompile Include="source\app\components\shooter.cpp" />
     <ClCompile Include="source\app\systems\shoot_system.cpp" />
     <ClCompile Include="source\engine\systems\rotate_system.cpp" />
     <ClCompile Include="source\engine\systems\scale_system.cpp" />
-    <ClCompile Include="source\app\components\serpentine_movement.cpp" />
     <ClCompile Include="source\app\systems\facing_system.cpp" />
     <ClCompile Include="source\app\systems\collision_system.cpp" />
     <ClCompile Include="source\app\systems\highlight_system.cpp" />
     <ClCompile Include="source\app\systems\menu_system.cpp" />
     <ClCompile Include="source\engine\events\event_listener.cpp" />
     <ClCompile Include="source\app\systems\hit_resolution_system.cpp" />
+    <ClCompile Include="source\app\systems\game_over_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -210,5 +208,10 @@
     <ClInclude Include="source\app\event\hit_event.hpp" />
     <ClInclude Include="source\app\systems\hit_resolution_system.hpp" />
     <ClInclude Include="source\app\event\append_dead_effect_event.hpp" />
+    <ClInclude Include="source\app\components\damage_effect_property.hpp" />
+    <ClInclude Include="source\engine\events\fade_render_layer_change_event.hpp" />
+    <ClInclude Include="source\app\event\game_over_event.hpp" />
+    <ClInclude Include="source\app\systems\game_over_system.hpp" />
+    <ClInclude Include="source\app\event\append_overray_fade_event.hpp" />
   </ItemGroup>
 </Project>

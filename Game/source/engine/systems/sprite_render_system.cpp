@@ -43,6 +43,12 @@ namespace sdl_engine
          if ( !reg.valid( entity ) ) { continue; }
          common_render( _renderer, sprt, trfm );
       }
+      // UIの下にフェードを描画したい場合このタグで描画を切り替えることができるs
+      for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderFadeUnderUITag>().each() )
+      {
+         if ( !reg.valid( entity ) ) { continue; }
+         common_render( _renderer, sprt, trfm );
+      }
 
       for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderUITag>().each() )
       {

@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include <engine/forward.hpp>
-#include <engine/utils.hpp>
 namespace myge
 {
    struct SerpentineMovement
@@ -14,5 +13,5 @@ namespace myge
       f32 time {};
    };
 
-   SerpentineMovement createSerpentineMovement( const json& data_ );
-}    // namespace myge
+   // no factory functions here; constructed directly by callers
+}    // namespace myge}    // namespace myge

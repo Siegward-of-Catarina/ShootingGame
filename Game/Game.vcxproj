@@ -93,17 +93,12 @@
     <ClCompile Include="source\app\components\bounding_box.cpp" />
     <ClCompile Include="source\app\components\entity_type_tag.cpp" />
     <ClCompile Include="source\app\components\player_input.cpp" />
-    <ClCompile Include="source\app\components\serpentine_movement.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="source\app\components\shooter.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="source\app\components\sprite_brink.cpp" />
     <ClCompile Include="source\app\systems\collision_system.cpp" />
     <ClCompile Include="source\app\systems\facing_system.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="source\app\systems\game_over_system.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -183,6 +178,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\app\components\damage_effect_property.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\components\button_ui.hpp" />
     <ClInclude Include="source\app\components\damage.hpp" />
     <ClInclude Include="source\app\components\entity_type_tag.hpp">
@@ -206,7 +205,15 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\app\event\append_overray_fade_event.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\event\dead_event.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\app\event\game_over_event.hpp">
       <SubType>
       </SubType>
     </ClInclude>
@@ -220,6 +227,10 @@
     <ClInclude Include="source\app\event\title_ui_event.hpp" />
     <ClInclude Include="source\app\systems\collision_system.hpp" />
     <ClInclude Include="source\app\systems\facing_system.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\app\systems\game_over_system.hpp">
       <SubType>
       </SubType>
     </ClInclude>
@@ -246,6 +257,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="source\engine\events\fade_events.hpp" />
+    <ClInclude Include="source\engine\events\fade_render_layer_change_event.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\engine\events\quit_event.hpp" />
     <ClInclude Include="source\engine\events\sprite_anim_end_event.hpp" />
     <ClInclude Include="source\engine\rendering\resource\color.hpp" />

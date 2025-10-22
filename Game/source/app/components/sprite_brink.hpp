@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include <engine/forward.hpp>
-#include <engine/utils.hpp>
 namespace myge {
 	struct SpriteBrink {
 		f32 speed{};
@@ -10,6 +9,4 @@ namespace myge {
 			SubAlpha
 		}state{ State::SubAlpha };
 	};
-
-	SpriteBrink createSpriteBrink(const json& data_);
 }

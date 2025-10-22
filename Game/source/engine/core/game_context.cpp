@@ -42,10 +42,10 @@ namespace sdl_engine
 
       _input_manager = std::make_unique<InputManager>();
 
-      _event_listener = std::make_unique<EventListener>( _dispatcher );
-      _system_manager = std::make_unique<SystemManager>( _registry, *_renderer, *_event_listener);
-      _scene_manager  = std::make_unique<SceneManager>( _dispatcher );
       _game_timer     = std::make_unique<GameTimer>();
+      _event_listener = std::make_unique<EventListener>( _dispatcher );
+      _system_manager = std::make_unique<SystemManager>( _registry, *_renderer, *_event_listener );
+      _scene_manager  = std::make_unique<SceneManager>( _dispatcher, *_game_timer );
 
       // 終了イベントを登録
       _event_listener->connect<&EngineContext::onQuitEvent, QuitEvent>( this );

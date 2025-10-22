@@ -1,10 +1,12 @@
 ﻿#include <app/components/bounding_box.hpp>
+#include <app/components/entity_type_tag.hpp>
 #include <app/components/lifecycle_tags.hpp>
 #include <app/systems/life_cycle_system.hpp>
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 // event
 #include <app/event/dead_event.hpp>
+#include <app/event/game_over_event.hpp>
 #include <engine/events/sprite_anim_end_event.hpp>
 namespace
 {
@@ -159,7 +161,11 @@ namespace myge
       }
 
       // まとめて削除
-      for ( auto entity : _dead_entities ) { reg.destroy( entity ); }
+      for ( auto entity : _dead_entities )
+      {
+         if ( reg.all_of<PlayerTag>( entity ) ) { _event_listener.trigger<GameOverEvent>( {} ); }
+         reg.destroy( entity );
+      }
    }
    void LifeCycleSystem::onEntityDead( DeadEvent& e )
    {

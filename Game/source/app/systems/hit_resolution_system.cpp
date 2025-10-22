@@ -4,6 +4,7 @@
 #include <engine/core.hpp>
 // component
 #include <app/components/damage.hpp>
+#include <app/components/damage_effect_property.hpp>
 #include <app/components/entity_type_tag.hpp>
 #include <app/components/status.hpp>
 // event
@@ -48,14 +49,17 @@ namespace myge
       for ( auto entity : damage_entities )
       {
          if ( !reg.valid( entity ) || reg.all_of<DamageEffect>( entity ) ) { continue; }
-         DamageEffect damage { 0.5f, 0.5f / 7, 0.0f };
-         if ( reg.all_of<PlayerTag>( entity ) )
+         // ダメージエフェクト初期値で生成
+         DamageEffect damage { .red_brink_time { 0.5f }, .brink_interval { 0.5f / 7 }, .elapsed_time { 0.0f } };
+         // ブリンクプロパティがあれば引き継ぐ
+         if ( auto brink_prop { reg.try_get<DamageEffectProperty>( entity ) }; brink_prop )
          {
-            damage.red_brink_time = 1.0f;
-            damage.brink_interval = 1.0f / 15;
+            damage.red_brink_time = brink_prop->red_brink_time;
+            damage.brink_interval = brink_prop->brink_interval;
          }
          reg.emplace<DamageEffect>( entity, damage );
       }
-      _event_listener.trigger<AppedDeadEffectEvent>( { dead_entities } );
+
+      _event_listener.trigger<AppendDeadEffectEvent>( { dead_entities } );
    }
 }    // namespace myge

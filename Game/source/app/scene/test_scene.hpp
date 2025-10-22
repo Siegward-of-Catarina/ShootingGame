@@ -5,7 +5,9 @@
 namespace myge
 {
    struct ShootEvent;
-   struct AppedDeadEffectEvent;
+   struct GameOverEvent;
+   struct AppendDeadEffectEvent;
+   struct AppendOverrayFadeEvent;
    class Wave;
    class TestScene final : public sdl_engine::Scene
    {
@@ -24,7 +26,9 @@ namespace myge
    private:
       void createWaves();
       void onShoot( ShootEvent& e );
-      void onDeadEffectAppend( AppedDeadEffectEvent& e );
+      void onGameOver( GameOverEvent& e );
+      void onDeadEffectAppend( AppendDeadEffectEvent& e );
+      void onOverrayFadeAppend( AppendOverrayFadeEvent& e );
 
    private:
       std::vector<std::unique_ptr<Wave>> _waves;

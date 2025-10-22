@@ -11,10 +11,12 @@ namespace sdl_engine
       GameTimer();
       ~GameTimer();
       void      update();
+      void      setGameSpeed( const f32 speed_ ) { _game_speed = speed_; };
       const f32 getDeltaTime() const { return _delta_time; };
       const u32 getFPS() { return _fps; };
 
    private:
+      f32 _game_speed;
       u64 _last_time;
       f32 _delta_time;
       f64 _elapsed_time;

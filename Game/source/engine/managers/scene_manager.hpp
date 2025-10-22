@@ -10,7 +10,7 @@ namespace sdl_engine
    class SceneManager
    {
    public:
-      SceneManager( entt::dispatcher& dispatcher_ );
+      SceneManager( entt::dispatcher& dispatcher_, GameTimer& game_timer_ );
       ~SceneManager();
       void update( const FrameData& frame_ );
       // 最初期シーン初期化後開始
@@ -22,12 +22,17 @@ namespace sdl_engine
       void   enableFadeOutIn( entt::entity fade_ ) { _fade = fade_; };
       Scene& currentScene() { return *_current_scene; };
 
+      void setGameSpeed( const f32 speed_ ) { _game_timer.setGameSpeed( speed_ ); };
+      // 追加: フェードエンティティの取得（シーンから制御したい場合に使用）
+      std::optional<entt::entity> fadeEntity() const { return _fade; }
+
    private:
       // フェードシステムからのイベントコールバック
       void onFadeOutEnd( FadeOutEndEvent& e );
       void onFadeInEnd( FadeInEndEvent& e );
 
    private:
+      GameTimer&                     _game_timer;
       std::unique_ptr<EventListener> _event_listener;
       std::optional<entt::entity>    _fade;
       std::unique_ptr<Scene>         _current_scene;

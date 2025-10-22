@@ -5,6 +5,7 @@
 #include <app/systems/input_system.hpp>
 #include <app/systems/life_cycle_system.hpp>
 #include <engine/basic_system.hpp>
+#include <engine/components/fade.hpp>
 #include <engine/core.hpp>
 #include <engine/managers/input_manager.hpp>
 #include <engine/managers/scene_manager.hpp>
@@ -22,7 +23,7 @@ namespace myge
 
       EntityFactory factory { registry, resource_manager };
       auto          window_size { _context->getWindowSize() };
-      auto          fade = factory.createDefaultFadeEntity( window_size.convertf32().x, window_size.convertf32().y );
+      auto fade = factory.createDefaultFadeEntity( "OutIn", window_size.convertf32().x, window_size.convertf32().y );
 
       _context->getSystemManager().addSystem(
         std::make_unique<sdl_engine::FadeSystem>( 99, registry, _context->getEventListener() ) );

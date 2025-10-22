@@ -4,6 +4,8 @@
 namespace sdl_engine
 {
    struct FadeOutStartEvent;
+   struct FadeRenderLayerChangeEvent;
+   struct FadeSetAlphaEvent;
    class FadeSystem : public SystemInterface
    {
    public:
@@ -14,6 +16,8 @@ namespace sdl_engine
 
    private:
       void onFadeOutStart( FadeOutStartEvent& e );
+      void onFadeRenderLayerChange( FadeRenderLayerChangeEvent& e );
+      void onFadeSetAlpha( FadeSetAlphaEvent& e );
 
    private:
       EventListener&                   _event_listener;

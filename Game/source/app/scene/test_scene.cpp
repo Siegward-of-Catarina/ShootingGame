@@ -9,6 +9,7 @@
 #include <app/systems/collision_system.hpp>
 #include <app/systems/enemy_movement_system.hpp>
 #include <app/systems/facing_system.hpp>
+#include <app/systems/game_over_system.hpp>
 #include <app/systems/hit_resolution_system.hpp>
 #include <app/systems/out_of_screen_system.hpp>
 #include <app/systems/player_movement_system.hpp>
@@ -17,11 +18,15 @@
 #include <app/systems/sprite_brink_system.hpp>
 // event
 #include <app/event/append_dead_effect_event.hpp>
+#include <app/event/append_overray_fade_event.hpp>
 #include <app/event/dead_event.hpp>
+#include <app/event/game_over_event.hpp>
 #include <app/event/shoot_event.hpp>
 // engine
+#include <app/event/game_over_event.hpp>
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
+#include <engine/events/fade_events.hpp>
 namespace
 {
    enum class SceneState
@@ -54,6 +59,7 @@ namespace myge
       system_manager.removeSystem<HitResolutionSystem>();
       system_manager.removeSystem<OutOfScreenSystem>();
       system_manager.removeSystem<SpriteBrinkSystem>();
+      system_manager.removeSystem<GameOverSystem>();
       auto& reg { registry() };
       for ( auto entt : reg.view<AffilGameScene>() )
       {
@@ -138,7 +144,9 @@ namespace myge
    void TestScene::setupEventHandlers()
    {
       eventListener().connect<&TestScene::onShoot, ShootEvent>( this );
-      eventListener().connect<&TestScene::onDeadEffectAppend, AppedDeadEffectEvent>( this );
+      eventListener().connect<&TestScene::onDeadEffectAppend, AppendDeadEffectEvent>( this );
+      eventListener().connect<&TestScene::onOverrayFadeAppend, AppendOverrayFadeEvent>( this );
+      eventListener().connect<&TestScene::onGameOver, GameOverEvent>( this );
    }
 
    void TestScene::addSystems()
@@ -148,11 +156,12 @@ namespace myge
       system_manager.addSystem( std::make_unique<ShootSystem>( 2, registry(), eventListener() ) );
       system_manager.addSystem( std::make_unique<FacingSystem>( 2, registry() ) );
       system_manager.addSystem( std::make_unique<EnemyMovementSystem>( 2, registry() ) );
-      system_manager.addSystem( std::make_unique<ScreenBoundsSystem>( 95, registry() ) );
+      system_manager.addSystem( std::make_unique<ScreenBoundsSystem>( 94, registry() ) );
       system_manager.addSystem( std::make_unique<CollisionSystem>( 95, registry(), eventListener() ) );
       system_manager.addSystem( std::make_unique<HitResolutionSystem>( 96, registry(), eventListener() ) );
       system_manager.addSystem( std::make_unique<OutOfScreenSystem>( 97, registry(), eventListener() ) );
       system_manager.addSystem( std::make_unique<SpriteBrinkSystem>( 98, registry() ) );
+      system_manager.addSystem( std::make_unique<GameOverSystem>( 99, registry(), eventListener() ) );
    }
 
    void TestScene::onShoot( ShootEvent& e )
@@ -160,8 +169,8 @@ namespace myge
       EntityFactory factory { registry(), resourceManager() };
       factory.createBullet( e.shooter, typeid( AffilGameScene ) );
    }
-
-   void TestScene::onDeadEffectAppend( AppedDeadEffectEvent& e )
+   void TestScene::onGameOver( GameOverEvent& e ) { sceneManager().setGameSpeed( 0.5f ); }
+   void TestScene::onDeadEffectAppend( AppendDeadEffectEvent& e )
    {
       auto& reg { registry() };
       for ( auto& entt : e.dead_entities )
@@ -173,5 +182,13 @@ namespace myge
          }
       }
       eventListener().trigger<DeadEvent>( { e.dead_entities } );
+   }
+   void TestScene::onOverrayFadeAppend( AppendOverrayFadeEvent& e )
+   {
+      scene_state = SceneState::Destroy;
+      sceneManager().setGameSpeed( 1.0f );
+      // EntityFactory factory { registry(), resourceManager() };
+      // fade = factory.createDefaultFadeEntity( "Out", 600.0f, 800.0f, 1.0f, 0.7f, 3.0f, 0.0f, true );
+      // eventListener().trigger<sdl_engine::FadeOutStartEvent>( { { fade } } );
    }
 }    // namespace myge

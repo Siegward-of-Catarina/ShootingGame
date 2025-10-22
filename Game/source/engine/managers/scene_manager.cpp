@@ -10,9 +10,10 @@
 
 namespace sdl_engine
 {
-   SceneManager::SceneManager( entt::dispatcher& dispatcher_ )
+   SceneManager::SceneManager( entt::dispatcher& dispatcher_, GameTimer& game_timer_ )
      : _event_listener { std::make_unique<EventListener>( dispatcher_ ) }
      , _fade {}
+     , _game_timer { game_timer_ }
      , _current_scene { nullptr }
      , _next_scene { nullptr }
      , _enable_update { true }

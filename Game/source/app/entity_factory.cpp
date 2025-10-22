@@ -5,11 +5,12 @@
 #include <app/components/affiliation.hpp>
 #include <app/components/bounding_box.hpp>
 #include <app/components/button_ui.hpp>
-#include <app/components/damage.hpp>
+#include <app/components/damage_effect_property.hpp>
 #include <app/components/entity_type_tag.hpp>
 #include <app/components/highlightable.hpp>
 #include <app/components/lifecycle_tags.hpp>
 #include <app/components/player_input.hpp>
+#include <app/components/player_movement.hpp>
 #include <app/components/serpentine_movement.hpp>
 #include <app/components/shooter.hpp>
 #include <app/components/sprite_brink.hpp>
@@ -21,6 +22,7 @@
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 #include <engine/graphics.hpp>
+#include <engine/utils.hpp>
 
 namespace myge
 {
@@ -29,29 +31,58 @@ namespace myge
    {
    }
    EntityFactory::~EntityFactory() {}
-   entt::entity EntityFactory::createDefaultFadeEntity( f32 window_width, f32 window_height )
+
+   // ライフタイム管理は外部で行うこと
+   entt::entity EntityFactory::createDefaultFadeEntity( const std::string_view type_,
+                                                        f32                    window_width_,
+                                                        f32                    window_height_,
+                                                        f32                    end_alpha_,             // option
+                                                        f32                    target_out_alpha_,      // option
+                                                        f32                    speed_,                 // option
+                                                        f32                    black_out_duration_,    // option
+                                                        bool                   under_ui_ )
    {
       auto fade { _registry.create() };
       // transfrom
       sdl_engine::Transform trfm_cmp {
-         .x { window_width / 2.0f }, .y { window_height / 2.0f }, .angle { 0.0f }, .scale { 1.0f }
+         .x { window_width_ / 2.0f }, .y { window_height_ / 2.0f }, .angle { 0.0f }, .scale { 1.0f }
       };
       _registry.emplace<sdl_engine::Transform>( fade, trfm_cmp );
       // sprite
       sdl_engine::Sprite sprt_comp {};
       sprt_comp.texture = _resource_manager.getSprite( "white" );
-      sprt_comp.src     = { 0.0f, 0.0f, window_width, window_height };
-      sprt_comp.dst     = { trfm_cmp.x, trfm_cmp.y, window_width, window_height };
+      sprt_comp.src     = { 0.0f, 0.0f, window_width_, window_height_ };
+      sprt_comp.dst     = { trfm_cmp.x, trfm_cmp.y, window_width_, window_height_ };
       sprt_comp.color   = { 0.0f, 0.0f, 0.0f, 0.0f };
       _registry.emplace<sdl_engine::Sprite>( fade, sprt_comp );
       // fade
       sdl_engine::Fade fade_comp { .state { sdl_engine::Fade::State::Idle },
-                                   .speed { 2.0f },
-                                   .black_out_duration { 1.0f } };
+                                   .type {},
+                                   .end_alpha { ( end_alpha_ >= 0 ) ? end_alpha_ : 0.0f },
+                                   .target_out_alpha { ( target_out_alpha_ >= 0 ) ? target_out_alpha_ : 1.0f },
+                                   .speed { ( speed_ >= 0 ) ? speed_ : 2.0f },
+                                   .black_out_duration { ( black_out_duration_ >= 0 ) ? black_out_duration_ : 1.0f } };
+
+      // type決定
+      if ( type_ == "OutIn" ) { fade_comp.type = sdl_engine::Fade::Type::OutIn; }
+      else if ( type_ == "Out" ) { fade_comp.type = sdl_engine::Fade::Type::Out; }
+      else if ( type_ == "In" ) { fade_comp.type = sdl_engine::Fade::Type::In; }
+      else
+      {
+         std::string err_msg = "EntityFactory::createDefaultFadeEntity: Invalid fade type ";
+         err_msg += std::string( type_ );
+         throw sdl_engine::GameException( err_msg.c_str() );
+      }
+
       _registry.emplace<sdl_engine::Fade>( fade, fade_comp );
-      _registry.emplace<sdl_engine::RenderFadeTag>( fade );
+
+      // フラグでUIの下に描画するか最前面に描画するか決める
+      if ( under_ui_ ) { _registry.emplace<sdl_engine::RenderFadeUnderUITag>( fade ); }
+      else { _registry.emplace<sdl_engine::RenderFadeTag>( fade ); }
+
       return fade;
    }
+
    entt::entity EntityFactory::createBullet( entt::entity& shooter_, const std::type_index& affiliation_id_ )
    {
       using namespace sdl_engine;
@@ -214,13 +245,33 @@ namespace myge
       {
          f32     cooldown { sdl_engine::getOptionalData<f32>( data_, "shoot_cooldown", 0.2f ) };
          auto    dir { sdl_engine::getOptionalData<std::array<f32, 2>>( data_, "bullet_velocity", { 0.0f, -500.0f } ) };
-         Shooter shtr { createShooter( cooldown, dir, "enemy_small" ) };
+         Shooter shtr {
+            cooldown, 0.0f, { dir[ 0 ], dir[ 1 ] },
+              BulletType::Enemy_small
+         };
          _registry.emplace<Shooter>( entity, shtr );
       }
       // [status]
       {
          Status status { .hp { 3 }, .max_hp { 3 }, .atk { 0 } };
          _registry.emplace<Status>( entity, status );
+      }
+      // [damage effect prop]
+      {
+         auto red_brink_time = sdl_engine::getOptionalData<f32>( data_, "red_brink_time", 0.5f );
+         auto brink_interval = sdl_engine::getOptionalData<f32>( data_, "brink_interval", 0.1f );
+
+         DamageEffectProperty dmg_effect_prop { red_brink_time, brink_interval };
+         _registry.emplace<DamageEffectProperty>( entity, dmg_effect_prop );
+      }
+      // [movement]
+      {
+         auto                max_speed { sdl_engine::getOptionalData<f32>( data_, "max_speed", 400.0f ) };
+         auto                acceleration { sdl_engine::getOptionalData<f32>( data_, "acceleration", 5.0f ) };
+         PlayerMovementInput move_input {
+            max_speed, acceleration, { 0.f, 0.f }
+         };
+         _registry.emplace<PlayerMovementInput>( entity, move_input );
       }
       return entity;
    }
@@ -288,8 +339,13 @@ namespace myge
             auto type { sdl_engine::getRequireData<std::string>( move_data.value(), "type" ) };
             if ( type == "serpentine" )
             {
-               SerpentineMovement serpent { createSerpentineMovement( move_data.value() ) };
-               serpent.center_x = trfm.x;
+               SerpentineMovement serpent {};
+               serpent.center_x       = trfm.x;
+               serpent.amplitude      = sdl_engine::getOptionalData<f32>( move_data.value(), "amplitude", 200.0f );
+               serpent.frequency      = sdl_engine::getOptionalData<f32>( move_data.value(), "frequency", 20.0f );
+               serpent.move_speed     = sdl_engine::getOptionalData<f32>( move_data.value(), "speed", 200.0f );
+               serpent.move_threshold = sdl_engine::getOptionalData<f32>( move_data.value(), "threshold", 0.9f );
+               serpent.time           = 0.0f;
                _registry.emplace<SerpentineMovement>( entity, serpent );
             }
          }
@@ -304,7 +360,14 @@ namespace myge
          Status status { .hp { 2 }, .max_hp { 2 }, .atk { 1 } };
          _registry.emplace<Status>( entity, status );
       }
+      // [damage effect prop]
+      {
+         auto red_brink_time = sdl_engine::getOptionalData<f32>( data_, "red_brink_time", 0.5f );
+         auto brink_interval = sdl_engine::getOptionalData<f32>( data_, "brink_interval", 0.5f / 7 );
 
+         DamageEffectProperty dmg_effect_prop { red_brink_time, brink_interval };
+         _registry.emplace<DamageEffectProperty>( entity, dmg_effect_prop );
+      }
       return entity;
    }
    entt::entity EntityFactory::createBasicUI( const json& data_, const std::type_index& affiliation_id_ )
