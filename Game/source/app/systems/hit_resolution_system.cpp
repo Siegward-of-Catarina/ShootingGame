@@ -26,23 +26,26 @@ namespace myge
       auto&                     reg = registry();
       std::vector<entt::entity> dead_entities;
       std::vector<entt::entity> damage_entities;
-      for ( auto [ entity_a, entity_b ] : e.hit_entity_pairs )
+      // firstは敵側、secondはプレイヤー側と固定し扱う
+      for ( auto [ enemy_side, player_side ] : e.hit_entity_pairs )
       {
-         if ( reg.valid( entity_a ) && reg.valid( entity_b ) )
+         if ( reg.valid( enemy_side ) && reg.valid( player_side ) )
          {
-            auto& status_a = reg.get<Status>( entity_a );
-            auto& status_b = reg.get<Status>( entity_b );
-            if ( !reg.all_of<DamageEffect>( entity_a ) && status_b.atk )
+            auto& status_a = reg.get<Status>( enemy_side );
+            auto& status_b = reg.get<Status>( player_side );
+            // エネミーサイドは無敵判定を取らない！！!reg.all_of<DamageEffect>( enemy_side )
+            if ( status_b.atk )
             {
                status_a.hp -= status_b.atk;
-               if ( status_a.hp <= 0 ) { dead_entities.emplace_back( entity_a ); }
-               else { damage_entities.emplace_back( entity_a ); }
+               if ( status_a.hp <= 0 ) { dead_entities.emplace_back( enemy_side ); }
+               else { damage_entities.emplace_back( enemy_side ); }
             }
-            if ( !reg.all_of<DamageEffect>( entity_b ) && status_a.atk )
+            // プレイヤーサイドは無敵判定を取る Damage中はダメージを受けない
+            if ( !reg.all_of<DamageEffect>( player_side ) && status_a.atk )
             {
                status_b.hp -= status_a.atk;
-               if ( status_b.hp <= 0 ) { dead_entities.emplace_back( entity_b ); }
-               else { damage_entities.emplace_back( entity_b ); }
+               if ( status_b.hp <= 0 ) { dead_entities.emplace_back( player_side ); }
+               else { damage_entities.emplace_back( player_side ); }
             }
          }
       }
@@ -59,7 +62,7 @@ namespace myge
          }
          reg.emplace<DamageEffect>( entity, damage );
       }
-
+      // 死亡エフェクト生成イベント発行
       _event_listener.trigger<AppendDeadEffectEvent>( { dead_entities } );
    }
 }    // namespace myge

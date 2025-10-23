@@ -74,6 +74,7 @@ namespace myge
                   if ( len <= rad )
                   {
                      SDL_Log( "hit" );
+                     // first:はエネミーサイド、second:はプレイヤーサイド
                      _hit_entity_pairs.emplace_back( enemy.entity, target_ );
                      // 一つの弾丸は一つの敵にしか当たらないためgotoで抜ける
                      return;

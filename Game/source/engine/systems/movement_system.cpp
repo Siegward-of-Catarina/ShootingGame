@@ -13,7 +13,7 @@ namespace sdl_engine
    void MovementSystem::update( const FrameData& frame_ )
    {
       auto& reg { registry() };
-      auto  view { getUpdateable<Transform, Velocity>( reg ) };
+      auto  view { getUpdateable<Transform, Velocity>( reg, entt::exclude<DirectMovementTag> ) };
       for ( auto [ entity, trfm, velo ] : view.each() )
       {
          if ( !reg.valid( entity ) ) { continue; }

@@ -56,6 +56,8 @@
     <ClCompile Include="source\engine\events\event_listener.cpp" />
     <ClCompile Include="source\app\systems\hit_resolution_system.cpp" />
     <ClCompile Include="source\app\systems\game_over_system.cpp" />
+    <ClCompile Include="source\app\scene\game_over_scene.cpp" />
+    <ClCompile Include="source\app\systems\transform_link_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -196,7 +198,7 @@
     <ClInclude Include="source\app\event\highlight_event.hpp" />
     <ClInclude Include="source\app\components\highlightable.hpp" />
     <ClInclude Include="source\app\systems\menu_system.hpp" />
-    <ClInclude Include="source\app\event\title_ui_event.hpp" />
+    <ClInclude Include="source\app\event\menu_button_event.hpp" />
     <ClInclude Include="source\app\event\key_down_event.hpp" />
     <ClInclude Include="source\app\components\title_menu.hpp" />
     <ClInclude Include="source\app\components\button_ui.hpp" />
@@ -213,5 +215,8 @@
     <ClInclude Include="source\app\event\game_over_event.hpp" />
     <ClInclude Include="source\app\systems\game_over_system.hpp" />
     <ClInclude Include="source\app\event\append_overray_fade_event.hpp" />
+    <ClInclude Include="source\app\scene\game_over_scene.hpp" />
+    <ClInclude Include="source\app\components\transform_link.hpp" />
+    <ClInclude Include="source\app\systems\transform_link_system.hpp" />
   </ItemGroup>
 </Project>

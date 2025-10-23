@@ -5,7 +5,7 @@
 // event
 #include <app/event/highlight_event.hpp>
 #include <app/event/key_down_event.hpp>
-#include <app/event/title_ui_event.hpp>
+#include <app/event/menu_button_event.hpp>
 
 namespace
 {
@@ -38,7 +38,7 @@ namespace myge
             _down_space_key = false;
 
             auto& but = registry().get<ButtonUI>( menu.menu_ui[ menu.selected ] );
-            _event_listener.trigger<TitleMenuEvent>( { but.type } );
+            _event_listener.trigger<MenuButtonEvent>( { but.type } );
          }
       }
    }

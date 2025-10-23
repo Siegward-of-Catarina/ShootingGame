@@ -7,8 +7,8 @@ namespace myge
    {
    public:
       SpriteBrinkSystem( i32 priority_, entt::registry& registry_ );
-      virtual ~SpriteBrinkSystem();
+      virtual ~SpriteBrinkSystem() override;
       // SystemInterface を介して継承されました
-      virtual void update(const sdl_engine::FrameData& frame_) override;
+      virtual void update( const sdl_engine::FrameData& frame_ ) override;
    };
 }    // namespace myge

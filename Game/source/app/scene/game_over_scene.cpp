@@ -1,4 +1,5 @@
 ﻿#include <app/entity_factory.hpp>
+#include <app/scene/game_over_scene.hpp>
 #include <app/scene/test_scene.hpp>
 #include <app/scene/title_scene.hpp>
 // system
@@ -12,15 +13,13 @@
 // event
 #include <app/event/menu_button_event.hpp>
 
-myge::TitleScene::TitleScene( const sdl_engine::SceneDependencies& dependencies_ )
-  : Scene { dependencies_, "game_data/scene_data/title_scene_data.json" }, _scene_elapsed_time { 0 }
+myge::GameOverScene::GameOverScene( const sdl_engine::SceneDependencies& dependencies_ )
+  : Scene { dependencies_, "game_data/scene_data/game_over_scene_data.json" }, _scene_elapsed_time { 0 }
 {
 }
 
-myge::TitleScene::~TitleScene()
+myge::GameOverScene::~GameOverScene()
 {
-   systemManager().removeSystem<SpriteBrinkSystem>();
-   systemManager().removeSystem<ScreenBoundsSystem>();
    systemManager().removeSystem<HighlightSystem>();
    systemManager().removeSystem<MenuSystem>();
    systemManager().removeSystem<OutOfScreenSystem>();
@@ -31,31 +30,18 @@ myge::TitleScene::~TitleScene()
    }
 }
 
-void myge::TitleScene::start() {}
+void myge::GameOverScene::start() {}
 
-void myge::TitleScene::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ ) {}
+void myge::GameOverScene::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ ) {}
 
-void myge::TitleScene::addSystems()
+void myge::GameOverScene::addSystems()
 {
-   systemManager().addSystem( std::make_unique<SpriteBrinkSystem>( 94, registry() ) );
-   systemManager().addSystem( std::make_unique<ScreenBoundsSystem>( 95, registry() ) );
    systemManager().addSystem( std::make_unique<HighlightSystem>( 95, registry(), eventListener() ) );
    systemManager().addSystem( std::make_unique<MenuSystem>( 96, registry(), eventListener() ) );
    systemManager().addSystem( std::make_unique<OutOfScreenSystem>( 97, registry(), eventListener() ) );
 }
 
-void myge::TitleScene::onTitleMenuAction( const MenuButtonEvent& e )
-{
-   switch ( e.button_type )
-   {
-      case ButtonUI::Type::Start :
-         sceneManager().setNextScene( std::make_unique<TestScene>( sceneDependencies() ) );
-         break;
-      case ButtonUI::Type::Exit : sceneManager().quitGame(); break;
-   }
-}
-
-void myge::TitleScene::createEntities()
+void myge::GameOverScene::createEntities()
 {
    auto& scene_data { sceneData() };
    if ( auto data { sdl_engine::tryGetJson( scene_data, "Entities" ) }; data )
@@ -65,7 +51,18 @@ void myge::TitleScene::createEntities()
    }
 }
 
-void myge::TitleScene::setupEventHandlers()
+void myge::GameOverScene::setupEventHandlers()
 {
-   eventListener().connect<&TitleScene::onTitleMenuAction, MenuButtonEvent>( this );
+   eventListener().connect<&GameOverScene::onContinueMenuAction, MenuButtonEvent>( this );
+}
+
+void myge::GameOverScene::onContinueMenuAction( const MenuButtonEvent& e )
+{
+   switch ( e.button_type )
+   {
+      case ButtonUI::Type::Start :
+         sceneManager().setNextScene( std::make_unique<TestScene>( sceneDependencies() ) );
+         break;
+      case ButtonUI::Type::Exit : sceneManager().quitGame(); break;
+   }
 }

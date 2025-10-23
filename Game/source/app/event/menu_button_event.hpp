@@ -3,7 +3,7 @@
 #include <engine/forward.hpp>
 namespace myge
 {
-   struct TitleMenuEvent
+   struct MenuButtonEvent
    {
       ButtonUI::Type button_type;
    };

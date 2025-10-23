@@ -1,4 +1,5 @@
 ﻿#include <SDL3/SDL.h>
+#include <SDL3/SDL_audio.h>
 #include <app/entity_factory.hpp>
 #include <app/game.hpp>
 #include <app/scene/title_scene.hpp>
@@ -11,7 +12,6 @@
 #include <engine/managers/scene_manager.hpp>
 #include <engine/managers/system_manager.hpp>
 #include <engine/systems/fade_system.hpp>
-
 namespace myge
 {
    Game::Game() : _context { std::make_unique<sdl_engine::EngineContext>( "shooting", 600, 800 ) }

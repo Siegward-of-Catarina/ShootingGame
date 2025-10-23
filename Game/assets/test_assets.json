@@ -20,15 +20,35 @@
 			},
 			{
 				"name": "enemy_bullet_hit",
-				"file_path": "hit.png"
+				"file_path": "enemy_bullet_hit.png"
+			},
+			{
+				"name": "player_bullet_hit",
+				"file_path": "player_bullet_hit.png"
 			},
 			{
 				"name": "enemy_dead",
-				"file_path": "expr_sprite.png"
+				"file_path": "enemy_dead.png"
+			},
+			{
+				"name": "player_dead",
+				"file_path": "player_dead.png"
+			},
+			{
+				"name": "player_booster",
+				"file_path": "player_booster.png"
 			},
 			{
 				"name": "title",
 				"file_path": "title.png"
+			},
+			{
+				"name": "game_over",
+				"file_path": "game_over.png"
+			},
+			{
+				"name": "continue",
+				"file_path": "continue.png"
 			},
 			{
 				"name": "start",
@@ -37,6 +57,14 @@
 			{
 				"name": "exit",
 				"file_path": "exit.png"
+			},
+			{
+				"name": "yes",
+				"file_path": "yes.png"
+			},
+			{
+				"name": "no",
+				"file_path": "no.png"
 			},
 			{
 				"name": "player_bullet",
@@ -97,6 +125,16 @@
 			"anim_type": "Once"
 		},
 		{
+			"name": "player_bullet_hit_anim",
+			"sprite_name": "player_bullet_hit",
+			"sprite_col": 8,
+			"sprite_row": 1,
+			"frame_width": 24,
+			"frame_height": 24,
+			"frame_time": 0.03,
+			"anim_type": "Once"
+		},
+		{
 			"name": "enemy_dead_anim",
 			"sprite_name": "enemy_dead",
 			"sprite_col": 14,
@@ -105,6 +143,26 @@
 			"frame_height": 64,
 			"frame_time": 0.03,
 			"anim_type": "Once"
+		},
+		{
+			"name": "player_dead_anim",
+			"sprite_name": "player_dead",
+			"sprite_col": 14,
+			"sprite_row": 1,
+			"frame_width": 64,
+			"frame_height": 64,
+			"frame_time": 0.03,
+			"anim_type": "Once"
+		},
+		{
+			"name": "player_booster_anim",
+			"sprite_name": "player_booster",
+			"sprite_col": 8,
+			"sprite_row": 1,
+			"frame_width": 32,
+			"frame_height": 32,
+			"frame_time": 0.03,
+			"anim_type": "Loop"
 		}
 	],
 	"FontDatas": [

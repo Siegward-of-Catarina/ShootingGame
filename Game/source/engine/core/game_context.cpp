@@ -7,6 +7,7 @@
 #include <engine/basic_system.hpp>
 // event
 #include <engine/events/quit_event.hpp>
+#include <engine/utils/common_utilities.hpp>
 namespace sdl_engine
 {
    EngineContext::EngineContext( std::string_view window_name_, i32 window_width_, i32 window_height_ )
@@ -23,6 +24,7 @@ namespace sdl_engine
      , _game_timer { nullptr }
      , is_quit { false }
    {
+      // NOTE: SDL_Init returns 0 on success. Original code inverted the check.
       if ( !SDL_Init( SDL_INIT_VIDEO ) ) { throw GameException( "SDLの初期化に失敗しました" ); }
 
 #ifdef _DEBUG

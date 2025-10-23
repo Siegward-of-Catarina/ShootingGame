@@ -27,6 +27,7 @@ namespace myge
       entt::entity createBullet( entt::entity& shooter_, const std::type_index& affiliation_id_ );
       entt::entity createHitEffect( entt::entity dead_entt_, const std::type_index& affiliation_id_ );
       entt::entity createPlayer( const json& data_, const std::type_index& affiliation_id_ );
+      entt::entity createPlayerBooster( const entt::entity parent_, const std::type_index& affiliation_id_ );
       entt::entity createWandererEnemy( const json&             data_,
                                         const std::type_index&  affiliation_id_,
                                         sdl_engine::Vector2_f32 offset_pos_ = { 0.0f, 0.0f } );

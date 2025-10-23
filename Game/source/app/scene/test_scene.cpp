@@ -1,7 +1,7 @@
 ﻿#include <SDL3/SDL.h>
 #include <app/entity_factory.hpp>
+#include <app/scene/game_over_scene.hpp>
 #include <app/scene/test_scene.hpp>
-#include <app/scene/title_scene.hpp>
 #include <app/waves/wave.hpp>
 #include <app/waves/wave_factory.hpp>
 // system
@@ -16,6 +16,7 @@
 #include <app/systems/screen_bounds_system.hpp>
 #include <app/systems/shoot_system.hpp>
 #include <app/systems/sprite_brink_system.hpp>
+#include <app/systems/transform_link_system.hpp>
 // event
 #include <app/event/append_dead_effect_event.hpp>
 #include <app/event/append_overray_fade_event.hpp>
@@ -54,6 +55,7 @@ namespace myge
       system_manager.removeSystem<ShootSystem>();
       system_manager.removeSystem<FacingSystem>();
       system_manager.removeSystem<EnemyMovementSystem>();
+      system_manager.removeSystem<TransformLinkSystem>();
       system_manager.removeSystem<ScreenBoundsSystem>();
       system_manager.removeSystem<CollisionSystem>();
       system_manager.removeSystem<HitResolutionSystem>();
@@ -102,7 +104,7 @@ namespace myge
             if ( inputManager().isAnyKeydown() ) { scene_state = SceneState::Destroy; }
             break;
          case SceneState::Destroy :
-            sceneManager().setNextScene( std::make_unique<TitleScene>( sceneDependencies() ) );
+            sceneManager().setNextScene( std::make_unique<GameOverScene>( sceneDependencies() ) );
             break;
       }
    }
@@ -156,6 +158,7 @@ namespace myge
       system_manager.addSystem( std::make_unique<ShootSystem>( 2, registry(), eventListener() ) );
       system_manager.addSystem( std::make_unique<FacingSystem>( 2, registry() ) );
       system_manager.addSystem( std::make_unique<EnemyMovementSystem>( 2, registry() ) );
+      system_manager.addSystem( std::make_unique<TransformLinkSystem>( 93, registry(), eventListener() ) );
       system_manager.addSystem( std::make_unique<ScreenBoundsSystem>( 94, registry() ) );
       system_manager.addSystem( std::make_unique<CollisionSystem>( 95, registry(), eventListener() ) );
       system_manager.addSystem( std::make_unique<HitResolutionSystem>( 96, registry(), eventListener() ) );
@@ -187,8 +190,5 @@ namespace myge
    {
       scene_state = SceneState::Destroy;
       sceneManager().setGameSpeed( 1.0f );
-      // EntityFactory factory { registry(), resourceManager() };
-      // fade = factory.createDefaultFadeEntity( "Out", 600.0f, 800.0f, 1.0f, 0.7f, 3.0f, 0.0f, true );
-      // eventListener().trigger<sdl_engine::FadeOutStartEvent>( { { fade } } );
    }
 }    // namespace myge

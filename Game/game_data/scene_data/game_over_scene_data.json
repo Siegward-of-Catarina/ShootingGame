@@ -1,0 +1,30 @@
+﻿{
+	"Entities": {
+		"basic_ui": [
+			{
+				"sprite_name": "game_over",
+				"pos": [ 300.0, 200.0 ]
+			},
+			{
+				"sprite_name": "continue",
+				"pos": [ 300.0, 500.0 ]
+			}
+		],
+		"menu": [
+			{
+				"highlightable_ui": [
+					{
+						"sprite_name": "yes",
+						"pos": [ 300.0, 600.0 ],
+						"button_type": "start"
+					},
+					{
+						"sprite_name": "no",
+						"pos": [ 300.0, 700.0 ],
+						"button_type": "exit"
+					}
+				]
+			}
+		]
+	}
+}

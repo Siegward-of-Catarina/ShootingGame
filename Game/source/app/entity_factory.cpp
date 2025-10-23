@@ -17,6 +17,7 @@
 #include <app/components/status.hpp>
 #include <app/components/title_input.hpp>
 #include <app/components/title_menu.hpp>
+#include <app/components/transform_link.hpp>
 
 // basic_components
 #include <engine/basic_component.hpp>
@@ -149,8 +150,8 @@ namespace myge
 
       if ( _registry.all_of<PlayerBulletTag>( dead_entt_ ) )
       {
-         sprite = _resource_manager.getSprite( "enemy_bullet_hit" );
-         anim   = _resource_manager.getSpriteAnim( "enemy_bullet_hit_anim" );
+         sprite = _resource_manager.getSprite( "player_bullet_hit" );
+         anim   = _resource_manager.getSpriteAnim( "player_bullet_hit_anim" );
       }
       else if ( _registry.all_of<EnemyTag>( dead_entt_ ) )
       {
@@ -159,8 +160,8 @@ namespace myge
       }
       else if ( _registry.all_of<PlayerTag>( dead_entt_ ) )
       {
-         sprite = _resource_manager.getSprite( "enemy_dead" );
-         anim   = _resource_manager.getSpriteAnim( "enemy_dead_anim" );
+         sprite = _resource_manager.getSprite( "player_dead" );
+         anim   = _resource_manager.getSpriteAnim( "player_dead_anim" );
       }
 
       auto entity { _registry.create() };
@@ -247,7 +248,7 @@ namespace myge
          auto    dir { sdl_engine::getOptionalData<std::array<f32, 2>>( data_, "bullet_velocity", { 0.0f, -500.0f } ) };
          Shooter shtr {
             cooldown, 0.0f, { dir[ 0 ], dir[ 1 ] },
-              BulletType::Enemy_small
+              BulletType::Player
          };
          _registry.emplace<Shooter>( entity, shtr );
       }
@@ -272,6 +273,53 @@ namespace myge
             max_speed, acceleration, { 0.f, 0.f }
          };
          _registry.emplace<PlayerMovementInput>( entity, move_input );
+      }
+
+      createPlayerBooster( entity, affiliation_id_ );
+
+      return entity;
+   }
+   entt::entity EntityFactory::createPlayerBooster( const entt::entity parent_, const std::type_index& affiliation_id_ )
+   {
+      auto entity { _registry.create() };
+
+      setAffiliationTag( entity, affiliation_id_ );
+
+      // リソース
+      auto sprt_resource { _resource_manager.getSprite( "player_booster" ) };
+      auto sprt_anim_resource { _resource_manager.getSpriteAnim( "player_booster_anim" ) };
+      f32  frame_w { static_cast<f32>( sprt_anim_resource->frame_width ) };
+      f32  frame_h { static_cast<f32>( sprt_anim_resource->frame_height ) };
+
+      // タグコンポーネント
+      _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
+      _registry.emplace<PlayerTag>( entity );
+      _registry.emplace<myge::EnteringTag>( entity );
+      _registry.emplace<sdl_engine::RenderableTag>( entity );
+      _registry.emplace<sdl_engine::UpdateableTag>( entity );
+      // [Sprite]
+      {
+         sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
+         sprt.dst.w = frame_w;
+         sprt.dst.h = frame_h;
+         _registry.emplace<sdl_engine::Sprite>( entity, sprt );
+      }
+      // [SpriteAnim]
+      {
+         sdl_engine::SpriteAnim sp_anim { sdl_engine::createSpriteAnim( sprt_anim_resource, 1u ) };
+         _registry.emplace<sdl_engine::SpriteAnim>( entity, sp_anim );
+      }
+      // [Transform]
+      {
+         sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
+         _registry.emplace<sdl_engine::Transform>( entity, trfm );
+      }
+      // [TransformLink]
+      {
+         TransformLink trfm_link {
+            parent_, { 0.0f, 40.0f }
+         };
+         _registry.emplace<TransformLink>( entity, trfm_link );
       }
       return entity;
    }

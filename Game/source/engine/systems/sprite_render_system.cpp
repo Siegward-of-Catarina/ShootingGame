@@ -16,7 +16,7 @@ namespace sdl_engine
    void SpriteRenderSystem::update( [[maybe_unused]] const FrameData& frame_ )
    {
       auto& reg { registry() };
-      _renderer.renderClear( .3f, .3f, .3f, 1.f );
+      _renderer.renderClear( .0f, .0f, .0f, 1.f );
 
       // 汎用描画
       auto common_render = []( Renderer& renderer, Sprite& sprt, Transform& trfm )

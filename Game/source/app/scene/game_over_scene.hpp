@@ -3,13 +3,13 @@
 #include <engine/scene/scene.hpp>
 namespace myge
 {
-
    struct MenuButtonEvent;
-   class TitleScene final : public sdl_engine::Scene
+   class GameOverScene final : public sdl_engine::Scene
    {
+
    public:
-      TitleScene( const sdl_engine::SceneDependencies& dependencies_ );
-      virtual ~TitleScene() override;
+      GameOverScene( const sdl_engine::SceneDependencies& dependencies_ );
+      virtual ~GameOverScene() override;
       virtual void start() override;
       virtual void update( const sdl_engine::FrameData& frame_ ) override;
 
@@ -20,7 +20,7 @@ namespace myge
       virtual void setupEventHandlers() override;
 
    private:
-      void onTitleMenuAction( const MenuButtonEvent& e );
+      void onContinueMenuAction( const MenuButtonEvent& e );
 
    private:
       f64 _scene_elapsed_time;
