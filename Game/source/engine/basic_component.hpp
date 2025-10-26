@@ -1,8 +1,10 @@
 ﻿#pragma once
+#include <engine/Components/background_music.hpp>
 #include <engine/Components/direct_control_tags.hpp>
 #include <engine/Components/enable_tag_components.hpp>
 #include <engine/Components/fade.hpp>
 #include <engine/Components/render_type_tag.hpp>
+#include <engine/Components/soundeffect.hpp>
 #include <engine/Components/sprite.hpp>
 #include <engine/Components/sprite_anim.hpp>
 #include <engine/Components/text.hpp>

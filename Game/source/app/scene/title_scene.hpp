@@ -5,6 +5,7 @@ namespace myge
 {
 
    struct MenuButtonEvent;
+   struct KeyDownEvent;
    class TitleScene final : public sdl_engine::Scene
    {
    public:
@@ -21,6 +22,7 @@ namespace myge
 
    private:
       void onTitleMenuAction( const MenuButtonEvent& e );
+      void onAppendInputSE( const KeyDownEvent& e );
 
    private:
       f64 _scene_elapsed_time;

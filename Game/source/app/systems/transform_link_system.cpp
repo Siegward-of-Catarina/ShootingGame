@@ -8,12 +8,16 @@
 #include <engine/core.hpp>
 // event
 #include <app/event/dead_event.hpp>
+
 namespace
 {
    constexpr size_t DEFAULT_RESERVE_SIZE { 2 };
 }
+
 namespace myge
 {
+   // 子エンティティの Transform を親に追従させるシステム
+   // 親が無効化された場合、子を DeadEvent で破棄させる
    TransformLinkSystem::TransformLinkSystem( i32                        priority_,
                                              entt::registry&            registry_,
                                              sdl_engine::EventListener& event_listener_ )
@@ -21,11 +25,14 @@ namespace myge
    {
       _dead_link_entities.reserve( DEFAULT_RESERVE_SIZE );
    }
+
    TransformLinkSystem::~TransformLinkSystem() {}
-   void TransformLinkSystem::update( const sdl_engine::FrameData& frame_ )
+
+   void TransformLinkSystem::update( const sdl_engine::FrameData& /*frame_*/ )
    {
       auto& reg { registry() };
       _dead_link_entities.clear();
+
       for ( auto [ entity, trfm, link ] : reg.view<sdl_engine::Transform, TransformLink>().each() )
       {
          if ( !reg.valid( entity ) ) { continue; }

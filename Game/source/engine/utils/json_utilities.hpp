@@ -5,12 +5,22 @@
 #include <nlohmann/json.hpp>
 #include <optional>
 #include <source_location>
+
+// nlohmann::json の別名
 using json = nlohmann::json;
 
 namespace sdl_engine
 {
-   json                                              loadJson( std::string_view assets_path_ );
+   // 指定パスの JSON ファイルを読み込み、json オブジェクトを返す。
+   // 読み込み/解析失敗時は GameException を投げる。
+   json loadJson( std::string_view assets_path_ );
+
+   // data_ の中から key_ に対応する json 値を参照で取得する。
+   // キーが存在しない、または null の場合は std::nullopt。
    std::optional<std::reference_wrapper<const json>> tryGetJson( const json& data_, std::string_view key_ );
+
+   // 必須キーの取り出し。存在しない/値が null の場合は GameException を投げる。
+   // 取得時に json::get<T>() を用いるため、T は変換可能な型である必要がある。
    template<typename T>
    const T getRequireData( const json& data_, std::string_view key_ )
    {
@@ -22,6 +32,9 @@ namespace sdl_engine
       }
       return data_.at( key_str ).get<T>();
    }
+
+   // 任意キーの取り出し。存在しない/値が null の場合は default_value_ を返す。
+   // log_when_default_ が true の場合、既定値使用を SDL_LogDebug に出力する。
    template<typename T>
    const T
    getOptionalData( const json& data_, std::string_view key_, const T& default_value_, bool log_when_default_ = false )

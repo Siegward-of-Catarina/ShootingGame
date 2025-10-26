@@ -165,6 +165,31 @@
 			"anim_type": "Loop"
 		}
 	],
+	"Sounds": {
+		"SoundRootPath": "assets/sound/",
+		"SoundDatas": [
+			{
+				"name": "bgm_title",
+				"file_path": "title.wav"
+			},
+			{
+				"name": "select",
+				"file_path": "select.mp3"
+			},
+			{
+				"name": "decide",
+				"file_path": "decide.mp3"
+			},
+			{
+				"name": "se_chun1",
+				"file_path": "se_chun1.mp3"
+			},
+			{
+				"name": "se_explode11",
+				"file_path": "se_explode11.mp3"
+			}
+		]
+	},
 	"FontDatas": [
 		{
 			"name": "font_x8",

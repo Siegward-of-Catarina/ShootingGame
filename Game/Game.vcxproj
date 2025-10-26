@@ -86,7 +86,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../third_party/SDL/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -137,6 +137,14 @@
     <ClCompile Include="source\app\scene\title_scene.cpp" />
     <ClCompile Include="source\app\systems\screen_bounds_system.cpp" />
     <ClCompile Include="source\engine\rendering\resource\loader\font_loader.cpp" />
+    <ClCompile Include="source\engine\sound\resource\loader\sound_loader.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="source\engine\sound\sound_mixer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="source\engine\systems\fade_system.cpp" />
     <ClCompile Include="source\engine\core\game_timer.cpp" />
     <ClCompile Include="source\app\systems\input_system.cpp" />
@@ -161,6 +169,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="source\engine\systems\scale_system.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="source\engine\systems\sound_system.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -265,8 +277,16 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\engine\components\background_music.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\engine\Components\direct_control_tags.hpp" />
     <ClInclude Include="source\engine\components\render_type_tag.hpp" />
+    <ClInclude Include="source\engine\components\soundeffect.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\engine\components\text.hpp" />
     <ClInclude Include="source\engine\Components\use_custom_update_transform_tags.hpp">
       <SubType>
@@ -282,6 +302,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="source\engine\events\quit_event.hpp" />
+    <ClInclude Include="source\engine\events\sound_events.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\engine\events\sprite_anim_end_event.hpp" />
     <ClInclude Include="source\engine\rendering\resource\color.hpp" />
     <ClInclude Include="source\app\components\lifecycle_tags.hpp" />
@@ -294,6 +318,18 @@
     <ClInclude Include="source\app\components\lifecycle.hpp" />
     <ClInclude Include="source\engine\rendering\resource\font_resource.hpp" />
     <ClInclude Include="source\engine\rendering\resource\loader\font_loader.hpp" />
+    <ClInclude Include="source\engine\sound\resource\loader\sound_loader.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\engine\sound\resource\sound_resource.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\engine\sound\sound_mixer.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\engine\systems\fade_system.hpp" />
     <ClInclude Include="source\engine\components\fade.hpp" />
     <ClInclude Include="source\engine\forward.hpp" />
@@ -337,6 +373,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="source\engine\systems\scale_system.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\engine\systems\sound_system.hpp">
       <SubType>
       </SubType>
     </ClInclude>

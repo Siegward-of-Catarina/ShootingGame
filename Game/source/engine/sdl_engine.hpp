@@ -1,4 +1,5 @@
 ﻿#pragma once
+// エンジンが提供する主なヘッダをひとまとめにインクルードするアグリゲータ
 #include <engine/basic_component.hpp>
 #include <engine/basic_system.hpp>
 #include <engine/core.hpp>

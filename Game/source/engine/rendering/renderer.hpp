@@ -1,10 +1,9 @@
 ﻿#pragma once
-#include <SDL3_ttf/SDL_ttf.h>
 #include <engine/components/text.hpp>
 #include <engine/core/forward_declarations.hpp>
-using SDL_RendererPtr = std::unique_ptr<SDL_Renderer, decltype( &SDL_DestroyRenderer )>;
 namespace sdl_engine
 {
+   using SDL_RendererPtr = std::unique_ptr<SDL_Renderer, decltype( &SDL_DestroyRenderer )>;
 
    // rendererに渡す用の transform　componentのtransformに依存したくない
    struct RenderTransform
@@ -41,7 +40,6 @@ namespace sdl_engine
       void renderPresent();
 
    private:
-      SDL_RendererPtr  _sdl_renderer;
-      std::queue<Text> _text_render_queue;
+      SDL_RendererPtr _sdl_renderer;
    };
 }    // namespace sdl_engine

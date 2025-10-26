@@ -15,6 +15,7 @@ namespace sdl_engine
    struct FrameData;
    class GameTimer;
    class Scene;
+   struct SceneDependencies;
    class EventListener;
    class SceneManager;
    class ResourceManager;
@@ -24,6 +25,7 @@ namespace sdl_engine
    class Vector2_f32;
    class Vector2_i32;
    class Renderer;
+   class SoundMixer;
 
    class SpriteLoader;
    class SpriteResourceDeleter;
@@ -33,6 +35,7 @@ namespace sdl_engine
    struct SpriteResource;
    struct SpriteAnimResource;
    struct FontResource;
+   struct SoundResource;
 
    class SystemInterface;
    struct LogicUpdateableTag;
@@ -44,6 +47,7 @@ namespace sdl_engine
 struct SDL_Texture;
 struct SDL_Window;
 struct SDL_Renderer;
+struct SDL_Mixer;
 
 // 型エイリアス
 using u64 = std::uint64_t;
@@ -57,5 +61,3 @@ using i16 = std::int16_t;
 using i8  = std::int8_t;
 using f32 = float;
 using f64 = double;
-
-using SDL_WindowPtr = std::unique_ptr<SDL_Window, decltype( &SDL_DestroyWindow )>;

@@ -3,6 +3,7 @@
 #include <engine/rendering/renderer.hpp>
 #include <engine/rendering/resource/sprite_anim_resource.hpp>
 #include <engine/rendering/resource/sprite_resource.hpp>
+#include <engine/sound/resource/sound_resource.hpp>
 #include <engine/utils/json_utilities.hpp>
 #include <nlohmann/json.hpp>
 
@@ -17,7 +18,7 @@ namespace sdl_engine
    ResourceManager::ResourceManager() {}
    ResourceManager::~ResourceManager() {}
 
-   void ResourceManager::loadResources( Renderer& renderer_, std::string_view assets_path_ )
+   void ResourceManager::loadResources( Renderer& renderer_, SoundMixer& soundmixer_, std::string_view assets_path_ )
    {
       // assets読み込み
       auto assets = loadJson( assets_path_ );
@@ -29,24 +30,22 @@ namespace sdl_engine
          auto sprite_root_path { getRequireData<std::string>( sprites->get(), "SpriteRootPath" ) };
          if ( !sprite_root_path.ends_with( '/' ) ) { sprite_root_path += '/'; }
 
-         // 元JSONは破壊しない（非破壊）: ローダーに渡す最小JSONだけを生成して渡す
+         // 元JSONは破壊しない: ローダーに渡す最小JSONだけを生成して渡す
          if ( auto spritedatas { tryGetJson( sprites->get(), "SpriteDatas" ) }; spritedatas )
          {
-            for ( const auto& sprt : spritedatas->get() )
+            for ( const auto& data : spritedatas->get() )
             {
-               // name 取得（キャッシュのキーに使用）
-               auto name = getRequireData<std::string>( sprt, "name" );
 
                // 相対パス + ルートの連結
-               auto rel_path = getRequireData<std::string>( sprt, "file_path" );
+               auto rel_path = getRequireData<std::string>( data, "file_path" );
 
                // SpriteLoaderが必要とする最小データのみ構築（file_pathのみ）
                json loader_input           = json::object();
                loader_input[ "file_path" ] = sprite_root_path + rel_path;
 
                // nameからhashを生成して登録
+               auto name   = getRequireData<std::string>( data, "name" );
                auto handle = _sprite_cache.load( u32Hash( name ), renderer_, loader_input );
-               (void)handle;
             }
          }
       }
@@ -54,12 +53,33 @@ namespace sdl_engine
       // SpriteAnims 読み込み
       if ( auto sprite_anims { tryGetJson( assets, "SpriteAnims" ) }; sprite_anims )
       {
-         for ( const auto& anim : sprite_anims->get() )
+         for ( const auto& data : sprite_anims->get() )
          {
             // nameからhashを生成して登録
-            auto name   = getRequireData<std::string>( anim, "name" );
-            auto handle = _sprite_anim_cache.load( u32Hash( name ), anim );
-            (void)handle;
+            auto name   = getRequireData<std::string>( data, "name" );
+            auto handle = _sprite_anim_cache.load( u32Hash( name ), data );
+         }
+      }
+
+      // SoundDatas 読み込み
+      if ( auto sounds { tryGetJson( assets, "Sounds" ) }; sounds )
+      {
+         // ルートパスを取得。末尾が「/」じゃない場合は追加
+         auto sound_root_path { getRequireData<std::string>( sounds->get(), "SoundRootPath" ) };
+         if ( !sound_root_path.ends_with( '/' ) ) { sound_root_path += '/'; }
+         if ( auto sound_datas { tryGetJson( sounds->get(), "SoundDatas" ) }; sound_datas )
+         {
+            for ( const auto& data : sound_datas->get() )
+            {
+               // 相対パス + ルートの連結
+               auto rel_path = getRequireData<std::string>( data, "file_path" );
+               // SoundLoaderが必要とする最小データのみ構築（file_pathのみ）
+               json loader_input           = json::object();
+               loader_input[ "file_path" ] = sound_root_path + rel_path;
+               // nameからhashを生成して登録
+               auto name   = getRequireData<std::string>( data, "name" );
+               auto handle = _sound_cache.load( u32Hash( name ), soundmixer_, loader_input );
+            }
          }
       }
 
@@ -71,7 +91,6 @@ namespace sdl_engine
             // nameからhashを生成して登録
             auto name   = getRequireData<std::string>( data, "name" );
             auto handle = _font_cache.load( u32Hash( name ), data );
-            (void)handle;
          }
       }
    }
@@ -99,6 +118,11 @@ namespace sdl_engine
    entt::resource<FontResource> ResourceManager::getFont( std::string_view key_ )
    {
       if ( entt::resource<FontResource> res = _font_cache[ u32Hash( key_ ) ]; res ) { return res; }
+      return {};
+   }
+   entt::resource<SoundResource> ResourceManager::getSound( std::string_view key_ )
+   {
+      if ( entt::resource<SoundResource> res = _sound_cache[ u32Hash( key_ ) ]; res ) { return res; }
       return {};
    }
 }    // namespace sdl_engine

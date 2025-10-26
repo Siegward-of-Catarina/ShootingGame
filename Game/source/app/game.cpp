@@ -14,8 +14,14 @@
 #include <engine/systems/fade_system.hpp>
 namespace myge
 {
-   Game::Game() : _context { std::make_unique<sdl_engine::EngineContext>( "shooting", 600, 800 ) }
+   Game::Game() : _context { nullptr }
    {
+      // エンジンコンテキスト初期化
+      sdl_engine::EngineInitInfo init_info {
+         .window_name { "shooting" }, .window_width { 600 }, .window_height { 800 }, .se_track_size { 32 }
+      };
+      _context = std::make_unique<sdl_engine::EngineContext>( init_info );
+      // アセット読み込み
       _context->loadAssets( "assets/test_assets.json" );
 
       auto& resource_manager { _context->getResourceManager() };
@@ -29,15 +35,10 @@ namespace myge
         std::make_unique<sdl_engine::FadeSystem>( 99, registry, _context->getEventListener() ) );
 
       _context->getSceneManager().enableFadeOutIn( fade );
-      // 次のシーンとしてセットする
-      sdl_engine::SceneDependencies dependencies { .registry { registry },
-                                                   .dispatcher { _context->getDispatcher() },
-                                                   .resource_manager { resource_manager },
-                                                   .input_manager { _context->getInputManager() },
-                                                   .scene_manager { _context->getSceneManager() },
-                                                   .system_manager { _context->getSystemManager() } };
 
-      _context->getSceneManager().initStartCurrentScene( std::make_unique<TitleScene>( dependencies ) );
+      // 次のシーンとしてセットする
+      auto depend { _context->getSceneDependencies() };
+      _context->getSceneManager().initStartCurrentScene( std::make_unique<TitleScene>( depend ) );
 
       // アプリケーションの基幹システム
       _context->getSystemManager().addSystem(
@@ -49,7 +50,7 @@ namespace myge
         std::make_unique<LifeCycleSystem>( 100, registry, _context->getEventListener() ) );
    }
 
-   Game::~Game() { SDL_Quit(); }
+   Game::~Game() {}
 
    void Game::run()
    {

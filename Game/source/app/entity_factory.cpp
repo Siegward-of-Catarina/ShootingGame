@@ -84,6 +84,31 @@ namespace myge
       return fade;
    }
 
+   entt::entity
+   EntityFactory::createSoundEffect( const std::string_view resource_key_, const i64 loop_count_, const f32 volume_ )
+   {
+      auto                    entity { _registry.create() };
+      sdl_engine::SoundEffect sound_comp { .sound { _resource_manager.getSound( resource_key_ ) },
+                                           .loop_count { loop_count_ },
+                                           .volume { volume_ } };
+      _registry.emplace<sdl_engine::SoundEffect>( entity, sound_comp );
+      return entity;
+   }
+
+   entt::entity EntityFactory::createBGM( const std::string_view resource_key_,
+                                          const i64              loop_count_,
+                                          const i64              fade_time_ms_,
+                                          const f32              volume_ )
+   {
+      auto                        entity { _registry.create() };
+      sdl_engine::BackgroundMusic sound_comp { .sound { _resource_manager.getSound( resource_key_ ) },
+                                               .loop_count { loop_count_ },
+                                               .fade_time_ms { fade_time_ms_ },
+                                               .volume { volume_ } };
+      _registry.emplace<sdl_engine::BackgroundMusic>( entity, sound_comp );
+      return entity;
+   }
+
    entt::entity EntityFactory::createBullet( entt::entity& shooter_, const std::type_index& affiliation_id_ )
    {
       using namespace sdl_engine;

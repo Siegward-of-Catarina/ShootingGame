@@ -24,6 +24,12 @@ namespace myge
                                             f32                    speed_              = -1.0f,    // option
                                             f32                    black_out_duration_ = -1.0f,    // option
                                             bool                   under_ui_           = false );
+
+      entt::entity createSoundEffect( const std::string_view resource_key_, const i64 loop_count_, const f32 volume_ );
+      entt::entity createBGM( const std::string_view resource_key_,
+                              const i64              loop_count_,
+                              const i64              fade_time_ms_,
+                              const f32              volume_ );
       entt::entity createBullet( entt::entity& shooter_, const std::type_index& affiliation_id_ );
       entt::entity createHitEffect( entt::entity dead_entt_, const std::type_index& affiliation_id_ );
       entt::entity createPlayer( const json& data_, const std::type_index& affiliation_id_ );

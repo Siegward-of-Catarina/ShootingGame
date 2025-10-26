@@ -7,27 +7,29 @@ namespace sdl_engine
 {
    SpriteLoader::result_type SpriteLoader::operator()( Renderer& renderer_, const json& data_ ) const
    {
-      auto path_ = data_.at( "file_path" ).get<std::string>();
-      if ( !std::filesystem::exists( path_ ) ) { SDL_Log( "画像ファイルが存在しません:  %s ", path_.data() ); }
+      auto path_ = getRequireData<std::string>( data_, "file_path" );
+      if ( !std::filesystem::exists( path_ ) )
+      {
+         std::string msg { "画像ファイルが存在しません: " };
+         msg += path_.data();
+         throw GameException( msg.c_str() );
+      }
 
-      SpriteResource* resource { new SpriteResource };
-      resource->texture = renderer_.loadTexture( path_ );
-      if ( !resource->texture ) { SDL_Log( "画像を読み込めませんでした:  %s ", SDL_GetError() ); }
+      auto out { std::make_shared<SpriteResource>( renderer_.loadTexture( path_ ) ) };
 
-      SDL_SetTextureBlendMode( resource->texture, SDL_BLENDMODE_BLEND );    // 標準はアルファブレンド
-      SDL_SetTextureScaleMode( resource->texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );
+      SDL_SetTextureBlendMode( out->texture, SDL_BLENDMODE_BLEND );    // 標準はアルファブレンド
+      SDL_SetTextureScaleMode( out->texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );
 
-      return std::shared_ptr<SpriteResource>( resource, SpriteResourceDeleter );
+      return out;
    }
    SpriteLoader::result_type SpriteLoader::operator()( SDL_Texture*& texture_ ) const
    {
-      SpriteResource* resource { new SpriteResource };
-      resource->texture = texture_;
-      texture_          = nullptr;
+      auto out { std::make_shared<SpriteResource>( texture_ ) };
+      texture_ = nullptr;
 
-      SDL_SetTextureBlendMode( resource->texture, SDL_BLENDMODE_BLEND );    // 標準はアルファブレンド
-      SDL_SetTextureScaleMode( resource->texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );
+      SDL_SetTextureBlendMode( out->texture, SDL_BLENDMODE_BLEND );    // 標準はアルファブレンド
+      SDL_SetTextureScaleMode( out->texture, SDL_ScaleMode::SDL_SCALEMODE_NEAREST );
 
-      return std::shared_ptr<SpriteResource>( resource, SpriteResourceDeleter );
+      return out;
    }
 }    // namespace sdl_engine

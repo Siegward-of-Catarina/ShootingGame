@@ -4,14 +4,9 @@ namespace sdl_engine
 {
    struct SpriteResource
    {
+      SpriteResource() : texture { nullptr } {}
+      SpriteResource( SDL_Texture* texture_ ) : texture { texture_ } {}
+      ~SpriteResource() { SDL_DestroyTexture( texture ); };
       SDL_Texture* texture;
    };
-   inline void SpriteResourceDeleter( SpriteResource* sprite_ )
-   {
-      if ( sprite_ )
-      {
-         if ( sprite_->texture ) { SDL_DestroyTexture( sprite_->texture ); }
-         delete sprite_;
-      }
-   }
 }    // namespace sdl_engine
