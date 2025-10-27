@@ -4,5 +4,5 @@ namespace myge
 {
    class wave;
    class wave1;
-   class TestScene;
+   class GameScene;
 }    // namespace myge

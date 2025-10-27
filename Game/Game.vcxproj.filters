@@ -13,7 +13,7 @@
     <ClCompile Include="source\engine\rendering\resource\loader\sprite_anim_loader.cpp" />
     <ClCompile Include="source\engine\rendering\resource\loader\sprite_loader.cpp" />
     <ClCompile Include="source\engine\scene\scene.cpp" />
-    <ClCompile Include="source\app\scene\test_scene.cpp" />
+    <ClCompile Include="source\app\scene\game_scene.cpp" />
     <ClCompile Include="source\engine\utils\json_utilities.cpp" />
     <ClCompile Include="source\app\waves\wave.cpp" />
     <ClCompile Include="source\app\waves\wave_factory.cpp" />
@@ -135,7 +135,7 @@
     <ClInclude Include="source\engine\rendering\resource\loader\sprite_loader.hpp" />
     <ClInclude Include="source\engine\rendering\resource\sprite_anim_resource.hpp" />
     <ClInclude Include="source\engine\scene\scene.hpp" />
-    <ClInclude Include="source\app\scene\test_scene.hpp" />
+    <ClInclude Include="source\app\scene\game_scene.hpp" />
     <ClInclude Include="source\engine\systems\system_interface.hpp" />
     <ClInclude Include="source\app\waves\wave.hpp" />
     <ClInclude Include="source\app\waves\wave_factory.hpp" />
@@ -228,5 +228,6 @@
     <ClInclude Include="source\engine\systems\sound_system.hpp" />
     <ClInclude Include="source\engine\events\sound_events.hpp" />
     <ClInclude Include="source\engine\components\background_music.hpp" />
+    <ClInclude Include="source\app\components\sin_wave_movement.hpp" />
   </ItemGroup>
 </Project>

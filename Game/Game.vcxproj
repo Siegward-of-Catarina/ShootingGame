@@ -184,7 +184,7 @@
     <ClCompile Include="source\engine\rendering\resource\loader\sprite_anim_loader.cpp" />
     <ClCompile Include="source\engine\rendering\resource\loader\sprite_loader.cpp" />
     <ClCompile Include="source\engine\scene\scene.cpp" />
-    <ClCompile Include="source\app\scene\test_scene.cpp" />
+    <ClCompile Include="source\app\scene\game_scene.cpp" />
     <ClCompile Include="source\engine\utils\json_utilities.cpp" />
     <ClCompile Include="source\app\waves\wave.cpp" />
     <ClCompile Include="source\app\waves\wave1.cpp" />
@@ -215,6 +215,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="source\app\components\shooter.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\app\components\sin_wave_movement.hpp">
       <SubType>
       </SubType>
     </ClInclude>
@@ -440,7 +444,7 @@
     <ClInclude Include="source\resource\resource_manager.hpp" />
     <ClInclude Include="source\engine\rendering\resource\sprite_anim_resource.hpp" />
     <ClInclude Include="source\engine\scene\scene.hpp" />
-    <ClInclude Include="source\app\scene\test_scene.hpp" />
+    <ClInclude Include="source\app\scene\game_scene.hpp" />
     <ClInclude Include="source\sequencer.hpp" />
     <ClInclude Include="source\engine\systems\system_interface.hpp" />
     <ClInclude Include="source\app\waves\wave.hpp" />

@@ -4,7 +4,7 @@
 #include <SDL3/SDL.h>
 #include <app/entity_factory.hpp>
 #include <app/scene/game_over_scene.hpp>
-#include <app/scene/test_scene.hpp>
+#include <app/scene/game_scene.hpp>
 #include <app/waves/wave.hpp>
 #include <app/waves/wave_factory.hpp>
 // system
@@ -53,12 +53,12 @@ namespace
 
 namespace myge
 {
-   TestScene::TestScene( const sdl_engine::SceneDependencies& dependencies_ )
+   GameScene::GameScene( const sdl_engine::SceneDependencies& dependencies_ )
      : Scene { dependencies_, "game_data/scene_data/game_scene_data.json" }, _scene_elapsed_time { 0.f }
    {
    }
 
-   TestScene::~TestScene()
+   GameScene::~GameScene()
    {
       // 追加したシステムの登録解除
       auto& system_manager { systemManager() };
@@ -82,9 +82,9 @@ namespace myge
       }
    }
 
-   void TestScene::start() {}    // 開始時処理（現在は無し）
+   void GameScene::start() {}    // 開始時処理（現在は無し）
 
-   void TestScene::update( const sdl_engine::FrameData& frame_ )
+   void GameScene::update( const sdl_engine::FrameData& frame_ )
    {
       _scene_elapsed_time += frame_.delta_time;
 
@@ -131,7 +131,7 @@ namespace myge
       }
    }
 
-   void TestScene::createWaves()
+   void GameScene::createWaves()
    {
       // シーンJSONからWaveを生成
       auto&            scene_data { sceneData() };
@@ -151,7 +151,7 @@ namespace myge
       }
    }
 
-   void TestScene::createEntities()
+   void GameScene::createEntities()
    {
       // 事前にWaveを構築
       createWaves();
@@ -165,22 +165,22 @@ namespace myge
       }
    }
 
-   void TestScene::postSystemAddition()
+   void GameScene::postSystemAddition()
    {
       // シーン開始時の状態設定
       scene_state = SceneState::WaveStart;
    }
 
-   void TestScene::setupEventHandlers()
+   void GameScene::setupEventHandlers()
    {
       // 必要なイベントを購読
-      eventListener().connect<&TestScene::onShoot, ShootEvent>( this );
-      eventListener().connect<&TestScene::onDeadEffectAppend, AppendDeadEffectEvent>( this );
-      eventListener().connect<&TestScene::onOverrayFadeAppend, AppendOverrayFadeEvent>( this );
-      eventListener().connect<&TestScene::onGameOver, GameOverEvent>( this );
+      eventListener().connect<&GameScene::onShoot, ShootEvent>( this );
+      eventListener().connect<&GameScene::onDeadEffectAppend, AppendDeadEffectEvent>( this );
+      eventListener().connect<&GameScene::onOverrayFadeAppend, AppendOverrayFadeEvent>( this );
+      eventListener().connect<&GameScene::onGameOver, GameOverEvent>( this );
    }
 
-   void TestScene::addSystems()
+   void GameScene::addSystems()
    {
       // 実行順（第1引数の番号が小さいほど先に実行）を指定してシステム登録
       auto& system_manager { systemManager() };
@@ -197,7 +197,7 @@ namespace myge
       system_manager.addSystem( std::make_unique<GameOverSystem>( 99, registry(), eventListener() ) );
    }
 
-   void TestScene::onShoot( ShootEvent& e )
+   void GameScene::onShoot( ShootEvent& e )
    {
       // 弾を生成し、効果音を再生
       EntityFactory factory { registry(), resourceManager() };
@@ -206,13 +206,13 @@ namespace myge
       eventListener().trigger<sdl_engine::PlaySEEvent>( { sound } );
    }
 
-   void TestScene::onGameOver( GameOverEvent& e )
+   void GameScene::onGameOver( GameOverEvent& e )
    {
       // ゲームオーバー時はスローモーションへ
       sceneManager().setGameSpeed( 0.5f );
    }
 
-   void TestScene::onDeadEffectAppend( AppendDeadEffectEvent& e )
+   void GameScene::onDeadEffectAppend( AppendDeadEffectEvent& e )
    {
       // 対象にヒットエフェクトを付与してからDeadEventを発火
       auto& reg { registry() };
@@ -227,7 +227,7 @@ namespace myge
       eventListener().trigger<DeadEvent>( { e.dead_entities } );
    }
 
-   void TestScene::onOverrayFadeAppend( AppendOverrayFadeEvent& e )
+   void GameScene::onOverrayFadeAppend( AppendOverrayFadeEvent& e )
    {
       // フェード要求：遷移フローへ移行し、ゲーム速度を戻す
       scene_state = SceneState::Destroy;

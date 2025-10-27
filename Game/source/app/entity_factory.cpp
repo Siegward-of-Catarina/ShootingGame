@@ -13,6 +13,7 @@
 #include <app/components/player_movement.hpp>
 #include <app/components/serpentine_movement.hpp>
 #include <app/components/shooter.hpp>
+#include <app/components/sin_wave_movement.hpp>
 #include <app/components/sprite_brink.hpp>
 #include <app/components/status.hpp>
 #include <app/components/title_input.hpp>
@@ -397,9 +398,9 @@ namespace myge
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
       // [Velocity]
+      sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
       {
-         sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
-         auto                 dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
+         auto dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
          velo.dx = dir[ 0 ];
          velo.dy = dir[ 1 ];
          _registry.emplace<sdl_engine::Velocity>( entity, velo );
@@ -420,6 +421,16 @@ namespace myge
                serpent.move_threshold = sdl_engine::getOptionalData<f32>( move_data.value(), "threshold", 0.9f );
                serpent.time           = 0.0f;
                _registry.emplace<SerpentineMovement>( entity, serpent );
+            }
+            else if ( type == "sin_wave" )
+            {
+               SinWaveMovement sin_wave {};
+               sin_wave.amplitude  = sdl_engine::getOptionalData<f32>( move_data.value(), "amplitude", 100.0f );
+               sin_wave.frequency  = sdl_engine::getOptionalData<f32>( move_data.value(), "frequency", 10.0f );
+               sin_wave.move_speed = sdl_engine::getOptionalData<f32>( move_data.value(), "speed", 200.0f );
+               sin_wave.direction  = sdl_engine::Vector2_f32( velo.dx, velo.dy );
+               sin_wave.time       = 0.0f;
+               _registry.emplace<SinWaveMovement>( entity, sin_wave );
             }
          }
       }

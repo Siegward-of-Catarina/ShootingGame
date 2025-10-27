@@ -2,7 +2,7 @@
 // - メニューのハイライト/決定入力を受けてシーン遷移
 // - 開始時にBGMを生成して再生（SoundSystemで処理）
 #include <app/entity_factory.hpp>
-#include <app/scene/test_scene.hpp>
+#include <app/scene/game_scene.hpp>
 #include <app/scene/title_scene.hpp>
 // system
 #include <app/components/affiliation.hpp>
@@ -61,7 +61,7 @@ void myge::TitleScene::onTitleMenuAction( const MenuButtonEvent& e )
       case ButtonUI::Type::Start :
          // タイトルBGMをフェードアウトしてゲームへ
          eventListener().trigger<sdl_engine::StopBGMEvent>( { 1000 } );
-         sceneManager().setNextScene( std::make_unique<TestScene>( sceneDependencies() ) );
+         sceneManager().setNextScene( std::make_unique<GameScene>( sceneDependencies() ) );
          break;
       case ButtonUI::Type::Exit : sceneManager().quitGame(); break;
    }

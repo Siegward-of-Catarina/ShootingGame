@@ -9,11 +9,11 @@ namespace myge
    struct AppendDeadEffectEvent;
    struct AppendOverrayFadeEvent;
    class Wave;
-   class TestScene final : public sdl_engine::Scene
+   class GameScene final : public sdl_engine::Scene
    {
    public:
-      TestScene( const sdl_engine::SceneDependencies& dependencies_ );
-      virtual ~TestScene() override;
+      GameScene( const sdl_engine::SceneDependencies& dependencies_ );
+      virtual ~GameScene() override;
       virtual void start() override;
       virtual void update( const sdl_engine::FrameData& frame_ ) override;
 

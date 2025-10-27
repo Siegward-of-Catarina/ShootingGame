@@ -2,7 +2,7 @@
 // - Continue(=Start) でリトライ、Exitでタイトルへ戻る
 #include <app/entity_factory.hpp>
 #include <app/scene/game_over_scene.hpp>
-#include <app/scene/test_scene.hpp>
+#include <app/scene/game_scene.hpp>
 #include <app/scene/title_scene.hpp>
 // system
 #include <app/components/affiliation.hpp>
@@ -70,7 +70,7 @@ void myge::GameOverScene::onContinueMenuAction( const MenuButtonEvent& e )
    switch ( e.button_type )
    {
       case ButtonUI::Type::Start :
-         sceneManager().setNextScene( std::make_unique<TestScene>( sceneDependencies() ) );
+         sceneManager().setNextScene( std::make_unique<GameScene>( sceneDependencies() ) );
          break;
       case ButtonUI::Type::Exit :
          sceneManager().setNextScene( std::make_unique<TitleScene>( sceneDependencies() ) );
