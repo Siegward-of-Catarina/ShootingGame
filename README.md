@@ -4,7 +4,7 @@
 自作軽量エンジン上で ECS(EnTT) によりゲームロジックを構築。アセット/シーン/ウェーブを JSON でデータ駆動化。
 
 - 役割: 個人開発（設計/実装/アセットパイプライン）
-- 主要技術: C++20, SDL3, SDL_image, SDL_ttf, EnTT, nlohmann::json
+- 主要技術: C++20, SDL3, SDL_image, EnTT, nlohmann::json
 - 開発環境: Visual Studio 2022 / Windows x64
 - リポジトリ: https://github.com/Siegward-of-Catarina/ShootingGame
 
@@ -32,9 +32,8 @@
 
 1) レポジトリを開く（`Game/Game.vcxproj` またはフォルダーを開く）
 2) 構成: x64 / Debug または Release
-3) スタートアップを `Game` に設定（__Set as Startup Project__）
-4) ビルド（__Build Solution__ / Ctrl+Shift+B）
-5) 実行（__Start Debugging__ / F5 または __Start Without Debugging__ / Ctrl+F5）
+3) ビルド（__Build Solution__ / Ctrl+Shift+B）
+4) 実行（__Start Debugging__ / F5 または __Start Without Debugging__ / Ctrl+F5）
 
 依存は同梱済み（追加インストール不要）。
 
