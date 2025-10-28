@@ -44,7 +44,7 @@ namespace myge
                                     myge::BoundingBox&                           target_box_,
                                     std::unordered_map<u32, std::vector<Enemy>>& enemies_ )
       {
-         auto [ gx, gy ] { getGridCoord( target_trfm_.x, target_trfm_.y ) };
+         auto [ gx, gy ] { getGridCoord( target_trfm_.position.x, target_trfm_.position.y ) };
          // 弾丸のいるグリッドとその周囲8マスをチェック
          for ( i32 row { -1 }; row <= 1; row++ )    // 行 [ 上(-1), 現在グリッド, 下(+1) ]
          {
@@ -67,7 +67,8 @@ namespace myge
                // グリッド内のみ判定する
                for ( auto& enemy : enemies_[ id ] )
                {
-                  sdl_engine::Vector2_f32 dir { target_trfm_.x - enemy.trfm.x, target_trfm_.y - enemy.trfm.y };
+                  sdl_engine::Vector2_f32 dir { target_trfm_.position.x - enemy.trfm.position.y,
+                                                target_trfm_.position.x - enemy.trfm.position.y };
                   f32                     rad = target_box_.radius + enemy.box.radius;
                   rad *= rad;
                   auto len { dir.lengthSq() };
@@ -91,7 +92,7 @@ namespace myge
          if ( !reg.valid( entt ) ) { continue; }
          if ( box.harf_width * 2 < CELL_SIZE || box.harf_hegiht * 2 < CELL_SIZE )
          {
-            auto [ gx, gy ] { getGridCoord( trfm.x, trfm.y ) };
+            auto [ gx, gy ] { getGridCoord( trfm.position.x, trfm.position.y ) };
             // グリッドを線形化
             u32 id { gy * GRID_WIDTH + gx };
             enemies[ id ].emplace_back( Enemy { entt, trfm, box } );

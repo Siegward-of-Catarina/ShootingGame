@@ -47,14 +47,16 @@ namespace myge
       auto fade { _registry.create() };
       // transfrom
       sdl_engine::Transform trfm_cmp {
-         .x { window_width_ / 2.0f }, .y { window_height_ / 2.0f }, .angle { 0.0f }, .scale { 1.0f }
+         .position { window_width_ / 2.0f, window_height_ / 2.0f },
+          .angle { 0.0f },
+          .scale { 1.0f }
       };
       _registry.emplace<sdl_engine::Transform>( fade, trfm_cmp );
       // sprite
       sdl_engine::Sprite sprt_comp {};
       sprt_comp.texture = _resource_manager.getSprite( "white" );
       sprt_comp.src     = { 0.0f, 0.0f, window_width_, window_height_ };
-      sprt_comp.dst     = { trfm_cmp.x, trfm_cmp.y, window_width_, window_height_ };
+      sprt_comp.dst     = { trfm_cmp.position.x, trfm_cmp.position.y, window_width_, window_height_ };
       sprt_comp.color   = { 0.0f, 0.0f, 0.0f, 0.0f };
       _registry.emplace<sdl_engine::Sprite>( fade, sprt_comp );
       // fade
@@ -246,19 +248,25 @@ namespace myge
       }
       // [Transform]
       {
-         sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
-         auto                  pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
+         sdl_engine::Transform trfm {
+            { 0.0f, 0.0f },
+            0.0f, 1.0f
+         };
+         auto pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
          // array生成に対応するためoffsetを足す
-         trfm.x = pos[ 0 ];
-         trfm.y = pos[ 1 ];
+         trfm.position.x = pos[ 0 ];
+         trfm.position.y = pos[ 1 ];
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
       // [Velocity]
       {
-         sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
-         auto                 dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
-         velo.dx = dir[ 0 ];
-         velo.dy = dir[ 1 ];
+         sdl_engine::Velocity velo {
+            { 0.0f, 10.0f },
+            0.0f, 0.0f
+         };
+         auto dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
+         velo.vector.x = dir[ 0 ];
+         velo.vector.y = dir[ 1 ];
          _registry.emplace<sdl_engine::Velocity>( entity, velo );
       }
       // [BBox]
@@ -337,7 +345,10 @@ namespace myge
       }
       // [Transform]
       {
-         sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
+         sdl_engine::Transform trfm {
+            { 0.0f, 0.0f },
+            0.0f, 1.0f
+         };
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
       // [TransformLink]
@@ -388,21 +399,27 @@ namespace myge
          _registry.emplace<sdl_engine::SpriteAnim>( entity, sp_anim );
       }
       // [Transform]
-      sdl_engine::Transform trfm { 0.0f, 0.0f, 180.0f, 1.0f };
+      sdl_engine::Transform trfm {
+         { 0.0f, 0.0f },
+         180.0f, 1.0f
+      };
       {
 
          // array生成に対応するためoffsetを足す
          auto pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
-         trfm.x = pos[ 0 ] + offset_pos_.x;
-         trfm.y = pos[ 1 ] + offset_pos_.y;
+         trfm.position.x = pos[ 0 ] + offset_pos_.x;
+         trfm.position.y = pos[ 1 ] + offset_pos_.y;
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
       // [Velocity]
-      sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
+      sdl_engine::Velocity velo {
+         { 0.0f, 10.0f },
+         0.0f, 0.0f
+      };
       {
          auto dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
-         velo.dx = dir[ 0 ];
-         velo.dy = dir[ 1 ];
+         velo.vector.x = dir[ 0 ];
+         velo.vector.y = dir[ 1 ];
          _registry.emplace<sdl_engine::Velocity>( entity, velo );
       }
       // [movement]
@@ -414,7 +431,7 @@ namespace myge
             if ( type == "serpentine" )
             {
                SerpentineMovement serpent {};
-               serpent.center_x       = trfm.x;
+               serpent.center_x       = trfm.position.x;
                serpent.amplitude      = sdl_engine::getOptionalData<f32>( move_data.value(), "amplitude", 200.0f );
                serpent.frequency      = sdl_engine::getOptionalData<f32>( move_data.value(), "frequency", 20.0f );
                serpent.move_speed     = sdl_engine::getOptionalData<f32>( move_data.value(), "speed", 200.0f );
@@ -428,7 +445,7 @@ namespace myge
                sin_wave.amplitude  = sdl_engine::getOptionalData<f32>( move_data.value(), "amplitude", 100.0f );
                sin_wave.frequency  = sdl_engine::getOptionalData<f32>( move_data.value(), "frequency", 10.0f );
                sin_wave.move_speed = sdl_engine::getOptionalData<f32>( move_data.value(), "speed", 200.0f );
-               sin_wave.direction  = sdl_engine::Vector2_f32( velo.dx, velo.dy );
+               sin_wave.direction  = sdl_engine::Vector2_f32( velo.vector.x, velo.vector.y );
                sin_wave.time       = 0.0f;
                _registry.emplace<SinWaveMovement>( entity, sin_wave );
             }
@@ -475,11 +492,14 @@ namespace myge
       }
       // Transform
       {
-         sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
-         auto                  pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
+         sdl_engine::Transform trfm {
+            { 0.0f, 0.0f },
+            0.0f, 1.0f
+         };
+         auto pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
          // array生成に対応するためoffsetを足す
-         trfm.x = pos[ 0 ];
-         trfm.y = pos[ 1 ];
+         trfm.position.x = pos[ 0 ];
+         trfm.position.y = pos[ 1 ];
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
       return entity;
@@ -530,11 +550,14 @@ namespace myge
       }
       // Transform
       {
-         sdl_engine::Transform trfm { 0.0f, 0.0f, 0.0f, 1.0f };
-         auto                  pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
+         sdl_engine::Transform trfm {
+            { 0.0f, 0.0f },
+            0.0f, 1.0f
+         };
+         auto pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
          // array生成に対応するためoffsetを足す
-         trfm.x = pos[ 0 ];
-         trfm.y = pos[ 1 ];
+         trfm.position.x = pos[ 0 ];
+         trfm.position.y = pos[ 1 ];
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
 
@@ -622,17 +645,23 @@ namespace myge
          _registry.emplace<sdl_engine::Sprite>( entt, sprt );
 
          // Transform
-         sdl_engine::Transform trfm { 300.0f, 0.0f, 0.0f, 1.0f };
-         auto                  pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
-         trfm.x = pos[ 0 ];
-         trfm.y = pos[ 1 ] - sprt.dst.h * i++;
+         sdl_engine::Transform trfm {
+            { 300.0f, 0.0f },
+            0.0f, 1.0f
+         };
+         auto pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
+         trfm.position.x = pos[ 0 ];
+         trfm.position.y = pos[ 1 ] - sprt.dst.h * i++;
          _registry.emplace<sdl_engine::Transform>( entt, trfm );
 
          // Velocity
-         sdl_engine::Velocity velo { 0.0f, 10.0f, 0.0f, 0.0f };
-         auto                 dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
-         velo.dx = dir[ 0 ];
-         velo.dy = dir[ 1 ];
+         sdl_engine::Velocity velo {
+            { 0.0f, 10.0f },
+            0.0f, 0.0f
+         };
+         auto dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
+         velo.vector.x = dir[ 0 ];
+         velo.vector.y = dir[ 1 ];
          _registry.emplace<sdl_engine::Velocity>( entt, velo );
          // BBox
          BoundingBox box { createBoundingBox( sprt.dst.w / 2, sprt.dst.h / 2, 0.0f, BoundingBox::EnableAxis::Top ) };

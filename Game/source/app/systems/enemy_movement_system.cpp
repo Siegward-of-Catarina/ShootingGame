@@ -1,6 +1,7 @@
 ﻿#include <app/components/entity_type_tag.hpp>
 #include <app/components/serpentine_movement.hpp>
 #include <app/components/sin_wave_movement.hpp>
+#include <app/components/stop_and_shoot_movement.hpp>
 #include <app/systems/enemy_movement_system.hpp>
 #include <cmath>
 #include <engine/basic_component.hpp>
@@ -17,6 +18,13 @@ namespace myge
 
    void EnemyMovementSystem::update( const sdl_engine::FrameData& frame_ )
    {
+      serpentineMovement( frame_ );
+      sinWaveMovement( frame_ );
+      stopAndShootMovement( frame_ );
+   }
+
+   void EnemyMovementSystem::serpentineMovement( const sdl_engine::FrameData& frame_ )
+   {
       auto& reg { registry() };
       for ( auto [ entity, velo, movement ] :
             getLogicUpdateable<sdl_engine::Velocity, SerpentineMovement, EnemyTag>( reg ).each() )
@@ -31,11 +39,15 @@ namespace myge
          auto target = sinv * movement.amplitude + movement.center_x;
          auto pre    = pre_sinv * movement.amplitude + movement.center_x;
          //_ x方向は横揺れ
-         velo.dx = ( target - pre ) / ( frame_.delta_time );
+         velo.vector.x = ( target - pre ) / ( frame_.delta_time );
          // y方向は端に行ったら降下
-         velo.dy = ( abs( sinv ) > movement.move_threshold ) ? movement.move_speed : 0.f;
+         velo.vector.y = ( abs( sinv ) > movement.move_threshold ) ? movement.move_speed : 0.f;
       }
+   }
 
+   void EnemyMovementSystem::sinWaveMovement( const sdl_engine::FrameData& frame_ )
+   {
+      auto& reg { registry() };
       for ( auto [ entity, velo, movement ] :
             getLogicUpdateable<sdl_engine::Velocity, SinWaveMovement, EnemyTag>( reg ).each() )
       {
@@ -55,15 +67,34 @@ namespace myge
 
          // 基本進行
          movement.direction.normalize();
-         velo.dx = movement.direction.x * movement.move_speed;
-         velo.dy = movement.direction.y * movement.move_speed;
+         velo.vector = movement.direction * movement.move_speed;
 
          // 進行方向の垂直ベクトルを求める
          sdl_engine::Vector2_f32 normal { -movement.direction.y, movement.direction.x };
 
          // サイン波のオフセット分を加算
-         velo.dx += normal.x * ( diff_offset / frame_.delta_time );
-         velo.dy += normal.y * ( diff_offset / frame_.delta_time );
+         velo.vector += normal * ( diff_offset / frame_.delta_time );
+      }
+   }
+
+   void EnemyMovementSystem::stopAndShootMovement( const sdl_engine::FrameData& frame_ )
+   {
+      auto& reg { registry() };
+      for ( auto [ entity, trfm, velo, movement ] :
+            getLogicUpdateable<sdl_engine::Transform, sdl_engine::Velocity, StopAndShootMovement, EnemyTag>( reg )
+              .each() )
+      {
+         switch ( movement.state )
+         {
+            case StopAndShootMovement::State::Entering :
+               sdl_engine::Vector2_f32 to_target = movement.stop_pos - trfm.position;
+               to_target.normalize();
+               velo.vector   = to_target * movement.speed;
+               velo.vector.x = std::abs( velo.vector.x );
+               break;
+            case StopAndShootMovement::State::Shooting : break;
+            case StopAndShootMovement::State::Exiting : break;
+         }
       }
    }
 

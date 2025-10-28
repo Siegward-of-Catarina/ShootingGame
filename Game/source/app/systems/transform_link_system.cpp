@@ -44,8 +44,8 @@ namespace myge
          }
          // 親の Transform を参照して位置を更新
          auto trfm_parent = reg.get<sdl_engine::Transform>( link.parent );
-         trfm.x           = trfm_parent.x + link.offset_pos.x;
-         trfm.y           = trfm_parent.y + link.offset_pos.y;
+         trfm.position.x  = trfm_parent.position.x + link.offset_pos.x;
+         trfm.position.y  = trfm_parent.position.y + link.offset_pos.y;
       }
 
       if ( !_dead_link_entities.empty() ) { _event_listener.trigger<DeadEvent>( { _dead_link_entities } ); }

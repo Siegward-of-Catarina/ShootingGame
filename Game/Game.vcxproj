@@ -224,6 +224,10 @@
     </ClInclude>
     <ClInclude Include="source\app\components\sprite_brink.hpp" />
     <ClInclude Include="source\app\components\status.hpp" />
+    <ClInclude Include="source\app\components\stop_and_shoot_movement.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\components\title_menu.hpp" />
     <ClInclude Include="source\app\components\transform_link.hpp">
       <SubType>

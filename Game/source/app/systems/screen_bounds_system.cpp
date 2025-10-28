@@ -120,10 +120,10 @@ namespace myge
       for ( auto [ entity, box, trfm ] : reg.view<BoundingBox, sdl_engine::Transform>().each() )
       {
          if ( !reg.valid( entity ) ) { continue; }
-         SDL_FRect target { .x { trfm.x - box.harf_width },
-                            .y { trfm.y - box.harf_hegiht },
-                            .w { trfm.x + box.harf_width },
-                            .h { trfm.y + box.harf_hegiht } };
+         SDL_FRect target { .x { trfm.position.x - box.harf_width },
+                            .y { trfm.position.y - box.harf_hegiht },
+                            .w { trfm.position.x + box.harf_width },
+                            .h { trfm.position.y + box.harf_hegiht } };
 
          SDL_FRect screen { .x { 0.f }, .y { 0.f }, .w { frame_.window_width }, .h { frame_.window_height } };
          // 画面外から登場するケースに対応するため、

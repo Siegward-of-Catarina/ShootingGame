@@ -17,8 +17,8 @@ namespace sdl_engine
       for ( auto [ entity, trfm, velo ] : view.each() )
       {
          if ( !reg.valid( entity ) ) { continue; }
-         trfm.x += velo.dx * frame_.delta_time;
-         trfm.y += velo.dy * frame_.delta_time;
+         trfm.position.x += velo.vector.x * frame_.delta_time;
+         trfm.position.y += velo.vector.y * frame_.delta_time;
       }
    }
 }    // namespace sdl_engine

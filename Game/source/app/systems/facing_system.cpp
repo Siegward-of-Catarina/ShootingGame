@@ -14,7 +14,7 @@ namespace myge
       for ( auto [ entity, trfm, velo ] : view.each() )
       {
          if ( !reg.valid( entity ) ) { continue; }
-         trfm.angle = atan2( velo.dy, velo.dx ) * ( 180.0f / 3.141592f ) + 90;
+         trfm.angle = atan2( velo.vector.y, velo.vector.x ) * ( 180.0f / 3.141592f ) + 90;
       }
    }
 }    // namespace myge

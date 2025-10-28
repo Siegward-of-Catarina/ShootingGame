@@ -30,23 +30,23 @@ namespace myge
          if ( !reg.valid( entity ) ) { continue; }
          if ( box.state == BoundingBox::State::PartinalTop )
          {
-            velo.dy = 0;
-            trfm.y  = static_cast<f32>( box.harf_hegiht );
+            velo.vector.y   = 0;
+            trfm.position.y = static_cast<f32>( box.harf_hegiht );
          }
          if ( box.state == BoundingBox::State::PartinalBottom )
          {
-            velo.dy = 0;
-            trfm.y  = frame_.window_height - box.harf_hegiht;
+            velo.vector.y   = 0;
+            trfm.position.y = frame_.window_height - box.harf_hegiht;
          }
          if ( box.state == BoundingBox::State::PartinalLeft )
          {
-            velo.dx = 0;
-            trfm.x  = static_cast<f32>( box.harf_width );
+            velo.vector.x   = 0;
+            trfm.position.x = static_cast<f32>( box.harf_width );
          }
          if ( box.state == BoundingBox::State::PartinalRight )
          {
-            velo.dx = 0;
-            trfm.x  = frame_.window_width - box.harf_width;
+            velo.vector.x   = 0;
+            trfm.position.x = frame_.window_width - box.harf_width;
          }
       }
 
@@ -57,7 +57,7 @@ namespace myge
       {
          if ( !reg.valid( entity ) ) { continue; }
          // screen2枚分戻す
-         if ( box.state == BoundingBox::State::OutBottom ) { trfm.y -= frame_.window_height * 2; }
+         if ( box.state == BoundingBox::State::OutBottom ) { trfm.position.y -= frame_.window_height * 2; }
       }
 
       std::vector<entt::entity> destroy_entities {};

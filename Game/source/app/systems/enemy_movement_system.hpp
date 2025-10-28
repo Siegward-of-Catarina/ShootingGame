@@ -10,6 +10,11 @@ namespace myge
       ~EnemyMovementSystem() override;
 
       // SystemInterface を介して継承されました
-      virtual void update(const sdl_engine::FrameData& frame_) override;
+      virtual void update( const sdl_engine::FrameData& frame_ ) override;
+
+   private:
+      void serpentineMovement( const sdl_engine::FrameData& frame_ );
+      void sinWaveMovement( const sdl_engine::FrameData& frame_ );
+      void stopAndShootMovement( const sdl_engine::FrameData& frame_ );
    };
 }    // namespace myge

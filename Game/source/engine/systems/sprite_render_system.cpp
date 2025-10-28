@@ -26,8 +26,8 @@ namespace sdl_engine
 
          auto harf_w = sprt.dst.w / 2;
          auto harf_h = sprt.dst.h / 2;
-         sprt.dst.x  = trfm.x - harf_w;
-         sprt.dst.y  = trfm.y - harf_h;
+         sprt.dst.x  = trfm.position.x - harf_w;
+         sprt.dst.y  = trfm.position.y - harf_h;
          renderer.renderTexture( sprt.texture->texture, &sprt.src, &sprt.dst, trfm.angle );
       };
 
@@ -59,7 +59,7 @@ namespace sdl_engine
       for ( auto [ entity, sprt, trfm, text ] : reg.view<Sprite, Transform, Text, RenderTextTag>().each() )
       {
          if ( !reg.valid( entity ) ) { continue; }
-         RenderTransform r_trfm { trfm.x, trfm.y, trfm.angle, trfm.scale };
+         RenderTransform r_trfm { trfm.position.x, trfm.position.y, trfm.angle, trfm.scale };
          _renderer.renderText( sprt.texture->texture, *text.font, text.text, r_trfm, sprt.color );
       }
 

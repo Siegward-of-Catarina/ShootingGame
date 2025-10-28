@@ -229,5 +229,6 @@
     <ClInclude Include="source\engine\events\sound_events.hpp" />
     <ClInclude Include="source\engine\components\background_music.hpp" />
     <ClInclude Include="source\app\components\sin_wave_movement.hpp" />
+    <ClInclude Include="source\app\components\stop_and_shoot_movement.hpp" />
   </ItemGroup>
 </Project>
