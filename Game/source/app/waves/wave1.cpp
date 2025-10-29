@@ -18,13 +18,13 @@ namespace myge
 {
    Wave1::Wave1( WaveDependencies& dependencies_ ) : Wave { dependencies_ } {}
 
-   void Wave1::start()
+   void Wave1::start( entt::entity player_ )
    {
       auto& wave_data { getWaveData() };
       if ( auto data { sdl_engine::tryGetJson( wave_data, "Entities" ) }; data )
       {
          EntityFactory factory { registry(), resourceManager() };
-         auto          entts { factory.createEntities( *data, typeid( AffilGameScene ) ) };
+         auto          entts { factory.createEntities( *data, typeid( AffilGameScene ), player_ ) };
          entities = entts;
       }
    }

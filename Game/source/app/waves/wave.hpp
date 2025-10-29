@@ -16,8 +16,8 @@ namespace myge
    public:
       Wave( WaveDependencies& dependencies_ );
       virtual ~Wave();
-      virtual void start()                   = 0;
-      virtual void update( f32 delta_time_ ) = 0;
+      virtual void start( entt::entity player_ = entt::null ) = 0;
+      virtual void update( f32 delta_time_ )                  = 0;
       void         loadWaveData( const std::string& wave_name_ );
       bool         isWaveEnd() { return _wave_end; }
 

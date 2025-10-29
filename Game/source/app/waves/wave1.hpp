@@ -10,7 +10,7 @@ namespace myge
    public:
       Wave1( WaveDependencies& dependencies_ );
       // Wave を介して継承されました
-      virtual void start() override;
+      virtual void start( entt::entity player_ = entt::null ) override;
       virtual void update( f32 delta_time_ ) override;
 
    private:

@@ -119,6 +119,16 @@
 			"anim_type": "Loop"
 		},
 		{
+			"name": "enemy2_anim",
+			"sprite_name": "enemy2",
+			"sprite_col": 8,
+			"sprite_row": 1,
+			"frame_width": 32,
+			"frame_height": 40,
+			"frame_time": 0.03,
+			"anim_type": "Loop"
+		},
+		{
 			"name": "enemy_bullet_hit_anim",
 			"sprite_name": "enemy_bullet_hit",
 			"sprite_col": 8,

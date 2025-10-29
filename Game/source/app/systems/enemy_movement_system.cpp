@@ -1,5 +1,6 @@
 ﻿#include <app/components/entity_type_tag.hpp>
 #include <app/components/serpentine_movement.hpp>
+#include <app/components/shooter.hpp>
 #include <app/components/sin_wave_movement.hpp>
 #include <app/components/stop_and_shoot_movement.hpp>
 #include <app/systems/enemy_movement_system.hpp>
@@ -79,21 +80,51 @@ namespace myge
 
    void EnemyMovementSystem::stopAndShootMovement( const sdl_engine::FrameData& frame_ )
    {
-      auto& reg { registry() };
+      auto&                     reg { registry() };
+      std::vector<entt::entity> change_tag_entity;
       for ( auto [ entity, trfm, velo, movement ] :
             getLogicUpdateable<sdl_engine::Transform, sdl_engine::Velocity, StopAndShootMovement, EnemyTag>( reg )
               .each() )
       {
+         sdl_engine::Vector2_f32 to_target;
          switch ( movement.state )
          {
             case StopAndShootMovement::State::Entering :
-               sdl_engine::Vector2_f32 to_target = movement.stop_pos - trfm.position;
+               to_target = movement.stop_pos - trfm.position;
                to_target.normalize();
-               velo.vector   = to_target * movement.speed;
-               velo.vector.x = std::abs( velo.vector.x );
+               velo.vector = to_target * movement.speed;
+               // 到達判定
+               if ( to_target.lengthSq() <= 0.02 )
+               {
+                  velo.vector    = { 0, 0 };
+                  movement.state = StopAndShootMovement::State::Shooting;
+               }
                break;
-            case StopAndShootMovement::State::Shooting : break;
-            case StopAndShootMovement::State::Exiting : break;
+            case StopAndShootMovement::State::Shooting :
+               // ShootingEnemyTagが付いていない = 射撃前 or　射撃終了後であるので付け替え対象に
+               if ( !reg.all_of<ShootingEnemyTag>( entity ) ) { change_tag_entity.emplace_back( entity ); }
+               break;
+            case StopAndShootMovement::State::Exiting :
+               to_target = movement.exit_pos - trfm.position;
+               to_target.normalize();
+               velo.vector = to_target * movement.speed;
+               break;
+         }
+      }
+
+      for ( auto& entity : change_tag_entity )
+      {
+         if ( reg.all_of<FinishedShootTag>( entity ) )
+         {
+            // 射撃終了後ならタグを外して退出状態へ
+            reg.remove<ShootingEnemyTag>( entity );
+            auto& movement = reg.get<StopAndShootMovement>( entity );
+            movement.state = StopAndShootMovement::State::Exiting;
+         }
+         else
+         {
+            // 射撃前ならタグを付与して射撃開始
+            reg.emplace<ShootingEnemyTag>( entity );
          }
       }
    }

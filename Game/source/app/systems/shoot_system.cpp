@@ -1,5 +1,6 @@
 ﻿#include <app/components/player_input.hpp>
 #include <app/components/shooter.hpp>
+#include <app/components/target.hpp>
 #include <app/entity_factory.hpp>
 #include <app/systems/shoot_system.hpp>
 #include <engine/basic_component.hpp>
@@ -18,6 +19,12 @@ namespace myge
 
    void ShootSystem::update( const sdl_engine::FrameData& frame_ )
    {
+      PlayerShoot( frame_ );
+      EnemyBurstShoot( frame_ );
+   }
+
+   void ShootSystem::PlayerShoot( const sdl_engine::FrameData& frame_ )
+   {
       for ( auto [ entity, shooter, input ] : getLogicUpdateable<Shooter, PlayerInput>( registry() ).each() )
       {
          if ( shooter.wait > shooter.cooldown && input.isShoot )
@@ -26,6 +33,32 @@ namespace myge
             _event_listener.trigger<ShootEvent>( { entity } );
          }
          else if ( shooter.wait <= shooter.cooldown ) { shooter.wait += frame_.delta_time; }
+      }
+   }
+   void ShootSystem::EnemyBurstShoot( const sdl_engine::FrameData& frame_ )
+   {
+      auto&                     reg { registry() };
+      std::vector<entt::entity> finished_entity;
+      for ( auto [ entity, shooter, trfm, target ] :
+            getLogicUpdateable<Shooter, sdl_engine::Transform, Target, ShootingEnemyTag>( reg ).each() )
+      {
+         if ( shooter.wait > shooter.cooldown )
+         {
+            shooter.num_shot--;
+            shooter.wait             = 0.0;
+            auto target_trfm         = reg.get<sdl_engine::Transform>( target.target_entity );
+            shooter.bullet_direction = target_trfm.position - trfm.position;
+            shooter.bullet_direction.normalize();
+            _event_listener.trigger<ShootEvent>( { entity } );
+         }
+         else if ( shooter.wait <= shooter.cooldown ) { shooter.wait += frame_.delta_time; }
+         if ( shooter.num_shot == 0 ) { finished_entity.emplace_back( entity ); }
+      }
+      for ( auto entity : finished_entity )
+      {
+         // ShootingEnemyTag を外して FinishedBrastTag を付与
+         reg.remove<ShootingEnemyTag>( entity );
+         reg.emplace<FinishedShootTag>( entity );
       }
    }
 }    // namespace myge

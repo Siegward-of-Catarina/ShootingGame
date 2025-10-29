@@ -37,6 +37,8 @@ namespace myge
       entt::entity createWandererEnemy( const json&             data_,
                                         const std::type_index&  affiliation_id_,
                                         sdl_engine::Vector2_f32 offset_pos_ = { 0.0f, 0.0f } );
+      entt::entity
+      createShootingEnemy( const json& data_, const std::type_index& affiliation_id_, entt::entity player_ );
       entt::entity createBasicUI( const json& data_, const std::type_index& affiliation_id_ );
       entt::entity createHighlightableUI( const json& data_, const std::type_index& affiliation_id_ );
       entt::entity createBasicText( const json& data_, const std::type_index& affiliation_id_ );
@@ -48,6 +50,7 @@ namespace myge
       std::vector<entt::entity> createWandererEnemyArray( const json& data_, const std::type_index& affiliation_id_ );
       std::vector<entt::entity> createEntities( const json&                     data_,
                                                 const std::type_index&          affiliation_id_,
+                                                const entt::entity              player_ = {},
                                                 const std::vector<std::string>& exclude = {} );
 
    private:

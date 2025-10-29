@@ -54,7 +54,9 @@ namespace
 namespace myge
 {
    GameScene::GameScene( const sdl_engine::SceneDependencies& dependencies_ )
-     : Scene { dependencies_, "game_data/scene_data/game_scene_data.json" }, _scene_elapsed_time { 0.f }
+     : Scene { dependencies_, "game_data/scene_data/game_scene_data.json" }
+     , _scene_elapsed_time { 0.f }
+     , _player_entity { entt::null }
    {
    }
 
@@ -94,7 +96,7 @@ namespace myge
       {
          case SceneState::WaveStart :
             // 現在のWaveを開始
-            _waves[ idx ]->start();
+            _waves[ idx ]->start( _player_entity );
             scene_state = SceneState::Wave;
             break;
 
@@ -161,7 +163,13 @@ namespace myge
       if ( auto data { sdl_engine::tryGetJson( scene_data, "Entities" ) }; data )
       {
          EntityFactory factory { registry(), resourceManager() };
-         factory.createEntities( *data, typeid( AffilGameScene ) );
+         if ( auto player_data { sdl_engine::tryGetJson( data->get(), "player" ) }; player_data )
+         {
+            // プレイヤーを先に生成しておく ここがおかしい
+            _player_entity = factory.createPlayer( player_data->get(), typeid( AffilGameScene ) );
+         }
+
+         factory.createEntities( *data, typeid( AffilGameScene ), entt::null, { "player" } );
       }
    }
 

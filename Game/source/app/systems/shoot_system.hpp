@@ -12,6 +12,10 @@ namespace myge
       virtual void update( const sdl_engine::FrameData& frame_ ) override;
 
    private:
+      void PlayerShoot( const sdl_engine::FrameData& frame_ );
+      void EnemyBurstShoot( const sdl_engine::FrameData& frame_ );
+
+   private:
       sdl_engine::EventListener& _event_listener;
    };
 }    // namespace myge

@@ -7,8 +7,7 @@ namespace myge
    {
       f32                     speed    = {};
       sdl_engine::Vector2_f32 stop_pos = {};
-      u32                     num_shots {};
-      f32                     shoot_interval = {};
+      sdl_engine::Vector2_f32 exit_pos = {};
       enum class State
       {
          Entering,

@@ -33,5 +33,6 @@ namespace myge
    private:
       std::vector<std::unique_ptr<Wave>> _waves;
       f64                                _scene_elapsed_time;
+      entt::entity                       _player_entity;
    };
 }    // namespace myge

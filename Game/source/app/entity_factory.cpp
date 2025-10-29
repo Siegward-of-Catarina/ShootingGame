@@ -16,10 +16,11 @@
 #include <app/components/sin_wave_movement.hpp>
 #include <app/components/sprite_brink.hpp>
 #include <app/components/status.hpp>
+#include <app/components/stop_and_shoot_movement.hpp>
+#include <app/components/target.hpp>
 #include <app/components/title_input.hpp>
 #include <app/components/title_menu.hpp>
 #include <app/components/transform_link.hpp>
-
 // basic_components
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
@@ -139,9 +140,9 @@ namespace myge
          _registry.emplace<Transform>( entity, trfm_comp );
       }
       // [velocity] shooterがvelocityを決める
-      const auto& shooter_comp { _registry.get<Shooter>( shooter_ ) };
+      auto& shooter_comp { _registry.get<Shooter>( shooter_ ) };
       {
-         Velocity velo { shooter_comp.bullet_velocity.x, shooter_comp.bullet_velocity.y };
+         Velocity velo { .vector { shooter_comp.bullet_direction * shooter_comp.speed } };
          _registry.emplace<Velocity>( entity, velo );
       }
 
@@ -254,8 +255,7 @@ namespace myge
          };
          auto pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
          // array生成に対応するためoffsetを足す
-         trfm.position.x = pos[ 0 ];
-         trfm.position.y = pos[ 1 ];
+         trfm.position = sdl_engine::Vector2_f32 { pos };
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
       // [Velocity]
@@ -265,8 +265,7 @@ namespace myge
             0.0f, 0.0f
          };
          auto dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
-         velo.vector.x = dir[ 0 ];
-         velo.vector.y = dir[ 1 ];
+         velo.vector = sdl_engine::Vector2_f32 { dir };
          _registry.emplace<sdl_engine::Velocity>( entity, velo );
       }
       // [BBox]
@@ -278,13 +277,15 @@ namespace myge
       _registry.emplace<PlayerInput>( entity );
       // [Shooter]
       {
-         f32     cooldown { sdl_engine::getOptionalData<f32>( data_, "shoot_cooldown", 0.2f ) };
-         auto    dir { sdl_engine::getOptionalData<std::array<f32, 2>>( data_, "bullet_velocity", { 0.0f, -500.0f } ) };
-         Shooter shtr {
-            cooldown, 0.0f, { dir[ 0 ], dir[ 1 ] },
-              BulletType::Player
-         };
-         _registry.emplace<Shooter>( entity, shtr );
+         auto    dir_array { sdl_engine::getOptionalData<std::array<f32, 2>>(
+           data_, "bullet_direction", { 0.0f, -1.0f } ) };
+         Shooter shooter { .cooldown { sdl_engine::getOptionalData<f32>( data_, "shoot_cooldown", 0.2f ) },
+                           .wait { 0.0f },
+                           .num_shot { sdl_engine::getOptionalData<i8>( data_, "num_shot", 3 ) },
+                           .bullet_direction { dir_array },
+                           .speed { 500.0f },
+                           .bullet_type { BulletType::Player } };
+         _registry.emplace<Shooter>( entity, shooter );
       }
       // [status]
       {
@@ -302,7 +303,7 @@ namespace myge
       // [movement]
       {
          auto                max_speed { sdl_engine::getOptionalData<f32>( data_, "max_speed", 400.0f ) };
-         auto                acceleration { sdl_engine::getOptionalData<f32>( data_, "acceleration", 5.0f ) };
+         auto                acceleration { sdl_engine::getOptionalData<f32>( data_, "move_acceleration", 5.0f ) };
          PlayerMovementInput move_input {
             max_speed, acceleration, { 0.f, 0.f }
          };
@@ -407,8 +408,7 @@ namespace myge
 
          // array生成に対応するためoffsetを足す
          auto pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
-         trfm.position.x = pos[ 0 ] + offset_pos_.x;
-         trfm.position.y = pos[ 1 ] + offset_pos_.y;
+         trfm.position = offset_pos_ + sdl_engine::Vector2_f32 { pos };
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
       // [Velocity]
@@ -418,8 +418,7 @@ namespace myge
       };
       {
          auto dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
-         velo.vector.x = dir[ 0 ];
-         velo.vector.y = dir[ 1 ];
+         velo.vector = sdl_engine::Vector2_f32 { dir };
          _registry.emplace<sdl_engine::Velocity>( entity, velo );
       }
       // [movement]
@@ -471,6 +470,111 @@ namespace myge
       }
       return entity;
    }
+   entt::entity
+   EntityFactory::createShootingEnemy( const json& data_, const std::type_index& affiliation_id_, entt::entity player_ )
+   {
+      auto entity { _registry.create() };
+      setAffiliationTag( entity, affiliation_id_ );
+      // リソース
+      auto sprt_resource { _resource_manager.getSprite( "enemy2" ) };
+      auto sprt_anim_resource { _resource_manager.getSpriteAnim( "enemy2_anim" ) };
+
+      f32 frame_w { static_cast<f32>( sprt_anim_resource->frame_width ) };
+      f32 frame_h { static_cast<f32>( sprt_anim_resource->frame_height ) };
+
+      // タグ
+      {
+         _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
+         _registry.emplace<EnemyTag>( entity );
+         auto interval { sdl_engine::getOptionalData<f32>( data_, "interval", 0.0f, true ) };
+         if ( interval > 0.0f ) { _registry.emplace<WaitTag>( entity, interval, 0.0f ); }
+         else
+         {
+            _registry.emplace<EnteringTag>( entity );
+            _registry.emplace<sdl_engine::RenderableTag>( entity );
+            _registry.emplace<sdl_engine::UpdateableTag>( entity );
+         }
+      }
+      // [Sprite]
+      {
+         sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
+         sprt.dst.w = frame_w;
+         sprt.dst.h = frame_h;
+         _registry.emplace<sdl_engine::Sprite>( entity, sprt );
+      }
+      // [SpriteAnim]
+      {
+         sdl_engine::SpriteAnim sp_anim { sdl_engine::createSpriteAnim( sprt_anim_resource ) };
+         _registry.emplace<sdl_engine::SpriteAnim>( entity, sp_anim );
+      }
+      // [Transform]
+      sdl_engine::Transform trfm {
+         { 0.0f, 0.0f },
+         180.0f, 1.0f
+      };
+      {
+         auto pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
+         trfm.position = sdl_engine::Vector2_f32 { pos };
+         _registry.emplace<sdl_engine::Transform>( entity, trfm );
+      }
+      // [Velocity]
+      sdl_engine::Velocity velo {
+         { 0.0f, 10.0f },
+         0.0f, 0.0f
+      };
+      {
+         auto dir { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "dir" ) };
+         velo.vector = sdl_engine::Vector2_f32 { dir };
+         _registry.emplace<sdl_engine::Velocity>( entity, velo );
+      }
+      // [movement]
+      {
+         auto                 stop_pos_array { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "stop_pos" ) };
+         auto                 exit_pos_array { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "exit_pos" ) };
+         StopAndShootMovement stop_and_shoot { .speed { sdl_engine::getRequireData<f32>( data_, "move_speed" ) },
+                                               .stop_pos { stop_pos_array },
+                                               .exit_pos { exit_pos_array },
+                                               .state { StopAndShootMovement::State::Entering } };
+         _registry.emplace<StopAndShootMovement>( entity, stop_and_shoot );
+      }
+      // [Shooter]
+      {
+         Shooter shooter {
+            .cooldown { sdl_engine::getOptionalData<f32>( data_, "shoot_cooldown", 0.5f ) },
+            .wait { 0.0f },
+            .num_shot { sdl_engine::getOptionalData<i8>( data_, "num_shot", 3 ) },
+            .bullet_direction {
+                       0.0f, 1.0f }, // bullet direction はplayerへの方向ベクトルにする 仮にPlayerが存在しない場合は下方向
+            .speed { 500.0f },
+            .bullet_type { BulletType::Enemy_small }
+         };
+         _registry.emplace<Shooter>( entity, shooter );
+      }
+      // [target]
+      {
+         Target target { .target_entity { player_ } };
+         _registry.emplace<Target>( entity, target );
+      }
+      // [BBox]
+      {
+         BoundingBox box { createBoundingBox( frame_w / 2, frame_h / 2, 20.0f ) };
+         _registry.emplace<BoundingBox>( entity, box );
+      }
+      // [Status]
+      {
+         Status status { .hp { 2 }, .max_hp { 2 }, .atk { 1 } };
+         _registry.emplace<Status>( entity, status );
+      }
+      // [damage effect prop]
+      {
+         auto red_brink_time = sdl_engine::getOptionalData<f32>( data_, "red_brink_time", 0.5f );
+         auto brink_interval = sdl_engine::getOptionalData<f32>( data_, "brink_interval", 0.5f / 7 );
+
+         DamageEffectProperty dmg_effect_prop { red_brink_time, brink_interval };
+         _registry.emplace<DamageEffectProperty>( entity, dmg_effect_prop );
+      }
+      return entity;
+   }
    entt::entity EntityFactory::createBasicUI( const json& data_, const std::type_index& affiliation_id_ )
    {
       auto entity { _registry.create() };
@@ -498,8 +602,7 @@ namespace myge
          };
          auto pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
          // array生成に対応するためoffsetを足す
-         trfm.position.x = pos[ 0 ];
-         trfm.position.y = pos[ 1 ];
+         trfm.position = sdl_engine::Vector2_f32 { pos };
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
       return entity;
@@ -556,8 +659,7 @@ namespace myge
          };
          auto pos { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "pos" ) };
          // array生成に対応するためoffsetを足す
-         trfm.position.x = pos[ 0 ];
-         trfm.position.y = pos[ 1 ];
+         trfm.position = sdl_engine::Vector2_f32 { pos };
          _registry.emplace<sdl_engine::Transform>( entity, trfm );
       }
 
@@ -680,14 +782,14 @@ namespace myge
       for ( u32 i = 0; i < num_enemy; i++ )
       {
          sdl_engine::Vector2_f32 vec;
-         vec.x         = offset[ 0 ] * i;
-         vec.y         = offset[ 1 ] * i;
+         vec           = sdl_engine::Vector2_f32 { offset } * static_cast<f32>( i );
          entities[ i ] = createWandererEnemy( data_, affiliation_id_, vec );
       }
       return entities;
    }
    std::vector<entt::entity> EntityFactory::createEntities( const json&                     data_,
                                                             const std::type_index&          affiliation_id_,
+                                                            const entt::entity              player_,
                                                             const std::vector<std::string>& exclude_ )
    {
 
@@ -707,6 +809,14 @@ namespace myge
                auto entts { createWandererEnemyArray( data, affiliation_id_ ) };
                entities.insert(
                  entities.end(), std::make_move_iterator( entts.begin() ), std::make_move_iterator( entts.end() ) );
+            }
+            else if ( entity_type == "en_shooter" )
+            {
+               if ( _registry.valid( player_ ) )
+               {
+                  auto entity { createShootingEnemy( data, affiliation_id_, player_ ) };
+                  entities.emplace_back( entity );
+               }
             }
             else if ( entity_type == "player" )
             {

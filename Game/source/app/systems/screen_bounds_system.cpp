@@ -6,19 +6,31 @@
 #include <engine/utils.hpp>
 namespace
 {
+   struct BoxRect
+   {
+      f32 left;
+      f32 right;
+      f32 top;
+      f32 bottom;
+   };
+
    // 有効な方向のみで内側判定を行う
-   bool isInside( SDL_FRect& target_, SDL_FRect& screen_, myge::BoundingBox::EnableAxis& enable_axis_ )
+   bool isInside( const BoxRect& target_, const BoxRect& screen_, const myge::BoundingBox::EnableAxis& enable_axis_ )
    {
       switch ( enable_axis_ )
       {
-         case myge::BoundingBox::EnableAxis::Top : return target_.y >= screen_.y && target_.y <= screen_.h;
-         case myge::BoundingBox::EnableAxis::Bottom : return target_.h >= screen_.y && target_.h <= screen_.h;
-         case myge::BoundingBox::EnableAxis::Left : return target_.x >= screen_.x && target_.x <= screen_.w;
-         case myge::BoundingBox::EnableAxis::Right : return target_.w >= screen_.x && target_.w <= screen_.w;
-         case myge::BoundingBox::EnableAxis::LR : return target_.x >= screen_.x && target_.w <= screen_.w;
-         case myge::BoundingBox::EnableAxis::TB : return target_.y >= screen_.y && target_.h <= screen_.h;
+         case myge::BoundingBox::EnableAxis::Top : return target_.top >= screen_.top && target_.top <= screen_.bottom;
+         case myge::BoundingBox::EnableAxis::Bottom :
+            return target_.bottom >= screen_.top && target_.bottom <= screen_.bottom;
+         case myge::BoundingBox::EnableAxis::Left :
+            return target_.left >= screen_.left && target_.left <= screen_.right;
+         case myge::BoundingBox::EnableAxis::Right :
+            return target_.right >= screen_.left && target_.right <= screen_.right;
+         case myge::BoundingBox::EnableAxis::LR : return target_.left >= screen_.left && target_.right <= screen_.right;
+         case myge::BoundingBox::EnableAxis::TB : return target_.top >= screen_.top && target_.bottom <= screen_.bottom;
          case myge::BoundingBox::EnableAxis::ALL :
-            return target_.y >= screen_.y && target_.h <= screen_.h && target_.x >= screen_.x && target_.w <= screen_.w;
+            return target_.top >= screen_.top && target_.bottom <= screen_.bottom && target_.left >= screen_.left
+                && target_.right <= screen_.right;
       }
       return false;
    }
@@ -120,43 +132,54 @@ namespace myge
       for ( auto [ entity, box, trfm ] : reg.view<BoundingBox, sdl_engine::Transform>().each() )
       {
          if ( !reg.valid( entity ) ) { continue; }
-         SDL_FRect target { .x { trfm.position.x - box.harf_width },
-                            .y { trfm.position.y - box.harf_hegiht },
-                            .w { trfm.position.x + box.harf_width },
-                            .h { trfm.position.y + box.harf_hegiht } };
 
-         SDL_FRect screen { .x { 0.f }, .y { 0.f }, .w { frame_.window_width }, .h { frame_.window_height } };
+         BoxRect target_bbox { .left { trfm.position.x - box.harf_width },
+                               .right { trfm.position.x + box.harf_width },
+                               .top { trfm.position.y - box.harf_hegiht },
+                               .bottom { trfm.position.y + box.harf_hegiht } };
+
+         BoxRect screen {
+            .left { 0.f }, .right { frame_.window_width }, .top { 0.f }, .bottom { frame_.window_height }
+         };
          // 画面外から登場するケースに対応するため、
          // ステートがNoneの場合Insideしか判定を取らない
          if ( box.state == BoundingBox::State::None )
          {
             // 有効方向[ enable_axis ]をもとに判定を行う
-            if ( isInside( target, screen, box.enable_axis ) ) { box.state = BoundingBox::State::Inside; }
+            if ( isInside( target_bbox, screen, box.enable_axis ) ) { box.state = BoundingBox::State::Inside; }
          }
          else
          {
             // 有効方向[ enable_axis ]をもとに判定を行う
-            if ( isOutTop( target.h, screen.y, box.enable_axis ) ) { box.state = BoundingBox::State::OutTop; }
-            else if ( isOutBottom( target.y, screen.h, box.enable_axis ) )
+            if ( isOutTop( target_bbox.bottom, screen.top, box.enable_axis ) )
             {
-
+               box.state = BoundingBox::State::OutTop;
+            }
+            else if ( isOutBottom( target_bbox.top, screen.bottom, box.enable_axis ) )
+            {
                box.state = BoundingBox::State::OutBottom;
             }
-            else if ( isOutLeft( target.w, screen.x, box.enable_axis ) ) { box.state = BoundingBox::State::OutLeft; }
-            else if ( isOutRight( target.x, screen.w, box.enable_axis ) ) { box.state = BoundingBox::State::OutRight; }
-            else if ( isPartinalTop( target.y, screen.y, box.enable_axis ) )
+            else if ( isOutLeft( target_bbox.right, screen.left, box.enable_axis ) )
+            {
+               box.state = BoundingBox::State::OutLeft;
+            }
+            else if ( isOutRight( target_bbox.left, screen.right, box.enable_axis ) )
+            {
+               box.state = BoundingBox::State::OutRight;
+            }
+            else if ( isPartinalTop( target_bbox.top, screen.top, box.enable_axis ) )
             {
                box.state = BoundingBox::State::PartinalTop;
             }
-            else if ( isPartinalBottom( target.h, screen.h, box.enable_axis ) )
+            else if ( isPartinalBottom( target_bbox.bottom, screen.bottom, box.enable_axis ) )
             {
                box.state = BoundingBox::State::PartinalBottom;
             }
-            else if ( isPartinalLeft( target.x, screen.x, box.enable_axis ) )
+            else if ( isPartinalLeft( target_bbox.left, screen.left, box.enable_axis ) )
             {
                box.state = BoundingBox::State::PartinalLeft;
             }
-            else if ( isPartinalRight( target.w, screen.w, box.enable_axis ) )
+            else if ( isPartinalRight( target_bbox.right, screen.right, box.enable_axis ) )
             {
                box.state = BoundingBox::State::PartinalRight;
             }
