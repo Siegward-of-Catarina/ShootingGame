@@ -29,6 +29,7 @@ namespace sdl_engine
    float Vector2_f32::lengthSq() { return x * x + y * y; }
 
    float Vector2_f32::length() { return std::sqrt( lengthSq() ); }
+   float Vector2_f32::dot( const Vector2_f32& vec ) { return x * vec.x + y * vec.y; }
 }    // namespace sdl_engine
 
 namespace sdl_engine

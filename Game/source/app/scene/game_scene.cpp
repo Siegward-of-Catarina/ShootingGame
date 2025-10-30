@@ -96,7 +96,7 @@ namespace myge
       {
          case SceneState::WaveStart :
             // 現在のWaveを開始
-            _waves[ idx ]->start( _player_entity );
+            _waves[ 1 ]->start( _player_entity );
             scene_state = SceneState::Wave;
             break;
 
@@ -166,7 +166,7 @@ namespace myge
          if ( auto player_data { sdl_engine::tryGetJson( data->get(), "player" ) }; player_data )
          {
             // プレイヤーを先に生成しておく ここがおかしい
-            _player_entity = factory.createPlayer( player_data->get(), typeid( AffilGameScene ) );
+            _player_entity = factory.createPlayer( player_data->get()[ 0 ], typeid( AffilGameScene ) );
          }
 
          factory.createEntities( *data, typeid( AffilGameScene ), entt::null, { "player" } );

@@ -231,5 +231,6 @@
     <ClInclude Include="source\app\components\sin_wave_movement.hpp" />
     <ClInclude Include="source\app\components\stop_and_shoot_movement.hpp" />
     <ClInclude Include="source\app\components\target.hpp" />
+    <ClInclude Include="source\app\components\facing_tag.hpp" />
   </ItemGroup>
 </Project>

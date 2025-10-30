@@ -5,9 +5,10 @@ namespace myge
 {
    struct StopAndShootMovement
    {
-      f32                     speed    = {};
-      sdl_engine::Vector2_f32 stop_pos = {};
-      sdl_engine::Vector2_f32 exit_pos = {};
+      f32                     speed        = {};
+      sdl_engine::Vector2_f32 stop_pos     = {};
+      sdl_engine::Vector2_f32 exit_pos     = {};
+      sdl_engine::Vector2_f32 pre_trfm_pos = {};
       enum class State
       {
          Entering,

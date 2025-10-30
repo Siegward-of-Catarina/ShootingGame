@@ -39,16 +39,20 @@ namespace myge
    {
       auto&                     reg { registry() };
       std::vector<entt::entity> finished_entity;
-      for ( auto [ entity, shooter, trfm, target ] :
-            getLogicUpdateable<Shooter, sdl_engine::Transform, Target, ShootingEnemyTag>( reg ).each() )
+      for ( auto [ entity, shooter, trfm, velo, target ] :
+            getLogicUpdateable<Shooter, sdl_engine::Transform, sdl_engine::Velocity, Target, ShootingEnemyTag>( reg )
+              .each() )
       {
+
+         auto target_trfm         = reg.get<sdl_engine::Transform>( target.target_entity );
+         shooter.bullet_direction = target_trfm.position - trfm.position;
+         shooter.bullet_direction.normalize();
+
          if ( shooter.wait > shooter.cooldown )
          {
             shooter.num_shot--;
-            shooter.wait             = 0.0;
-            auto target_trfm         = reg.get<sdl_engine::Transform>( target.target_entity );
-            shooter.bullet_direction = target_trfm.position - trfm.position;
-            shooter.bullet_direction.normalize();
+            shooter.wait = 0.0;
+
             _event_listener.trigger<ShootEvent>( { entity } );
          }
          else if ( shooter.wait <= shooter.cooldown ) { shooter.wait += frame_.delta_time; }

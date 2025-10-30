@@ -12,6 +12,9 @@ namespace myge
    struct EnemyTag
    {
    };
+   struct EnemyBulletTag
+   {
+   };
    struct BackgroundTag
    {
    };

@@ -8,7 +8,9 @@ namespace sdl_engine
    public:
       Vector2_f32( f32 d_0_ = 0.f, f32 d_1_ = 0.f );
       explicit Vector2_f32( std::array<f32, 2>& array_ );
-      Vector2_i32  converti32();
+      Vector2_i32        converti32();
+      std::array<f32, 2> array() { return std::array<f32, 2> { x, y }; }
+
       Vector2_f32  operator*( const Vector2_f32& vec ) { return { x * vec.x, y * vec.y }; }
       Vector2_f32  operator*( const f32 value ) { return { x * value, y * value }; }
       Vector2_f32  operator/( const f32 value ) { return { x / value, y / value }; }
@@ -20,13 +22,25 @@ namespace sdl_engine
          y += vec.y;
          return *this;
       }
-      f32&               operator[]( const i32 index ) { return index == 0 ? x : y; }
-      std::array<f32, 2> array() { return std::array<f32, 2> { x, y }; }
-
+      Vector2_f32& operator-=( const Vector2_f32& vec )
+      {
+         x -= vec.x;
+         y -= vec.y;
+         return *this;
+      }
+      Vector2_f32& operator*=( const f32 value )
+      {
+         x *= value;
+         y *= value;
+         return *this;
+      }
+      f32&         operator[]( const i32 index ) { return index == 0 ? x : y; }
+      explicit     operator bool() const { return x != 0.f || y != 0.f; }
       Vector2_f32& normalize();
       Vector2_f32  normalized();
       float        lengthSq();
       float        length();
+      float        dot( const Vector2_f32& vec );
 
    public:
       f32 x;

@@ -7,6 +7,7 @@
 #include <app/components/button_ui.hpp>
 #include <app/components/damage_effect_property.hpp>
 #include <app/components/entity_type_tag.hpp>
+#include <app/components/facing_tag.hpp>
 #include <app/components/highlightable.hpp>
 #include <app/components/lifecycle_tags.hpp>
 #include <app/components/player_input.hpp>
@@ -123,9 +124,9 @@ namespace myge
       setAffiliationTag( entity, affiliation_id_ );
 
       _registry.emplace<EnteringTag>( entity );
+      _registry.emplace<FacingTag>( entity );
       _registry.emplace<sdl_engine::RenderableTag>( entity );
       _registry.emplace<sdl_engine::UpdateableTag>( entity );
-      _registry.emplace<PlayerBulletTag>( entity );
       _registry.emplace<RenderGameSpriteTag>( entity );
 
       // [status]
@@ -151,10 +152,14 @@ namespace myge
       {
          switch ( shooter_comp.bullet_type )
          {
-            case BulletType::Player : sprt_comp = createSprite( _resource_manager.getSprite( "player_bullet" ) ); break;
+            case BulletType::Player :
+               sprt_comp = createSprite( _resource_manager.getSprite( "player_bullet" ) );
+               _registry.emplace<PlayerBulletTag>( entity );
+               break;
 
             case BulletType::Enemy_small :
                sprt_comp = createSprite( _resource_manager.getSprite( "enemy_bullet_small" ) );
+               _registry.emplace<EnemyBulletTag>( entity );
                break;
             case BulletType::Enemy_Large :
                sprt_comp = createSprite( _resource_manager.getSprite( "player_bullet" ) );
@@ -377,6 +382,8 @@ namespace myge
       // タグ
       {
          _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
+
+         _registry.emplace<FacingTag>( entity );
          _registry.emplace<EnemyTag>( entity );
          auto interval { sdl_engine::getOptionalData<f32>( data_, "interval", 0.0f, true ) };
          if ( interval > 0.0f ) { _registry.emplace<WaitTag>( entity, interval, 0.0f ); }
@@ -445,7 +452,6 @@ namespace myge
                sin_wave.frequency  = sdl_engine::getOptionalData<f32>( move_data.value(), "frequency", 10.0f );
                sin_wave.move_speed = sdl_engine::getOptionalData<f32>( move_data.value(), "speed", 200.0f );
                sin_wave.direction  = sdl_engine::Vector2_f32( velo.vector.x, velo.vector.y );
-               sin_wave.time       = 0.0f;
                _registry.emplace<SinWaveMovement>( entity, sin_wave );
             }
          }
@@ -486,6 +492,8 @@ namespace myge
       {
          _registry.emplace<sdl_engine::RenderGameSpriteTag>( entity );
          _registry.emplace<EnemyTag>( entity );
+
+         _registry.emplace<FacingTag>( entity );
          auto interval { sdl_engine::getOptionalData<f32>( data_, "interval", 0.0f, true ) };
          if ( interval > 0.0f ) { _registry.emplace<WaitTag>( entity, interval, 0.0f ); }
          else
@@ -531,9 +539,11 @@ namespace myge
       {
          auto                 stop_pos_array { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "stop_pos" ) };
          auto                 exit_pos_array { sdl_engine::getRequireData<std::array<f32, 2>>( data_, "exit_pos" ) };
-         StopAndShootMovement stop_and_shoot { .speed { sdl_engine::getRequireData<f32>( data_, "move_speed" ) },
+         StopAndShootMovement stop_and_shoot { .speed {
+                                                 sdl_engine::getOptionalData<f32>( data_, "move_speed", 100.0f ) },
                                                .stop_pos { stop_pos_array },
                                                .exit_pos { exit_pos_array },
+                                               .pre_trfm_pos { trfm.position },    // 初期位置をセット
                                                .state { StopAndShootMovement::State::Entering } };
          _registry.emplace<StopAndShootMovement>( entity, stop_and_shoot );
       }

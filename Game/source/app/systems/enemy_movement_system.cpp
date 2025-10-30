@@ -6,6 +6,7 @@
 #include <app/systems/enemy_movement_system.hpp>
 #include <cmath>
 #include <engine/basic_component.hpp>
+#include <engine/components/enable_tag_components.hpp>
 #include <engine/core.hpp>
 
 namespace myge
@@ -86,29 +87,34 @@ namespace myge
             getLogicUpdateable<sdl_engine::Transform, sdl_engine::Velocity, StopAndShootMovement, EnemyTag>( reg )
               .each() )
       {
-         sdl_engine::Vector2_f32 to_target;
          switch ( movement.state )
          {
             case StopAndShootMovement::State::Entering :
-               to_target = movement.stop_pos - trfm.position;
-               to_target.normalize();
-               velo.vector = to_target * movement.speed;
+            {
+               sdl_engine::Vector2_f32 now_to_target = movement.stop_pos - trfm.position;
+               sdl_engine::Vector2_f32 pre_to_target = movement.stop_pos - movement.pre_trfm_pos;
                // 到達判定
-               if ( to_target.lengthSq() <= 0.02 )
+               if ( now_to_target.lengthSq() <= 3.0f || now_to_target.dot( pre_to_target ) < 0.0f )
                {
-                  velo.vector    = { 0, 0 };
                   movement.state = StopAndShootMovement::State::Shooting;
                }
+               // 判定後正規化して速度設定
+               now_to_target.normalize();
+               velo.vector = now_to_target * movement.speed;
                break;
+            }
             case StopAndShootMovement::State::Shooting :
                // ShootingEnemyTagが付いていない = 射撃前 or　射撃終了後であるので付け替え対象に
                if ( !reg.all_of<ShootingEnemyTag>( entity ) ) { change_tag_entity.emplace_back( entity ); }
                break;
             case StopAndShootMovement::State::Exiting :
+            {
+               sdl_engine::Vector2_f32 to_target;
                to_target = movement.exit_pos - trfm.position;
                to_target.normalize();
                velo.vector = to_target * movement.speed;
                break;
+            }
          }
       }
 
@@ -118,13 +124,17 @@ namespace myge
          {
             // 射撃終了後ならタグを外して退出状態へ
             reg.remove<ShootingEnemyTag>( entity );
+            // 更新対象へ戻す
+            reg.emplace<sdl_engine::UpdateableTag>( entity );
             auto& movement = reg.get<StopAndShootMovement>( entity );
             movement.state = StopAndShootMovement::State::Exiting;
          }
          else
          {
             // 射撃前ならタグを付与して射撃開始
+            // 更新対象から除外
             reg.emplace<ShootingEnemyTag>( entity );
+            reg.remove<sdl_engine::UpdateableTag>( entity );
          }
       }
    }
