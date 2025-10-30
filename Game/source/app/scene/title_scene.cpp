@@ -1,21 +1,26 @@
 ﻿// タイトルシーン
 // - メニューのハイライト/決定入力を受けてシーン遷移
 // - 開始時にBGMを生成して再生（SoundSystemで処理）
-#include <app/entity_factory.hpp>
-#include <app/scene/game_scene.hpp>
+// my header
 #include <app/scene/title_scene.hpp>
-// system
+// scene
+#include <app/scene/game_scene.hpp>
+// factory
+#include <app/entity_factory.hpp>
+// component
 #include <app/components/affiliation.hpp>
+// system
 #include <app/systems/highlight_system.hpp>
 #include <app/systems/menu_system.hpp>
 #include <app/systems/out_of_screen_system.hpp>
 #include <app/systems/screen_bounds_system.hpp>
 #include <app/systems/sprite_brink_system.hpp>
-#include <engine/core.hpp>
 // event
 #include <app/event/key_down_event.hpp>
 #include <app/event/menu_button_event.hpp>
 #include <engine/events/sound_events.hpp>
+// core
+#include <engine/core.hpp>
 
 myge::TitleScene::TitleScene( const sdl_engine::SceneDependencies& dependencies_ )
   : Scene { dependencies_, "game_data/scene_data/title_scene_data.json" }, _scene_elapsed_time { 0 }

@@ -1,6 +1,6 @@
 ﻿#include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
-#include <engine/Components/text.hpp>
+#include <engine/components/text.hpp>
 #include <engine/core/game_exception.hpp>
 #include <engine/rendering/renderer.hpp>
 #include <engine/rendering/resource/color.hpp>

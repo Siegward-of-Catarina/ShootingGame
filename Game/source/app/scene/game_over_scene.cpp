@@ -1,16 +1,19 @@
 ﻿// ゲームオーバーシーン
 // - Continue(=Start) でリトライ、Exitでタイトルへ戻る
-#include <app/entity_factory.hpp>
+// my header
 #include <app/scene/game_over_scene.hpp>
+// scene
 #include <app/scene/game_scene.hpp>
 #include <app/scene/title_scene.hpp>
-// system
+// factory
+#include <app/entity_factory.hpp>
+// component
 #include <app/components/affiliation.hpp>
+// system
 #include <app/systems/highlight_system.hpp>
 #include <app/systems/menu_system.hpp>
 #include <app/systems/out_of_screen_system.hpp>
-#include <app/systems/screen_bounds_system.hpp>
-#include <app/systems/sprite_brink_system.hpp>
+// core
 #include <engine/core.hpp>
 // event
 #include <app/event/menu_button_event.hpp>

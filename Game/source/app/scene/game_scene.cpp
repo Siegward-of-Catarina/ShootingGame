@@ -1,14 +1,19 @@
 ﻿// ゲーム本編のテストシーン。
 // - Waveの開始/更新/終了を状態機械で管理
 // - 各種システムの登録とイベントハンドラの受け口を提供
-#include <SDL3/SDL.h>
-#include <app/entity_factory.hpp>
-#include <app/scene/game_over_scene.hpp>
+// my header
 #include <app/scene/game_scene.hpp>
+// scene
+#include <app/scene/game_over_scene.hpp>
+// wave
 #include <app/waves/wave.hpp>
+// factory
+#include <app/entity_factory.hpp>
 #include <app/waves/wave_factory.hpp>
-// system
+// component
 #include <app/components/affiliation.hpp>
+#include <engine/basic_component.hpp>
+// system
 #include <app/systems/collision_system.hpp>
 #include <app/systems/enemy_movement_system.hpp>
 #include <app/systems/facing_system.hpp>
@@ -26,15 +31,10 @@
 #include <app/event/dead_event.hpp>
 #include <app/event/game_over_event.hpp>
 #include <app/event/shoot_event.hpp>
+#include <engine/events/fade_events.hpp>
 #include <engine/events/sound_events.hpp>
 // engine
-#include <app/event/game_over_event.hpp>
-#include <engine/basic_component.hpp>
 #include <engine/core.hpp>
-#include <engine/events/fade_events.hpp>
-
-//
-#include <SDL3_mixer/SDL_mixer.h>
 
 namespace
 {

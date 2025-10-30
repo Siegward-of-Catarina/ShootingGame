@@ -1,5 +1,5 @@
-﻿#include <engine/Components/direct_control_tags.hpp>
-#include <engine/components/Velocity.hpp>
+﻿#include <engine/components/Velocity.hpp>
+#include <engine/components/direct_control_tags.hpp>
 #include <engine/components/transform.hpp>
 #include <engine/core/game_context.hpp>
 #include <engine/core/game_timer.hpp>
