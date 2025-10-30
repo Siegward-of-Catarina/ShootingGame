@@ -297,7 +297,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="source\engine\Components\direct_control_tags.hpp" />
+    <ClInclude Include="source\engine\components\direct_control_tags.hpp" />
     <ClInclude Include="source\engine\components\render_type_tag.hpp" />
     <ClInclude Include="source\engine\components\soundeffect.hpp">
       <SubType>
