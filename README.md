@@ -1,118 +1,96 @@
-# 🧬 BioArmada (C++20 / SDL3 / EnTT)
+# 🧬 BioArmada
 
-縦スクロール型の非弾幕シューティング。  
-自作軽量エンジン上で ECS(EnTT) によりゲームロジックを構築。アセット/シーン/ウェーブを JSON でデータ駆動化。
+**BioArmade** は、非弾幕系の縦スクロールシューティングゲームです。  
+自作エンジンを用いて、基本的なSTG（シューティングゲーム）の遊びを再現しつつ、最新のECS設計や軽量エンジン構築手法を検証することを目的としています。
 
-- 役割: 個人開発（設計/実装/アセットパイプライン）
-- 主要技術: C++20, SDL3, SDL_image, EnTT, nlohmann::json
-- 開発環境: Visual Studio 2022 / Windows x64
-- リポジトリ: https://github.com/Siegward-of-Catarina/ShootingGame
+> 🛠️ **約1ヶ月半**でゲーム本体とエンジンを開発。
 
 ---
 
-## ハイライト
+## ⚙️ 使用技術
 
-- ECS設計の実装経験：エンジン層とゲーム層を分離し、責務と依存を明確化
-- データ駆動設計：JSONでアセット/シーン/ウェーブ/エンティティを定義、`EntityFactory`で生成
-- 当たり判定の効率化：100px/セル × 6x8 の空間分割で近傍 3×3 セルのみ探索
-- フェーズ設計：イベント駆動で被弾→ダメージ→撃破演出→削除を非同期処理
-- 実装の見どころ: フェード演出、被ダメ赤点滅、波状出現、蛇行移動など
-
----
-
-## 画面と操作
-
-- タイトル: 上下で選択、Spaceで決定（Start/Exit）
-- ゲーム: 矢印キーで移動、Zでショット
-- ウィンドウ: 600×800 固定
+- **言語**：C++20  
+- **ライブラリ**：SDL3 / SDL3_image / SDL3_mixer / EnTT / nlohmann::json  
+- **開発環境**：Visual Studio  
+- **バージョン管理**：Git  
+- **開発目的**：ECSベースの軽量エンジン構築とゲーム開発手法の検証  
 
 ---
 
-## ビルドと実行（Visual Studio 2022）
+## 🏗️ リポジトリ構成
 
-1) レポジトリを開く（`Game/Game.vcxproj` またはフォルダーを開く）
-2) 構成: x64 / Debug または Release
-3) ビルド（__Build Solution__ / Ctrl+Shift+B）
-4) 実行（__Start Debugging__ / F5 または __Start Without Debugging__ / Ctrl+F5）
+プロジェクトには以下の主要ディレクトリが含まれます：
 
-依存は同梱済み（追加インストール不要）。
+### 📂 Game
 
----
+- **assets**: ゲーム内で利用するサウンドやスプライト画像ファイル、およびテスト用のアセット定義ファイルが含まれます。
+  - `sound/`
+  - `sprite/`
+  - `test_assets.json`
+- **game_data**: ステージやウェーブデータを管理するシーンデータを格納。
+  - `scene_data/`
+  - `wave_data/`
+- **source**: ゲームロジックとエンジンのコード。
+  - `app/`: アプリケーションコード
+  - `engine/`: エンジンコード
 
-## 実装構成（抜粋）
+### 📂 LICENSES
 
-- エンジン層（OOP）
-  - `EngineContext`: Renderer/Resource/Input/Scene/System を初期化・保持
-  - システム: `MovementSystem`, `RotateSystem`, `ScaleSystem`, `FadeSystem`
-  - フェード: 専用エンティティ + `FadeSystem` でシーン遷移演出
-- ゲーム層（ECS）
-  - シーン: `title_scene`, `test_scene`（`Scene`基底に依存注入）
-  - ファクトリ: `EntityFactory`（Player/Enemy/Bullet/UI/Text/背景などを JSON から生成）
-  - システム:
-    - 入力: `InputSystem` → `PlayerInput`/`TitleInput` を更新
-    - 射撃: `ShootSystem` → `ShootEvent` → 弾生成（`EntityFactory::createBullet`）
-    - 移動: `PlayerMovementSystem` / `EnemyMovementSystem`（蛇行 `SerpentineMovement`）
-    - 当たり判定: `CollisionSystem`（円形近似 + 6×8グリッドで近傍探索）
-    - ヒット解決: `HitResolutionSystem`（HP/ATK減算、`AppedDeadEffectEvent` 発火）
-    - 演出: `SpriteBrinkSystem`（被ダメ赤点滅、点滅UI）
-    - 画面外/寿命: `OutOfScreenSystem` ほか
-- データ駆動
-  - アセット: `assets/test_assets.json`（スプライト/アニメ/フォント）
-  - シーン: `game_data/scene_data/game_scene_data.json`
-  - ウェーブ: `waves`（クラス名 + データパスでロード）
-  - 例: `en_wanderer_array` による一括生成、`movement.serpentine` パラメトリック移動
+- 各ライブラリやアセットのライセンス情報を格納。
+  - SDL関連ライセンス（`SDL3`, `SDL3_image`, `SDL3_mixer`, `SDL_ttf`）
+  - nlohmann::json関連ライセンス（Apache, BSD, MIT, GPL-3.0など）
+  - サウンドアセットのライセンス情報（`sound_LICENSES.txt`）
 
 ---
 
-## 技術的課題と解決
+## 🧩 エンジン設計
 
-- 当たり判定の低コスト化
-  - 問題: 全探索は弾×敵で O(NM) に増大
-  - 解法: 100px グリッドで空間分割し、弾は近傍 3×3 セルのみ探索（9セル）
-  - 実装: `CollisionSystem`（セルIDを線形化し `unordered_map` でバケット化）
-- 被弾から撃破までの責務分離
-  - `HitEvent`（衝突検出）→ `HitResolutionSystem`（HP処理/演出付与）→ `DeadEvent`（破棄/エフェクト）
-  - イベント駆動で結合度を抑制し、演出の差し替え容易化
+本プロジェクトでは、**EngineContext** を中核としたモジュラー構造を採用しています。  
+エンジン層とゲームロジック層を明確に分離し、**OOP**と**ECS**の利点を活用しています。
 
----
+### エンジン層
 
-## コード参照（導線）
+- **EngineContext**：エンジンの中核モジュール  
+- **Renderer**：描画処理を統括  
+- **ResourceManager**：アセット管理（JSON定義）  
+- **SceneManager**：シーン遷移と演出管理  
 
-- エンティティ生成: `Game/source/app/entity_factory.cpp`
-- 衝突とヒット解決: `Game/source/app/systems/collision_system.cpp`, `hit_resolution_system.cpp`
-- 被ダメ演出: `Game/source/app/systems/sprite_brink_system.cpp`, `components/damage.hpp`
-- エントリ/起動: `Game/source/app/game.cpp`, `main.cpp`
+### ゲームロジック層
 
----
-
-## 今後の拡張案
-
-- 弾幕/パターンエディタ、敵AIのスクリプト化（Lua/JSON強化）
-- ECSシステムの並列化、プロファイリングに基づくホットスポット最適化
-- 当たり判定のAABB/OBB併用、広域空間分割（Quadtree）検証
-- ツールチェーン（Wave/Stage 可視編集ツール）
+- `MovementSystem`：移動管理  
+- `ShooterSystem`：弾生成・発射ロジック  
+- `CollisionSystem`：当たり判定処理  
+- `SpawnSystem`：敵出現管理  
 
 ---
 
-## メディア
+## 🎮 ゲーム内容
 
-- トレーラー: <リンクを挿入>
-- スクリーンショット: <リンクを挿入>
+- プレイヤーの操作：移動、ショット、敵撃破  
+- ステージ進行：JSONデータによる外部制御  
+- 柔軟な演出：システムの拡張を容易にする設計  
 
 ---
 
-## ライセンス
+## 📜 ライセンス
 
-同梱ライブラリは各ライセンスに従います（`/LICENSES`）。
-- SDL3, SDL_image, SDL_ttf（Zlib）
-- nlohmann/json（Apache-2.0）
-- EnTT（配布形態に準拠）
+本プロジェクトでは以下のライセンスを使用しています：
 
-本体/自作エンジン部のライセンスはリポジトリの LICENSE を参照（未設定の場合は追記してください）。
-# その他
+- ゲームエンジンおよびコード：MITライセンス（ライセンス詳細は `LICENSES/` を参照）  
+- 使用ライブラリのライセンス情報：
+  - SDL関連ライブラリ（`SDL3`, `SDL3_image`, `SDL3_mixer`, `SDL_ttf`）
+  - nlohmann::json（Apache, BSD, MIT, GPL-3.0）
 
-* 作成者 倉本　星玖
-* 所属　ポリテクセンター関西　Iotシステム科
-* E-mail kuramoto.riku.zzz@gmail.com
+---
 
-<p align="right">(<a href="#top">トップへ</a>)</p>
+## 📩 コンタクト情報
+
+- **作成者**: 倉本 星玖  
+- **所属**: ポリテクセンター関西 IoTシステム科  
+- **E-mail**: kuramoto.riku.zzz@gmail.com  
+
+---
+
+<p align="right">(<a href="#top">トップに戻る</a>)</p>  
+
+---
