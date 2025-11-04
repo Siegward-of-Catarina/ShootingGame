@@ -6,4 +6,8 @@ namespace myge
    {
       entt::entity shooter;
    };
+   struct LaserShootEvent
+   {
+      entt::entity shooter;
+   };
 }    // namespace myge

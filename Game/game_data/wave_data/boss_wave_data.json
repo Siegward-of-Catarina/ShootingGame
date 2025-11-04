@@ -1,0 +1,48 @@
+﻿{
+	"Entities": {
+		"sound_bgm": [
+			{
+				"sound_key": "bgm_bossscene",
+				"loop_count": -1,
+				"volume": 0.3,
+				"fade_time_ms": 100
+			}
+		],
+		"en_boss": [
+			{
+				"interval": 2,
+				"pos": [ 300.0, -220.0 ],
+				"dir": [ 0.0, 100.0 ],
+				"movement": {
+					"amplitude": 150.0,
+					"frequency": 1.0,
+					"stop_py": 150.0
+				},
+				"multiple_shooter": [
+					{
+						"type": "Enemy_small",
+						"spawn_position": [ -48.0, 44.0 ],
+						"shoot_cooldown": 0.2,
+						"num_shots": 3,
+						"speed": 300.0,
+						"on_shoot_se_key": "enemy_small_shoot",
+						"bullet_hp": 1,
+						"bullet_atk": 1
+					},
+					{
+						"type": "Enemy_Large",
+						"spawn_position": [ -70.0, 72.0 ],
+						"shoot_cooldown": 1,
+						"num_shots": 0.3,
+						"speed": 100.0,
+						"on_shoot_se_key": "enemy_large_shoot",
+						"bullet_hp": 2,
+						"bullet_atk": 1
+					}
+				],
+				"laser_spawn_position": [ 0.0, 454.0 ],
+				"laser_speed": 500.0
+			}
+		]
+	}
+}

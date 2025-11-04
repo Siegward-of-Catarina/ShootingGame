@@ -1,0 +1,23 @@
+﻿{
+	"Entities": {
+		"brink_ui": [
+			{
+				"interval": 2,
+				"sprite_name": "boss_battle",
+				"pos": [ 300.0, 300.0 ],
+				"brink_speed": 0.7,
+				"brink_min_alpha": 0.1,
+				"brink_num_cycles": 3,
+				"brink_reverse": true
+			}
+		],
+		"sound_se": [
+			{
+				"sound_key": "boss_battle_effect",
+				"loop_count": 3,
+				"volume": 0.5,
+				"delay": 2
+			}
+		]
+	}
+}

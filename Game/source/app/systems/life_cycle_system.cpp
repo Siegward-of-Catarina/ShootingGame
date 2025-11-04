@@ -5,7 +5,9 @@
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
 // event
+#include <app/event/charge_end_event.hpp>
 #include <app/event/dead_event.hpp>
+#include <app/event/dead_laser_event.hpp>
 #include <app/event/game_over_event.hpp>
 #include <engine/events/sprite_anim_end_event.hpp>
 namespace
@@ -26,6 +28,7 @@ namespace myge
       _change_tag_entities.reserve( DEFAULT_RESERVE_SIZE );
       _dead_entities.reserve( DEFAULT_RESERVE_SIZE );
       _event_listener.connect<&LifeCycleSystem::onEntityDead, DeadEvent>( this );
+      _event_listener.connect<&LifeCycleSystem::onLaserDead, DeadLaserEvent>( this );
       _event_listener.connect<&LifeCycleSystem::onSpriteAnimEnd, sdl_engine::SpriteAnimEndEvent>( this );
    }
    LifeCycleSystem::~LifeCycleSystem() {}
@@ -54,6 +57,7 @@ namespace myge
       for ( auto& entity : _change_tag_entities )
       {
          if ( !reg.valid( entity ) ) { continue; }
+         // waitからenteringへ
          if ( reg.all_of<WaitTag>( entity ) )
          {
             reg.remove<WaitTag>( entity );
@@ -61,6 +65,7 @@ namespace myge
             reg.emplace<sdl_engine::RenderableTag>( entity );
             reg.emplace<sdl_engine::UpdateableTag>( entity );
          }
+         // enteringからactiveへ
          else if ( reg.all_of<EnteringTag>( entity ) )
          {
 
@@ -164,6 +169,7 @@ namespace myge
       for ( auto entity : _dead_entities )
       {
          if ( reg.all_of<PlayerTag>( entity ) ) { _event_listener.trigger<GameOverEvent>( {} ); }
+         if ( reg.all_of<ChargeEffectTag>( entity ) ) { _event_listener.trigger<ChargeEndEvent>( {} ); }
          reg.destroy( entity );
       }
    }
@@ -176,6 +182,10 @@ namespace myge
          reg.remove<ActiveTag>( entity );
          reg.emplace<DeadTag>( entity );
       }
+   }
+   void LifeCycleSystem::onLaserDead( DeadLaserEvent& e )
+   {
+      for ( auto [ entity ] : registry().view<EnemyBossLaserTag>().each() ) { registry().destroy( entity ); }
    }
    void LifeCycleSystem::onSpriteAnimEnd( sdl_engine::SpriteAnimEndEvent& e )
    {

@@ -19,6 +19,7 @@ namespace myge
       virtual void addSystems() override;
       virtual void createEntities() override;
       virtual void setupEventHandlers() override;
+      virtual void postSystemAddition() override;
 
    private:
       void onTitleMenuAction( const MenuButtonEvent& e );

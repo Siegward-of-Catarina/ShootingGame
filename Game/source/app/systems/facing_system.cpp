@@ -12,7 +12,8 @@ namespace myge
    void FacingSystem::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ )
    {
       auto& reg { registry() };
-      auto  view { getLogicUpdateable<sdl_engine::Transform, sdl_engine::Velocity, FacingTag>( reg ) };
+      // factingはスクリーン内入場時に違和感をなくすため常に更新する
+      auto view { reg.view<sdl_engine::Transform, sdl_engine::Velocity, FacingTag>() };
       for ( auto [ entity, trfm, velo ] : view.each() )
       {
          if ( !reg.valid( entity ) ) { continue; }
@@ -32,7 +33,7 @@ namespace myge
          }
          // Shooting中でターゲットを向かない、または通常時はVelocityに従う
          if ( dir.lengthSq() <= 0.000001f ) { dir = velo.vector; }
-         if ( dir.lengthSq() > 0.000001f ) { trfm.angle = atan2( dir.y, dir.x ) * ( 180.0f / 3.141592f ) + 90; }
+         if ( dir.lengthSq() > 0.000001f ) { trfm.angle = atan2( dir.y, dir.x ) * ( 180.0f / 3.141592f ) - 90; }
       }
    }
 }    // namespace myge

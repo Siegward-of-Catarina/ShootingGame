@@ -10,7 +10,8 @@
 #include <engine/events/sound_events.hpp>
 // sound
 #include <engine/sound/sound_mixer.hpp>
-
+// core
+#include <engine/core/game_context.hpp>
 namespace sdl_engine
 {
    SoundSystem::SoundSystem( i32             priority_,
@@ -25,7 +26,7 @@ namespace sdl_engine
 
    SoundSystem::~SoundSystem() {}
 
-   void SoundSystem::update( const sdl_engine::FrameData& /*frame_*/ )
+   void SoundSystem::update( const sdl_engine::FrameData& frame_ )
    {
       auto&                     reg { registry() };
       std::vector<entt::entity> dead_sound_entities;
@@ -33,16 +34,20 @@ namespace sdl_engine
       // ワンショットSEの再生要求を処理
       for ( auto [ entity, se ] : reg.view<SoundEffect>().each() )
       {
-         _soundmixer.setSEVolume( se.volume );
-         _soundmixer.setPlaySE( se.sound->audio, se.loop_count );
-         dead_sound_entities.emplace_back( entity );    // 再生後に破棄
+         if ( se.delay < se.elapsed )
+         {
+            _soundmixer.setSEVolume( se.volume );
+            _soundmixer.setPlaySE( se.sound->audio, se.loop_count );
+            dead_sound_entities.emplace_back( entity );    // 再生後に破棄
+         }
+         else { se.elapsed += frame_.delta_time; }
       }
 
       // BGMの再生要求を処理
       for ( auto [ entity, bgm ] : reg.view<BackgroundMusic>().each() )
       {
          _soundmixer.setBGMVolume( bgm.volume );
-         _soundmixer.setPlayBGM( bgm.sound->audio, bgm.loop_count, bgm.fade_time_ms );
+         _soundmixer.setPlayBGM( bgm.sound->audio, bgm.fade_time_ms, bgm.loop_count );
          dead_sound_entities.emplace_back( entity );    // 再生後に破棄
       }
 

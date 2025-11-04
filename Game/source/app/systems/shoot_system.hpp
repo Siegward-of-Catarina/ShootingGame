@@ -14,6 +14,8 @@ namespace myge
    private:
       void PlayerShoot( const sdl_engine::FrameData& frame_ );
       void EnemyBurstShoot( const sdl_engine::FrameData& frame_ );
+      void EnemyDoubleBulletShoot( const sdl_engine::FrameData& frame_ );
+      void EnemyLaserShoot( const sdl_engine::FrameData& frame_ );
 
    private:
       sdl_engine::EventListener& _event_listener;

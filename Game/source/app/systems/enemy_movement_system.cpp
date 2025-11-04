@@ -1,14 +1,24 @@
-﻿#include <app/components/entity_type_tag.hpp>
+﻿// my header
+#include <app/systems/enemy_movement_system.hpp>
+// components
+#include <app/components/enemy_boss_ai.hpp>
+#include <app/components/enemy_boss_movement.hpp>
+#include <app/components/entity_type_tag.hpp>
 #include <app/components/serpentine_movement.hpp>
 #include <app/components/shooter.hpp>
 #include <app/components/sin_wave_movement.hpp>
 #include <app/components/stop_and_shoot_movement.hpp>
-#include <app/systems/enemy_movement_system.hpp>
-#include <cmath>
 #include <engine/basic_component.hpp>
 #include <engine/components/enable_tag_components.hpp>
+// core
 #include <engine/core.hpp>
-
+// std
+#include <cmath>
+#include <random>
+namespace
+{
+   sdl_engine::Vector2_f32 pre_velocity { 0.f, 0.f };
+}
 namespace myge
 {
    EnemyMovementSystem::EnemyMovementSystem( i32 priority_, entt::registry& registry_ )
@@ -23,6 +33,7 @@ namespace myge
       serpentineMovement( frame_ );
       sinWaveMovement( frame_ );
       stopAndShootMovement( frame_ );
+      bossMovement( frame_ );
    }
 
    void EnemyMovementSystem::serpentineMovement( const sdl_engine::FrameData& frame_ )
@@ -94,7 +105,7 @@ namespace myge
                sdl_engine::Vector2_f32 now_to_target = movement.stop_pos - trfm.position;
                sdl_engine::Vector2_f32 pre_to_target = movement.stop_pos - movement.pre_trfm_pos;
                // 到達判定
-               if ( now_to_target.lengthSq() <= 3.0f || now_to_target.dot( pre_to_target ) < 0.0f )
+               if ( now_to_target.lengthSq() <= 0.2f || now_to_target.dot( pre_to_target ) < 0.0f )
                {
                   movement.state = StopAndShootMovement::State::Shooting;
                }
@@ -135,6 +146,46 @@ namespace myge
             // 更新対象から除外
             reg.emplace<ShootingEnemyTag>( entity );
             reg.remove<sdl_engine::UpdateableTag>( entity );
+         }
+      }
+   }
+
+   void EnemyMovementSystem::bossMovement( const sdl_engine::FrameData& frame_ )
+   {
+      auto&      reg { registry() };
+      static f32 time = 0.0f;
+      for ( auto [ entity, trfm, velo, ai, movement ] :
+            getLogicUpdateable<sdl_engine::Transform, sdl_engine::Velocity, EnemyBossAI, EnemyBossMovement>( reg )
+              .each() )
+      {
+         if ( !reg.valid( entity ) ) { continue; }
+         if ( trfm.position.y > movement.stop_py )
+         {
+            trfm.position.y = movement.stop_py;
+            velo.vector.y   = 0.0f;
+         }
+         else if ( ai.attack == EnemyBossAI::Attack::LaserCharging || ai.attack == EnemyBossAI::Attack::LaserAttack )
+         {
+            velo.vector.x = 0.0f;
+            velo.vector.y = 0.0f;
+         }
+         else if ( trfm.position.y == movement.stop_py )
+         {
+            auto add_time = frame_.delta_time * movement.frequency;
+            movement.time += add_time;
+
+            // サイン波の現在値と1フレーム前の値を求める
+            auto sinv     = sinf( movement.time );
+            auto pre_sinv = sinf( movement.time - add_time );
+
+            // サイン波のオフセット値を求め, 差分を計算
+            auto offset      = sinv * movement.amplitude;
+            auto pre_offset  = pre_sinv * movement.amplitude;
+            auto diff_offset = offset - pre_offset;
+
+            // サイン波のオフセット分を加算
+            pre_velocity.x = diff_offset / frame_.delta_time;
+            velo.vector    = pre_velocity;
          }
       }
    }

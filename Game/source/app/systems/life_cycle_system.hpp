@@ -2,12 +2,14 @@
 
 #include <engine/forward.hpp>
 #include <engine/systems/system_interface.hpp>
-namespace sdl_engine {
-    struct SpriteAnimEndEvent;
+namespace sdl_engine
+{
+   struct SpriteAnimEndEvent;
 }
 namespace myge
 {
    struct DeadEvent;
+   struct DeadLaserEvent;
    class LifeCycleSystem final : public sdl_engine::SystemInterface
    {
    public:
@@ -25,7 +27,9 @@ namespace myge
 
    private:
       void onEntityDead( DeadEvent& e );
-      void onSpriteAnimEnd(sdl_engine::SpriteAnimEndEvent& e);
+      void onLaserDead( DeadLaserEvent& e );
+      void onSpriteAnimEnd( sdl_engine::SpriteAnimEndEvent& e );
+
    private:
       static constexpr u8 NEED_SORT_BACKGROUND_TAG = 1;
       static constexpr u8 NEED_SORT_GAMESPRITE_TAG = 2;

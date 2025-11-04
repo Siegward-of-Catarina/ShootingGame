@@ -4,6 +4,7 @@
 #include <engine/components/enable_tag_components.hpp>
 #include <engine/components/fade.hpp>
 #include <engine/components/render_type_tag.hpp>
+#include <engine/components/repeat_sprite.hpp>
 #include <engine/components/soundeffect.hpp>
 #include <engine/components/sprite.hpp>
 #include <engine/components/sprite_anim.hpp>

@@ -91,13 +91,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\app\components\bounding_box.cpp" />
-    <ClCompile Include="source\app\components\entity_type_tag.cpp" />
     <ClCompile Include="source\app\components\player_input.cpp" />
     <ClCompile Include="source\app\scene\game_over_scene.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="source\app\systems\collision_system.cpp" />
+    <ClCompile Include="source\app\systems\enemy_ai_system.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="source\app\systems\facing_system.cpp">
       <SubType>
       </SubType>
@@ -111,7 +114,15 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="source\app\systems\life_ui_system.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="source\app\systems\menu_system.cpp" />
+    <ClCompile Include="source\app\systems\score_system.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="source\app\systems\shoot_system.cpp">
       <SubType>
       </SubType>
@@ -187,7 +198,7 @@
     <ClCompile Include="source\app\scene\game_scene.cpp" />
     <ClCompile Include="source\engine\utils\json_utilities.cpp" />
     <ClCompile Include="source\app\waves\wave.cpp" />
-    <ClCompile Include="source\app\waves\wave1.cpp" />
+    <ClCompile Include="source\app\waves\basic_wave.cpp" />
     <ClCompile Include="source\engine\systems\sprite_render_system.cpp" />
     <ClCompile Include="source\engine\systems\movement_system.cpp" />
     <ClCompile Include="source\engine\systems\sprite_animation_system.cpp" />
@@ -204,6 +215,18 @@
     </ClInclude>
     <ClInclude Include="source\app\components\button_ui.hpp" />
     <ClInclude Include="source\app\components\damage.hpp" />
+    <ClInclude Include="source\app\components\se_properties.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\app\components\enemy_boss_movement.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\app\components\enemy_boss_ai.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\components\entity_type_tag.hpp">
       <SubType>
       </SubType>
@@ -214,6 +237,10 @@
     </ClInclude>
     <ClInclude Include="source\app\components\life.hpp" />
     <ClInclude Include="source\app\components\highlightable.hpp" />
+    <ClInclude Include="source\app\components\score.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\components\serpentine_movement.hpp">
       <SubType>
       </SubType>
@@ -249,7 +276,15 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\app\event\charge_end_event.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\event\dead_event.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\app\event\dead_laser_event.hpp">
       <SubType>
       </SubType>
     </ClInclude>
@@ -259,6 +294,15 @@
     </ClInclude>
     <ClInclude Include="source\app\event\hit_event.hpp" />
     <ClInclude Include="source\app\event\key_down_event.hpp" />
+    <ClInclude Include="source\app\event\append_charge_effect_event.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="source\app\event\player_life_changed_event.hpp" />
+    <ClInclude Include="source\app\event\play_damage_se_event.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\event\shoot_event.hpp">
       <SubType>
       </SubType>
@@ -269,7 +313,15 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\app\session\score_session.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\systems\collision_system.hpp" />
+    <ClInclude Include="source\app\systems\enemy_ai_system.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\systems\facing_system.hpp">
       <SubType>
       </SubType>
@@ -283,7 +335,15 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="source\app\systems\life_ui_system.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\systems\menu_system.hpp" />
+    <ClInclude Include="source\app\systems\score_system.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\systems\shoot_system.hpp">
       <SubType>
       </SubType>
@@ -299,6 +359,10 @@
     </ClInclude>
     <ClInclude Include="source\engine\components\direct_control_tags.hpp" />
     <ClInclude Include="source\engine\components\render_type_tag.hpp" />
+    <ClInclude Include="source\engine\components\repeat_sprite.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\engine\components\soundeffect.hpp">
       <SubType>
       </SubType>
@@ -361,12 +425,10 @@
     <ClInclude Include="source\app\systems\out_of_screen_system.hpp" />
     <ClInclude Include="source\app\systems\player_movement_system.hpp" />
     <ClInclude Include="source\engine\basic_component.hpp" />
-    <ClInclude Include="source\app\components\enemy_follower.hpp" />
     <ClInclude Include="source\app\systems\enemy_movement_system.hpp" />
     <ClInclude Include="source\app\forward_declarations.hpp" />
     <ClInclude Include="source\app\waves\wave_factory.hpp" />
     <ClInclude Include="source\Components\sprite.hpp" />
-    <ClInclude Include="source\app\components\enemy_leader.hpp" />
     <ClInclude Include="source\engine\components\sprite_anim.hpp" />
     <ClInclude Include="source\engine\components\sprite.hpp" />
     <ClInclude Include="source\engine\components\transform.hpp" />
@@ -460,7 +522,7 @@
     <ClInclude Include="source\sequencer.hpp" />
     <ClInclude Include="source\engine\systems\system_interface.hpp" />
     <ClInclude Include="source\app\waves\wave.hpp" />
-    <ClInclude Include="source\app\waves\wave1.hpp" />
+    <ClInclude Include="source\app\waves\basic_wave.hpp" />
     <ClInclude Include="source\engine\systems\sprite_render_system.hpp" />
     <ClInclude Include="source\engine\systems\movement_system.hpp" />
     <ClInclude Include="source\engine\systems\sprite_animation_system.hpp" />

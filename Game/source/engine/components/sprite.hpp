@@ -12,7 +12,7 @@ namespace sdl_engine
       ColorRGBA                      color {};
       // render orderはオプション。初期値100　基本はレンダータイプごとにレイヤー分けされる。
       // そのレイヤー内で優先順位をつけたい場合設定
-      u32 render_order {};
+      u32 render_order { 100u };
    };
 
    Sprite createSprite( ResourceManager& resource_manager_, const json& data_ );

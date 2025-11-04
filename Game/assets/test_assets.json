@@ -11,6 +11,10 @@
 				"file_path": "star.png"
 			},
 			{
+				"name": "hud",
+				"file_path": "hud.png"
+			},
+			{
 				"name": "player",
 				"file_path": "player_sprite.png"
 			},
@@ -23,6 +27,10 @@
 				"file_path": "enemy2_sprite.png"
 			},
 			{
+				"name": "boss",
+				"file_path": "boss_sprite.png"
+			},
+			{
 				"name": "enemy_bullet_hit",
 				"file_path": "enemy_bullet_hit.png"
 			},
@@ -33,6 +41,10 @@
 			{
 				"name": "enemy_dead",
 				"file_path": "enemy_dead.png"
+			},
+			{
+				"name": "boss_dead",
+				"file_path": "boss_dead.png"
 			},
 			{
 				"name": "player_dead",
@@ -49,6 +61,10 @@
 			{
 				"name": "game_over",
 				"file_path": "game_over.png"
+			},
+			{
+				"name": "boss_battle",
+				"file_path": "boss_battle.png"
 			},
 			{
 				"name": "continue",
@@ -71,12 +87,28 @@
 				"file_path": "no.png"
 			},
 			{
+				"name": "player_life",
+				"file_path": "player_life.png"
+			},
+			{
 				"name": "player_bullet",
 				"file_path": "player_bullet.png"
 			},
 			{
 				"name": "enemy_bullet_small",
 				"file_path": "enemy_bullet.png"
+			},
+			{
+				"name": "enemy_bullet_large",
+				"file_path": "enemy_bullet_large.png"
+			},
+			{
+				"name": "boss_laser",
+				"file_path": "laser.png"
+			},
+			{
+				"name": "charge_effect",
+				"file_path": "charge_sprite.png"
 			},
 			{
 				"name": "font_1_x8",
@@ -129,6 +161,16 @@
 			"anim_type": "Loop"
 		},
 		{
+			"name": "boss_anim",
+			"sprite_name": "boss",
+			"sprite_col": 10,
+			"sprite_row": 1,
+			"frame_width": 200,
+			"frame_height": 210,
+			"frame_time": 0.03,
+			"anim_type": "Loop"
+		},
+		{
 			"name": "enemy_bullet_hit_anim",
 			"sprite_name": "enemy_bullet_hit",
 			"sprite_col": 8,
@@ -159,6 +201,16 @@
 			"anim_type": "Once"
 		},
 		{
+			"name": "boss_dead_anim",
+			"sprite_name": "boss_dead",
+			"sprite_col": 12,
+			"sprite_row": 1,
+			"frame_width": 320,
+			"frame_height": 320,
+			"frame_time": 0.03,
+			"anim_type": "Once"
+		},
+		{
 			"name": "player_dead_anim",
 			"sprite_name": "player_dead",
 			"sprite_col": 14,
@@ -177,6 +229,16 @@
 			"frame_height": 32,
 			"frame_time": 0.03,
 			"anim_type": "Loop"
+		},
+		{
+			"name": "charge_effect_anim",
+			"sprite_name": "charge_effect",
+			"sprite_col": 16,
+			"sprite_row": 1,
+			"frame_width": 95,
+			"frame_height": 96,
+			"frame_time": 0.06,
+			"anim_type": "Once"
 		}
 	],
 	"Sounds": {
@@ -187,6 +249,14 @@
 				"file_path": "title.wav"
 			},
 			{
+				"name": "bgm_gamescene",
+				"file_path": "arcade-game-370922.mp3"
+			},
+			{
+				"name": "bgm_bossscene",
+				"file_path": "flat-8-bit-gaming-music-instrumental-211547.mp3"
+			},
+			{
 				"name": "select",
 				"file_path": "select.mp3"
 			},
@@ -195,12 +265,40 @@
 				"file_path": "decide.mp3"
 			},
 			{
-				"name": "se_chun1",
+				"name": "player_shoot",
 				"file_path": "se_chun1.mp3"
+			},
+			{
+				"name": "enemy_small_shoot",
+				"file_path": "se_beam05.mp3"
+			},
+			{
+				"name": "enemy_large_shoot",
+				"file_path": "se_zushuun3.mp3"
+			},
+			{
+				"name": "boss_laser",
+				"file_path": "se_laser01.mp3"
 			},
 			{
 				"name": "se_explode11",
 				"file_path": "se_explode11.mp3"
+			},
+			{
+				"name": "player_dead",
+				"file_path": "Explosion03-1(Long).mp3"
+			},
+			{
+				"name": "enemy_dead",
+				"file_path": "SNES-Shooter01-06(Damage).mp3"
+			},
+			{
+				"name": "bullet_hit",
+				"file_path": "Arcade-General01-17(Noise).mp3"
+			},
+			{
+				"name": "boss_battle_effect",
+				"file_path": "Warning-Siren04-03(Low-Short).mp3"
 			}
 		]
 	},

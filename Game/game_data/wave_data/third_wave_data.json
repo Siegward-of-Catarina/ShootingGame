@@ -1,0 +1,262 @@
+﻿{
+	"Entities": {
+		"en_wanderer_array": [
+			{
+				"num": 5,
+				"interval": 1,
+				"offset_len": [ 60.0, 60.0 ],
+				"pos": [ 0.0, 860.0 ],
+				"dir": [ 100.0, -150.0 ],
+				"movement": {
+					"type": "sin_wave",
+					"amplitude": 70.0,
+					"frequency": -0.8,
+					"speed": 120.0
+				}
+			},
+			{
+				"num": 5,
+				"interval": 1,
+				"offset_len": [ 60.0, 60.0 ],
+				"pos": [ 600.0, 860.0 ],
+				"dir": [ -100.0, -150.0 ],
+				"movement": {
+					"type": "sin_wave",
+					"amplitude": 70.0,
+					"frequency": 0.8,
+					"speed": 120.0
+				}
+			},
+			{
+				"num": 5,
+				"interval": 4,
+				"offset_len": [ 60.0, 60.0 ],
+				"pos": [ 250.0, -40.0 ],
+				"dir": [ 20, 150.0 ],
+				"movement": {
+					"type": "sin_wave",
+					"amplitude": 50.0,
+					"frequency": 2.0,
+					"speed": 120.0
+				}
+			},
+			{
+				"num": 5,
+				"interval": 4,
+				"offset_len": [ 60.0, 60.0 ],
+				"pos": [ 350.0, -40.0 ],
+				"dir": [ -20.0, 150.0 ],
+				"movement": {
+					"type": "sin_wave",
+					"amplitude": 50.0,
+					"frequency": -2.0,
+					"speed": 120.0
+				}
+			},
+			{
+				"num": 5,
+				"interval": 10,
+				"offset_len": [ 60.0, 60.0 ],
+				"pos": [ -40.0, 200.0 ],
+				"dir": [ 150.0, 30.0 ],
+				"movement": {
+					"type": "sin_wave",
+					"amplitude": 20.0,
+					"frequency": 4.0,
+					"speed": 150.0
+				}
+			},
+			{
+				"num": 5,
+				"interval": 10,
+				"offset_len": [ 60.0, 60.0 ],
+				"pos": [ -40.0, 150.0 ],
+				"dir": [ 150.0, 30.0 ],
+				"movement": {
+					"type": "sin_wave",
+					"amplitude": 20.0,
+					"frequency": 4.0,
+					"speed": 150.0
+				}
+			},
+			{
+				"num": 5,
+				"interval": 14,
+				"offset_len": [ 60.0, 60.0 ],
+				"pos": [ 640.0, 300.0 ],
+				"dir": [ -150.0, 30.0 ],
+				"movement": {
+					"type": "sin_wave",
+					"amplitude": 20.0,
+					"frequency": 4.0,
+					"speed": 150.0
+				}
+			},
+			{
+				"num": 5,
+				"interval": 14,
+				"offset_len": [ 60.0, 60.0 ],
+				"pos": [ 640.0, 350.0 ],
+				"dir": [ -150.0, 30.0 ],
+				"movement": {
+					"type": "sin_wave",
+					"amplitude": 20.0,
+					"frequency": 4.0,
+					"speed": 150.0
+				}
+			},
+			{
+				"num": 40,
+				"interval": 16,
+				"offset_len": [ 40.0, 40.0 ],
+				"pos": [ 300.0, -40.0 ],
+				"dir": [ 0.0, 100.0 ],
+				"movement": {
+					"type": "serpentine",
+					"amplitude": 250.0,
+					"frequency": 1,
+					"speed": 100.0,
+					"threshold": 0.8
+				}
+			}
+		],
+		"en_shooter": [
+			{
+				"interval": 8,
+				"pos": [ 0.0, -40.0 ],
+				"dir": [ 40.0, 100.0 ],
+				"stop_pos": [ 300, 100 ],
+				"exit_pos": [ -40, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 12,
+				"pos": [ 300.0, -40.0 ],
+				"dir": [ 40.0, 100.0 ],
+				"stop_pos": [ 50, 100 ],
+				"exit_pos": [ -40, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 12,
+				"pos": [ 300.0, -40.0 ],
+				"dir": [ -40.0, 100.0 ],
+				"stop_pos": [ 550, 100 ],
+				"exit_pos": [ 640, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 16,
+				"pos": [ 640.0, -60.0 ],
+				"dir": [ -40.0, 100.0 ],
+				"stop_pos": [ 550, 100 ],
+				"exit_pos": [ 640, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 16,
+				"pos": [ -40.0, 800.0 ],
+				"dir": [ 40.0, -100.0 ],
+				"stop_pos": [ 150, 500 ],
+				"exit_pos": [ -40, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 20,
+				"pos": [ -40.0, 100.0 ],
+				"dir": [ 40.0, 0.0 ],
+				"stop_pos": [ 100, 100 ],
+				"exit_pos": [ -40, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 22,
+				"pos": [ 640.0, 200.0 ],
+				"dir": [ -40.0, 0.0 ],
+				"stop_pos": [ 500, 200 ],
+				"exit_pos": [ 640, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 24,
+				"pos": [ -40.0, 300.0 ],
+				"dir": [ 40.0, 0.0 ],
+				"stop_pos": [ 100, 300 ],
+				"exit_pos": [ -40, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 26,
+				"pos": [ 100.0, -40.0 ],
+				"dir": [ 0.0, 100.0 ],
+				"stop_pos": [ 100, 100 ],
+				"exit_pos": [ -40, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 27,
+				"pos": [ 150.0, -40.0 ],
+				"dir": [ 0.0, 100.0 ],
+				"stop_pos": [ 150, 100 ],
+				"exit_pos": [ -40, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 28,
+				"pos": [ 200.0, -40.0 ],
+				"dir": [ 0.0, 100.0 ],
+				"stop_pos": [ 200, 100 ],
+				"exit_pos": [ -40, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 30,
+				"pos": [ 640.0, 100.0 ],
+				"dir": [ -50.0, 100.0 ],
+				"stop_pos": [ 450, 200 ],
+				"exit_pos": [ 640, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 31,
+				"pos": [ 640.0, 100.0 ],
+				"dir": [ -50.0, 100.0 ],
+				"stop_pos": [ 500, 200 ],
+				"exit_pos": [ 640.0, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 32,
+				"pos": [ 640.0, 100.0 ],
+				"dir": [ -50.0, 100.0 ],
+				"stop_pos": [ 550, 200 ],
+				"exit_pos": [ 640.0, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 35,
+				"pos": [ 100.0, -40.0 ],
+				"dir": [ 0.0, 100.0 ],
+				"stop_pos": [ 100, 200 ],
+				"exit_pos": [ -40.0, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 35,
+				"pos": [ 300.0, -40.0 ],
+				"dir": [ 0.0, 100.0 ],
+				"stop_pos": [ 300, 200 ],
+				"exit_pos": [ 300.0, -60 ],
+				"move_speed": 200.0
+			},
+			{
+				"interval": 35,
+				"pos": [ 500.0, -40.0 ],
+				"dir": [ 0.0, 100.0 ],
+				"stop_pos": [ 500, 200 ],
+				"exit_pos": [ 640.0, -60 ],
+				"move_speed": 200.0
+			}
+		]
+	}
+}

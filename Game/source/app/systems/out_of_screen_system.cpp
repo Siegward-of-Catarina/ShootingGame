@@ -83,6 +83,6 @@ namespace myge
       }
 
       // 消去対象のエンティティがあればDeadにする
-      if ( !destroy_entities.empty() ) { _event_listener.trigger<DeadEvent>( { destroy_entities } ); }
+      if ( !destroy_entities.empty() ) { _event_listener.trigger<DeadEvent>( { destroy_entities, true } ); }
    }
 }    // namespace myge

@@ -13,6 +13,14 @@
 				"dir": [ 0.0, 80.0 ]
 			}
 		],
+		"sound_bgm": [
+			{
+				"sound_key": "bgm_title",
+				"loop_count": -1,
+				"volume": 0.3,
+				"fade_time_ms": 0
+			}
+		],
 		"basic_ui": [
 			{
 				"sprite_name": "title",

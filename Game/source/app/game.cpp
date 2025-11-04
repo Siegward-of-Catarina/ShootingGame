@@ -36,7 +36,7 @@ namespace myge
 
       _context->getSceneManager().enableFadeOutIn( fade );
 
-      // 次のシーンとしてセットする
+      // シーンセット
       auto depend { _context->getSceneDependencies() };
       _context->getSceneManager().initStartCurrentScene( std::make_unique<TitleScene>( depend ) );
 

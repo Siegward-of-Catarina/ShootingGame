@@ -1,5 +1,14 @@
 創作堂さくら紅葉
-url:https://yukizakura.net/
+url:https://yukizakura.net
 
 効果音工房
-url: https://umipla.com/
+url: https://umipla.com
+
+charge1 : プロが作る無料ゲーム音楽素材　ユーフルカ
+https://youfulca.com
+
+OtoLogic
+url:https://otologic.jp
+
+Pixabay
+https://pixabay.com/

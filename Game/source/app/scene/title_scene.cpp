@@ -19,6 +19,8 @@
 #include <app/event/key_down_event.hpp>
 #include <app/event/menu_button_event.hpp>
 #include <engine/events/sound_events.hpp>
+// session
+#include <app/session/score_session.hpp>
 // core
 #include <engine/core.hpp>
 
@@ -51,11 +53,34 @@ void myge::TitleScene::update( [[maybe_unused]] const sdl_engine::FrameData& fra
 void myge::TitleScene::addSystems()
 {
    // 実行順は第1引数の優先度で制御（小さいほど先）
-   systemManager().addSystem( std::make_unique<SpriteBrinkSystem>( 94, registry() ) );
-   systemManager().addSystem( std::make_unique<ScreenBoundsSystem>( 95, registry() ) );
+   systemManager().addSystem( std::make_unique<ScreenBoundsSystem>( 94, registry() ) );
    systemManager().addSystem( std::make_unique<HighlightSystem>( 95, registry(), eventListener() ) );
    systemManager().addSystem( std::make_unique<MenuSystem>( 96, registry(), eventListener() ) );
    systemManager().addSystem( std::make_unique<OutOfScreenSystem>( 97, registry(), eventListener() ) );
+}
+
+void myge::TitleScene::createEntities()
+{
+   // JSONからタイトル用エンティティを生成し、BGMも生成
+   auto& scene_data { sceneData() };
+   if ( auto data { sdl_engine::tryGetJson( scene_data, "Entities" ) }; data )
+   {
+      EntityFactory factory { registry(), resourceManager() };
+      factory.createEntities( *data, typeid( AffilTitleScene ) );
+   }
+}
+
+void myge::TitleScene::setupEventHandlers()
+{
+   // メニューと入力SEイベントを購読
+   eventListener().connect<&TitleScene::onTitleMenuAction, MenuButtonEvent>( this );
+   eventListener().connect<&TitleScene::onAppendInputSE, KeyDownEvent>( this );
+}
+
+void myge::TitleScene::postSystemAddition()
+{
+   // タイトルシーン開始時にスコアセッションを初期化
+   registry().ctx().emplace<ScoreSession>( 0u );
 }
 
 void myge::TitleScene::onTitleMenuAction( const MenuButtonEvent& e )
@@ -76,25 +101,6 @@ void myge::TitleScene::onAppendInputSE( const KeyDownEvent& e )
 {
    // 入力音を生成（再生はSoundSystemで処理、生成後は自動破棄）
    EntityFactory factory { registry(), resourceManager() };
-   if ( e.down_key != KeyDownEvent::EnableKeys::Space ) { factory.createSoundEffect( "select", 0, 0.5f ); }
-   else { factory.createSoundEffect( "decide", 0, 0.5f ); }
-}
-
-void myge::TitleScene::createEntities()
-{
-   // JSONからタイトル用エンティティを生成し、BGMも生成
-   auto& scene_data { sceneData() };
-   if ( auto data { sdl_engine::tryGetJson( scene_data, "Entities" ) }; data )
-   {
-      EntityFactory factory { registry(), resourceManager() };
-      factory.createEntities( *data, typeid( AffilTitleScene ) );
-      factory.createBGM( "bgm_title", -1, 0, 0.5f );    // ループ再生
-   }
-}
-
-void myge::TitleScene::setupEventHandlers()
-{
-   // メニューと入力SEイベントを購読
-   eventListener().connect<&TitleScene::onTitleMenuAction, MenuButtonEvent>( this );
-   eventListener().connect<&TitleScene::onAppendInputSE, KeyDownEvent>( this );
+   if ( e.down_key != KeyDownEvent::EnableKeys::Space ) { factory.createSoundEffect( "select", 0, 0.3f, 0.0f ); }
+   else { factory.createSoundEffect( "decide", 0, 0.3f, 0.0f ); }
 }

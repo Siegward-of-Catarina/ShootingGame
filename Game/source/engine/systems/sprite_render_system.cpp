@@ -50,7 +50,31 @@ namespace sdl_engine
          common_render( _renderer, sprt, trfm );
       }
 
-      for ( auto [ entity, sprt, trfm ] : reg.view<Sprite, Transform, RenderUITag>().each() )
+      for ( auto [ entity, sprt, repeat, trfm ] : reg.view<Sprite, RepeatSprite, Transform, RenderUITag>().each() )
+      {
+         if ( !reg.valid( entity ) ) { continue; }
+         for ( i32 i = 0; i < repeat.count; ++i )
+         {
+            f32 offset_x = repeat.offset.x * i;
+            f32 offset_y = repeat.offset.y * i;
+            // Gridタイプの場合は列数に応じてオフセットを調整
+            if ( repeat.type == RepeatSprite::Type::Grid )
+            {
+               i32 row    = i / repeat.columns;
+               i32 column = i % repeat.columns;
+               offset_x   = repeat.offset.x * column + repeat.offset_column.x * row;
+               offset_y   = repeat.offset.y * row + repeat.offset_column.y * row;
+            }
+            // Transformをコピーしてオフセットを適用
+            Transform trfm_modified = trfm;
+            trfm_modified.position.x += offset_x;
+            trfm_modified.position.y += offset_y;
+
+            common_render( _renderer, sprt, trfm_modified );
+         }
+      }
+      for ( auto [ entity, sprt, trfm ] :
+            reg.view<Sprite, Transform, RenderUITag>( entt::exclude<RepeatSprite> ).each() )
       {
          if ( !reg.valid( entity ) ) { continue; }
          common_render( _renderer, sprt, trfm );

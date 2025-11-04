@@ -4,39 +4,72 @@
 #include <cmath>
 #include <engine/basic_component.hpp>
 #include <engine/core.hpp>
+
+// event
+#include <app/event/dead_event.hpp>
 namespace myge
 {
-   SpriteBrinkSystem::SpriteBrinkSystem( i32 priority_, entt::registry& registry_ )
-     : SystemInterface { priority_, registry_ }
+   SpriteBrinkSystem::SpriteBrinkSystem( i32                        priority_,
+                                         entt::registry&            registry_,
+                                         sdl_engine::EventListener& event_listener_ )
+     : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }
    {
    }
    SpriteBrinkSystem::~SpriteBrinkSystem() {}
    void SpriteBrinkSystem::update( const sdl_engine::FrameData& frame_ )
    {
-      auto& reg { registry() };
+      auto&                     reg { registry() };
+      std::vector<entt::entity> to_dead_brink;
       for ( auto [ entity, sprt, brink ] : getLogicUpdateable<sdl_engine::Sprite, SpriteBrink>( reg ).each() )
       {
          if ( !reg.valid( entity ) ) { continue; }
-         switch ( brink.state )
+
+         if ( brink.is_cycle_end == 2 )
          {
-            case SpriteBrink::State::AddAlpha :
-               sprt.color.a += brink.speed * frame_.delta_time;
-               if ( sprt.color.a > 1.0f )
-               {
-                  sprt.color.a = 1.0f;
-                  brink.state  = SpriteBrink::State::SubAlpha;
-               }
-               break;
-            case SpriteBrink::State::SubAlpha :
-               sprt.color.a -= brink.speed * frame_.delta_time;
-               if ( sprt.color.a < brink.min_alpha )
-               {
-                  sprt.color.a = brink.min_alpha;
-                  brink.state  = SpriteBrink::State::AddAlpha;
-               }
-               break;
+            // 1サイクル完了 -1の場合無限ループ
+            if ( brink.num_cycles > 0 ) { brink.num_cycles--; }
+            brink.is_cycle_end = 0;
+         }
+
+         if ( brink.num_cycles != 0 )
+         {
+            switch ( brink.state )
+            {
+               case SpriteBrink::State::AddAlpha :
+                  sprt.color.a += brink.speed * frame_.delta_time;
+                  if ( sprt.color.a > 1.0f )
+                  {
+                     sprt.color.a = 1.0f;
+                     brink.state  = SpriteBrink::State::SubAlpha;
+                     brink.is_cycle_end++;
+                  }
+                  break;
+               case SpriteBrink::State::SubAlpha :
+                  sprt.color.a -= brink.speed * frame_.delta_time;
+                  if ( sprt.color.a < brink.min_alpha )
+                  {
+                     sprt.color.a = brink.min_alpha;
+                     brink.state  = SpriteBrink::State::AddAlpha;
+                     brink.is_cycle_end++;
+                  }
+                  break;
+            }
+         }
+         else
+         {
+            // num_cycles が0になったスプライトをアルファ値0にしてdeadリストへ
+            sprt.color.a -= brink.speed * frame_.delta_time;
+            if ( sprt.color.a < brink.min_alpha )
+            {
+               sprt.color.a = brink.min_alpha;
+               to_dead_brink.emplace_back( entity );
+            }
          }
       }
+
+      // dead brink
+      // num_cycles が0になったスプライトのdeadイベント発行
+      if ( !to_dead_brink.empty() ) { _event_listener.trigger<DeadEvent>( DeadEvent { to_dead_brink } ); }
 
       std::vector<entt::entity> to_remove;
       for ( auto [ entity, sprt, damage ] : getLogicUpdateable<sdl_engine::Sprite, DamageEffect>( reg ).each() )

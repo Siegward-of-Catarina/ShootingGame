@@ -16,5 +16,6 @@ namespace myge
       void serpentineMovement( const sdl_engine::FrameData& frame_ );
       void sinWaveMovement( const sdl_engine::FrameData& frame_ );
       void stopAndShootMovement( const sdl_engine::FrameData& frame_ );
+      void bossMovement( const sdl_engine::FrameData& frame_);
    };
 }    // namespace myge

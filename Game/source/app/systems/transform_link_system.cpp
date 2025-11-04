@@ -48,6 +48,6 @@ namespace myge
          trfm.position.y  = trfm_parent.position.y + link.offset_pos.y;
       }
 
-      if ( !_dead_link_entities.empty() ) { _event_listener.trigger<DeadEvent>( { _dead_link_entities } ); }
+      if ( !_dead_link_entities.empty() ) { _event_listener.trigger<DeadEvent>( { _dead_link_entities, false } ); }
    }
 }    // namespace myge

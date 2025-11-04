@@ -12,11 +12,25 @@ namespace myge
    struct EnemyTag
    {
    };
+   struct EnemyBossTag
+   {
+   };
    struct EnemyBulletTag
+   {
+   };
+   struct EnemyBossLaserTag
+   {
+   };
+   struct ChargeEffectTag
    {
    };
    struct BackgroundTag
    {
    };
-   void emplaceEntityTypeTag( entt::registry& registry_, entt::entity entity_, std::string_view type_ );
+   struct PlayerHPUITag
+   {
+   };
+   struct ScoreTextTag
+   {
+   };
 }    // namespace myge

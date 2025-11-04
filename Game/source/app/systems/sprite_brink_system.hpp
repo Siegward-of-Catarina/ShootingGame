@@ -6,9 +6,12 @@ namespace myge
    class SpriteBrinkSystem final : public sdl_engine::SystemInterface
    {
    public:
-      SpriteBrinkSystem( i32 priority_, entt::registry& registry_ );
+      SpriteBrinkSystem( i32 priority_, entt::registry& registry_, sdl_engine::EventListener& event_listener_ );
       virtual ~SpriteBrinkSystem() override;
       // SystemInterface を介して継承されました
       virtual void update( const sdl_engine::FrameData& frame_ ) override;
+
+   private:
+      sdl_engine::EventListener& _event_listener;
    };
 }    // namespace myge
