@@ -45,10 +45,16 @@ namespace myge
             getLogicUpdateable<Shooter, sdl_engine::Transform, sdl_engine::Velocity, Target, ShootingEnemyTag>( reg )
               .each() )
       {
-
-         auto target_trfm         = reg.get<sdl_engine::Transform>( target.target_entity );
-         shooter.bullet_direction = target_trfm.position - trfm.position;
-         shooter.bullet_direction.normalize();
+         if ( reg.valid( target.target_entity ) )
+         {
+            auto target_trfm         = reg.get<sdl_engine::Transform>( target.target_entity );
+            shooter.bullet_direction = target_trfm.position - trfm.position;
+            shooter.bullet_direction.normalize();
+         }
+         else
+         {    // playerが死亡していたら真下に撃つ
+            shooter.bullet_direction = { 0.0f, 1.0f };
+         }
 
          if ( shooter.wait > shooter.cooldown )
          {

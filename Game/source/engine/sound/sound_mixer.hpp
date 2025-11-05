@@ -52,7 +52,7 @@ namespace sdl_engine
        * @param loop_count_ ループ回数。-1で無限ループ
        * デフォルトは 0（ループなし）
        */
-      void setPlaySE( MIX_Audio* audio_, const i64 loop_count_ = 0 );
+      void setPlaySE( MIX_Audio* audio_, const f32 volume_, const i64 loop_count_ = 0 );
       /**
        * @brief BGMtrackにセットして再生
        * @param audio_ 再生するオーディオ

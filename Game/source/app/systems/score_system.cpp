@@ -20,6 +20,14 @@ namespace myge
    ScoreSystem::ScoreSystem( i32 priority_, entt::registry& registry_, sdl_engine::EventListener& event_listener_ )
      : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }
    {
+      // スコアテキストを更新
+      for ( auto [ entity, text ] : registry_.view<sdl_engine::Text, ScoreTextTag>().each() )
+      {
+         if ( !registry_.valid( entity ) ) { continue; }
+         // スコア表示を4桁にフォーマット
+         text.text = std::format( "{:04}", registry_.ctx().get<ScoreSession>().value );
+      }
+      // deadイベントリスナー登録
       _event_listener.connect<&ScoreSystem::onScoreChanged, DeadEvent>( this );
    }
    ScoreSystem::~ScoreSystem() {}

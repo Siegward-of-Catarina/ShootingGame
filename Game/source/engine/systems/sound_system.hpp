@@ -4,9 +4,9 @@
 
 namespace sdl_engine
 {
-   struct PlaySEEvent;     // 未使用（将来拡張）
-   struct StopBGMEvent;    // BGM停止要求（フェードアウト時間付き）
-
+   struct StopSEEvent;          // SE停止要求
+   struct StopBGMEvent;         // BGM停止要求（フェードアウト時間付き）
+   struct StopAllSoundEvent;    // すべてのサウンド停止要求（フェードアウト時間付き）
    // サウンド再生を担うシステム
    // - SoundEffect/BackgroundMusic コンポーネントを検出して1フレームで再生要求
    // - 再生要求後は当該エンティティを破棄（使い捨てトリガー）
@@ -22,6 +22,8 @@ namespace sdl_engine
    private:
       // BGM停止イベントハンドラ
       void onStopBGM( const StopBGMEvent& e );
+      void onStopSE( const StopSEEvent& e );
+      void onStopAllSound( const StopAllSoundEvent& e );
 
    private:
       SoundMixer&    _soundmixer;        // 実際の再生を行うミキサ

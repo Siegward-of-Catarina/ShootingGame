@@ -7,9 +7,8 @@ namespace myge
    struct ShootEvent;
    struct LaserShootEvent;
    struct AppendChargeEvent;
-   struct GameOverEvent;
+   struct GameEndEvent;
    struct AppendDeadEffectEvent;
-   struct AppendOverrayFadeEvent;
    struct PlayDamageSEEvent;
    class Wave;
    class GameScene final : public sdl_engine::Scene
@@ -23,6 +22,7 @@ namespace myge
    private:
       virtual void addSystems() override;
       virtual void createEntities() override;
+      virtual void postEntityCreation() override;
       virtual void postSystemAddition() override;
       virtual void setupEventHandlers() override;
 
@@ -30,15 +30,16 @@ namespace myge
       void createWaves();
       void onShoot( ShootEvent& e );
       void onShootLaser( LaserShootEvent& e );
-      void onGameOver( GameOverEvent& e );
+      void onGameEnd( GameEndEvent& e );
       void onDeadEffectAppend( AppendDeadEffectEvent& e );
-      void onOverrayFadeAppend( AppendOverrayFadeEvent& e );
       void onChargeEffectAppend( AppendChargeEvent& e );
       void onPlayDamageSE( PlayDamageSEEvent& e );
 
    private:
       std::vector<std::unique_ptr<Wave>> _waves;
-      f64                                _scene_elapsed_time;
       entt::entity                       _player_entity;
+      f32                                _game_end_timer;
+      bool                               _game_cleared;
+      u8                                 _current_wave_index;
    };
 }    // namespace myge

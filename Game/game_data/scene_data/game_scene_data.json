@@ -72,8 +72,10 @@
 			{
 				"pos": [ 300.0, 750.0 ],
 				"dir": [ 0.0, -150.0 ],
+				"z_order": 2,
 				"max_speed": 400.0,
 				"move_acceleration": 7.0,
+				"move_deceleration": 10.0,
 				"shoot_cooldown": 0.15,
 				"bullet_velocity": [ 0.0, -700.0 ],
 				"red_brink_time": 1.5,

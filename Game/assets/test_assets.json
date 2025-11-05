@@ -63,6 +63,10 @@
 				"file_path": "game_over.png"
 			},
 			{
+				"name": "game_clear",
+				"file_path": "game_clear.png"
+			},
+			{
 				"name": "boss_battle",
 				"file_path": "boss_battle.png"
 			},
@@ -257,6 +261,14 @@
 				"file_path": "flat-8-bit-gaming-music-instrumental-211547.mp3"
 			},
 			{
+				"name": "bgm_gameover",
+				"file_path": "kl-peach-game-over-i-132096.mp3"
+			},
+			{
+				"name": "game_clear",
+				"file_path": "8bit-ME_Victory01.mp3"
+			},
+			{
 				"name": "select",
 				"file_path": "select.mp3"
 			},
@@ -270,7 +282,7 @@
 			},
 			{
 				"name": "enemy_small_shoot",
-				"file_path": "se_beam05.mp3"
+				"file_path": "NES-Shooter01-1(Shoot).mp3"
 			},
 			{
 				"name": "enemy_large_shoot",
@@ -286,11 +298,15 @@
 			},
 			{
 				"name": "player_dead",
-				"file_path": "Explosion03-1(Long).mp3"
+				"file_path": "se_bomb2-1.mp3"
 			},
 			{
 				"name": "enemy_dead",
 				"file_path": "SNES-Shooter01-06(Damage).mp3"
+			},
+			{
+				"name": "boss_dead",
+				"file_path": "Explosion02-1(Long).mp3"
 			},
 			{
 				"name": "bullet_hit",

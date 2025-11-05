@@ -29,7 +29,7 @@ namespace myge
       for ( auto [ entity, repeat ] : getLogicUpdateable<sdl_engine::RepeatSprite, PlayerHPUITag>( reg ).each() )
       {
          if ( !reg.valid( entity ) ) { continue; }
-         repeat.count = e.hp;
+         if ( e.hp >= 0 ) { repeat.count = static_cast<u32>( e.hp ); }
       }
    }
 }    // namespace myge

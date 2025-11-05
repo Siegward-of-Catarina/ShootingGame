@@ -54,7 +54,6 @@
     <ClCompile Include="source\app\systems\menu_system.cpp" />
     <ClCompile Include="source\engine\events\event_listener.cpp" />
     <ClCompile Include="source\app\systems\hit_resolution_system.cpp" />
-    <ClCompile Include="source\app\systems\game_over_system.cpp" />
     <ClCompile Include="source\app\scene\game_over_scene.cpp" />
     <ClCompile Include="source\app\systems\transform_link_system.cpp" />
     <ClCompile Include="source\engine\sound\sound_mixer.cpp" />
@@ -63,6 +62,7 @@
     <ClCompile Include="source\app\systems\life_ui_system.cpp" />
     <ClCompile Include="source\app\systems\score_system.cpp" />
     <ClCompile Include="source\app\systems\enemy_ai_system.cpp" />
+    <ClCompile Include="source\app\scene\game_clear_scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -215,9 +215,7 @@
     <ClInclude Include="source\app\event\append_dead_effect_event.hpp" />
     <ClInclude Include="source\app\components\damage_effect_property.hpp" />
     <ClInclude Include="source\engine\events\fade_render_layer_change_event.hpp" />
-    <ClInclude Include="source\app\event\game_over_event.hpp" />
-    <ClInclude Include="source\app\systems\game_over_system.hpp" />
-    <ClInclude Include="source\app\event\append_overray_fade_event.hpp" />
+    <ClInclude Include="source\app\event\game_end_event.hpp" />
     <ClInclude Include="source\app\scene\game_over_scene.hpp" />
     <ClInclude Include="source\app\components\transform_link.hpp" />
     <ClInclude Include="source\app\systems\transform_link_system.hpp" />
@@ -246,5 +244,6 @@
     <ClInclude Include="source\app\event\dead_laser_event.hpp" />
     <ClInclude Include="source\app\components\se_properties.hpp" />
     <ClInclude Include="source\app\event\play_damage_se_event.hpp" />
+    <ClInclude Include="source\app\scene\game_clear_scene.hpp" />
   </ItemGroup>
 </Project>

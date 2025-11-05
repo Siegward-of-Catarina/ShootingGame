@@ -22,6 +22,10 @@ namespace sdl_engine
    {
       // BGM停止イベントを購読
       _event_listener.connect<&SoundSystem::onStopBGM, StopBGMEvent>( this );
+      // SE停止イベントを購読
+      _event_listener.connect<&SoundSystem::onStopSE, StopSEEvent>( this );
+      // 全サウンド停止イベントを購読
+      _event_listener.connect<&SoundSystem::onStopAllSound, StopAllSoundEvent>( this );
    }
 
    SoundSystem::~SoundSystem() {}
@@ -36,8 +40,7 @@ namespace sdl_engine
       {
          if ( se.delay < se.elapsed )
          {
-            _soundmixer.setSEVolume( se.volume );
-            _soundmixer.setPlaySE( se.sound->audio, se.loop_count );
+            _soundmixer.setPlaySE( se.sound->audio, se.volume, se.loop_count );
             dead_sound_entities.emplace_back( entity );    // 再生後に破棄
          }
          else { se.elapsed += frame_.delta_time; }
@@ -60,4 +63,6 @@ namespace sdl_engine
       // フェードアウト時間付きで停止
       _soundmixer.stopBGM( e.fadeout_time_ms );
    }
+   void SoundSystem::onStopSE( const StopSEEvent& e ) { _soundmixer.stopSE( e.fadeout_time_ms ); }
+   void SoundSystem::onStopAllSound( const StopAllSoundEvent& e ) { _soundmixer.stopAllSound( e.fadeout_time_ms ); }
 }    // namespace sdl_engine

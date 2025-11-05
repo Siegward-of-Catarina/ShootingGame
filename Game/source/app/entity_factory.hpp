@@ -42,7 +42,8 @@ namespace myge
       entt::entity createDeadEffect( entt::entity dead_entt_, const std::type_index& affiliation_id_ );
       entt::entity createChargeEffect( sdl_engine::Transform& trfm_, const std::type_index& affiliation_id_ );
       entt::entity createPlayer( const json& data_, const std::type_index& affiliation_id_ );
-      entt::entity createPlayerBooster( const entt::entity parent_, const std::type_index& affiliation_id_ );
+      entt::entity
+      createPlayerBooster( const entt::entity parent_, const u32 z_order_, const std::type_index& affiliation_id_ );
       entt::entity createWandererEnemy( const json&             data_,
                                         const std::type_index&  affiliation_id_,
                                         sdl_engine::Vector2_f32 offset_pos_ = { 0.0f, 0.0f } );

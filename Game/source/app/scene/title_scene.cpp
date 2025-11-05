@@ -70,17 +70,18 @@ void myge::TitleScene::createEntities()
    }
 }
 
+void myge::TitleScene::postEntityCreation()
+{    // タイトルシーン開始時にスコアセッションを初期化
+   auto& ctx { registry().ctx() };
+   if ( !ctx.contains<ScoreSession>() ) { ctx.emplace<ScoreSession>( 0u ); }
+   else { ctx.get<ScoreSession>().value = 0; }
+}
+
 void myge::TitleScene::setupEventHandlers()
 {
    // メニューと入力SEイベントを購読
    eventListener().connect<&TitleScene::onTitleMenuAction, MenuButtonEvent>( this );
    eventListener().connect<&TitleScene::onAppendInputSE, KeyDownEvent>( this );
-}
-
-void myge::TitleScene::postSystemAddition()
-{
-   // タイトルシーン開始時にスコアセッションを初期化
-   registry().ctx().emplace<ScoreSession>( 0u );
 }
 
 void myge::TitleScene::onTitleMenuAction( const MenuButtonEvent& e )

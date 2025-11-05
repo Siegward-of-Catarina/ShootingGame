@@ -8,7 +8,7 @@
 #include <app/event/charge_end_event.hpp>
 #include <app/event/dead_event.hpp>
 #include <app/event/dead_laser_event.hpp>
-#include <app/event/game_over_event.hpp>
+#include <app/event/game_end_event.hpp>
 #include <engine/events/sprite_anim_end_event.hpp>
 namespace
 {
@@ -84,7 +84,7 @@ namespace myge
          // Spriteを基準にTransformもソートこれも固定
          reg.sort<sdl_engine::Transform, sdl_engine::Sprite>();
          // ここからは削除されたエンティティが所属していたレイヤごとにソートが必要なら
-         // Spriteを基準にソートする
+         //  Spriteを基準にソートする
          if ( _need_sort & NEED_SORT_BACKGROUND_TAG )
          {
             reg.sort<sdl_engine::RenderBackgroundTag, sdl_engine::Sprite>();
@@ -168,7 +168,14 @@ namespace myge
       // まとめて削除
       for ( auto entity : _dead_entities )
       {
-         if ( reg.all_of<PlayerTag>( entity ) ) { _event_listener.trigger<GameOverEvent>( {} ); }
+         // player or boss大破で終了（boss時はレーザーも消す）
+         if ( reg.all_of<EnemyBossTag>( entity ) )
+         {
+            _event_listener.trigger<DeadLaserEvent>( {} );
+            // クリアフラグを立てる
+            _event_listener.trigger<GameEndEvent>( { true } );
+         }
+         else if ( reg.all_of<PlayerTag>( entity ) ) { _event_listener.trigger<GameEndEvent>( { false } ); }
          if ( reg.all_of<ChargeEffectTag>( entity ) ) { _event_listener.trigger<ChargeEndEvent>( {} ); }
          reg.destroy( entity );
       }
@@ -178,13 +185,17 @@ namespace myge
       auto& reg { registry() };
       for ( auto entity : e.dead_entities )
       {
+         // 安全にチェック: 無効なエンティティ、または既にDeadTagを持つ場合はスキップ
          if ( !reg.valid( entity ) ) { continue; }
-         reg.remove<ActiveTag>( entity );
+         if ( reg.all_of<DeadTag>( entity ) ) { continue; }
+
+         if ( reg.all_of<ActiveTag>( entity ) ) { reg.remove<ActiveTag>( entity ); }
          reg.emplace<DeadTag>( entity );
       }
    }
    void LifeCycleSystem::onLaserDead( DeadLaserEvent& e )
    {
+      // ボスレーザーを全て削除
       for ( auto [ entity ] : registry().view<EnemyBossLaserTag>().each() ) { registry().destroy( entity ); }
    }
    void LifeCycleSystem::onSpriteAnimEnd( sdl_engine::SpriteAnimEndEvent& e )

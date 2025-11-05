@@ -90,7 +90,6 @@ namespace myge
                   auto len { dir.lengthSq() };
                   if ( len <= rad )
                   {
-                     SDL_Log( "hit" );
                      // first:はエネミーサイド、second:はプレイヤーサイド
                      _hit_entity_pairs.emplace_back( enemy.entity, target_ );
                      return;
@@ -167,8 +166,8 @@ namespace myge
                              player_box.harf_hegiht )
               && !reg.all_of<DamageEffect>( player_entity ) )
          {
-            // SDL_Log( "Laser hit" );
             _hit_entity_pairs.emplace_back( laser, player_entity );
+            break;
          }
       }
 

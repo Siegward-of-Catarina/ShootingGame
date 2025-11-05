@@ -42,6 +42,7 @@ namespace myge
             if ( status_a.hp <= 0
                  || ( reg.all_of<EnemyBulletTag>( enemy_side ) && reg.all_of<PlayerTag>( player_side ) ) )
             {
+               status_a.hp = 0;
                dead_entities.emplace_back( enemy_side );
             }
             else if ( !reg.all_of<EnemyBossLaserTag>( enemy_side ) ) { damage_entities.emplace_back( enemy_side ); }
@@ -51,7 +52,11 @@ namespace myge
             {
                const auto before_hp = status_b.hp;
                status_b.hp -= status_a.atk;
-               if ( status_b.hp <= 0 ) { dead_entities.emplace_back( player_side ); }
+               if ( status_b.hp <= 0 )
+               {
+                  status_b.hp = 0;
+                  dead_entities.emplace_back( player_side );
+               }
                else { damage_entities.emplace_back( player_side ); }
                // プレイヤーのライフ変化イベント発行
                if ( before_hp != status_b.hp && reg.all_of<PlayerTag>( player_side ) )
@@ -80,7 +85,7 @@ namespace myge
          // ダメージSE再生イベント発行
          _event_listener.trigger<PlayDamageSEEvent>( { damage_entities } );
       }
-      // 死亡エフェクト生成イベント発行
-      _event_listener.trigger<AppendDeadEffectEvent>( { dead_entities } );
+      // 死亡エフェクト生成イベント発行（空なら送らない）
+      if ( !dead_entities.empty() ) { _event_listener.trigger<AppendDeadEffectEvent>( { dead_entities } ); }
    }
 }    // namespace myge

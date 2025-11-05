@@ -83,7 +83,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../third_party/SDL/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -92,6 +92,10 @@
   <ItemGroup>
     <ClCompile Include="source\app\components\bounding_box.cpp" />
     <ClCompile Include="source\app\components\player_input.cpp" />
+    <ClCompile Include="source\app\scene\game_clear_scene.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="source\app\scene\game_over_scene.cpp">
       <SubType>
       </SubType>
@@ -102,10 +106,6 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="source\app\systems\facing_system.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="source\app\systems\game_over_system.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -272,10 +272,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="source\app\event\append_overray_fade_event.hpp">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="source\app\event\charge_end_event.hpp">
       <SubType>
       </SubType>
@@ -288,7 +284,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="source\app\event\game_over_event.hpp">
+    <ClInclude Include="source\app\event\game_end_event.hpp">
       <SubType>
       </SubType>
     </ClInclude>
@@ -309,6 +305,10 @@
     </ClInclude>
     <ClInclude Include="source\app\event\highlight_event.hpp" />
     <ClInclude Include="source\app\event\menu_button_event.hpp" />
+    <ClInclude Include="source\app\scene\game_clear_scene.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="source\app\scene\game_over_scene.hpp">
       <SubType>
       </SubType>
@@ -323,10 +323,6 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="source\app\systems\facing_system.hpp">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="source\app\systems\game_over_system.hpp">
       <SubType>
       </SubType>
     </ClInclude>

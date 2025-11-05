@@ -7,6 +7,7 @@ namespace myge
    {
       f32                     max_speed {};
       f32                     acceleration {};
+      f32                     deceleration {};
       sdl_engine::Vector2_f32 smooth_dir {};
    };
    struct PlayerMovementAuto

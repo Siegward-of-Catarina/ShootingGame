@@ -17,8 +17,7 @@ namespace myge
       sdl_engine::Vector2_f32 spawn_position {};    // 弾丸の発射位置（相対座標）
       sdl_engine::Vector2_f32 bullet_direction {};
       f32                     speed {};
-      std::string             on_shoot_se_key {};    // 発射時の効果音キー
-      u32                     bullet_hp {};
+      i32                     bullet_hp {};
       u32                     bullet_atk {};
       BulletType              bullet_type { BulletType::Player };
    };
@@ -35,7 +34,6 @@ namespace myge
       f32                     laser_lifetime {};
       f32                     elapsed_time {};
       u32                     laser_atk {};
-      std::string             on_shoot_se_key {};    // 発射時の効果音キー
    };
    struct ShootingEnemyTag
    {

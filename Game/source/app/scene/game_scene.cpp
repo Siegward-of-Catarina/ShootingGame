@@ -4,6 +4,7 @@
 // my header
 #include <app/scene/game_scene.hpp>
 // scene
+#include <app/scene/game_clear_scene.hpp>
 #include <app/scene/game_over_scene.hpp>
 // wave
 #include <app/waves/wave.hpp>
@@ -21,7 +22,6 @@
 #include <app/systems/enemy_ai_system.hpp>
 #include <app/systems/enemy_movement_system.hpp>
 #include <app/systems/facing_system.hpp>
-#include <app/systems/game_over_system.hpp>
 #include <app/systems/hit_resolution_system.hpp>
 #include <app/systems/life_ui_system.hpp>
 #include <app/systems/out_of_screen_system.hpp>
@@ -34,15 +34,16 @@
 // event
 #include <app/event/append_charge_effect_event.hpp>
 #include <app/event/append_dead_effect_event.hpp>
-#include <app/event/append_overray_fade_event.hpp>
 #include <app/event/dead_event.hpp>
-#include <app/event/game_over_event.hpp>
+#include <app/event/game_end_event.hpp>
 #include <app/event/play_damage_se_event.hpp>
 #include <app/event/shoot_event.hpp>
 #include <engine/events/fade_events.hpp>
 #include <engine/events/sound_events.hpp>
 // engine
 #include <engine/core.hpp>
+// session
+#include <app/session/score_session.hpp>
 
 namespace
 {
@@ -52,19 +53,20 @@ namespace
       WaveStart,    // Wave開始
       Wave,         // Wave更新中
       WaveEnd,      // 次のWaveへ進める
-      GameOver,     // 未使用（将来拡張）
       End,          // すべてのWave終了
-      Destroy       // シーン遷移要求
+      GameOver,     // ゲームオーバー遷移
+      GameClear     // ゲームクリア遷移
    } scene_state;
-   entt::entity fade;    // フェード制御用（将来拡張）
 }    // namespace
 
 namespace myge
 {
    GameScene::GameScene( const sdl_engine::SceneDependencies& dependencies_ )
      : Scene { dependencies_, "game_data/scene_data/game_scene_data.json" }
-     , _scene_elapsed_time { 0.f }
      , _player_entity { entt::null }
+     , _game_end_timer { 0.0f }    // ゲームエンドで値付与　カウントダウン方式で使用
+     , _game_cleared { false }
+     , _current_wave_index { 0 }
    {
    }
 
@@ -85,7 +87,6 @@ namespace myge
       system_manager.removeSystem<SpriteBrinkSystem>();
       system_manager.removeSystem<LifeUISystem>();
       system_manager.removeSystem<ScoreSystem>();
-      system_manager.removeSystem<GameOverSystem>();
 
       // 本シーン所属のエンティティを破棄
       auto& reg { registry() };
@@ -99,47 +100,56 @@ namespace myge
 
    void GameScene::update( const sdl_engine::FrameData& frame_ )
    {
-      _scene_elapsed_time += frame_.delta_time;
 
-      // Wave進行用のステートマシン
-      static int idx = 0;    // 現在のWaveインデックス
+      // Wave進行とGameSceneのステートマシン
       switch ( scene_state )
       {
          case SceneState::WaveStart :
             // 現在のWaveを開始
-            _waves[ idx ]->start( _player_entity );
+            _waves[ _current_wave_index ]->start( _player_entity );
             scene_state = SceneState::Wave;
             break;
 
          case SceneState::Wave :
             // Wave更新と終了判定
-            _waves[ idx ]->update( frame_.delta_time );
-            if ( _waves[ idx ]->isWaveEnd() ) { scene_state = SceneState::WaveEnd; }
+            _waves[ _current_wave_index ]->update( frame_.delta_time );
+            if ( _waves[ _current_wave_index ]->isWaveEnd() ) { scene_state = SceneState::WaveEnd; }
             break;
 
          case SceneState::WaveEnd :
             // 次のWaveへ（最後まで到達したらEndへ）
-            idx++;    // 次へ
-            if ( _waves.size() == idx )
+            _current_wave_index++;    // 次へ
+            if ( _waves.size() == _current_wave_index )
             {
-               scene_state = SceneState::End;
-               idx         = 0;
+               scene_state         = SceneState::End;
+               _current_wave_index = 0;
             }
             else { scene_state = SceneState::WaveStart; }
             break;
 
          case SceneState::End :
-            // 任意キーでシーン終了フローへ
-            if ( inputManager().isAnyKeydown() ) { scene_state = SceneState::Destroy; }
-            break;
+            if ( _game_end_timer < 0.0f )
+            {
+               if ( _game_cleared ) { scene_state = SceneState::GameClear; }
+               else { scene_state = SceneState::GameOver; }
 
-         case SceneState::Destroy :
-            // GameOverシーンへ遷移
-            sceneManager().setNextScene( std::make_unique<GameOverScene>( sceneDependencies() ) );
+               // ゲームスピードを元に戻す
+               sceneManager().setGameSpeed( 1.0f );
+            }
+            else { _game_end_timer -= frame_.delta_time; }
             break;
 
          case SceneState::GameOver :
-            // 未使用
+            // サウンドをフェードアウトしてゲームへ
+            eventListener().trigger<sdl_engine::StopAllSoundEvent>( { 100 } );
+            // GameOverシーンへ遷移
+            sceneManager().setNextScene( std::make_unique<GameOverScene>( sceneDependencies() ) );
+            break;
+         case SceneState::GameClear :
+            // サウンドをフェードアウトしてゲームへ
+            eventListener().trigger<sdl_engine::StopAllSoundEvent>( { 100 } );
+            // GameClearシーンへ遷移 （現状GameOverシーンへ）
+            sceneManager().setNextScene( std::make_unique<GameClearScene>( sceneDependencies() ) );
             break;
       }
    }
@@ -184,6 +194,12 @@ namespace myge
       }
    }
 
+   void GameScene::postEntityCreation()
+   {
+      // スコアセッションを初期化
+      registry().ctx().get<ScoreSession>().value = 0u;
+   }
+
    void GameScene::postSystemAddition()
    {
       // シーン開始時の状態設定
@@ -199,8 +215,7 @@ namespace myge
       eventListener().connect<&GameScene::onShoot, ShootEvent>( this );
       eventListener().connect<&GameScene::onShootLaser, LaserShootEvent>( this );
       eventListener().connect<&GameScene::onDeadEffectAppend, AppendDeadEffectEvent>( this );
-      eventListener().connect<&GameScene::onOverrayFadeAppend, AppendOverrayFadeEvent>( this );
-      eventListener().connect<&GameScene::onGameOver, GameOverEvent>( this );
+      eventListener().connect<&GameScene::onGameEnd, GameEndEvent>( this );
       eventListener().connect<&GameScene::onChargeEffectAppend, AppendChargeEvent>( this );
       eventListener().connect<&GameScene::onPlayDamageSE, PlayDamageSEEvent>( this );
    }
@@ -222,7 +237,6 @@ namespace myge
       system_manager.addSystem( std::make_unique<SpriteBrinkSystem>( 97, registry(), eventListener() ) );
       system_manager.addSystem( std::make_unique<LifeUISystem>( 98, registry(), eventListener() ) );
       system_manager.addSystem( std::make_unique<ScoreSystem>( 98, registry(), eventListener() ) );
-      system_manager.addSystem( std::make_unique<GameOverSystem>( 99, registry(), eventListener() ) );
    }
 
    void GameScene::onShoot( ShootEvent& e )
@@ -231,20 +245,21 @@ namespace myge
       EntityFactory factory { registry(), resourceManager() };
       factory.createBullet( e.shooter, typeid( AffilGameScene ) );
       // シューターの種類に応じて効果音を再生
-      auto         shooter_comp = registry().try_get<Shooter>( e.shooter );
+      auto         shoot_se = registry().try_get<ShootSE>( e.shooter );
       entt::entity sound { entt::null };
       // 1つのShooterの場合
-      if ( shooter_comp ) { sound = factory.createSoundEffect( shooter_comp->on_shoot_se_key, 0, 0.2f, 0.0f ); }
+      if ( shoot_se ) { sound = factory.createSoundEffect( shoot_se->sound_key, 0, shoot_se->volume, 0.0f ); }
       else    // MultipleShooterの場合
       {
          auto mul_shooter_comp = registry().try_get<MultipleShooter>( e.shooter );
+         auto mul_shoot_se     = registry().try_get<MultipleShootSE>( e.shooter );
          if ( mul_shooter_comp )
          {
-            auto& shooter = mul_shooter_comp->shooters[ mul_shooter_comp->current_index ];
-            sound         = factory.createSoundEffect( shooter.on_shoot_se_key, 0, 0.2f, 0.0f );
+            // CurrentIndexに対応したShootSEを取得して再生
+            auto& shoot_se = mul_shoot_se->shoot_ses[ mul_shooter_comp->current_index ];
+            sound          = factory.createSoundEffect( shoot_se.sound_key, 0, shoot_se.volume, 0.0f );
          }
       }
-      eventListener().trigger<sdl_engine::PlaySEEvent>( { sound } );
    }
 
    void GameScene::onShootLaser( LaserShootEvent& e )
@@ -252,14 +267,19 @@ namespace myge
       // 弾を生成し、効果音を再生
       EntityFactory factory { registry(), resourceManager() };
       factory.createLaserBeam( e.shooter, typeid( AffilGameScene ) );
-      auto shooter_comp = registry().get<LaserShooter>( e.shooter );
-      auto sound        = factory.createSoundEffect( shooter_comp.on_shoot_se_key, 0, 0.2f, 0.0f );
+      auto shoot_se = registry().try_get<EXShootSE>( e.shooter );
+      auto sound    = factory.createSoundEffect( shoot_se->sound_key, 0, shoot_se->volume, 0.0f );
    }
 
-   void GameScene::onGameOver( GameOverEvent& e )
+   void GameScene::onGameEnd( GameEndEvent& e )
    {
       // ゲームオーバー時はスローモーションへ
       sceneManager().setGameSpeed( 0.5f );
+      // SEをフェードアウト
+      eventListener().trigger<sdl_engine::StopSEEvent>( { 1000 } );
+      _game_end_timer = 1.5f;
+      scene_state     = SceneState::End;
+      _game_cleared   = e.is_cleared;
    }
 
    void GameScene::onDeadEffectAppend( AppendDeadEffectEvent& e )
@@ -277,18 +297,10 @@ namespace myge
             if ( auto dead_se { reg.try_get<DeadSE>( entity ) }; dead_se )
             {
                auto se_entity = factory.createSoundEffect( dead_se->sound_key, 0, dead_se->volume, 0.0f );
-               eventListener().trigger<sdl_engine::PlaySEEvent>( { se_entity } );
             }
          }
       }
       eventListener().trigger<DeadEvent>( { e.dead_entities, false } );
-   }
-
-   void GameScene::onOverrayFadeAppend( AppendOverrayFadeEvent& e )
-   {
-      // フェード要求：遷移フローへ移行し、ゲーム速度を戻す
-      scene_state = SceneState::Destroy;
-      sceneManager().setGameSpeed( 1.0f );
    }
    void GameScene::onChargeEffectAppend( AppendChargeEvent& e )
    {    // 弾を生成し、効果音を再生

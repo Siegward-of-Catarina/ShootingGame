@@ -1,7 +1,7 @@
-﻿// ゲームオーバーシーン
+﻿// ゲームクリアシーン
 // - Continue(=Start) でリトライ、Exitでタイトルへ戻る
 // my header
-#include <app/scene/game_over_scene.hpp>
+#include <app/scene/game_clear_scene.hpp>
 // scene
 #include <app/scene/game_scene.hpp>
 #include <app/scene/title_scene.hpp>
@@ -22,12 +22,12 @@
 // session
 #include <app/session/score_session.hpp>
 
-myge::GameOverScene::GameOverScene( const sdl_engine::SceneDependencies& dependencies_ )
-  : Scene { dependencies_, "game_data/scene_data/game_over_scene_data.json" }
+myge::GameClearScene::GameClearScene( const sdl_engine::SceneDependencies& dependencies_ )
+  : Scene { dependencies_, "game_data/scene_data/game_clear_scene_data.json" }
 {
 }
 
-myge::GameOverScene::~GameOverScene()
+myge::GameClearScene::~GameClearScene()
 {
    // 追加したシステムの登録解除
    systemManager().removeSystem<HighlightSystem>();
@@ -43,11 +43,11 @@ myge::GameOverScene::~GameOverScene()
    }
 }
 
-void myge::GameOverScene::start() {}    // 初期化処理（現状なし）
+void myge::GameClearScene::start() {}    // 初期化処理（現状なし）
 
-void myge::GameOverScene::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ ) {}
+void myge::GameClearScene::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ ) {}
 
-void myge::GameOverScene::addSystems()
+void myge::GameClearScene::addSystems()
 {
    // 実行順は第1引数の優先度で制御
    systemManager().addSystem( std::make_unique<HighlightSystem>( 95, registry(), eventListener() ) );
@@ -56,7 +56,7 @@ void myge::GameOverScene::addSystems()
    systemManager().addSystem( std::make_unique<ScoreSystem>( 98, registry(), eventListener() ) );
 }
 
-void myge::GameOverScene::createEntities()
+void myge::GameClearScene::createEntities()
 {
    // JSONからUI等を生成
    auto& scene_data { sceneData() };
@@ -67,15 +67,15 @@ void myge::GameOverScene::createEntities()
    }
 }
 
-void myge::GameOverScene::setupEventHandlers()
+void myge::GameClearScene::setupEventHandlers()
 {
    // メニュー決定イベントを購読
-   eventListener().connect<&GameOverScene::onContinueMenuAction, MenuButtonEvent>( this );
+   eventListener().connect<&GameClearScene::onContinueMenuAction, MenuButtonEvent>( this );
    // インプットSEイベントを購読
-   eventListener().connect<&GameOverScene::onAppendInputSE, KeyDownEvent>( this );
+   eventListener().connect<&GameClearScene::onAppendInputSE, KeyDownEvent>( this );
 }
 
-void myge::GameOverScene::onContinueMenuAction( const MenuButtonEvent& e )
+void myge::GameClearScene::onContinueMenuAction( const MenuButtonEvent& e )
 {
    // Start=リトライ、Exit=タイトルへ
    switch ( e.button_type )
@@ -88,7 +88,7 @@ void myge::GameOverScene::onContinueMenuAction( const MenuButtonEvent& e )
          break;
    }
 }
-void myge::GameOverScene::onAppendInputSE( const KeyDownEvent& e )
+void myge::GameClearScene::onAppendInputSE( const KeyDownEvent& e )
 {
    // 入力音を生成（再生はSoundSystemで処理、生成後は自動破棄）
    EntityFactory factory { registry(), resourceManager() };

@@ -25,7 +25,6 @@
 						"shoot_cooldown": 0.2,
 						"num_shots": 3,
 						"speed": 300.0,
-						"on_shoot_se_key": "enemy_small_shoot",
 						"bullet_hp": 1,
 						"bullet_atk": 1
 					},
@@ -35,7 +34,6 @@
 						"shoot_cooldown": 1,
 						"num_shots": 0.3,
 						"speed": 100.0,
-						"on_shoot_se_key": "enemy_large_shoot",
 						"bullet_hp": 2,
 						"bullet_atk": 1
 					}

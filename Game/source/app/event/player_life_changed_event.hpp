@@ -4,6 +4,6 @@ namespace myge
 {
    struct PlayerLifeChangedEvent
    {
-      u32 hp {};
+      i32 hp {};
    };
 }    // namespace myge

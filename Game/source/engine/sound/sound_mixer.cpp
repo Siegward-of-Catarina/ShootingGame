@@ -127,7 +127,7 @@ namespace sdl_engine
       SDL_SetNumberProperty( properties, MIX_PROP_PLAY_LOOPS_NUMBER, loop_count_ );
       MIX_PlayTrack( _bgm_track.get(), properties );
    }
-   void SoundMixer::setPlaySE( MIX_Audio* audio_, const i64 loop_count_ )
+   void SoundMixer::setPlaySE( MIX_Audio* audio_, const f32 volume_, const i64 loop_count_ )
    {
       // 空いているトラックにセット
       for ( auto& track : _se_tracks )
@@ -138,6 +138,8 @@ namespace sdl_engine
             // ループ回数セット
             auto properties { MIX_GetTrackProperties( track.get() ) };
             SDL_SetNumberProperty( properties, MIX_PROP_PLAY_LOOPS_NUMBER, loop_count_ );
+            // 音量セット
+            MIX_SetTrackGain( track.get(), volume_ );
             // 　再生
             MIX_PlayTrack( track.get(), properties );
             break;

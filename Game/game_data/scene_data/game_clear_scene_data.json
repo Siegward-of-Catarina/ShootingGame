@@ -2,7 +2,7 @@
 	"Entities": {
 		"basic_ui": [
 			{
-				"sprite_name": "game_over",
+				"sprite_name": "game_clear",
 				"pos": [ 300.0, 200.0 ]
 			},
 			{
@@ -44,7 +44,7 @@
 		],
 		"sound_bgm": [
 			{
-				"sound_key": "bgm_gameover",
+				"sound_key": "game_clear",
 				"loop_count": 0,
 				"volume": 0.5,
 				"fade_time_ms": 100

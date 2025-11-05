@@ -23,10 +23,19 @@ namespace myge
          velo.vector.y = 0;
          input.move_direction.normalize();
          // 緩やかに加速・減速
-         movement.smooth_dir.x +=
-           ( movement.acceleration * frame_.delta_time ) * ( input.move_direction.x - movement.smooth_dir.x );
-         movement.smooth_dir.y +=
-           ( movement.acceleration * frame_.delta_time ) * ( input.move_direction.y - movement.smooth_dir.y );
+         if ( input.move_direction.x != 0 )
+         {
+            movement.smooth_dir.x +=
+              ( movement.acceleration * frame_.delta_time ) * ( input.move_direction.x - movement.smooth_dir.x );
+         }
+         else { movement.smooth_dir.x -= movement.smooth_dir.x * ( movement.deceleration * frame_.delta_time ); }
+
+         if ( input.move_direction.y != 0 )
+         {
+            movement.smooth_dir.y +=
+              ( movement.acceleration * frame_.delta_time ) * ( input.move_direction.y - movement.smooth_dir.y );
+         }
+         else { movement.smooth_dir.y -= movement.smooth_dir.y * ( movement.deceleration * frame_.delta_time ); }
 
          velo.vector.x = movement.smooth_dir.x * movement.max_speed;
          velo.vector.y = movement.smooth_dir.y * movement.max_speed;

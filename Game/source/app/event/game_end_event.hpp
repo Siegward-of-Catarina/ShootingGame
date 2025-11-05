@@ -1,7 +1,8 @@
 ﻿#pragma once
 namespace myge
 {
-   struct AppendOverrayFadeEvent
+   struct GameEndEvent
    {
+      bool is_cleared;
    };
 }    // namespace myge

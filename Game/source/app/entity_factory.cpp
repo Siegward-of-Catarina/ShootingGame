@@ -285,7 +285,7 @@ namespace myge
          sprite = _resource_manager.getSprite( "enemy_bullet_hit" );
          anim   = _resource_manager.getSpriteAnim( "enemy_bullet_hit_anim" );
       }
-      else if ( -_registry.all_of<EnemyBossTag>( dead_entt_ ) )
+      else if ( _registry.all_of<EnemyBossTag>( dead_entt_ ) )
       {
          sprite = _resource_manager.getSprite( "boss_dead" );
          anim   = _resource_manager.getSpriteAnim( "boss_dead_anim" );
@@ -314,6 +314,7 @@ namespace myge
       _registry.emplace<sdl_engine::Transform>( entity, trfm );
 
       auto sprt { sdl_engine::createSprite( sprite ) };
+      sprt.render_order = 0;    // エフェクトは手前に描画する
       auto sprt_anim { sdl_engine::createSpriteAnim( anim ) };
 
       sprt.dst.w = static_cast<f32>( anim->frame_width );
@@ -372,10 +373,11 @@ namespace myge
       _registry.emplace<sdl_engine::RenderableTag>( entity );
       _registry.emplace<sdl_engine::UpdateableTag>( entity );
       // [Sprite]
+      sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
       {
-         sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
-         sprt.dst.w = frame_w;
-         sprt.dst.h = frame_h;
+         sprt.dst.w        = frame_w;
+         sprt.dst.h        = frame_h;
+         sprt.render_order = sdl_engine::getOptionalData<u32>( data_, "z_order", 100 );
          _registry.emplace<sdl_engine::Sprite>( entity, sprt );
       }
       // [SpriteAnim]
@@ -422,8 +424,7 @@ namespace myge
             .spawn_position { 0.0f, 0.0f },
             .bullet_direction { dir_array },
             .speed { 500.0f },
-            .on_shoot_se_key { sdl_engine::getOptionalData<std::string>( data_, "num_shot", "player_shoot" ) },
-            .bullet_hp { sdl_engine::getOptionalData<u32>( data_, "bullet_hp", 1 ) },
+            .bullet_hp { sdl_engine::getOptionalData<i32>( data_, "bullet_hp", 1 ) },
             .bullet_atk { sdl_engine::getOptionalData<u32>( data_, "bullet_atk", 1 ) },
             .bullet_type { BulletType::Player }
          };
@@ -446,24 +447,28 @@ namespace myge
       {
          auto                max_speed { sdl_engine::getOptionalData<f32>( data_, "max_speed", 400.0f ) };
          auto                acceleration { sdl_engine::getOptionalData<f32>( data_, "move_acceleration", 5.0f ) };
+         auto                deceleration { sdl_engine::getOptionalData<f32>( data_, "move_deceleration", 3.0f ) };
          PlayerMovementInput move_input {
-            max_speed, acceleration, { 0.f, 0.f }
+            max_speed, acceleration, deceleration, { 0.f, 0.f }
          };
          _registry.emplace<PlayerMovementInput>( entity, move_input );
       }
-      // dead damage se
+      // sound properties
       {
-         DeadSE dead_se_comp { "player_dead", 0.5 };
+         DeadSE dead_se_comp { "player_dead", 0.7f };    // player死亡は派手に
          _registry.emplace<DeadSE>( entity, dead_se_comp );
-
-         DamageSE damage_se_comp { "bullet_hit", 0.3 };
+         DamageSE damage_se_comp { "bullet_hit", 0.5f };
          _registry.emplace<DamageSE>( entity, damage_se_comp );
+         ShootSE shoot_se_comp { "player_shoot", 0.2f };
+         _registry.emplace<ShootSE>( entity, shoot_se_comp );
       }
-      createPlayerBooster( entity, affiliation_id_ );
+      createPlayerBooster( entity, sprt.render_order, affiliation_id_ );
 
       return entity;
    }
-   entt::entity EntityFactory::createPlayerBooster( const entt::entity parent_, const std::type_index& affiliation_id_ )
+   entt::entity EntityFactory::createPlayerBooster( const entt::entity     parent_,
+                                                    const u32              z_order_,
+                                                    const std::type_index& affiliation_id_ )
    {
       auto entity { _registry.create() };
 
@@ -484,8 +489,9 @@ namespace myge
       // [Sprite]
       {
          sdl_engine::Sprite sprt { sdl_engine::createSprite( sprt_resource ) };
-         sprt.dst.w = frame_w;
-         sprt.dst.h = frame_h;
+         sprt.dst.w        = frame_w;
+         sprt.dst.h        = frame_h;
+         sprt.render_order = z_order_;    // 親と同じ描画順にする
          _registry.emplace<sdl_engine::Sprite>( entity, sprt );
       }
       // [SpriteAnim]
@@ -626,9 +632,9 @@ namespace myge
       }
       // dead se
       {
-         DeadSE dead_se_comp { "enemy_dead", 0.3 };
+         DeadSE dead_se_comp { "enemy_dead", 0.5f };
          _registry.emplace<DeadSE>( entity, dead_se_comp );
-         DamageSE damage_se_comp { "bullet_hit", 0.3 };
+         DamageSE damage_se_comp { "bullet_hit", 0.5f };
          _registry.emplace<DamageSE>( entity, damage_se_comp );
       }
       return entity;
@@ -714,9 +720,7 @@ namespace myge
             .bullet_direction {
                        0.0f, 1.0f }, // bullet direction はplayerへの方向ベクトルにする 仮にPlayerが存在しない場合は下方向
             .speed { 500.0f },
-            .on_shoot_se_key {
-                       sdl_engine::getOptionalData<std::string>( data_, "on_shoot_se_key", "enemy_small_shoot" ) },
-            .bullet_hp { sdl_engine::getOptionalData<u32>( data_, "bullet_hp", 1 ) },
+            .bullet_hp { sdl_engine::getOptionalData<i32>( data_, "bullet_hp", 1 ) },
             .bullet_atk { sdl_engine::getOptionalData<u32>( data_, "bullet_atk", 1 ) },
             .bullet_type { BulletType::Enemy_small }
          };
@@ -752,10 +756,12 @@ namespace myge
       }
       // dead se
       {
-         DeadSE dead_se_comp { "enemy_dead", 0.3 };
+         DeadSE dead_se_comp { "enemy_dead", 0.5f };
          _registry.emplace<DeadSE>( entity, dead_se_comp );
-         DamageSE damage_se_comp { "bullet_hit", 0.3 };
+         DamageSE damage_se_comp { "bullet_hit", 0.5f };
          _registry.emplace<DamageSE>( entity, damage_se_comp );
+         ShootSE shoot_se_comp { "enemy_small_shoot", 0.4f };
+         _registry.emplace<ShootSE>( entity, shoot_se_comp );
       }
       return entity;
    }
@@ -853,9 +859,7 @@ namespace myge
                .spawn_position { spawn_pos_array },
                .bullet_direction { 0.0f, 1.0f },
                .speed { sdl_engine::getOptionalData<f32>( data, "speed", 500.0f ) },
-               .on_shoot_se_key {
-                          sdl_engine::getOptionalData<std::string>( data, "on_shoot_se_key", "enemy_small_shoot" ) },
-               .bullet_hp { sdl_engine::getOptionalData<u32>( data, "bullet_hp", 1 ) },
+               .bullet_hp { sdl_engine::getOptionalData<i32>( data, "bullet_hp", 1 ) },
                .bullet_atk { sdl_engine::getOptionalData<u32>( data, "bullet_atk", 1 ) },
                .bullet_type { BulletType::Enemy_small }  //  ひとまずスモールでセット
             };
@@ -875,8 +879,7 @@ namespace myge
             .laser_direction { 0.0f, 1.0f },
             .laser_lifetime { 2.0f },
             .elapsed_time { 0.0f },
-            .laser_atk { sdl_engine::getOptionalData<u32>( data_, "laser_atk", 2 ) },
-            .on_shoot_se_key { sdl_engine::getOptionalData<std::string>( data_, "on_shoot_se_key", "boss_laser" ) },
+            .laser_atk { sdl_engine::getOptionalData<u32>( data_, "laser_atk", 2 ) }
          };
          _registry.emplace<LaserShooter>( entity, laser_shooter );
       }
@@ -904,8 +907,17 @@ namespace myge
          _registry.emplace<DamageEffectProperty>( entity, dmg_effect_prop );
       }
       {
-         DamageSE damage_se_comp { "bullet_hit", 0.3 };
+         DeadSE dead_se_comp { "boss_dead", 0.7f };    // boss死亡は派手に
+         _registry.emplace<DeadSE>( entity, dead_se_comp );
+         DamageSE damage_se_comp { "bullet_hit", 0.5f };
          _registry.emplace<DamageSE>( entity, damage_se_comp );
+         MultipleShootSE multi_shoot_se_comp {
+            { { "enemy_small_shoot", 0.3f }, { "enemy_large_shoot", 0.3f } }
+         };
+         _registry.emplace<MultipleShootSE>( entity, multi_shoot_se_comp );
+         // レーザー
+         EXShootSE ex_shoot_se_comp { "boss_laser", 0.5f };
+         _registry.emplace<EXShootSE>( entity, ex_shoot_se_comp );
       }
       return entity;
    }
