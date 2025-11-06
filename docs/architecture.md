@@ -5,7 +5,8 @@
 ## 凡例
 
 - **実線矢印 (→)**: 保持 (所有権を持つ)
-- **点線矢印 (-.->)**: 参照 (所有権を持たない)
+- **点線矢印 (-.->)**: 使用 (一時的な参照)
+- **破線矢印 (-..->)**: 参照 (永続的な参照)
 
 ---
 
@@ -31,7 +32,7 @@ graph TB
         EnTT[EnTT]
     end
     
-    Scenes -.uses.-> Managers
+    Scenes -..refers..-> Managers
     Scenes -.uses.-> AppSystems
     
     EC -->|owns| Managers
@@ -88,7 +89,6 @@ graph TB
     RM -.uses.-> SndL
     
     SL -.uses.-> R
-    FL -.uses.-> R
     SndL -.uses.-> SMX
 ```
 
