@@ -173,7 +173,7 @@ graph TB
     SRS --> T
     SRS --> Spr
     SRS --> Txt
-    SRS --> R
+    SRS -.uses.-> R
     
     FS --> EngEvents
     SAS --> EngEvents
@@ -531,7 +531,7 @@ sequenceDiagram
     Scene->>EF: createEntitiesFromJSON(data)
     
     loop For each entity in JSON
-        EF->>EF: 判定 entity_type
+        EF->>EF: determine entity_type
         EF->>Reg: create()
         EF->>Reg: emplace<Components>()
     end
