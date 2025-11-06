@@ -150,7 +150,7 @@ graph LR
     
     E --> R
     C --> R
-    R -.uses.-> S
+    R ==refers==> S
     S -.triggers.-> D
 ```
 
