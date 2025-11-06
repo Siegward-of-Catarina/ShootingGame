@@ -6,7 +6,7 @@
 
 - **実線矢印 (→)**: 保持 (所有権を持つ)
 - **点線矢印 (-.->)**: 使用 (一時的な参照)
-- **破線矢印 (-..->)**: 参照 (永続的な参照)
+- **太線矢印 (==>)**: 参照 (永続的な参照)
 
 ---
 
@@ -32,7 +32,7 @@ graph TB
         EnTT[EnTT]
     end
     
-    Scenes -..refers..-> Managers
+    Scenes ==refers==> Managers
     Scenes -.uses.-> AppSystems
     
     EC -->|owns| Managers
