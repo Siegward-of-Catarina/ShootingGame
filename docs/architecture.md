@@ -33,13 +33,13 @@ graph TB
     
     Scenes -.uses.-> Managers
     Scenes -.uses.-> AppSystems
-    AppSystems -.uses.-> EngineSystems
     
     EC -->|owns| Managers
-    Managers -.uses.-> EngineSystems
+    EC -->|owns| SDL
+    EC -->|owns| EnTT
     
-    EC -.uses.-> SDL
-    EC -.uses.-> EnTT
+    Managers -->|owns| EngineSystems
+    Managers -->|owns| AppSystems
 ```
 
 ---
