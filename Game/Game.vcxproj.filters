@@ -63,6 +63,7 @@
     <ClCompile Include="source\app\systems\score_system.cpp" />
     <ClCompile Include="source\app\systems\enemy_ai_system.cpp" />
     <ClCompile Include="source\app\scene\game_clear_scene.cpp" />
+    <ClCompile Include="source\pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Components\sprite.hpp" />
@@ -143,7 +144,6 @@
     <ClInclude Include="source\app\waves\wave_factory.hpp" />
     <ClInclude Include="source\app\waves\basic_wave.hpp" />
     <ClInclude Include="source\engine\rendering\resource\sprite_resource.hpp" />
-    <ClInclude Include="source\app\forward_declarations.hpp" />
     <ClInclude Include="source\app\systems\enemy_movement_system.hpp" />
     <ClInclude Include="source\engine\basic_component.hpp" />
     <ClInclude Include="source\app\components\player_movement.hpp" />
@@ -190,19 +190,19 @@
     <ClInclude Include="source\engine\Components\use_custom_update_transform_tags.hpp" />
     <ClInclude Include="source\engine\components\direct_control_tags.hpp" />
     <ClInclude Include="source\app\components\serpentine_movement.hpp" />
-    <ClInclude Include="source\app\event\shoot_event.hpp" />
+    <ClInclude Include="source\app\events\shoot_event.hpp" />
     <ClInclude Include="source\engine\events\fade_events.hpp" />
     <ClInclude Include="source\app\systems\facing_system.hpp" />
     <ClInclude Include="source\app\systems\collision_system.hpp" />
     <ClInclude Include="source\app\components\life.hpp" />
-    <ClInclude Include="source\app\event\dead_event.hpp" />
+    <ClInclude Include="source\app\events\dead_event.hpp" />
     <ClInclude Include="source\engine\events\quit_event.hpp" />
     <ClInclude Include="source\app\systems\highlight_system.hpp" />
-    <ClInclude Include="source\app\event\highlight_event.hpp" />
+    <ClInclude Include="source\app\events\highlight_event.hpp" />
     <ClInclude Include="source\app\components\highlightable.hpp" />
     <ClInclude Include="source\app\systems\menu_system.hpp" />
-    <ClInclude Include="source\app\event\menu_button_event.hpp" />
-    <ClInclude Include="source\app\event\key_down_event.hpp" />
+    <ClInclude Include="source\app\events\menu_button_event.hpp" />
+    <ClInclude Include="source\app\events\key_down_event.hpp" />
     <ClInclude Include="source\app\components\title_menu.hpp" />
     <ClInclude Include="source\app\components\button_ui.hpp" />
     <ClInclude Include="source\app\components\affiliation.hpp" />
@@ -210,12 +210,12 @@
     <ClInclude Include="source\app\components\damage.hpp" />
     <ClInclude Include="source\app\components\status.hpp" />
     <ClInclude Include="source\engine\events\sprite_anim_end_event.hpp" />
-    <ClInclude Include="source\app\event\hit_event.hpp" />
+    <ClInclude Include="source\app\events\hit_event.hpp" />
     <ClInclude Include="source\app\systems\hit_resolution_system.hpp" />
-    <ClInclude Include="source\app\event\append_dead_effect_event.hpp" />
+    <ClInclude Include="source\app\events\append_dead_effect_event.hpp" />
     <ClInclude Include="source\app\components\damage_effect_property.hpp" />
     <ClInclude Include="source\engine\events\fade_render_layer_change_event.hpp" />
-    <ClInclude Include="source\app\event\game_end_event.hpp" />
+    <ClInclude Include="source\app\events\game_end_event.hpp" />
     <ClInclude Include="source\app\scene\game_over_scene.hpp" />
     <ClInclude Include="source\app\components\transform_link.hpp" />
     <ClInclude Include="source\app\systems\transform_link_system.hpp" />
@@ -232,18 +232,19 @@
     <ClInclude Include="source\app\components\facing_tag.hpp" />
     <ClInclude Include="source\engine\components\repeat_sprite.hpp" />
     <ClInclude Include="source\app\systems\life_ui_system.hpp" />
-    <ClInclude Include="source\app\event\player_life_changed_event.hpp" />
+    <ClInclude Include="source\app\events\player_life_changed_event.hpp" />
     <ClInclude Include="source\app\components\score.hpp" />
     <ClInclude Include="source\app\session\score_session.hpp" />
     <ClInclude Include="source\app\systems\score_system.hpp" />
     <ClInclude Include="source\app\systems\enemy_ai_system.hpp" />
     <ClInclude Include="source\app\components\enemy_boss_movement.hpp" />
     <ClInclude Include="source\app\components\enemy_boss_ai.hpp" />
-    <ClInclude Include="source\app\event\append_charge_effect_event.hpp" />
-    <ClInclude Include="source\app\event\charge_end_event.hpp" />
-    <ClInclude Include="source\app\event\dead_laser_event.hpp" />
+    <ClInclude Include="source\app\events\append_charge_effect_event.hpp" />
+    <ClInclude Include="source\app\events\charge_end_event.hpp" />
+    <ClInclude Include="source\app\events\dead_laser_event.hpp" />
     <ClInclude Include="source\app\components\se_properties.hpp" />
-    <ClInclude Include="source\app\event\play_damage_se_event.hpp" />
+    <ClInclude Include="source\app\events\play_damage_se_event.hpp" />
     <ClInclude Include="source\app\scene\game_clear_scene.hpp" />
+    <ClInclude Include="source\pch.hpp" />
   </ItemGroup>
 </Project>

@@ -1,13 +1,17 @@
-﻿#include <app/components/bounding_box.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <app/systems/collision_system.hpp>
+// component
+#include <app/components/bounding_box.hpp>
 #include <app/components/damage.hpp>
 #include <app/components/entity_type_tag.hpp>
-#include <app/systems/collision_system.hpp>
 #include <engine/components/transform.hpp>
-#include <engine/events/event_listener.hpp>
-#include <engine/math.hpp>
 // event
-#include <app/event/dead_event.hpp>
-#include <app/event/hit_event.hpp>
+#include <app/events/dead_event.hpp>
+#include <app/events/hit_event.hpp>
+#include <engine/events/event_listener.hpp>
+// math
+#include <engine/math.hpp>
 namespace
 {
    constexpr f32 CELL_SIZE   = 100.0f;
@@ -51,7 +55,7 @@ namespace myge
    {
    }
    CollisionSystem::~CollisionSystem() {}
-   void CollisionSystem::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ )
+   void CollisionSystem::update( const sdl_engine::FrameData& )
    {
       _hit_entity_pairs.clear();
       // common collision
@@ -157,7 +161,7 @@ namespace myge
          // レーザーはAABB判定で取る
          auto& player_trfm = reg.get<sdl_engine::Transform>( player_entity );
          auto& player_box  = reg.get<myge::BoundingBox>( player_entity );
-         // AABB判定　playerがDamageEffect持っていなければヒット
+         // AABB判定playerがDamageEffect持っていなければヒット
          if ( aabbCollision( la_trfm.position,
                              la_box.harf_width,
                              la_box.harf_hegiht,

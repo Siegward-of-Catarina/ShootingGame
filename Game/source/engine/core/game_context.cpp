@@ -1,15 +1,22 @@
-﻿#include <SDL3/SDL.h>
-#include <SDL3_mixer/SDL_mixer.h>
-#include <engine/core.hpp>
+﻿#include <pch.hpp>
+// my header
 #include <engine/core/game_context.hpp>
-#include <engine/events/event_listener.hpp>
+// manager
+#include <engine/managers/input_manager.hpp>
+#include <engine/managers/resource_manager.hpp>
+#include <engine/managers/scene_manager.hpp>
+#include <engine/managers/system_manager.hpp>
+// render
 #include <engine/rendering/renderer.hpp>
+// sound
 #include <engine/sound/sound_mixer.hpp>
-// basic systems
-#include <engine/basic_system.hpp>
+// scene
+#include <engine/scene/scene.hpp>
+// timer
+#include <engine/core/game_timer.hpp>
 // event
+#include <engine/events/event_listener.hpp>
 #include <engine/events/quit_event.hpp>
-#include <engine/utils/common_utilities.hpp>
 
 namespace sdl_engine
 {
@@ -29,14 +36,14 @@ namespace sdl_engine
      , _game_timer { nullptr }
      , is_quit { false }
    {
-      if ( !SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) ) { throw GameException( "SDLの初期化に失敗しました" ); }
+      if ( !SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) ) { throw GameException( "sdl init failed" ); }
 
 #ifdef _DEBUG
       SDL_SetLogPriority( SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INVALID );
 #endif
       // Window/Renderer 構築
       SDL_Window* window_raw = SDL_CreateWindow( info_.window_name.data(), _window_size.x, _window_size.y, 0 );
-      if ( !window_raw ) { throw GameException( "SDLwindowを作成できませんでした" ); }
+      if ( !window_raw ) { throw GameException( "SDL_CreateWindow failed" ); }
       _window = { window_raw, &SDL_DestroyWindow };
 
       _renderer         = std::make_unique<Renderer>( window_raw );
@@ -91,5 +98,5 @@ namespace sdl_engine
       return { _game_timer->getDeltaTime(), static_cast<f32>( _window_size.x ), static_cast<f32>( _window_size.y ) };
    }
 
-   void EngineContext::onQuitEvent( [[maybe_unused]] QuitEvent& e ) { is_quit = true; }
+   void EngineContext::onQuitEvent( QuitEvent& ) { is_quit = true; }
 }    // namespace sdl_engine

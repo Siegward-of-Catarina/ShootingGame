@@ -1,17 +1,23 @@
-﻿#include <SDL3/SDL.h>
-#include <SDL3/SDL_audio.h>
-#include <app/entity_factory.hpp>
+﻿#include <pch.hpp>
+// my header
 #include <app/game.hpp>
+// scene
 #include <app/scene/title_scene.hpp>
+// factory
+#include <app/entity_factory.hpp>
+// system
 #include <app/systems/input_system.hpp>
 #include <app/systems/life_cycle_system.hpp>
 #include <engine/basic_system.hpp>
+#include <engine/systems/fade_system.hpp>
+// component
 #include <engine/components/fade.hpp>
+// core
 #include <engine/core.hpp>
+// manager
 #include <engine/managers/input_manager.hpp>
 #include <engine/managers/scene_manager.hpp>
 #include <engine/managers/system_manager.hpp>
-#include <engine/systems/fade_system.hpp>
 namespace myge
 {
    Game::Game() : _context { nullptr }
@@ -22,7 +28,7 @@ namespace myge
       };
       _context = std::make_unique<sdl_engine::EngineContext>( init_info );
       // アセット読み込み
-      _context->loadAssets( "assets/test_assets.json" );
+      _context->loadAssets( "assets/assets.json" );
 
       auto& resource_manager { _context->getResourceManager() };
       auto& registry { _context->getRegistry() };

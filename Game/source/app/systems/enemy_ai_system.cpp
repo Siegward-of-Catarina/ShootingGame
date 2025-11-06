@@ -1,4 +1,5 @@
-﻿// my header
+﻿#include <pch.hpp>
+// my header
 #include <app/systems/enemy_ai_system.hpp>
 // components
 #include <app/components/enemy_boss_ai.hpp>
@@ -7,9 +8,9 @@
 #include <app/components/status.hpp>
 #include <engine/basic_component.hpp>
 // events
-#include <app/event/append_charge_effect_event.hpp>
-#include <app/event/charge_end_event.hpp>
-#include <app/event/dead_laser_event.hpp>
+#include <app/events/append_charge_effect_event.hpp>
+#include <app/events/charge_end_event.hpp>
+#include <app/events/dead_laser_event.hpp>
 // core
 #include <engine/core.hpp>
 // std
@@ -48,7 +49,7 @@ namespace myge
       _event_listener.connect<&EnemyBossAISystem::onChargeEnd, ChargeEndEvent>( this );
    }
    EnemyBossAISystem::~EnemyBossAISystem() {}
-   void EnemyBossAISystem::update( const sdl_engine::FrameData& frame_ )
+   void EnemyBossAISystem::update( const sdl_engine::FrameData& )
    {
       auto&                     reg { registry() };
       std::vector<entt::entity> change_tag_entity;
@@ -190,7 +191,7 @@ namespace myge
          }
       }
    }
-   void EnemyBossAISystem::onChargeEnd( ChargeEndEvent& e )
+   void EnemyBossAISystem::onChargeEnd( ChargeEndEvent& )
    {
       for ( auto [ entity, ai ] : getLogicUpdateable<EnemyBossAI>( registry() ).each() )
       {

@@ -1,9 +1,13 @@
-﻿#include <cmath>
-#include <engine/basic_component.hpp>
-#include <engine/core.hpp>
-#include <engine/graphics.hpp>
+﻿#include <pch.hpp>
+// my header
 #include <engine/systems/sprite_render_system.hpp>
-//
+// component
+#include <engine/basic_component.hpp>
+// core
+#include <engine/core.hpp>
+// graphics
+#include <engine/graphics.hpp>
+// resource
 #include <engine/rendering/resource/font_resource.hpp>
 namespace sdl_engine
 {
@@ -13,7 +17,7 @@ namespace sdl_engine
    }
    SpriteRenderSystem::~SpriteRenderSystem() {}
 
-   void SpriteRenderSystem::update( [[maybe_unused]] const FrameData& frame_ )
+   void SpriteRenderSystem::update( const FrameData& )
    {
       auto& reg { registry() };
       _renderer.renderClear( .0f, .0f, .0f, 1.f );
@@ -53,7 +57,7 @@ namespace sdl_engine
       for ( auto [ entity, sprt, repeat, trfm ] : reg.view<Sprite, RepeatSprite, Transform, RenderUITag>().each() )
       {
          if ( !reg.valid( entity ) ) { continue; }
-         for ( i32 i = 0; i < repeat.count; ++i )
+         for ( u32 i { 0 }; i < repeat.count; ++i )
          {
             f32 offset_x = repeat.offset.x * i;
             f32 offset_y = repeat.offset.y * i;

@@ -1,15 +1,17 @@
-﻿// my header
+﻿#include <pch.hpp>
+// my header
 #include <app/systems/score_system.hpp>
 // component
 #include <app/components/entity_type_tag.hpp>
 #include <app/components/score.hpp>
 #include <engine/basic_component.hpp>
 // event
-#include <app/event/dead_event.hpp>
+#include <app/events/dead_event.hpp>
 // session
 #include <app/session/score_session.hpp>
 // core
 #include <engine/core.hpp>
+// std
 #include <format>
 namespace
 {
@@ -31,7 +33,7 @@ namespace myge
       _event_listener.connect<&ScoreSystem::onScoreChanged, DeadEvent>( this );
    }
    ScoreSystem::~ScoreSystem() {}
-   void ScoreSystem::update( const sdl_engine::FrameData& frame_ ) {}
+   void ScoreSystem::update( const sdl_engine::FrameData& ) {}
    void ScoreSystem::onScoreChanged( DeadEvent& e )
    {
       auto& reg { registry() };

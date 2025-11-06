@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <engine/forward.hpp>
+#include <engine/core/forward_declarations.hpp>
 namespace myge
 {
    struct BoundingBox

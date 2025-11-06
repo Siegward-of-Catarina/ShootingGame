@@ -1,6 +1,7 @@
 ﻿// タイトルシーン
 // - メニューのハイライト/決定入力を受けてシーン遷移
 // - 開始時にBGMを生成して再生（SoundSystemで処理）
+#include <pch.hpp>
 // my header
 #include <app/scene/title_scene.hpp>
 // scene
@@ -16,8 +17,8 @@
 #include <app/systems/screen_bounds_system.hpp>
 #include <app/systems/sprite_brink_system.hpp>
 // event
-#include <app/event/key_down_event.hpp>
-#include <app/event/menu_button_event.hpp>
+#include <app/events/key_down_event.hpp>
+#include <app/events/menu_button_event.hpp>
 #include <engine/events/sound_events.hpp>
 // session
 #include <app/session/score_session.hpp>
@@ -48,7 +49,7 @@ myge::TitleScene::~TitleScene()
 
 void myge::TitleScene::start() {}    // 初期化処理（現状なし）
 
-void myge::TitleScene::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ ) {}
+void myge::TitleScene::update( const sdl_engine::FrameData& ) {}
 
 void myge::TitleScene::addSystems()
 {

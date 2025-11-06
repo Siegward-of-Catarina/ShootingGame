@@ -1,4 +1,5 @@
-﻿// my header
+﻿#include <pch.hpp>
+// my header
 #include <app/entity_factory.hpp>
 
 // components
@@ -28,6 +29,7 @@
 #include <app/components/transform_link.hpp>
 // basic_components
 #include <engine/basic_component.hpp>
+// core
 #include <engine/core.hpp>
 #include <engine/graphics.hpp>
 #include <engine/utils.hpp>
@@ -108,7 +110,7 @@ namespace myge
       return entity;
    }
 
-   entt::entity EntityFactory::createSoundEffect( const json& data_, const std::type_index& affiliation_id_ )
+   entt::entity EntityFactory::createSoundEffect( const json& data_ )
    {
       auto                    entity { _registry.create() };
       auto                    sound_key { sdl_engine::getRequireData<std::string>( data_, "sound_key" ) };
@@ -135,7 +137,7 @@ namespace myge
       return entity;
    }
 
-   entt::entity EntityFactory::createBGM( const json& data_, const std::type_index& affiliation_id_ )
+   entt::entity EntityFactory::createBGM( const json& data_ )
    {
       auto                        entity { _registry.create() };
       auto                        sound_key { sdl_engine::getRequireData<std::string>( data_, "sound_key" ) };
@@ -164,32 +166,33 @@ namespace myge
       _registry.emplace<RenderGameSpriteTag>( entity );
 
       // shooter or multiple shooter 取得
-      auto shooter_comp { _registry.try_get<Shooter>( shooter_ ) };
-      if ( !shooter_comp )
+      Shooter shooter_comp {};
+      if ( _registry.all_of<Shooter>( shooter_ ) ) { shooter_comp = _registry.get<Shooter>( shooter_ ); }
+      else
       {
          if ( auto mul_shooter_comp { _registry.try_get<MultipleShooter>( shooter_ ) }; mul_shooter_comp )
          {
-            shooter_comp = &mul_shooter_comp->shooters[ mul_shooter_comp->current_index ];
+            shooter_comp = mul_shooter_comp->shooters[ mul_shooter_comp->current_index ];
          }
       }
       // [transform] shooterの位置をそのまま使う
       auto trfm_comp { _registry.get<Transform>( shooter_ ) };
       {
-         if ( shooter_comp ) { trfm_comp.position += shooter_comp->spawn_position; }
+         trfm_comp.position += shooter_comp.spawn_position;
       }
       // [status]
       {
-         Status status { .hp { shooter_comp->bullet_hp },
-                         .max_hp { shooter_comp->bullet_hp },
-                         .atk { shooter_comp->bullet_atk } };
+         Status status { .hp { shooter_comp.bullet_hp },
+                         .max_hp { shooter_comp.bullet_hp },
+                         .atk { shooter_comp.bullet_atk } };
          _registry.emplace<Status>( entity, status );
       }
       // type別の設定
       // [velocity] shooterがvelocityを決める
-      Velocity velo { .vector { shooter_comp->bullet_direction * shooter_comp->speed } };
+      Velocity velo { .vector { shooter_comp.bullet_direction * shooter_comp.speed } };
       Sprite   sprt_comp {};
       {
-         switch ( shooter_comp->bullet_type )
+         switch ( shooter_comp.bullet_type )
          {
             case BulletType::Player :
                sprt_comp = createSprite( _resource_manager.getSprite( "player_bullet" ) );
@@ -1301,12 +1304,12 @@ namespace myge
             }
             else if ( entity_type == "sound_se" )
             {
-               auto entity { createSoundEffect( data, affiliation_id_ ) };
+               auto entity { createSoundEffect( data ) };
                entities.emplace_back( entity );
             }
             else if ( entity_type == "sound_bgm" )
             {
-               auto entity { createBGM( data, affiliation_id_ ) };
+               auto entity { createBGM( data ) };
                entities.emplace_back( entity );
             }
          }

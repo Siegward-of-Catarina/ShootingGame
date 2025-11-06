@@ -1,10 +1,13 @@
-﻿#include <engine/basic_component.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <engine/systems/fade_system.hpp>
+// component
+#include <engine/basic_component.hpp>
+// core
 #include <engine/core.hpp>
 // event
 #include <engine/events/fade_events.hpp>
 #include <engine/events/fade_render_layer_change_event.hpp>
-// system
-#include <engine/systems/fade_system.hpp>
 
 namespace
 {
@@ -17,6 +20,7 @@ namespace sdl_engine
    sdl_engine::FadeSystem::FadeSystem( i32 priority_, entt::registry& registry_, EventListener& event_listener_ )
      : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }, _fades {}
    {
+      _fades.reserve( 32 );
       _event_listener.connect<&FadeSystem::onFadeOutStart, FadeOutStartEvent>( this );
       _event_listener.connect<&FadeSystem::onFadeRenderLayerChange, FadeRenderLayerChangeEvent>( this );
       _event_listener.connect<&FadeSystem::onFadeSetAlpha, FadeSetAlphaEvent>( this );
@@ -26,102 +30,77 @@ namespace sdl_engine
 
    void sdl_engine::FadeSystem::update( const FrameData& frame_ )
    {
-      auto&                     reg { registry() };
-      std::vector<entt::entity> erase_entts {};
-      for ( auto& entity : _fades )
+      auto& reg { registry() };
+      // 更新対象のフェードを収集（RenderFadeTag/RenderFadeUnderUITag を持つ）
+      for ( auto [ entity, comp ] : reg.view<Fade>().each() )
       {
-         if ( !registry().valid( entity ) )
-         {
-            erase_entts.emplace_back( entity );
-            continue;
-         }
-         auto& fade { reg.get<Fade>( entity ) };
-         auto& sprt { reg.get<Sprite>( entity ) };
+         if ( !reg.valid( entity ) ) { continue; }
+         _fades.emplace( entity );
+      }
 
+      for ( auto entity : _fades )
+      {
+         if ( !reg.valid( entity ) || !reg.all_of<Fade>( entity ) ) { continue; }
+         auto& fade { reg.get<Fade>( entity ) };
+         auto& sprite { reg.get<Sprite>( entity ) };
          switch ( fade.state )
          {
             case Fade::State::FadeIn :
-               sprt.color.a -= fade.speed * frame_.delta_time;
-               if ( sprt.color.a < fade.end_alpha )
+               sprite.color.a -= fade.speed * frame_.delta_time;
+               if ( sprite.color.a < 0.001f )
                {
-                  sprt.color.a = fade.end_alpha;
-                  fade.state   = Fade::State::FadeInEnd;
+                  sprite.color.a = 0.0f;
+                  fade.state     = Fade::State::Idle;
                }
                break;
 
             case Fade::State::FadeOut :
-               sprt.color.a += fade.speed * frame_.delta_time;
-               if ( sprt.color.a > fade.target_out_alpha )
+               sprite.color.a += fade.speed * frame_.delta_time;
+               if ( sprite.color.a > fade.target_out_alpha - 0.001f )
                {
-                  sprt.color.a = fade.target_out_alpha;
-                  fade.state   = Fade::State::BlackOut;
+                  sprite.color.a = fade.target_out_alpha;
+                  fade.state     = Fade::State::BlackOut;    // 次はブラックアウト
                }
                break;
 
             case Fade::State::BlackOut :
-               fade.black_out_wait += frame_.delta_time;
-               if ( fade.black_out_wait > fade.black_out_duration )
-               {
-                  fade.state          = Fade::State::FadeOutEnd;
-                  fade.black_out_wait = 0.0f;
-               }
+               fade.black_out_duration -= frame_.delta_time;
+               if ( fade.black_out_duration <= 0.0f ) { fade.state = Fade::State::FadeIn; }
                break;
 
-            case Fade::State::FadeInEnd :
-               fade.state = Fade::State::Idle;
-               _event_listener.trigger<FadeInEndEvent>( { entity } );
-               break;
-
-            case Fade::State::FadeOutEnd :
-               _event_listener.trigger<FadeOutEndEvent>( { entity } );
-               // OutIn の場合、続けて In を開始
-               if ( fade.type == Fade::Type::OutIn ) { fade.state = Fade::State::FadeIn; }
-               break;
+            case Fade::State::Idle :
+            default : break;
          }
       }
-
-      // 無効化されたものを集合から除去
-      for ( auto& entt : erase_entts ) { _fades.erase( entt ); }
+      // 更新対象集合をクリア
+      _fades.clear();
    }
 
    void FadeSystem::onFadeOutStart( FadeOutStartEvent& e )
    {
-      if ( registry().all_of<Fade>( e.owner ) )
+      auto& reg { registry() };
+      if ( reg.valid( e.owner ) && reg.all_of<Fade>( e.owner ) )
       {
-         _fades.emplace( e.owner );
-         auto& fade { registry().get<Fade>( e.owner ) };
-         auto& sprt { registry().get<Sprite>( e.owner ) };
-
-         // start alpha override
-         if ( e.start_alpha_override >= 0.0f ) { sprt.color.a = e.start_alpha_override; }
+         auto& fade { reg.get<Fade>( e.owner ) };
          fade.state = Fade::State::FadeOut;
-
-         // パラメータのオーバーライド（指定時のみ）
-         if ( e.end_alpha_override >= 0.0f ) { fade.end_alpha = e.end_alpha_override; }
-         if ( e.start_alpha_override >= 0.0f ) { fade.target_out_alpha = e.start_alpha_override; }
-         if ( e.speed_override >= 0.0f ) { fade.speed = e.speed_override; }
-         if ( e.black_out_duration_override >= 0.0f ) { fade.black_out_duration = e.black_out_duration_override; }
-         if ( e.target_out_alpha_override >= 0.0f ) { fade.target_out_alpha = e.target_out_alpha_override; }
       }
    }
 
    void FadeSystem::onFadeRenderLayerChange( FadeRenderLayerChangeEvent& e )
    {
       auto& reg { registry() };
-      if ( reg.valid( e.fade_entity ) && reg.all_of<Fade>( e.fade_entity ) )
+      if ( reg.valid( e.fade_entity ) )
       {
+         // UI 下/上のタグを切り替え
          if ( e.under_ui )
          {
-            if ( reg.all_of<RenderFadeTag>( e.fade_entity ) ) { reg.remove<RenderFadeTag>( e.fade_entity ); }
             reg.emplace<RenderFadeUnderUITag>( e.fade_entity );
+            reg.remove<RenderFadeTag>( e.fade_entity );
          }
          else
          {
-            if ( reg.all_of<RenderFadeUnderUITag>( e.fade_entity ) )
-            {
-               reg.remove<RenderFadeUnderUITag>( e.fade_entity );
-            }
             reg.emplace<RenderFadeTag>( e.fade_entity );
+            reg.remove<RenderFadeUnderUITag>( e.fade_entity );
          }
       }
    }
@@ -131,8 +110,8 @@ namespace sdl_engine
       auto& reg { registry() };
       if ( reg.valid( e.owner ) && reg.all_of<Sprite>( e.owner ) )
       {
-         auto& sprt { reg.get<Sprite>( e.owner ) };
-         sprt.color.a = e.alpha;
+         auto& sprite { reg.get<Sprite>( e.owner ) };
+         sprite.color.a = e.alpha;
       }
    }
 }    // namespace sdl_engine

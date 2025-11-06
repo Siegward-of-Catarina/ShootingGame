@@ -1,12 +1,15 @@
-﻿#include <app/components/player_input.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <app/systems/shoot_system.hpp>
+// component
+#include <app/components/player_input.hpp>
 #include <app/components/shooter.hpp>
 #include <app/components/target.hpp>
-#include <app/entity_factory.hpp>
-#include <app/systems/shoot_system.hpp>
 #include <engine/basic_component.hpp>
+// core
 #include <engine/core.hpp>
-//
-#include <app/event/shoot_event.hpp>
+// event
+#include <app/events/shoot_event.hpp>
 namespace myge
 {
 

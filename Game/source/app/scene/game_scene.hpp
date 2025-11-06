@@ -1,7 +1,5 @@
 ﻿#pragma once
-#include <engine/forward.hpp>
 #include <engine/scene/scene.hpp>
-#include <engine/utils.hpp>
 namespace myge
 {
    struct ShootEvent;

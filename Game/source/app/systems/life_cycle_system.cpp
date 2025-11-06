@@ -1,14 +1,18 @@
-﻿#include <app/components/bounding_box.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <app/systems/life_cycle_system.hpp>
+// component
+#include <app/components/bounding_box.hpp>
 #include <app/components/entity_type_tag.hpp>
 #include <app/components/lifecycle_tags.hpp>
-#include <app/systems/life_cycle_system.hpp>
 #include <engine/basic_component.hpp>
+// core
 #include <engine/core.hpp>
 // event
-#include <app/event/charge_end_event.hpp>
-#include <app/event/dead_event.hpp>
-#include <app/event/dead_laser_event.hpp>
-#include <app/event/game_end_event.hpp>
+#include <app/events/charge_end_event.hpp>
+#include <app/events/dead_event.hpp>
+#include <app/events/dead_laser_event.hpp>
+#include <app/events/game_end_event.hpp>
 #include <engine/events/sprite_anim_end_event.hpp>
 namespace
 {
@@ -114,7 +118,7 @@ namespace myge
          if ( wait.elapsed > wait.wait_time ) { _change_tag_entities.emplace_back( entity ); }
       }
    }
-   void LifeCycleSystem::EnteringEntityUpdate( const sdl_engine::FrameData& frame_ )
+   void LifeCycleSystem::EnteringEntityUpdate( const sdl_engine::FrameData& )
    {
       auto& reg { registry() };
       // 画面外で存在しているとき
@@ -140,17 +144,17 @@ namespace myge
          }
       }
    }
-   void LifeCycleSystem::ActiveEntityUpdate( const sdl_engine::FrameData& frame_ )
+   void LifeCycleSystem::ActiveEntityUpdate( const sdl_engine::FrameData& )
    {
       auto& reg { registry() };
       for ( auto [ entity ] : reg.view<ActiveTag>().each() ) {}
    }
-   void LifeCycleSystem::DyingEntityUpdate( const sdl_engine::FrameData& frame_ )
+   void LifeCycleSystem::DyingEntityUpdate( const sdl_engine::FrameData& )
    {
       auto& reg { registry() };
       for ( auto [ entity ] : reg.view<DyingTag>().each() ) {}
    }
-   void LifeCycleSystem::DeadEntityUpdate( const sdl_engine::FrameData& frame_ )
+   void LifeCycleSystem::DeadEntityUpdate( const sdl_engine::FrameData& )
    {
       auto& reg { registry() };
       for ( auto [ entity ] : reg.view<DeadTag>().each() )
@@ -193,7 +197,7 @@ namespace myge
          reg.emplace<DeadTag>( entity );
       }
    }
-   void LifeCycleSystem::onLaserDead( DeadLaserEvent& e )
+   void LifeCycleSystem::onLaserDead( DeadLaserEvent& )
    {
       // ボスレーザーを全て削除
       for ( auto [ entity ] : registry().view<EnemyBossLaserTag>().each() ) { registry().destroy( entity ); }

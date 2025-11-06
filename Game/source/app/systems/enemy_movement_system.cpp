@@ -1,4 +1,5 @@
-﻿// my header
+﻿#include <pch.hpp>
+// my header
 #include <app/systems/enemy_movement_system.hpp>
 // components
 #include <app/components/enemy_boss_ai.hpp>
@@ -90,7 +91,7 @@ namespace myge
       }
    }
 
-   void EnemyMovementSystem::stopAndShootMovement( const sdl_engine::FrameData& frame_ )
+   void EnemyMovementSystem::stopAndShootMovement( const sdl_engine::FrameData& )
    {
       auto&                     reg { registry() };
       std::vector<entt::entity> change_tag_entity;

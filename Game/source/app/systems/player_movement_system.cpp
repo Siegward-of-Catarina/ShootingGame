@@ -1,8 +1,12 @@
-﻿#include <app/components/lifecycle_tags.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <app/systems/player_movement_system.hpp>
+// component
+#include <app/components/lifecycle_tags.hpp>
 #include <app/components/player_input.hpp>
 #include <app/components/player_movement.hpp>
-#include <app/systems/player_movement_system.hpp>
 #include <engine/basic_component.hpp>
+// core
 #include <engine/core.hpp>
 
 namespace myge

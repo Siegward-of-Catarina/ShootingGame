@@ -1,12 +1,15 @@
-﻿#include <app/components/damage.hpp>
-#include <app/components/sprite_brink.hpp>
+﻿#include <pch.hpp>
+// my header
 #include <app/systems/sprite_brink_system.hpp>
-#include <cmath>
+// component
+#include <app/components/damage.hpp>
+#include <app/components/sprite_brink.hpp>
 #include <engine/basic_component.hpp>
+// core
 #include <engine/core.hpp>
 
 // event
-#include <app/event/dead_event.hpp>
+#include <app/events/dead_event.hpp>
 namespace myge
 {
    SpriteBrinkSystem::SpriteBrinkSystem( i32                        priority_,

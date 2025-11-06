@@ -1,10 +1,14 @@
-﻿#include <app/components/bounding_box.hpp>
-#include <app/components/entity_type_tag.hpp>
+﻿#include <pch.hpp>
+// my header
 #include <app/systems/out_of_screen_system.hpp>
+// component
+#include <app/components/bounding_box.hpp>
+#include <app/components/entity_type_tag.hpp>
 #include <engine/basic_component.hpp>
+// core
 #include <engine/core.hpp>
 // event
-#include <app/event/dead_event.hpp>
+#include <app/events/dead_event.hpp>
 
 namespace
 {

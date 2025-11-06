@@ -8,8 +8,8 @@ namespace sdl_engine
    struct Transform
    {
       sdl_engine::Vector2_f32 position;
-      f32                     angle;
-      f32                     scale;
+      f32                     angle {};
+      f32                     scale {};
    };
 
    // JSON から Transform を生成（px/py/angle/scale）

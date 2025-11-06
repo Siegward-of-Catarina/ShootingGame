@@ -1,9 +1,13 @@
-﻿#include <engine/components/Velocity.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <engine/systems/scale_system.hpp>
+// component
+#include <engine/components/Velocity.hpp>
 #include <engine/components/direct_control_tags.hpp>
 #include <engine/components/transform.hpp>
+// core
 #include <engine/core/game_context.hpp>
 #include <engine/core/game_timer.hpp>
-#include <engine/systems/scale_system.hpp>
 namespace sdl_engine
 {
    ScaleSystem::ScaleSystem( i32 priority_, entt::registry& registry_ ) : SystemInterface { priority_, registry_ } {}

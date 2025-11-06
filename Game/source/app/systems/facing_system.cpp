@@ -1,15 +1,20 @@
-﻿#include <app/components/facing_tag.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <app/systems/facing_system.hpp>
+// component
+#include <app/components/facing_tag.hpp>
 #include <app/components/shooter.hpp>
 #include <app/components/target.hpp>
-#include <app/systems/facing_system.hpp>
-#include <cmath>
 #include <engine/basic_component.hpp>
+// core
 #include <engine/core.hpp>
+// std
+#include <cmath>
 namespace myge
 {
    FacingSystem::FacingSystem( i32 priority_, entt::registry& registry_ ) : SystemInterface { priority_, registry_ } {}
    FacingSystem::~FacingSystem() {}
-   void FacingSystem::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ )
+   void FacingSystem::update( const sdl_engine::FrameData& )
    {
       auto& reg { registry() };
       // factingはスクリーン内入場時に違和感をなくすため常に更新する

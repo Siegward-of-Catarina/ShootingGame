@@ -1,7 +1,12 @@
-﻿#include <engine/core.hpp>
-#include <engine/events/event_listener.hpp>
-#include <engine/managers/resource_manager.hpp>
+﻿#include <pch.hpp>
+// my header
 #include <engine/scene/scene.hpp>
+// core
+#include <engine/core.hpp>
+// event listener
+#include <engine/events/event_listener.hpp>
+// manager
+#include <engine/managers/resource_manager.hpp>
 
 namespace sdl_engine
 {

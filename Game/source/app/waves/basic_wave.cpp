@@ -1,4 +1,5 @@
-﻿// my header
+﻿#include <pch.hpp>
+// my header
 #include <app/waves/basic_wave.hpp>
 // factory
 #include <app/entity_factory.hpp>
@@ -24,7 +25,7 @@ namespace myge
          entities = entts;
       }
    }
-   void BasicWave::update( [[maybe_unused]] f32 delta_time_ )
+   void BasicWave::update( f32 )
    {
       i32 i { 0 };
       for ( auto& entity : entities )

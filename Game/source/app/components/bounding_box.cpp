@@ -1,4 +1,6 @@
-﻿#include <app/components/bounding_box.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <app/components/bounding_box.hpp>
 
 namespace myge
 {

@@ -1,8 +1,15 @@
-﻿#include <engine/basic_component.hpp>
-#include <engine/core.hpp>
-#include <engine/graphics.hpp>
+﻿#include <pch.hpp>
+// my header
 #include <engine/managers/scene_manager.hpp>
+// core
+#include <engine/core.hpp>
+// graphics
+#include <engine/graphics.hpp>
+// scene
 #include <engine/scene/scene.hpp>
+// component
+#include <engine/basic_component.hpp>
+// system
 #include <engine/systems/fade_system.hpp>
 // event
 #include <engine/events/fade_events.hpp>
@@ -66,4 +73,5 @@ namespace sdl_engine
          _enable_update = true;
       }
    }
+   void SceneManager::setGameSpeed( const f32 speed_ ) { _game_timer.setGameSpeed( speed_ ); }
 }    // namespace sdl_engine

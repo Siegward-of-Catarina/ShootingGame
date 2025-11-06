@@ -1,15 +1,13 @@
-﻿// my header
+﻿#include <pch.hpp>
+// my header
 #include <app/systems/life_ui_system.hpp>
-
 // component
 #include <app/components/damage.hpp>
 #include <app/components/entity_type_tag.hpp>
 #include <app/components/status.hpp>
 #include <engine/basic_component.hpp>
 // event
-#include "score_system.hpp"
-
-#include <app/event/player_life_changed_event.hpp>
+#include <app/events/player_life_changed_event.hpp>
 #include <engine/events/event_listener.hpp>
 namespace myge
 {

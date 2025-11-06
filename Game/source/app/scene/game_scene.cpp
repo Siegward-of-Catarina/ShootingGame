@@ -1,6 +1,4 @@
-﻿// ゲーム本編のテストシーン。
-// - Waveの開始/更新/終了を状態機械で管理
-// - 各種システムの登録とイベントハンドラの受け口を提供
+﻿#include <pch.hpp>
 // my header
 #include <app/scene/game_scene.hpp>
 // scene
@@ -32,12 +30,12 @@
 #include <app/systems/sprite_brink_system.hpp>
 #include <app/systems/transform_link_system.hpp>
 // event
-#include <app/event/append_charge_effect_event.hpp>
-#include <app/event/append_dead_effect_event.hpp>
-#include <app/event/dead_event.hpp>
-#include <app/event/game_end_event.hpp>
-#include <app/event/play_damage_se_event.hpp>
-#include <app/event/shoot_event.hpp>
+#include <app/events/append_charge_effect_event.hpp>
+#include <app/events/append_dead_effect_event.hpp>
+#include <app/events/dead_event.hpp>
+#include <app/events/game_end_event.hpp>
+#include <app/events/play_damage_se_event.hpp>
+#include <app/events/shoot_event.hpp>
 #include <engine/events/fade_events.hpp>
 #include <engine/events/sound_events.hpp>
 // engine
@@ -256,8 +254,8 @@ namespace myge
          if ( mul_shooter_comp )
          {
             // CurrentIndexに対応したShootSEを取得して再生
-            auto& shoot_se = mul_shoot_se->shoot_ses[ mul_shooter_comp->current_index ];
-            sound          = factory.createSoundEffect( shoot_se.sound_key, 0, shoot_se.volume, 0.0f );
+            auto& shoot_se_comp = mul_shoot_se->shoot_ses[ mul_shooter_comp->current_index ];
+            sound               = factory.createSoundEffect( shoot_se_comp.sound_key, 0, shoot_se_comp.volume, 0.0f );
          }
       }
    }
@@ -268,7 +266,7 @@ namespace myge
       EntityFactory factory { registry(), resourceManager() };
       factory.createLaserBeam( e.shooter, typeid( AffilGameScene ) );
       auto shoot_se = registry().try_get<EXShootSE>( e.shooter );
-      auto sound    = factory.createSoundEffect( shoot_se->sound_key, 0, shoot_se->volume, 0.0f );
+      factory.createSoundEffect( shoot_se->sound_key, 0, shoot_se->volume, 0.0f );
    }
 
    void GameScene::onGameEnd( GameEndEvent& e )
@@ -296,7 +294,7 @@ namespace myge
 
             if ( auto dead_se { reg.try_get<DeadSE>( entity ) }; dead_se )
             {
-               auto se_entity = factory.createSoundEffect( dead_se->sound_key, 0, dead_se->volume, 0.0f );
+               factory.createSoundEffect( dead_se->sound_key, 0, dead_se->volume, 0.0f );
             }
          }
       }

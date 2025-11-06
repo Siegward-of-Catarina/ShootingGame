@@ -1,4 +1,5 @@
-﻿// my header
+﻿#include <pch.hpp>
+// my header
 #include <engine/sound/sound_mixer.hpp>
 // core
 #include <engine/core.hpp>
@@ -14,7 +15,7 @@ namespace sdl_engine
       auto mixer = static_cast<SoundMixer*>( userdata_ );
       mixer->onSeTrackStopped( track_ );
    }
-   void SoundMixer::bgmTrackStoppedCallback( void* userdata_, MIX_Track* track_ )
+   void SoundMixer::bgmTrackStoppedCallback( void* userdata_, MIX_Track* )
    {
       auto mixer = static_cast<SoundMixer*>( userdata_ );
       mixer->onBgmTrackStopped();
@@ -39,7 +40,7 @@ namespace sdl_engine
      , _next_bgm_properties {}
    {
       // ミキサーの初期化
-      if ( !MIX_Init() ) { throw GameException( "SDL_Mixerの初期化に失敗しました" ); }
+      if ( !MIX_Init() ) { throw GameException( "MIX_Init failed" ); }
 
       // ミキサー生成
       auto mixer { MIX_CreateMixerDevice( SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr ) };
@@ -76,7 +77,7 @@ namespace sdl_engine
       auto audio { MIX_LoadAudio( _sdl_mixer.get(), path_.data(), true ) };
       if ( !audio )
       {
-         std::string msg = "音声ファイルのロードに失敗しました: " + std::string( SDL_GetError() );
+         std::string msg = "MIX_LoadAudio failed : " + std::string( SDL_GetError() );
          throw GameException( msg.c_str() );
       }
       return audio;
@@ -114,7 +115,7 @@ namespace sdl_engine
             // ループ回数セット
             auto properties { MIX_GetTrackProperties( track.get() ) };
             SDL_SetNumberProperty( properties, MIX_PROP_PLAY_LOOPS_NUMBER, loop_count_ );
-            // 　再生
+            // 再生
             MIX_PlayTrack( track.get(), properties );
             break;
          }
@@ -140,7 +141,7 @@ namespace sdl_engine
             SDL_SetNumberProperty( properties, MIX_PROP_PLAY_LOOPS_NUMBER, loop_count_ );
             // 音量セット
             MIX_SetTrackGain( track.get(), volume_ );
-            // 　再生
+            // 再生
             MIX_PlayTrack( track.get(), properties );
             break;
          }
@@ -167,7 +168,7 @@ namespace sdl_engine
          MIX_StopTrack( _bgm_track.get(), MIX_TrackMSToFrames( _bgm_track.get(), fadeout_time_ms_ ) );
       }
    }
-   // SE/BGMの一時停止、再開、停止 BGM用trackが増える場合を加味してタグでの制御にしておく　増えるとは言ってない
+   // SE/BGMの一時停止、再開、停止 BGM用trackが増える場合を加味してタグでの制御にしておく 増えるとは言ってない
    void SoundMixer::pauseSE() { MIX_PauseTag( _sdl_mixer.get(), SE_TAG ); }
    void SoundMixer::pauseBGM() { MIX_PauseTag( _sdl_mixer.get(), BGM_TAG ); }
 

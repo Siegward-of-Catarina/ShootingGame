@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <engine/forward.hpp>
+#include <engine/core/forward_declarations.hpp>
 #include <optional>
 namespace sdl_engine
 {
@@ -22,7 +22,7 @@ namespace sdl_engine
       void   enableFadeOutIn( entt::entity fade_ ) { _fade = fade_; };
       Scene& currentScene() { return *_current_scene; };
 
-      void setGameSpeed( const f32 speed_ ) { _game_timer.setGameSpeed( speed_ ); };
+      void setGameSpeed( const f32 speed_ );
       // 追加: フェードエンティティの取得（シーンから制御したい場合に使用）
       std::optional<entt::entity> fadeEntity() const { return _fade; }
 

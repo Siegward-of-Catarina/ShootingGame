@@ -1,4 +1,7 @@
-﻿#include <engine/components/sprite_anim.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <engine/components/sprite_anim.hpp>
+// manager
 #include <engine/managers/resource_manager.hpp>
 namespace sdl_engine
 {

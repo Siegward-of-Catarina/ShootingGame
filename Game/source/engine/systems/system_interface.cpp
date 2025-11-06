@@ -1,5 +1,8 @@
-﻿#include <engine/basic_component.hpp>
+﻿#include <pch.hpp>
+// my header
 #include <engine/systems/system_interface.hpp>
+// component
+#include <engine/basic_component.hpp>
 
 namespace sdl_engine
 {

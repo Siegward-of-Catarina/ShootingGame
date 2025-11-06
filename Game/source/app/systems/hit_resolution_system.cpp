@@ -1,4 +1,5 @@
-﻿// my header
+﻿#include <pch.hpp>
+// my header
 #include <app/systems/hit_resolution_system.hpp>
 // core
 #include <engine/core.hpp>
@@ -8,10 +9,10 @@
 #include <app/components/entity_type_tag.hpp>
 #include <app/components/status.hpp>
 // event
-#include <app/event/append_dead_effect_event.hpp>
-#include <app/event/hit_event.hpp>
-#include <app/event/play_damage_se_event.hpp>
-#include <app/event/player_life_changed_event.hpp>
+#include <app/events/append_dead_effect_event.hpp>
+#include <app/events/hit_event.hpp>
+#include <app/events/play_damage_se_event.hpp>
+#include <app/events/player_life_changed_event.hpp>
 namespace myge
 {
    HitResolutionSystem::HitResolutionSystem( i32                        priority_,
@@ -22,7 +23,7 @@ namespace myge
       _event_listener.connect<&HitResolutionSystem::onHit, HitEvent>( this );
    }
    HitResolutionSystem::~HitResolutionSystem() {}
-   void HitResolutionSystem::update( const sdl_engine::FrameData& frame_ ) {}
+   void HitResolutionSystem::update( const sdl_engine::FrameData& ) {}
    void HitResolutionSystem::onHit( HitEvent& e )
    {
       auto&                     reg = registry();

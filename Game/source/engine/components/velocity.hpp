@@ -8,7 +8,8 @@ namespace sdl_engine
    struct Velocity
    {
       sdl_engine::Vector2_f32 vector;
-      f32                     anguler, scale_rate;
+      f32                     anguler {};
+      f32                     scale_rate {};
    };
 
    // JSON から Velocity を生成（キーは実装側に依存）

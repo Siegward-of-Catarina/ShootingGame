@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <app/event/player_life_changed_event.hpp>
+#include <app/events/player_life_changed_event.hpp>
 #include <engine/forward.hpp>
 #include <engine/systems/system_interface.hpp>
 

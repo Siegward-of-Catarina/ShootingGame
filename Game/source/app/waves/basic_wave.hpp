@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <app/forward_declarations.hpp>
 #include <app/systems/enemy_movement_system.hpp>
 #include <app/waves/wave.hpp>
 #include <engine/core/forward_declarations.hpp>

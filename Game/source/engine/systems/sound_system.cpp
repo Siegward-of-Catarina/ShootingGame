@@ -1,6 +1,8 @@
 ﻿// サウンド再生システム
 // - SoundEffect/BackgroundMusic コンポーネントを検出してミキサへ再生依頼
-// - 依頼後はエンティティを破棄（トリガーとしての一時オブジェクト）
+// -依頼後はエンティティを破棄（トリガーとしての一時オブジェクト）
+#include <pch.hpp>
+// my header
 #include <engine/systems/sound_system.hpp>
 // compoenent
 #include <engine/components/background_music.hpp>

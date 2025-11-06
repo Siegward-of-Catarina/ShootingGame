@@ -1,10 +1,13 @@
-﻿#include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
-#include <engine/components/text.hpp>
-#include <engine/core/game_exception.hpp>
+﻿#include <pch.hpp>
+// my header
 #include <engine/rendering/renderer.hpp>
+// resource
 #include <engine/rendering/resource/color.hpp>
 #include <engine/rendering/resource/font_resource.hpp>
+// exception
+#include <engine/core/game_exception.hpp>
+// sdl
+#include <SDL3_image/SDL_image.h>
 namespace sdl_engine
 {
    Renderer::Renderer() : _sdl_renderer { nullptr, nullptr } {}
@@ -14,7 +17,7 @@ namespace sdl_engine
       SDL_Renderer* renderer_raw = SDL_CreateRenderer( window_, nullptr );
       if ( !renderer_raw )
       {
-         std::string msg = "SDL rendererを作成できませんでした: " + std::string( SDL_GetError() );
+         std::string msg = "SDL_CreateRenderer failed : " + std::string( SDL_GetError() );
          throw GameException( msg.c_str() );
       }
       _sdl_renderer = { renderer_raw, &SDL_DestroyRenderer };
@@ -27,7 +30,7 @@ namespace sdl_engine
       auto texture { IMG_LoadTexture( _sdl_renderer.get(), path.data() ) };
       if ( !texture )
       {
-         std::string msg = "SDL_Textureをロードに失敗しました: " + std::string( SDL_GetError() );
+         std::string msg = "IMG_LoadTexture failed : " + std::string( SDL_GetError() );
          throw GameException( msg.c_str() );
       }
 
@@ -46,7 +49,7 @@ namespace sdl_engine
       auto texture { SDL_CreateTextureFromSurface( _sdl_renderer.get(), surface ) };
       if ( !texture )
       {
-         std::string msg = "SDL_Textureを作成できませんでした: " + std::string( SDL_GetError() );
+         std::string msg = "SDL_CreateTextureFromSurface failed : " + std::string( SDL_GetError() );
          throw GameException( msg.c_str() );
       }
 

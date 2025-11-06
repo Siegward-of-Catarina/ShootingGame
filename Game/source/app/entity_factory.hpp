@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <engine/forward.hpp>
+#include <engine/core/forward_declarations.hpp>
 #include <engine/math.hpp>
 #include <engine/utils.hpp>
 #include <typeindex>
@@ -30,13 +30,13 @@ namespace myge
                                       const f32              volume_,
                                       const f32              delay_ );
       // for json
-      entt::entity createSoundEffect( const json& data_, const std::type_index& affiliation_id_ );
+      entt::entity createSoundEffect( const json& data_ );
       entt::entity createBGM( const std::string_view resource_key_,
                               const i64              loop_count_,
                               const i64              fade_time_ms_,
                               const f32              volume_ );
       // for json
-      entt::entity createBGM( const json& data_, const std::type_index& affiliation_id_ );
+      entt::entity createBGM( const json& data_ );
       entt::entity createBullet( entt::entity& shooter_, const std::type_index& affiliation_id_ );
       entt::entity createLaserBeam( entt::entity& shooter_, const std::type_index& affiliation_id_ );
       entt::entity createDeadEffect( entt::entity dead_entt_, const std::type_index& affiliation_id_ );

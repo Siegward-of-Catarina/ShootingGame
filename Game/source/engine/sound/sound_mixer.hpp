@@ -22,7 +22,7 @@ namespace sdl_engine
        * @param userdata_ SoundMixerのインスタンスへのポインタ
        * @param track_ 使用しない
        */
-      static void bgmTrackStoppedCallback( void* userdata_, [[maybe_unused]] MIX_Track* track_ );
+      static void bgmTrackStoppedCallback( void* userdata_, MIX_Track* );
 
    private:    // inner callbacks
       void onSeTrackStopped( MIX_Track* track_ );

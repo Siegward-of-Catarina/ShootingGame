@@ -1,4 +1,6 @@
-﻿#include <engine/components/velocity.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <engine/components/velocity.hpp>
 namespace sdl_engine
 {
    Velocity createVelocity( const json& data_ )

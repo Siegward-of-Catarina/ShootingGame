@@ -1,4 +1,6 @@
-﻿#include <engine/components/render_type_tag.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <engine/components/render_type_tag.hpp>
 namespace sdl_engine
 {
    void emplaceRenderTypeTag( entt::registry& registry_, entt::entity entity_, std::string_view type_ )

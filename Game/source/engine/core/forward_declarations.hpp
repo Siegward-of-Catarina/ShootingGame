@@ -1,16 +1,7 @@
 ﻿#pragma once
-#include <SDL3/SDL_render.h>
-#include <SDL3/SDL_video.h>
-#include <cstdint>
-#include <entt/entt.hpp>
-#include <memory>
-#include <queue>
-#include <string>
-#include <string_view>
-#include <vector>
+
 namespace sdl_engine
 {
-   // クラスの前方宣言
    class EngineContext;
    struct FrameData;
    class GameTimer;
@@ -43,13 +34,13 @@ namespace sdl_engine
    struct RenderableTag;
    struct Text;
 }    // namespace sdl_engine
-// SDLの前方宣言
+
 struct SDL_Texture;
 struct SDL_Window;
 struct SDL_Renderer;
 struct SDL_Mixer;
 
-// 型エイリアス
+// Type aliases
 using u64 = std::uint64_t;
 using u32 = std::uint32_t;
 using u16 = std::uint16_t;

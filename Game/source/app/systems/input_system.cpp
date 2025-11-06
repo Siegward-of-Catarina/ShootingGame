@@ -1,11 +1,16 @@
-﻿#include <app/components/player_input.hpp>
-#include <app/components/title_input.hpp>
+﻿#include <pch.hpp>
+// my header
 #include <app/systems/input_system.hpp>
+// component
+#include <app/components/player_input.hpp>
+#include <app/components/title_input.hpp>
 #include <engine/basic_component.hpp>
+// core
 #include <engine/core.hpp>
-#include <engine/graphics.hpp>
 // event
-#include <app/event/key_down_event.hpp>
+#include <app/events/key_down_event.hpp>
+// resource
+#include <engine/rendering/resource/sprite_anim_resource.hpp>
 
 namespace myge
 {
@@ -18,7 +23,7 @@ namespace myge
    {
    }
    InputSystem::~InputSystem() {}
-   void InputSystem::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ )
+   void InputSystem::update( const sdl_engine::FrameData& )
    {
       for ( auto [ entity, input, anim ] :
             getLogicUpdateable<PlayerInput, sdl_engine::SpriteAnim>( registry() ).each() )

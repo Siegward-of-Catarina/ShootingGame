@@ -27,7 +27,8 @@ namespace sdl_engine
       auto key_str = std::string( key_ );
       if ( !data_.contains( key_str ) || data_.at( key_str ).is_null() )
       {
-         std::string error_msg = "loadJsonNotice::[" + key_str + "]:必須キーが存在しないため作成できません";
+         std::string error_msg =
+           "loadJsonNotice::[" + key_str + "] : required key does not exist and cannot be created.";
          throw GameException( error_msg.c_str() );
       }
       return data_.at( key_str ).get<T>();

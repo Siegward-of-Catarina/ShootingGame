@@ -1,5 +1,9 @@
-﻿#include <engine/components/text.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <engine/components/text.hpp>
+// resource manager
 #include <engine/managers/resource_manager.hpp>
+// resource
 #include <engine/rendering/resource/font_resource.hpp>
 namespace sdl_engine
 {

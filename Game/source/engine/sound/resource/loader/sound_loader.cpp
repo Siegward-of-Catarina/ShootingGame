@@ -1,5 +1,9 @@
-﻿#include <engine/sound/resource/loader/sound_loader.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <engine/sound/resource/loader/sound_loader.hpp>
+// resource
 #include <engine/sound/resource/sound_resource.hpp>
+// sound
 #include <engine/sound/sound_mixer.hpp>
 namespace sdl_engine
 {
@@ -8,7 +12,7 @@ namespace sdl_engine
       auto path_ = getRequireData<std::string>( data_, "file_path" );
       if ( !std::filesystem::exists( path_ ) )
       {
-         std::string msg = "音声ファイルが存在しません: " + std::string( path_ );
+         std::string msg = "audio file does not exist : " + std::string( path_ );
          throw GameException( msg.c_str() );
       }
 

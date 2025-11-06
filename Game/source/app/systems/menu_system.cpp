@@ -1,11 +1,15 @@
-﻿#include <app/components/button_ui.hpp>
-#include <app/components/title_menu.hpp>
+﻿#include <pch.hpp>
+// my header
 #include <app/systems/menu_system.hpp>
+// component
+#include <app/components/button_ui.hpp>
+#include <app/components/title_menu.hpp>
+// core
 #include <engine/core.hpp>
 // event
-#include <app/event/highlight_event.hpp>
-#include <app/event/key_down_event.hpp>
-#include <app/event/menu_button_event.hpp>
+#include <app/events/highlight_event.hpp>
+#include <app/events/key_down_event.hpp>
+#include <app/events/menu_button_event.hpp>
 
 namespace
 {
@@ -16,16 +20,16 @@ namespace myge
    MenuSystem::MenuSystem( i32 priority_, entt::registry& registry_, sdl_engine::EventListener& event_listener_ )
      : SystemInterface { priority_, registry_ }, _event_listener { event_listener_ }, _down_space_key { false }
    {
-      for ( auto [ entt, menu ] : registry().view<TitleMenu>().each() )
+      for ( auto [ entity, menu ] : registry().view<TitleMenu>().each() )
       {
          _event_listener.trigger<HighlightEvent>( { menu.menu_ui[ menu.selected ] } );
       }
       _event_listener.connect<&MenuSystem::onInputAction, KeyDownEvent>( this );
    }
    MenuSystem::~MenuSystem() {}
-   void MenuSystem::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ )
+   void MenuSystem::update( const sdl_engine::FrameData& )
    {
-      for ( auto [ entt, menu ] : registry().view<TitleMenu>().each() )
+      for ( auto [ entity, menu ] : registry().view<TitleMenu>().each() )
       {
          if ( change )
          {
@@ -44,7 +48,7 @@ namespace myge
    }
    void MenuSystem::onInputAction( KeyDownEvent& e )
    {
-      for ( auto [ entt, menu ] : registry().view<TitleMenu>().each() )
+      for ( auto [ entity, menu ] : registry().view<TitleMenu>().each() )
       {
          if ( e.down_key == KeyDownEvent::EnableKeys::Down )
          {

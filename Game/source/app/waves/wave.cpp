@@ -1,4 +1,6 @@
-﻿#include <app/waves/wave.hpp>
+﻿#include <pch.hpp>
+// my header
+#include <app/waves/wave.hpp>
 namespace myge
 {
    Wave::Wave( WaveDependencies& dependencies_ )

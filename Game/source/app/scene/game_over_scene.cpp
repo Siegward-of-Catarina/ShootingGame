@@ -1,5 +1,6 @@
 ﻿// ゲームオーバーシーン
 // - Continue(=Start) でリトライ、Exitでタイトルへ戻る
+#include <pch.hpp>
 // my header
 #include <app/scene/game_over_scene.hpp>
 // scene
@@ -17,8 +18,8 @@
 // core
 #include <engine/core.hpp>
 // event
-#include <app/event/key_down_event.hpp>
-#include <app/event/menu_button_event.hpp>
+#include <app/events/key_down_event.hpp>
+#include <app/events/menu_button_event.hpp>
 // session
 #include <app/session/score_session.hpp>
 
@@ -45,7 +46,7 @@ myge::GameOverScene::~GameOverScene()
 
 void myge::GameOverScene::start() {}    // 初期化処理（現状なし）
 
-void myge::GameOverScene::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ ) {}
+void myge::GameOverScene::update( const sdl_engine::FrameData& ) {}
 
 void myge::GameOverScene::addSystems()
 {

@@ -1,4 +1,5 @@
-﻿// my header
+﻿#include <pch.hpp>
+// my header
 #include <app/systems/transform_link_system.hpp>
 
 // component
@@ -7,7 +8,7 @@
 // core
 #include <engine/core.hpp>
 // event
-#include <app/event/dead_event.hpp>
+#include <app/events/dead_event.hpp>
 
 namespace
 {

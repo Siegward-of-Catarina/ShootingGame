@@ -1,8 +1,13 @@
-#include <app/components/highlightable.hpp>
-#include <app/event/highlight_event.hpp>
+#include <pch.hpp>
+// my header
 #include <app/systems/highlight_system.hpp>
+// component
+#include <app/components/highlightable.hpp>
 #include <engine/basic_component.hpp>
+// event
+#include <app/events/highlight_event.hpp>
 #include <engine/events/event_listener.hpp>
+
 namespace myge
 {
    HighlightSystem::HighlightSystem( i32                        priority_,
@@ -14,7 +19,7 @@ namespace myge
       _event_listener.connect<&HighlightSystem::onHighlight, HighlightEvent>( this );
    }
    HighlightSystem::~HighlightSystem() {}
-   void HighlightSystem::update( [[maybe_unused]] const sdl_engine::FrameData& frame_ )
+   void HighlightSystem::update( const sdl_engine::FrameData& )
    {
       if ( _is_changed )
       {
@@ -31,10 +36,10 @@ namespace myge
    void HighlightSystem::onHighlight( HighlightEvent& e )
    {
       auto& reg { registry() };
-      for ( auto [ entt, select_txt ] : reg.view<Highlightable>().each() )
+      for ( auto [ entity, select_txt ] : reg.view<Highlightable>().each() )
       {
-         if ( !reg.valid( entt ) ) { continue; }
-         if ( entt == e.entity ) { select_txt.active = true; }
+         if ( !reg.valid( entity ) ) { continue; }
+         if ( entity == e.entity ) { select_txt.active = true; }
          else { select_txt.active = false; }
       }
       _is_changed = true;
