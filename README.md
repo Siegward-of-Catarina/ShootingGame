@@ -163,7 +163,7 @@ initialize() 内の流れ（データロード → エンティティ生成 → 
 
 ## 🧾 アセットとデータ（data & assets）
 
-- アセット定義: [Game/assets/test_assets.json](Game/assets/test_assets.json)
+- アセット定義: [Game/assets/assets.json](Game/assets/assets.json)
   - Sprites: `name` → 画像ファイル
   - SpriteAnims: フレーム矩形/時間/タイプ（Loop/Once/Manual）
   - Sounds: `name` → 音声ファイル
