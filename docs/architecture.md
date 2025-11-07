@@ -157,7 +157,7 @@ graph LR
     C --> R
     R ==refers==> S
     Scene ==refers==> EL
-    S -.triggers.-> EL
+    S ==refers==> EL
     EL -.triggers.-> D
 ```
 
