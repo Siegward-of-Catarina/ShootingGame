@@ -141,6 +141,7 @@ graph LR
         E[Entity<br/>ID]
         C[Component<br/>Data]
         S[System<br/>Logic]
+        Scene[Scene]
     end
     
     subgraph "EnTT"
@@ -148,10 +149,16 @@ graph LR
         D[dispatcher]
     end
     
+    subgraph "Event System"
+        EL[EventListener]
+    end
+    
     E --> R
     C --> R
     R ==refers==> S
-    S -.triggers.-> D
+    Scene ==refers==> EL
+    S -.triggers.-> EL
+    EL -.triggers.-> D
 ```
 
 ---
