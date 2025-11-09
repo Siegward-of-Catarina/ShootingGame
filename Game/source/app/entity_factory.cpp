@@ -1323,5 +1323,10 @@ namespace myge
    {
       if ( affiliation_id_ == typeid( AffilTitleScene ) ) { _registry.emplace<AffilTitleScene>( entity_ ); }
       else if ( affiliation_id_ == typeid( AffilGameScene ) ) { _registry.emplace<AffilGameScene>( entity_ ); }
+      else if ( affiliation_id_ == typeid( AffilGameOverScene ) ) { _registry.emplace<AffilGameOverScene>( entity_ ); }
+      else if ( affiliation_id_ == typeid( AffilGameClearScene ) )
+      {
+         _registry.emplace<AffilGameClearScene>( entity_ );
+      }
    }
 }    // namespace myge

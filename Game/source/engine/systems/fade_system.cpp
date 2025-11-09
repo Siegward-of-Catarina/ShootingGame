@@ -51,6 +51,7 @@ namespace sdl_engine
                {
                   sprite.color.a = 0.0f;
                   fade.state     = Fade::State::Idle;
+                  _event_listener.trigger<FadeInEndEvent>( { entity } );
                }
                break;
 
@@ -60,6 +61,7 @@ namespace sdl_engine
                {
                   sprite.color.a = fade.target_out_alpha;
                   fade.state     = Fade::State::BlackOut;    // 次はブラックアウト
+                  _event_listener.trigger<FadeOutEndEvent>( { entity } );
                }
                break;
 

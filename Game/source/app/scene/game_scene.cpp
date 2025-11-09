@@ -54,7 +54,7 @@ namespace
       End,          // すべてのWave終了
       GameOver,     // ゲームオーバー遷移
       GameClear     // ゲームクリア遷移
-   } scene_state;
+   } scene_state {};
 }    // namespace
 
 namespace myge
@@ -66,6 +66,7 @@ namespace myge
      , _game_cleared { false }
      , _current_wave_index { 0 }
    {
+      scene_state = SceneState::WaveStart;
    }
 
    GameScene::~GameScene()
