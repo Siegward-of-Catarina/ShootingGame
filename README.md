@@ -209,11 +209,12 @@ initialize() 内の流れ（データロード → エンティティ生成 → 
 
 ## 📜 ライセンス
 
-- コード: MIT（詳細は LICENSES/ を参照）
+- コード: MIT（詳細は `LICENSES/` を参照）
 - ライブラリ:
- - SDL 関連（SDL3 / SDL3_image / SDL3_mixer / SDL_ttf）
- - nlohmann::json（Apache, BSD, MIT, GPL-3.0）
-- サウンド/画像などアセットのライセンスは各ファイルに準拠
+ - SDL 関連（SDL3 / SDL3_image / SDL3_mixer / SDL_ttf）: zlib ライセンス。各コーデック/依存ライブラリはそれぞれのライセンスに従います（詳細は `LICENSES/` を参照）。
+ - EnTT: MIT
+ - nlohmann::json: MIT
+- サウンド/画像などアセットは各ファイルの記載に準拠
 
 ---
 

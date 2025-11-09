@@ -20,6 +20,10 @@ namespace sdl_engine
          std::string msg = "SDL_CreateRenderer failed : " + std::string( SDL_GetError() );
          throw GameException( msg.c_str() );
       }
+      // Adaptive Vsync 設定
+      // 画面キャプチャで背景がちらつくのを対策
+      SDL_SetRenderVSync( renderer_raw, SDL_RENDERER_VSYNC_ADAPTIVE );
+
       _sdl_renderer = { renderer_raw, &SDL_DestroyRenderer };
    }
    Renderer::~Renderer() {}
