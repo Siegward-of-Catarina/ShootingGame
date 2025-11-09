@@ -199,7 +199,7 @@ initialize() 内の流れ（データロード → エンティティ生成 → 
 ## 📩 コンタクト
 
 - 作成者: 倉本 星玖
-- 所属: ポリテクセンター関西 IoTシステム科
+- 所属: ポリテクセンター関西 IoTシステム科 (11月末まで)
 - E-mail: kuramoto.riku.zzz@gmail.com
 
 <p align="right">(<a href="#top">トップに戻る</a>)</p>
