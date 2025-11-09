@@ -7,4 +7,10 @@ namespace myge
    struct AffilGameScene
    {
    };
+   struct AffilGameOverScene
+   {
+   };
+   struct AffilGameClearScene
+   {
+   };
 }    // namespace myge

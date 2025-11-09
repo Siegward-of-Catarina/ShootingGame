@@ -38,7 +38,7 @@ myge::GameOverScene::~GameOverScene()
 
    // 本シーン所属のエンティティを破棄
    auto& reg { registry() };
-   for ( auto entt : reg.view<AffilTitleScene>() )
+   for ( auto entt : reg.view<AffilGameOverScene>() )
    {
       if ( reg.valid( entt ) ) { reg.destroy( entt ); }
    }
@@ -64,7 +64,7 @@ void myge::GameOverScene::createEntities()
    if ( auto data { sdl_engine::tryGetJson( scene_data, "Entities" ) }; data )
    {
       EntityFactory factory { registry(), resourceManager() };
-      factory.createEntities( *data, typeid( AffilTitleScene ) );
+      factory.createEntities( *data, typeid( AffilGameOverScene ) );
    }
 }
 
