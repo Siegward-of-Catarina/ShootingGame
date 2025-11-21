@@ -116,17 +116,18 @@ graph TB
         HRS[HitResolutionSystem]
     end
     
-    subgraph "Wave Management"
-        WM[WaveManager]
+    subgraph "Wave"
+        WV[Wave]
         EF[EntityFactory]
     end
     
-    GS -.uses.-> WM
+    GS -->|owns| WV
+
     GS -.uses.-> PMS
     GS -.uses.-> SS
     GS -.uses.-> CS
     
-    WM -.uses.-> EF
+    WV -.uses.-> EF
 ```
 
 ---
@@ -182,7 +183,7 @@ graph TB
     
     subgraph "Game"
         Scene[Scene]
-        WM[WaveManager]
+        WM[Wave]
         EF[EntityFactory]
     end
     
